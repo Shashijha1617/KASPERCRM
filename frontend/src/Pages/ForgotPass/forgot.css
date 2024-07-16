@@ -1,0 +1,147 @@
+/* forgot.css */
+
+.forgot form {
+    padding: 20px;
+}
+
+.forgot form button a {
+    color: #ffffff;
+    font-size: 16px;
+}
+
+/* MultiStageLoginForm.css */
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+
+    background: linear-gradient(white, white), url(http://localhost:3000/static/media/FLATiMAGE.e42bb2ca.jpeg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-blend-mode: multiply;
+}
+
+.main {
+    width: 40%;
+    backdrop-filter: blur(3px);
+    background-color: rgba(255, 255, 255, 0.568);
+    box-shadow: -3px 3px 5px rgba(202, 201, 201, 0.804);
+    border-radius: 10px;
+    display:flex;
+    align-items: center;
+    justify-content:center ;
+    flex-direction: column;
+    padding: 30px;
+
+}
+
+.stage-indicator {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.main .logo img {
+    width: 200px;
+    margin-bottom: 24px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.login-input {
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 10px;
+    height: 40px;
+    margin: 10px 0 10px;
+    padding: 15px;
+    border: 1px;
+    background-color: #eef3ff;
+}
+
+input:focus {
+    outline: none;
+}
+
+.login-button {
+    width: 100%;
+    padding: 8px 20px;
+    border: none;
+    margin-top: 15px;
+    border-radius: 5px;
+    background-color: #2d2ae2;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #2d2ae2;
+}
+
+.stage-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.progress-container {
+    width: 70%;
+    height: 20px;
+    background-color: #ddd;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0;
+    border-radius: 10px;
+    transition: width 0.5s ease-in-out;
+}
+
+.step-1 {
+    background-color: #ff6347;
+    width: 33.33%;
+}
+
+.step-2 {
+    background-color: orange;
+    width: 66.33%;
+}
+
+.step-3 {
+    background-color: #32cd32;
+    width: 100%;
+}
+
+.stage-text {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.error-message {
+    font-size: 12px;
+    color: red;
+}
+
+.count-Down {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}

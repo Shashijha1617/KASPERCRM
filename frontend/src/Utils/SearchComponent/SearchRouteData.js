@@ -1,0 +1,31 @@
+export const SearchRouteData = [
+  { control: 'Hr', name: "Active Task", path: "/hr/ActiveTask" },
+  { control: 'Hr', name: "Accepted Leave", path: "/hr/leaveAccepted" },
+  { control: 'Hr', name: "Attendane", path: "/hr/attenDance" },
+  { control: 'Hr', name: "Attendance Register", path: "/hr/AttendanceRegister" },
+  { control: 'Hr', name: "City", path: "/hr/city" },
+  { control: 'Hr', name: "Cencelled Task", path: "/hr/taskcancle" },
+  { control: 'Hr', name: "Company", path: "/hr/company" },
+  { control: 'Hr', name: "Completed Task", path: "/hr/taskcomplete" },
+  { control: 'Hr', name: "Country", path: "/hr/country" },
+  { control: 'Hr', name: "Dashboard", path: "/hr/dashboard" },
+  { control: 'Hr', name: "Department", path: "/hr/department" },
+  { control: 'Hr', name: "Employee", path: "/hr/employee" },
+  { control: 'Hr', name: "Leave Application", path: "/hr/leaveApplication" },
+  { control: 'Hr', name: "Leave Calendar", path: "/hr/holiday" },
+  { control: 'Hr', name: "Manual Attendance", path: "/hr/manualAttand" },
+  { control: 'Hr', name: "NewTask", path: "/hr/newTask" },
+  { control: 'Hr', name: "Notification", path: "/hr/notification" },
+  { control: 'Hr', name: "Pending Leave", path: "/hr/createLeave" },
+  { control: 'Hr', name: "Position", path: "/hr/position" },
+  { control: 'Hr', name: "Rejected Leave", path: "/hr/leaveRejected" },
+  { control: 'Hr', name: "Rejected Task", path: "/hr/rejectTask" },
+  { control: 'Hr', name: "Role", path: "/hr/role" },
+  { control: 'Hr', name: "Salary", path: "/hr/salary" },
+  { control: 'Hr', name: "State", path: "/hr/state" },
+  { control: 'Hr', name: "Todays Attendance", path: "/hr/todaysAttendance" },
+  { control: 'Hr', name: "View Attendance", path: "/hr/viewAttenDance" },
+];
+
+
+

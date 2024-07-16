@@ -1,0 +1,9 @@
+.DashboardCard {
+    box-shadow: 3px 3px 5px rgb(223, 220, 220);
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.DashboardCard hr {
+    background-color: rgb(219, 219, 219);
+}

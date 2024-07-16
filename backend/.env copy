@@ -1,0 +1,17 @@
+DATABASEURL=mongodb+srv://afrozzeelani:Zeelani123@cluster0.rvkkcii.mongodb.net/Shashi
+
+JWTKEY='ac47952df0cee2a9ef49c734117c6f03e522552a0da5053eed070a89aabb3bed007d'
+PORT=4000
+
+CLOUDINARY_CLOUD_NAME=drbqemmjk
+CLOUDINARY_API_KEY=237434138471526
+CLOUDINARY_API_SECRET=iq18yfUDh86gR20TtFI83ZEmF9U
+
+AUTH_EMAIL = 'kasperinfotech18@gmail.com'
+AUTH_PASSWORD = 'nupr hktf pqdr pvco'
+ 
+SALT_FECTOUR = 10
+
+# AUTH_EMAIL = 'info@kasperinfotech.org'
+# AUTH_PASSWORD = 'g.0!es=H9,QH'
+# SALT_FECTOUR = 10
