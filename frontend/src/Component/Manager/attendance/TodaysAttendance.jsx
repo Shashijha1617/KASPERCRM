@@ -97,9 +97,7 @@ const TodaysAttendance = () => {
   return (
     <Container>
       <div className="d-flex justify-content-between py-3">
-        <h4 className="fw-bolder my-auto text-success mb-2">
-          Today's Attendance
-        </h4>
+        <h5 className="fw-bolder my-auto text-success">Today's Attendance</h5>
         <span className="p-0 fw-bolder fs-6 text-success ">{Today()} </span>
       </div>
       <table className="table table-striped">
@@ -190,7 +188,7 @@ const TodaysAttendance = () => {
                     <AiOutlineMore />{" "}
                     <span
                       style={{
-                        display: activeCategory === user ? "flex" : "none"
+                        display: activeCategory === user ? "flex" : "none",
                       }}
                     >
                       <Link
@@ -200,7 +198,7 @@ const TodaysAttendance = () => {
                           whiteSpace: "pre",
                           right: "70%",
                           bottom: "-100%",
-                          zIndex: "5"
+                          zIndex: "5",
                         }}
                         className="shadow p-2 fs-6"
                       >

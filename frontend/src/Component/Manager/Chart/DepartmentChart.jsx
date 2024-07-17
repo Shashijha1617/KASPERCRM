@@ -3,16 +3,19 @@ import Chart from "react-apexcharts";
 import "./chart.css";
 import axios from "axios";
 import BASE_URL from "../../../Pages/config/config";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 
 const DepartmentChart = () => {
   const [departmentData, setDepartmentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { darkMode } = useTheme();
+
   const [chartOption, setChartOption] = useState({
     options: {
       labels: [],
       legend: {
-        position: 'bottom'
+        position: "bottom",
       },
       fill: {
         colors: [
@@ -21,8 +24,8 @@ const DepartmentChart = () => {
           "#FFC700",
           "#FF407D",
           "#9F70FD",
-          "#FE7A36"
-        ]
+          "#FE7A36",
+        ],
       },
       plotOptions: {
         pie: {
@@ -30,22 +33,22 @@ const DepartmentChart = () => {
             labels: {
               show: true,
               total: {
-                show: true
-              }
-            }
-          }
-        }
-      }
+                show: true,
+              },
+            },
+          },
+        },
+      },
     },
-    series: []
+    series: [],
   });
 
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         if (Array.isArray(response.data)) {
@@ -85,14 +88,14 @@ const DepartmentChart = () => {
               labels: {
                 show: true,
                 total: {
-                  show: true
-                }
-              }
-            }
-          }
-        }
+                  show: true,
+                },
+              },
+            },
+          },
+        },
       },
-      series: series
+      series: series,
     });
   };
 
@@ -102,13 +105,26 @@ const DepartmentChart = () => {
 
   return (
     <>
-      <div style={{ height: "fit-content" }} className="ChartCard p-2 pb-0">
+      <div
+        style={{
+          height: "fit-content",
+          background: darkMode
+            ? "var(--primaryDashMenuColor)"
+            : "var(--primaryDashColorDark)",
+          color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--primaryDashMenuColor)",
+        }}
+        className="ChartCard p-2 pt-3 shadow"
+      >
         <div className="ChartHeader">
           <h6
             style={{
               width: "fit-content",
               boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
-              color: "var(--primaryDashColorDark)"
+              color: darkMode
+                ? "var(--primaryDashColorDark)"
+                : "var(--primaryDashMenuColor)",
             }}
             className="fw-bolder d-flex px-3 rounded-5 py-1"
           >
@@ -120,7 +136,7 @@ const DepartmentChart = () => {
           series={chartOption.series}
           type="donut"
           width="100%"
-          height="355px"
+          height="325px"
         />
       </div>
     </>

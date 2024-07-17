@@ -1,85 +1,74 @@
 import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
+import InnerDashContainer from "../../InnerDashContainer";
 import Moment from "moment";
-import { RiLoginCircleFill, RiLogoutCircleFill } from "react-icons/ri";
-import { PiCoffeeFill } from "react-icons/pi";
-import { FaComputerMouse } from "react-icons/fa6";
-import toast from "react-hot-toast";
 import BASE_URL from "../../../Pages/config/config";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import toast from "react-hot-toast";
+import AttendanceDetails from "./AttendanceList";
+import { RiLoginCircleFill, RiLogoutCircleFill } from "react-icons/ri";
+import { MdCoffee, MdMouse } from "react-icons/md";
+// import TodayLoginTime from "../../../Pages/GetDailyData/GetDailyData";
 
-function HrAttendance(props) {
+function SetLog(props) {
   const [empName, setEmpName] = useState(null);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [onBreak, setOnBreak] = useState(false);
+  const { darkMode } = useTheme();
 
   const {
     employees,
     setEmployees,
+    selectedEmployee,
     setSelectedEmployee,
+    attencenceID,
     setAttencenceID,
-    setMessage
+    message,
+    setMessage,
   } = useContext(AttendanceContext);
 
   useEffect(() => {
-    const loadEmployeeData = async () => {
+    const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/api/employee`, {
-          headers: {
-            authorization: localStorage.getItem("token") || ""
+        const response = await axios.get(
+          `${BASE_URL}/api/employee/` + props.data["_id"],
+          {
+            headers: {
+              authorization: localStorage.getItem("token") || "",
+            },
           }
-        });
-        let hr = response.data.filter((val) => val.Account === 2);
-        setEmployees(hr);
+        );
+        console.log(response.data);
+        setEmployees(response.data);
       } catch (error) {
         console.error("Error fetching employees:", error);
       }
     };
-    loadEmployeeData();
+    fetchUsers();
   }, []);
+  // hello
 
   useEffect(() => {
     const loadPersonalInfoData = async () => {
       try {
         const response = await axios.get(
-          `${BASE_URL}/api/personal-info/` + localStorage.getItem("_id"),
+          `${BASE_URL}/api/personal-info/` + props.data["_id"],
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         );
+        console.log(response.data.FirstName);
         setEmpName(response.data.FirstName);
-        checkLoginStatus(response.data.FirstName);
       } catch (error) {
-        console.error("Error fetching personal info:", error);
-      }
-    };
-
-    const checkLoginStatus = async (name) => {
-      try {
-        const response = await axios.get(`${BASE_URL}/api/attendance`, {
-          headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
-        });
-        const userAttendance = response.data.find(
-          (entry) => entry.FirstName === name
-        );
-        if (userAttendance) {
-          const lastEntry = userAttendance.attendanceObjID.at(-1);
-          if (lastEntry && lastEntry.status === "Login") {
-            setLoggedIn(true);
-          }
-        }
-      } catch (error) {
-        console.error("Error checking login status:", error);
+        console.error("Error fetching employees:", error);
       }
     };
 
     loadPersonalInfoData();
   }, []);
 
+  // hello
   const handleUserChange = (employeeID) => {
     const selectedEmployee = employees.find(
       (employee) => employee._id === employeeID
@@ -110,36 +99,40 @@ function HrAttendance(props) {
   };
 
   const handleLogin = async () => {
-    let data = employees.filter((val) => val.FirstName === empName);
+    let data = employees.filter((val) => {
+      return val.FirstName === empName;
+    });
     let attencenceID = data[0].attendanceObjID;
     let selectedEmployee = data[0]._id;
-    setLoggedIn(true);
+
     try {
       if (!empName) {
         setMessage("Please select a user");
         return;
       }
-      const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
-      const currentTime = Moment().format("LT");
+
+      const currentTime = Moment().format("HH:mm:ss");
       await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
         employeeId: selectedEmployee,
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1,
         date: new Date().getDate(),
         loginTime: [currentTime],
-        loginTimeMs: [currentTimeMs],
-        status: "Login"
+        status: "login",
       });
+      setMessage("Login time recorded successfully");
       toast.success("Login time recorded successfully");
     } catch (error) {
-      console.error("Error recording login time:", error);
-      toast.error("Error recording login time");
+      // console.error("Error recording login time:", error);
+      setMessage("Error recording login time");
+      toast.error("Error recording login time:", error);
     }
   };
 
   const handleLogout = async () => {
-    setLoggedIn(false);
-    let data = employees.filter((val) => val.FirstName === empName);
+    let data = employees.filter((val) => {
+      return val.FirstName === empName;
+    });
     let attencenceID = data[0].attendanceObjID;
     let selectedEmployee = data[0]._id;
     try {
@@ -147,7 +140,7 @@ function HrAttendance(props) {
         setMessage("Please select an employee");
         return;
       }
-      const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
+
       const currentTime = Moment().format("HH:mm:ss");
       await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
         employeeId: selectedEmployee,
@@ -155,118 +148,142 @@ function HrAttendance(props) {
         month: new Date().getMonth() + 1,
         date: new Date().getDate(),
         logoutTime: [currentTime],
-        logoutTimeMs: [currentTimeMs],
-        status: "Logout"
+        status: "logout",
       });
+      setMessage("Logout time recorded successfully");
       toast.success("Logout time recorded successfully");
     } catch (error) {
-      console.error("Error recording logout time:", error);
-      toast.error("Error recording logout time");
+      // console.error("Error recording logout time:", error);
+      setMessage("Error recording logout time");
+      toast.error("Error recording logout time:", error);
     }
   };
 
   const handleResume = async () => {
-    setOnBreak(false);
-    let email = localStorage.getItem("Email");
-    if (employees) {
-      let data = employees.filter((val) => val.Email === email);
-      let attencenceID = data[0].attendanceObjID;
-      let selectedEmployee = data[0]._id;
-      try {
-        if (!data) {
-          setMessage("Please select an employee");
-          return;
-        }
-
-        const currentTime = Moment().format("HH:mm:ss");
-        const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
-        await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
-          employeeId: selectedEmployee,
-          year: new Date().getFullYear(),
-          month: new Date().getMonth() + 1,
-          date: new Date().getDate(),
-          ResumeTime: [currentTime],
-          resumeTimeMS: [currentTimeMs],
-          status: "Login"
-        });
-        toast.success("Resumed time recorded successfully");
-      } catch (error) {
-        console.error("Error recording resume time:", error);
-        toast.error("Error recording resume time");
+    let data = employees.filter((val) => {
+      return val.FirstName === empName;
+    });
+    let attencenceID = data[0].attendanceObjID;
+    let selectedEmployee = data[0]._id;
+    try {
+      if (!empName) {
+        setMessage("Please select an employee");
+        return;
       }
+
+      const currentTime = new Date().toLocaleTimeString();
+      const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
+
+      await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
+        employeeId: selectedEmployee,
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1,
+        date: new Date().getDate(),
+        ResumeTime: [currentTime],
+        resumeTimeMS: [currentTimeMs],
+        status: "resume",
+      });
+
+      setMessage("Resumed time recorded successfully");
+      toast.success("Resumed time recorded successfully");
+    } catch (error) {
+      console.error("Error recording resume time:", error);
+      setMessage("Error recording resume time");
+      toast.error("Error recording resume time:", error);
     }
   };
 
   const handleBreak = async () => {
-    setOnBreak(true);
-    let email = localStorage.getItem("Email");
-    if (employees) {
-      let data = employees.filter((val) => val.Email === email);
-      let attencenceID = data[0].attendanceObjID;
-      let selectedEmployee = data[0]._id;
-      try {
-        if (!data) {
-          setMessage("Please select an employee");
-          return;
-        }
-
-        const currentTime = Moment().format("HH:mm:ss");
-        const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
-        await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
-          employeeId: selectedEmployee,
-          year: new Date().getFullYear(),
-          month: new Date().getMonth() + 1,
-          date: new Date().getDate(),
-          breakTime: [currentTime],
-          breakTimeMs: [currentTimeMs],
-          status: "Break"
-        });
-        toast.success("Break time recorded successfully");
-      } catch (error) {
-        console.error("Error recording break time:", error);
-        toast.error("Error recording break time");
+    let data = employees.filter((val) => {
+      return val.FirstName === empName;
+    });
+    let attencenceID = data[0].attendanceObjID;
+    let selectedEmployee = data[0]._id;
+    try {
+      if (!empName) {
+        setMessage("Please select an employee");
+        return;
       }
+
+      const currentTime = new Date().toLocaleTimeString();
+      const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
+
+      await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
+        employeeId: selectedEmployee,
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1,
+        date: new Date().getDate(),
+        breakTime: [currentTime],
+        breakTimeMs: [currentTimeMs],
+        status: "break",
+      });
+      setMessage("Break time recorded successfully");
+      toast.success("Break time recorded successfully");
+    } catch (error) {
+      // console.error("Error recording break time:", error);
+      setMessage("Error recording break time");
+      toast.error("Error recording break time:", error);
     }
   };
 
   return (
-    <div className="App row gap-2">
-      <div style={{ alignItems: "center" }} className="d-flex gap-2">
-        {!loggedIn && (
-          <button
-            className="btn btn-success d-flex align-items-center justify-content-center gap-2"
-            onClick={handleLogin}
+    <div className="container-fluid">
+      <div className="d-flex align-items-center justify-content-between py-2">
+        <div className="d-flex justify-content-between aline-items-center p-3 px-2">
+          <h5
+            style={{
+              color: darkMode
+                ? "var(--primaryDashColorDark)"
+                : "var(--primaryDashMenuColor)",
+            }}
+            className="fw-bold my-auto"
           >
-            <RiLoginCircleFill className="my-auto fs-5" /> Login
-          </button>
-        )}
-        {loggedIn && (
-          <button
-            className="btn btn-danger d-flex align-items-center justify-content-center gap-2"
-            onClick={handleLogout}
-          >
-            <RiLogoutCircleFill className="my-auto fs-5" /> Logout
-          </button>
-        )}
-        {!onBreak && loggedIn && (
-          <button
-            className="btn btn-warning d-flex align-items-center justify-content-center gap-2"
-            onClick={handleBreak}
-          >
-            <PiCoffeeFill className="my-auto fs-5" /> Take a Break
-          </button>
-        )}
-        {onBreak && (
-          <button
-            className="btn btn-primary d-flex align-items-center justify-content-center gap-2"
-            onClick={handleResume}
-          >
-            <FaComputerMouse className="my-auto fs-5" /> Resume
-          </button>
-        )}
+            Attendance System
+          </h5>
+        </div>
+        <div className="d-flex  gap-3 px-2" style={{ height: "fit-content" }}>
+          <div className="d-flex gap-3">
+            {/* <button
+              title="Login"
+              className="btn btn-success d-flex align-items-center gap-2"
+              onClick={handleLogin}
+            >
+              <RiLoginCircleFill />{" "}
+              <span className="d-none d-md-flex">Login</span>
+            </button>
+            <button
+              className="btn btn-danger d-flex align-items-center gap-2"
+              title="Logout"
+              onClick={handleLogout}
+            >
+              <RiLogoutCircleFill />{" "}
+              <span className="d-none d-md-flex">Logout</span>
+            </button> */}
+            <div className="d-flex gap-3">
+              <button
+                title="Break"
+                className="btn btn-warning d-flex align-items-center gap-2"
+                onClick={handleBreak}
+              >
+                <MdCoffee /> <span className="d-none d-md-flex">Break</span>
+              </button>
+              <button
+                title="Resume"
+                className="btn btn-primary d-flex align-items-center gap-2"
+                onClick={handleResume}
+              >
+                <MdMouse /> <span className="d-none d-md-flex">Resume</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* {message && <p>{message}</p>} */}
+
+      <AttendanceDetails />
     </div>
   );
 }
 
-export default HrAttendance;
+export default SetLog;

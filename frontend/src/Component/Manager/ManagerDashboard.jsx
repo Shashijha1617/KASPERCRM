@@ -24,7 +24,19 @@ const DashboardHR = (props) => {
   };
 
   return (
-    <div style={{ backgroundColor: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)" }}>
+    <div
+      style={{
+        backgroundColor: darkMode
+          ? "var(--secondaryDashMenuColor)"
+          : "var(--secondaryDashColorDark)",
+        maxHeight: "100vh",
+        overflow: "hidden",
+        position: "fixed",
+        width: "100%",
+        left: "0",
+        top: "0",
+      }}
+    >
       <SidebarSlider />
       <Router>
         <div id="outer-main-div">
@@ -40,12 +52,16 @@ const DashboardHR = (props) => {
           <div
             className="d-flex"
             style={{
-              maxHeight: "100vh"
+              maxHeight: "100vh",
             }}
             id="main-non-nav"
           >
             <Sidebar />
-            <div className="HrDashBG w-100" id="main-area">
+            <div
+              style={{ maxHeight: "92vh", overflow: "auto" }}
+              className="w-100"
+              id="main-area"
+            >
               <MainContent />
             </div>
           </div>

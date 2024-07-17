@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import jsPDF from "jspdf";
@@ -37,8 +37,8 @@ const LeaveApplicationHRTable = (props) => {
     axios
       .get(`${BASE_URL}/api/leave-application-hr/`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         const leaveApplicationHRObj = response.data;
@@ -59,7 +59,7 @@ const LeaveApplicationHRTable = (props) => {
             ToDate: formatDate(data["ToDate"]?.slice(0, 10)),
             Days: calculateDays(data?.FromDate, data?.ToDate),
             Reasonforleave: data?.Reasonforleave,
-            Status: status(data?.Status)
+            Status: status(data?.Status),
           };
         });
 
@@ -100,8 +100,8 @@ const LeaveApplicationHRTable = (props) => {
       axios
         .delete(`${BASE_URL}/api/leave-application-hr/` + e1 + "/" + e2, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
         .then((res) => {
           loadLeaveApplicationHRData();
@@ -119,7 +119,7 @@ const LeaveApplicationHRTable = (props) => {
       const doc = new jsPDF({
         orientation: "landscape",
         unit: "mm",
-        format: [pdfWidth, pdfHeight]
+        format: [pdfWidth, pdfHeight],
       });
 
       doc.setFontSize(18);
@@ -132,7 +132,7 @@ const LeaveApplicationHRTable = (props) => {
         "Remarks",
         "Days",
         "CreatedOn",
-        "Status"
+        "Status",
       ];
       const data = filteredData.map((row) => [
         row.empID,
@@ -142,13 +142,13 @@ const LeaveApplicationHRTable = (props) => {
         row.Days,
         row.CreatedOn,
         row.Reasonforleave,
-        row.Status
+        row.Status,
       ]);
       doc.setFontSize(12);
       doc.autoTable({
         head: [headers],
         body: data,
-        startY: 25
+        startY: 25,
       });
 
       doc.save("leaveApplication_data.pdf");
@@ -209,20 +209,30 @@ const LeaveApplicationHRTable = (props) => {
 
   return (
     <div className="container-fluid">
-      <div className="d-flex flex-column justify-between">
+      <div className="d-flex flex-column justify-between m-2 mt-3">
         <div className="d-flex justify-content-between aline-items-center">
-          <h6
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)"
-            }}
-            className="fw-bold my-auto"
-          >
-            {" "}
-            Leaves Request{" "}
-            <span className="text-warning"> ({approvedLeaves}) </span>
-          </h6>
+          <div>
+            <h5
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+              className="m-0 p-0 "
+            >
+              Leaves Request ( {approvedLeaves} )
+            </h5>
+            <p
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+              className="m-0 p-0 "
+            >
+              You can see all new leave requests here{" "}
+            </p>
+          </div>
           <div className="d-flex gap-2 justify-content-between py-3">
             <button
               className="btn btn-danger rounded-0 py-0 shadow-sm d-flex justify-center  aline-center gap-2"
@@ -236,7 +246,7 @@ const LeaveApplicationHRTable = (props) => {
                 style={{
                   height: "100%",
                   width: "100%",
-                  paddingLeft: "15%"
+                  paddingLeft: "15%",
                 }}
                 className="form-control border rounded-0"
                 type="text"
@@ -257,12 +267,11 @@ const LeaveApplicationHRTable = (props) => {
         <div>
           <div
             style={{
-              minHeight: "68vh",
-              maxHeight: "68vh",
+              maxHeight: "76vh",
               overflow: "auto",
-              position: "relative"
+              position: "relative",
             }}
-            className="table-responsive p-2 mb-3"
+            className="table-responsive border border-1 border-black"
           >
             <table className="table" style={{ fontSize: ".9rem" }}>
               <thead>
@@ -278,7 +287,7 @@ const LeaveApplicationHRTable = (props) => {
                       color: darkMode
                         ? "var(--primaryDashColorDark)"
                         : "var( --secondaryDashMenuColor)",
-                      border: "none"
+                      border: "none",
                     }}
                   >
                     Employee Name
@@ -293,7 +302,7 @@ const LeaveApplicationHRTable = (props) => {
                       color: darkMode
                         ? "var(--primaryDashColorDark)"
                         : "var( --secondaryDashMenuColor)",
-                      border: "none"
+                      border: "none",
                     }}
                   >
                     Emp ID
@@ -308,7 +317,7 @@ const LeaveApplicationHRTable = (props) => {
                       color: darkMode
                         ? "var(--primaryDashColorDark)"
                         : "var( --secondaryDashMenuColor)",
-                      border: "none"
+                      border: "none",
                     }}
                   >
                     Leave Type
@@ -323,7 +332,7 @@ const LeaveApplicationHRTable = (props) => {
                       color: darkMode
                         ? "var(--primaryDashColorDark)"
                         : "var( --secondaryDashMenuColor)",
-                      border: "none"
+                      border: "none",
                     }}
                   >
                     Start Date
@@ -338,7 +347,7 @@ const LeaveApplicationHRTable = (props) => {
                       color: darkMode
                         ? "var(--primaryDashColorDark)"
                         : "var( --secondaryDashMenuColor)",
-                      border: "none"
+                      border: "none",
                     }}
                   >
                     End Date
@@ -353,7 +362,7 @@ const LeaveApplicationHRTable = (props) => {
                       color: darkMode
                         ? "var(--primaryDashColorDark)"
                         : "var( --secondaryDashMenuColor)",
-                      border: "none"
+                      border: "none",
                     }}
                   >
                     CreatedOn
@@ -368,7 +377,7 @@ const LeaveApplicationHRTable = (props) => {
                       color: darkMode
                         ? "var(--primaryDashColorDark)"
                         : "var( --secondaryDashMenuColor)",
-                      border: "none"
+                      border: "none",
                     }}
                   >
                     Days
@@ -383,7 +392,7 @@ const LeaveApplicationHRTable = (props) => {
                       color: darkMode
                         ? "var(--primaryDashColorDark)"
                         : "var( --secondaryDashMenuColor)",
-                      border: "none"
+                      border: "none",
                     }}
                   >
                     Status
@@ -398,7 +407,7 @@ const LeaveApplicationHRTable = (props) => {
                       color: darkMode
                         ? "var(--primaryDashColorDark)"
                         : "var( --secondaryDashMenuColor)",
-                      border: "none"
+                      border: "none",
                     }}
                   >
                     Remarks
@@ -413,7 +422,7 @@ const LeaveApplicationHRTable = (props) => {
                       color: darkMode
                         ? "var(--primaryDashColorDark)"
                         : "var( --secondaryDashMenuColor)",
-                      border: "none"
+                      border: "none",
                     }}
                   >
                     Actions
@@ -424,226 +433,93 @@ const LeaveApplicationHRTable = (props) => {
                 {filteredData.length > 0 ? (
                   filteredData
                     .filter((e) => e.Status == "Pending")
-                    .map((data, index) => (
-                      <tr key={index}>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none"
-                          }}
-                          className="py-1"
-                        >
-                          <div style={{ height: "35px", width: "35px" }}>
-                            <img
-                              style={{
-                                height: "100%",
-                                width: "100%",
-                                borderRadius: "50%",
-                                overflow: "hidden",
-                                objectFit: "cover"
-                              }}
-                              src={
-                                data?.data?.profile?.image_url
-                                  ? data?.data?.profile?.image_url
-                                  : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
-                              }
-                              alt=""
-                            />
-                          </div>
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none"
-                          }}
-                        >
-                          {data.Name}
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none"
-                          }}
-                        >
-                          {data.empID}
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none"
-                          }}
-                        >
-                          {data.Leavetype}
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none"
-                          }}
-                        >
-                          {data.FromDate}
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none"
-                          }}
-                        >
-                          {data.ToDate}
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none"
-                          }}
-                        >
-                          <span>{data.CreatedOn}</span>
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none"
-                          }}
-                        >
-                          <span>{data.Days}</span>
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none",
-                            fontSize: ".8rem"
-                          }}
-                        >
-                          <span className=" text-white bg-warning px-2 py-0 rounded-5">
-                            {data.Status}
-                          </span>
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none"
-                          }}
-                        >
-                          {data.Reasonforleave}
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none"
-                          }}
-                        >
-                          <div
-                            className="d-flex gap-3 py-2"
-                            style={{ cursor: "pointer" }}
-                          >
-                            <p title="Update" className="m-auto text-primary">
-                              <FontAwesomeIcon
-                                className="m-auto"
-                                icon={faEdit}
-                                onClick={() =>
-                                  props.onEditLeaveApplicationHR(data.data)
+                    .map((data, index) => {
+                      const rowBodyStyle = {
+                        position: "sticky",
+                        top: "0",
+                        verticalAlign: "middle",
+                        background: darkMode
+                          ? "var(--secondaryDashMenuColor)"
+                          : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
+                      };
+                      return (
+                        <tr key={index}>
+                          <td style={rowBodyStyle} className="py-1">
+                            <div style={{ height: "35px", width: "35px" }}>
+                              <img
+                                style={{
+                                  height: "100%",
+                                  width: "100%",
+                                  borderRadius: "50%",
+                                  overflow: "hidden",
+                                  objectFit: "cover",
+                                }}
+                                src={
+                                  data?.data?.profile?.image_url
+                                    ? data?.data?.profile?.image_url
+                                    : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
                                 }
+                                alt=""
                               />
-                            </p>
-                            {/* <p title="Delete" className="m-auto text-danger">
-                          <FontAwesomeIcon
-                            className="m-auto"
-                            icon={faTrash}
-                            onClick={() =>
-                              onLeaveApplicationHRDelete(
-                                data.data["employee"][0]["_id"],
-                                data.data["_id"]
-                              )
-                            }
-                          />
-                        </p> */}
-                          </div>
-                        </td>
-                      </tr>
-                    ))
+                            </div>
+                          </td>
+                          <td style={rowBodyStyle}>{data.Name}</td>
+                          <td style={rowBodyStyle}>{data.empID}</td>
+                          <td style={rowBodyStyle}>{data.Leavetype}</td>
+                          <td style={rowBodyStyle}>{data.FromDate}</td>
+                          <td style={rowBodyStyle}>{data.ToDate}</td>
+                          <td style={rowBodyStyle}>
+                            <span>{data.CreatedOn}</span>
+                          </td>
+                          <td style={rowBodyStyle}>
+                            <span>{data.Days}</span>
+                          </td>
+                          <td style={rowBodyStyle}>
+                            <span className=" text-white bg-warning px-2 py-0 rounded-5">
+                              {data.Status}
+                            </span>
+                          </td>
+                          <td style={rowBodyStyle}>{data.Reasonforleave}</td>
+                          <td style={rowBodyStyle}>
+                            <div
+                              className="d-flex gap-3 py-2"
+                              style={{ cursor: "pointer" }}
+                            >
+                              <p title="Update" className="m-auto text-primary">
+                                <FontAwesomeIcon
+                                  className="m-auto"
+                                  icon={faEdit}
+                                  onClick={() =>
+                                    props.onEditLeaveApplicationHR(data.data)
+                                  }
+                                />
+                              </p>
+                              <p title="Delete" className="m-auto text-danger">
+                                <FontAwesomeIcon
+                                  className="m-auto"
+                                  icon={faTrash}
+                                  onClick={() =>
+                                    onLeaveApplicationHRDelete(
+                                      data.data["employee"][0]["_id"],
+                                      data.data["_id"]
+                                    )
+                                  }
+                                />
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
                 ) : (
                   <div
                     style={{
                       height: "30vh",
                       width: "94%",
-                      position: "absolute"
+                      position: "absolute",
                     }}
                     className="d-flex flex-column justify-content-center align-items-center gap-1"
                   >

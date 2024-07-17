@@ -4,19 +4,21 @@ import axios from "axios";
 import Chart from "react-apexcharts";
 import { FaChartLine } from "react-icons/fa";
 import BASE_URL from "../../../../Pages/config/config";
+import { useTheme } from "../../../../Context/TheamContext/ThemeContext";
 const TaskChart = () => {
   const [departmentData, setDepartmentData] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const email = localStorage.getItem("Email");
+  const { darkMode } = useTheme();
 
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         if (Array.isArray(response.data)) {
@@ -110,92 +112,102 @@ const TaskChart = () => {
         task.status === "Pending" &&
         task.managerEmail === email &&
         !calculateRemainingTime(task.endDate).delay
-    ).length
+    ).length,
   };
 
   const chartData = {
     series: [
       {
         name: "Total Employee",
-        data: Object.values(departmentCounts)
-      }
+        data: Object.values(departmentCounts),
+      },
     ],
     options: {
       chart: {
         type: "bar",
-        height: 350
+        height: 350,
       },
       plotOptions: {
         bar: {
           horizontal: false,
           columnWidth: "40%",
-          endingShape: "rounded"
-        }
+          endingShape: "rounded",
+        },
       },
       dataLabels: {
-        enabled: false
+        enabled: false,
       },
       stroke: {
         show: true,
         width: 2,
-        colors: ["transparent"]
+        colors: ["transparent"],
       },
       xaxis: {
         categories: Object.keys(departmentCounts),
         title: {
-          text: "Department Wise Employee"
-        }
+          text: "Department Wise Employee",
+        },
       },
       yaxis: {
         title: {
-          text: "Number of Employee"
-        }
+          text: "Number of Employee",
+        },
       },
 
       fill: {
         opacity: 1,
-        colors: ["var(--primaryDashColorDark)"]
+        colors: ["var(--primaryDashColorDark)"],
       },
       tooltip: {
         y: {
           formatter: function (val) {
             return " " + val + "";
-          }
+          },
         },
         markers: {
-          colors: "yellow"
-        }
-      }
-    }
+          colors: "yellow",
+        },
+      },
+    },
   };
   const taskStatusChartData = {
     options: {
       chart: {
         id: "task-status-chart",
-        type: "bar"
+        type: "bar",
       },
       xaxis: {
         categories: Object.keys(taskStatusCounts),
         title: {
-          text: "Task Status"
-        }
+          text: "Task Status",
+        },
       },
       yaxis: {
         title: {
-          text: "Number of Tasks"
-        }
-      }
+          text: "Number of Tasks",
+        },
+      },
     },
     series: [
       {
         name: "Task Status",
-        data: Object.values(taskStatusCounts)
-      }
-    ]
+        data: Object.values(taskStatusCounts),
+      },
+    ],
   };
 
   return (
-    <div className="ChartCard shadow-sm">
+    <div
+      style={{
+        background: darkMode
+          ? "var(--primaryDashMenuColor)"
+          : "var(--primaryDashColorDark)",
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--primaryDashMenuColor)",
+      }}
+      className="ChartCard shadow py-2 px-3 pt-3"
+    >
       <div className="ChartHeader">
         <h5 className="fw-bolder d-flex gap-3 ">
           <FaChartLine className="my-auto" />
@@ -207,7 +219,7 @@ const TaskChart = () => {
           options={taskStatusChartData.options}
           series={taskStatusChartData.series}
           type="bar"
-          height="85%"
+          height="299px"
         />
       </div>
     </div>

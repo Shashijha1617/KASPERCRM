@@ -20,13 +20,14 @@ import ManagerCencelledTask from "../HrManager/ManagerTaskManagement/ManagerCenc
 import ManagerCompletedTask from "../HrManager/ManagerTaskManagement/ManagerCompletedTask.jsx";
 import ManagerRejectedTask from "../HrManager/ManagerTaskManagement/ManagerRejectedTask.jsx";
 import ManagerActiveTask from "./ManagerTaskManagement/ManagerActiveTask.jsx";
-import Attendance from "../HrManager/attendance/Attendance.jsx";
+import Attendance from "../HrManager/attendance/AttendanceSample.jsx";
 import LeaveCalendar from "../../Pages/LeaveCalendar/LeaveCalendar.jsx";
 import TodaysAttendance from "../HrManager/attendance/TodaysAttendance.jsx";
 import Employee from "../../Pages/AddEmployee/Employee.jsx";
 import LeaveApplication from "../../Pages/ApplyLeave/LeaveApplication.jsx";
 import Notification from "./Notification/Notification.jsx";
 import PersonalInfo from "../Employee/EmpPresonal/PersonalInfo.jsx";
+import SelfAttendance from "../HrManager/attendance/SelfAttendance.jsx";
 
 const MainContent = () => {
   return (
@@ -79,6 +80,7 @@ const MainContent = () => {
           exact
           component={TodaysAttendance}
         />
+        <Route path="/manager/myAttendance" exact component={SelfAttendance} />
         <Route path="/manager/notification" exact component={Notification} />
         <Route path="/manager/createLeave" exact component={LeaveApplication} />
 

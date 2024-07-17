@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./WelcomeBoard.css";
 import axios from "axios";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
-import HrAttendance from "../../Component/HrManager/attendance/Attendance";
+import HrAttendance from "../../Component/HrManager/attendance/AttendanceSample";
 import BASE_URL from "../config/config";
 
 const WelcomeBoard = () => {
@@ -15,8 +15,8 @@ const WelcomeBoard = () => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setEmployeeData(response.data);
@@ -33,14 +33,14 @@ const WelcomeBoard = () => {
   return (
     <div
       style={{
-        height: "100%",
+        height: "220px",
         width: "100%",
         backgroundColor: darkMode
           ? "var(--primaryDashMenuColor)"
           : "var(--primaryDashColorDark)",
         color: darkMode
           ? "var(--primaryDashColorDark)"
-          : "var(--primaryDashMenuColor)"
+          : "var(--primaryDashMenuColor)",
       }}
       className="d-flex align-items-center shadow rounded-3 m-0 justify-content-center p-2"
     >

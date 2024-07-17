@@ -24,7 +24,6 @@ import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import SearchComponent from "../../Utils/SearchComponent/SearchComponent ";
 
 const NavBar = (props, data) => {
-
   const [activeProfile, setActiveProfile] = useState(null);
   const history = useHistory();
   const { darkMode } = useTheme();
@@ -36,8 +35,7 @@ const NavBar = (props, data) => {
   const { socket } = useContext(AttendanceContext);
   const { toggleSidebar } = useSidebar();
   const [loginNoti, setLoginNoti] = useState(true); //this is only for hr and admin to block employee login notification.
-  let userProfile ;
-    
+  let userProfile;
 
   console.log(userProfile);
   const id = localStorage.getItem("_id");
@@ -48,15 +46,15 @@ const NavBar = (props, data) => {
       subtitle: taskName,
       duration: 4000,
       icon: Logo,
-      native: true
+      native: true,
     });
   };
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         console.log(response.data);
@@ -77,8 +75,8 @@ const NavBar = (props, data) => {
         { email },
         {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         }
       )
       .then((response) => {
@@ -98,8 +96,8 @@ const NavBar = (props, data) => {
         { email },
         {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         }
       )
       .then((response) => {
@@ -166,7 +164,7 @@ const NavBar = (props, data) => {
           managerEmail,
           hrEmail,
           messageBy,
-          profile
+          profile,
         } = data;
 
         const data1 = {
@@ -177,7 +175,7 @@ const NavBar = (props, data) => {
           managerEmail,
           hrEmail,
           messageBy,
-          profile
+          profile,
         };
         setNotification((prev) => [data1, ...prev]);
         pushNotification(data1.message);
@@ -192,7 +190,7 @@ const NavBar = (props, data) => {
           hrEmail,
           managerEmail,
           messageBy,
-          profile
+          profile,
         } = data;
         if (location === "employee") {
           const data1 = {
@@ -203,7 +201,7 @@ const NavBar = (props, data) => {
             employeeEmail,
             hrEmail,
             messageBy,
-            profile
+            profile,
           };
           setNotification((prev) => [data1, ...prev]);
           pushNotification(data1.message);
@@ -216,7 +214,7 @@ const NavBar = (props, data) => {
             employeeEmail,
             hrEmail,
             messageBy,
-            profile
+            profile,
           };
           setNotification((prev) => [data1, ...prev]);
           pushNotification(data1.message);
@@ -229,7 +227,7 @@ const NavBar = (props, data) => {
             employeeEmail,
             managerEmail,
             messageBy,
-            profile
+            profile,
           };
           setNotification((prev) => [data1, ...prev]);
           pushNotification(data1.message);
@@ -245,8 +243,8 @@ const NavBar = (props, data) => {
           { email },
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         )
         .then((response) => {
@@ -284,9 +282,9 @@ const NavBar = (props, data) => {
             backgroundColor: "white",
             boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
             borderRadius: "4px",
-            zIndex: "9999"
+            zIndex: "9999",
           },
-          toastClassName: "custom-toast"
+          toastClassName: "custom-toast",
         });
       }
     };
@@ -307,9 +305,9 @@ const NavBar = (props, data) => {
             backgroundColor: "red",
             boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
             borderRadius: "4px",
-            zIndex: "9999"
+            zIndex: "9999",
           },
-          toastClassName: "custom-toast"
+          toastClassName: "custom-toast",
         });
       }
     };
@@ -344,9 +342,13 @@ const NavBar = (props, data) => {
 
   return (
     <div
-      // id="main-nav"
       className="px-2 py-1"
-      style={{ height: "fit-content", backgroundColor: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)", }}
+      style={{
+        height: "fit-content",
+        backgroundColor: darkMode
+          ? "var(--primaryDashMenuColor)"
+          : "var(--primaryDashColorDark)",
+      }}
     >
       <nav
         style={{ height: "3rem" }}
@@ -354,14 +356,28 @@ const NavBar = (props, data) => {
       >
         <button
           onClick={handleClick}
-          style={{ color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)", }}
+          style={{
+            color: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var(--primaryDashMenuColor)",
+          }}
           className="my-auto btn fs-5 p-1 mx-0 d-flex d-sm-none align-iems-center"
         >
           <LuMenu />
         </button>
         <span>
-          <img className="d-flex d-sm-none" style={{ width: '30px', height: 'auto' }} src={MiniLogo} alt="" />
-          <img className="d-sm-flex d-none" style={{ width: '100px', height: 'auto' }} src={Logo} alt="" />
+          <img
+            className="d-flex d-sm-none"
+            style={{ width: "30px", height: "auto" }}
+            src={MiniLogo}
+            alt=""
+          />
+          <img
+            className="d-sm-flex d-none"
+            style={{ width: "100px", height: "auto" }}
+            src={Logo}
+            alt=""
+          />
         </span>
         <DarkModeToggle />
         <div className="ml-auto my-auto d-flex align-items-center gap-3">
@@ -385,7 +401,7 @@ const NavBar = (props, data) => {
                   borderRadius: "50% 50% 50% 0",
                   objectFit: "cover",
                   fontSize: ".8rem",
-                  padding: "0 .1rem"
+                  padding: "0 .1rem",
                 }}
               >
                 <span className="m-auto">{uniqueNotification.length}</span>
@@ -403,7 +419,7 @@ const NavBar = (props, data) => {
                     minWidth: "230px",
                     maxWidth: "250px",
                     borderRadius: "20px 0 20px 20px",
-                    display: notiToggle == "name" ? "flex" : "none"
+                    display: notiToggle == "name" ? "flex" : "none",
                   }}
                   className="border border-muted border-1 flex-column gap-1 w-100 bg-white align-items-center gap-2 justify-content-between  p-2  shadow"
                 >
@@ -430,16 +446,16 @@ const NavBar = (props, data) => {
                               onClick={
                                 val.status === "unseen"
                                   ? () =>
-                                    notificationHandler(val.taskId, val.path)
+                                      notificationHandler(val.taskId, val.path)
                                   : () =>
-                                    history.push(`/${location}/${val.path}`)
+                                      history.push(`/${location}/${val.path}`)
                               }
                             >
                               <div
                                 style={{
                                   height: "30px",
                                   width: "30px",
-                                  overflow: "hidden"
+                                  overflow: "hidden",
                                 }}
                               >
                                 <img
@@ -448,7 +464,7 @@ const NavBar = (props, data) => {
                                     width: "100%",
                                     objectFit: "cover",
                                     overflow: "hidden",
-                                    borderRadius: "50%"
+                                    borderRadius: "50%",
                                   }}
                                   src={val.profile ? val.profile : profile}
                                   alt=""
@@ -498,7 +514,7 @@ const NavBar = (props, data) => {
                 width: "35px",
                 border: "1px solid blue",
                 borderRadius: "50%",
-                position: "relative"
+                position: "relative",
               }}
             >
               <img
@@ -507,9 +523,13 @@ const NavBar = (props, data) => {
                   width: "100%",
                   objectFit: "cover",
                   border: "1px solid red",
-                  borderRadius: "50%"
+                  borderRadius: "50%",
                 }}
-                src={employeeData.profile?employeeData.profile.image_url: profile}
+                src={
+                  employeeData.profile
+                    ? employeeData.profile.image_url
+                    : profile
+                }
                 alt=""
               />
 
@@ -521,7 +541,7 @@ const NavBar = (props, data) => {
                   width: "fit-content",
                   right: "0",
                   top: "90%",
-                  display: activeProfile === "name" ? "flex" : "none"
+                  display: activeProfile === "name" ? "flex" : "none",
                 }}
               >
                 <span>

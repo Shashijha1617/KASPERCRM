@@ -76,8 +76,8 @@ const SelfAttendance = () => {
           `${BASE_URL}/api/attendance/${employeeId}`,
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token") || ""}`
-            }
+              Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+            },
           }
         );
 
@@ -182,79 +182,6 @@ const SelfAttendance = () => {
 
   return (
     <div className="d-flex flex-column p-5 gap-3">
-      {/* <div className="d-flex gap-3 ">
-        <div>
-          <select
-            className="form-select w-100 shadow-sm text-muted"
-            id="employeeId"
-            value={employeeId}
-            onChange={handleEmployeeChange}
-          >
-            <option value="" disabled>
-              --Select an employee--
-            </option>
-
-            {employees
-              .sort((a, b) => a.empID - b.empID)
-              .map((employee) => (
-                <option
-                  className="text-uppercase"
-                  key={employee._id}
-                  value={employee._id}
-                >
-                  🪪 ({employee.empID}) {employee.FirstName}-{employee.LastName}
-                </option>
-              ))}
-          </select>
-        </div>
-
-        <button
-          className="btn shadow btn-dark fw-bolder"
-          style={{ width: "fit-content" }}
-          onClick={handleFetchAttendance}
-        >
-          Fetch Attendance
-        </button>
-      </div> */}
-      <div className="d-flex gap-3 justify-content-between">
-        {/* <div>
-          <select
-            className="form-select w-100 shadow-sm text-muted"
-            id="employeeId"
-            value={employeeId}
-            onChange={handleEmployeeChange}
-          >
-            <option value="" disabled>
-              --Select an employee--
-            </option>
-            {employees
-              .sort((a, b) => a.empID - b.empID)
-              .map((employee) => (
-                <option
-                  className="text-uppercase"
-                  key={employee._id}
-                  value={employee._id}
-                >
-                  <p>
-                    🪪 ({employee.empID}) {employee.FirstName}
-                  </p>
-                </option>
-              ))}
-          </select>
-        </div> */}
-        {/* <button
-          disabled={!employeeId}
-          style={{ display: "flex", alignItems: "center", gap: ".5rem" }}
-          className="btn shadow btn-dark fw-bolder"
-          onClick={handleFetchAttendance}
-        >
-          <MdOutlineRefresh
-            className={`fs-4 ${isButtonClicked ? "rotate" : ""}`}
-          />{" "}
-          Get
-        </button> */}
-      </div>
-
       {attendanceData && (
         <div className="d-flex gap-3">
           <div>
@@ -340,7 +267,7 @@ const SelfAttendance = () => {
                               style={{
                                 display: "flex ",
                                 justifyContent: "start",
-                                alignItems: "center"
+                                alignItems: "center",
                               }}
                               className="fs-6 gap-2 "
                               onMouseEnter={handleInfoMouseEnter}
@@ -436,7 +363,7 @@ const SelfAttendance = () => {
             alignItems: "center",
             wordSpacing: "5px",
             flexDirection: "column",
-            gap: "1rem"
+            gap: "1rem",
           }}
         >
           <div className="fs-2 fw-bolder">

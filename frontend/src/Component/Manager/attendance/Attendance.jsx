@@ -23,7 +23,7 @@ function SetLog(props) {
     attencenceID,
     setAttencenceID,
     message,
-    setMessage
+    setMessage,
   } = useContext(AttendanceContext);
 
   useEffect(() => {
@@ -33,8 +33,8 @@ function SetLog(props) {
           `${BASE_URL}/api/employee/` + props.data["_id"],
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         );
         console.log(response.data);
@@ -54,8 +54,8 @@ function SetLog(props) {
           `${BASE_URL}/api/personal-info/` + props.data["_id"],
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         );
         console.log(response.data.FirstName);
@@ -118,7 +118,7 @@ function SetLog(props) {
         month: new Date().getMonth() + 1,
         date: new Date().getDate(),
         loginTime: [currentTime],
-        status: "login"
+        status: "login",
       });
       setMessage("Login time recorded successfully");
       toast.success("Login time recorded successfully");
@@ -148,7 +148,7 @@ function SetLog(props) {
         month: new Date().getMonth() + 1,
         date: new Date().getDate(),
         logoutTime: [currentTime],
-        status: "logout"
+        status: "logout",
       });
       setMessage("Logout time recorded successfully");
       toast.success("Logout time recorded successfully");
@@ -181,7 +181,7 @@ function SetLog(props) {
         date: new Date().getDate(),
         ResumeTime: [currentTime],
         resumeTimeMS: [currentTimeMs],
-        status: "resume"
+        status: "resume",
       });
 
       setMessage("Resumed time recorded successfully");
@@ -215,7 +215,7 @@ function SetLog(props) {
         date: new Date().getDate(),
         breakTime: [currentTime],
         breakTimeMs: [currentTimeMs],
-        status: "break"
+        status: "break",
       });
       setMessage("Break time recorded successfully");
       toast.success("Break time recorded successfully");
@@ -234,7 +234,7 @@ function SetLog(props) {
             style={{
               color: darkMode
                 ? "var(--primaryDashColorDark)"
-                : "var(--primaryDashMenuColor)"
+                : "var(--primaryDashMenuColor)",
             }}
             className="fw-bold my-auto"
           >

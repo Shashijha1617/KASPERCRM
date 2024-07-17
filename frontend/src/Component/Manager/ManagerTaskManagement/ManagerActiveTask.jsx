@@ -11,9 +11,12 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import { v4 as uuid } from "uuid";
 import BASE_URL from "../../../Pages/config/config";
+import ActiveTask from "../../../img/Task/ActiveTask.svg";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+
 const ManagerActiveTask = () => {
   const [modalShow, setModalShow] = React.useState(false);
-  const name = localStorage.getItem("Name")
+  const name = localStorage.getItem("Name");
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -36,22 +39,23 @@ const ManagerActiveTask = () => {
   const [taskName, setTaskName] = useState("");
   const [allImage, setAllImage] = useState(null);
   const [empData, setEmpData] = useState(null);
+  const { darkMode } = useTheme();
 
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         const employeeObj = response.data;
         console.log("response", response.data);
-        const emp = response.data.filter((val)=>{
+        const emp = response.data.filter((val) => {
           return val.Email === email;
-        })
-        console.log(emp)
-        setEmpData(emp)
+        });
+        console.log(emp);
+        setEmpData(emp);
         setEmployeeData(employeeObj);
         setLoading(false);
         const rowDataT = employeeObj.map((data) => {
@@ -63,7 +67,7 @@ const ManagerActiveTask = () => {
             ContactNo: data["ContactNo"],
             PositionName: data["position"][0]
               ? data["position"][0]["PositionName"]
-              : ""
+              : "",
           };
         });
         console.log(rowDataT);
@@ -143,13 +147,13 @@ const ManagerActiveTask = () => {
             empname: employee.FirstName,
             empemail: employee.Email,
             empdesignation: employee.PositionName,
-            emptaskStatus: "Task Assigned"
+            emptaskStatus: "Task Assigned",
           };
 
           await axios.post(
             `${BASE_URL}/api/tasks/${selectedTaskId}/employees`,
             {
-              employees: [employeeData]
+              employees: [employeeData],
             }
           );
         } catch (error) {
@@ -160,22 +164,23 @@ const ManagerActiveTask = () => {
         }
       }
       const taskId = uuid();
-      console.log(empData[0].profile)
-      if(empData[0].profile){
-      const employeeTaskNotification = {
-        senderMail: email,
-        employeesEmail: employeeNotificationArr,
-        taskId,
-        status: "unseen",
-        message: `Task Assigned`,
-        messageBy: name,
-        profile: empData[0].profile.image_url,
-        taskName,
-        Account: 2,
-        path: "newTask"
-      };
+      console.log(empData[0].profile);
+      if (empData[0].profile) {
+        const employeeTaskNotification = {
+          senderMail: email,
+          employeesEmail: employeeNotificationArr,
+          taskId,
+          status: "unseen",
+          message: `Task Assigned`,
+          messageBy: name,
+          profile: empData[0].profile.image_url,
+          taskName,
+          Account: 2,
+          path: "newTask",
+        };
 
-      socket.emit("employeeTaskNotification", employeeTaskNotification);}else{
+        socket.emit("employeeTaskNotification", employeeTaskNotification);
+      } else {
         const employeeTaskNotification = {
           senderMail: email,
           employeesEmail: employeeNotificationArr,
@@ -186,10 +191,10 @@ const ManagerActiveTask = () => {
           profile: null,
           taskName,
           Account: 2,
-          path: "newTask"
+          path: "newTask",
         };
-  
-        socket.emit("employeeTaskNotification", employeeTaskNotification)
+
+        socket.emit("employeeTaskNotification", employeeTaskNotification);
       }
       fetchData();
 
@@ -200,7 +205,6 @@ const ManagerActiveTask = () => {
       toast.error("Failed to forward task. Please try again.");
     }
   };
-  
 
   const askStatus = async (taskId) => {};
   const completeTask = async (taskId, taskName, adminMail) => {
@@ -216,11 +220,11 @@ const ManagerActiveTask = () => {
 
       await axios.put(`${BASE_URL}/api/tasks/${taskId}`, {
         status: "Completed",
-        comment: CompleteRemarks
+        comment: CompleteRemarks,
       });
 
       toast.success("Task completed successfully!");
-      if(empData[0].profile){
+      if (empData[0].profile) {
         const data = {
           taskId,
           status: "unseen",
@@ -232,10 +236,10 @@ const ManagerActiveTask = () => {
           profile: empData[0].profile.image_url,
           adminMail,
           Account: 1,
-          taskStatus: "completed"
+          taskStatus: "completed",
         };
         socket.emit("adminTaskNotification", data);
-      }else{
+      } else {
         const data = {
           taskId,
           status: "unseen",
@@ -244,14 +248,14 @@ const ManagerActiveTask = () => {
           taskName,
           message: `Task Completed`,
           messageBy: name,
-          profile:null,
+          profile: null,
           adminMail,
           Account: 1,
-          taskStatus: "completed"
+          taskStatus: "completed",
         };
         socket.emit("adminTaskNotification", data);
       }
-   
+
       fetchData();
     } catch (error) {
       console.error("Error completing task:", error.message);
@@ -349,10 +353,17 @@ const ManagerActiveTask = () => {
   };
 
   return (
-    <div className="py-2">
-      <h1 className="fs-3 fw-bolder text-uppercase mb-4">
-        All Active Tasks ({calculateTotalActiveTasks()})
-      </h1>
+    <div className="p-4">
+      <h5 style={{ fontWeight: "600" }} className="p-0 m-0 text-uppercase">
+        Active Task (
+        {
+          tasks.filter(
+            (task) => task.status === "Pending" && task.managerEmail === email
+          ).length
+        }
+        )
+      </h5>
+      <p className="text-muted p-0 m-0">You can view all active tasks here!</p>
 
       {loading && (
         <div className="d-flex align-items-center gap-2">
@@ -363,303 +374,339 @@ const ManagerActiveTask = () => {
 
       {error && <p className="text-danger">{error}</p>}
 
-      <div className="overflow-auto" style={{ maxHeight: "80vh" }}>
-        {tasks
-          .filter(
-            (task) => task.status === "Pending" && task.managerEmail === email
-          )
-          .map((task, index) => (
-            <details
-              style={{
-                boxShadow: "-1px 1px 10px gray"
-              }}
-              className="p-1 position-relative mt-3 fs-4 rounded mx-3"
-              key={task.id}
-            >
-              <summary
-                style={{ height: "fit-content" }}
-                className="d-flex justify-content-between aline-center form-control bg-dark  text-white"
+      <div
+        className="mt-2"
+        style={{
+          overflowY: "scroll",
+          maxHeight: "80vh",
+          scrollbarWidth: "thin",
+          scrollbarGutter: "stable",
+          scrollMargin: "1rem",
+          backgroundColor: darkMode
+            ? "var(--primaryDashMenuColor)"
+            : "var(--primaryDashColorDark)",
+        }}
+      >
+        {tasks.filter(
+          (task) => task.status === "Assigned" && task.managerEmail === email
+        ).length > 0 ? (
+          tasks
+            .filter(
+              (task) => task.status === "Pending" && task.managerEmail === email
+            )
+            .map((task, index) => (
+              <details
+                style={{
+                  boxShadow: "-1px 1px 10px gray",
+                }}
+                className="p-1 position-relative mt-3 fs-4 rounded mx-3"
+                key={task.id}
               >
-                <div className="fw-bold fs-5 d-flex justify-content-center flex-column">
-                  # Task {index + 1} : {task.Taskname}
-                </div>
-                <div
-                  style={{ position: "absolute", top: "-10px", left: "20px" }}
-                  className="fw-bold bg-white rounded-5 px-3 text-primary fs-6 d-flex justify-content-center aline-center flex-column"
+                <summary
+                  style={{ height: "fit-content" }}
+                  className="d-flex justify-content-between aline-center form-control bg-dark  text-white"
                 >
-                  {task.department}
-                </div>
-                <div className="d-flex gap-2 RemainingTimeHandel justify-content-between ">
-                  {calculateRemainingTime(task.endDate).delay ? (
-                    <div>
-                      <div className="text-center d-none">
-                        <div className="form-control  fw-bold p-0">
+                  <div className="fw-bold fs-5 d-flex justify-content-center flex-column">
+                    # Task {index + 1} : {task.Taskname}
+                  </div>
+                  <div
+                    style={{ position: "absolute", top: "-10px", left: "20px" }}
+                    className="fw-bold bg-white rounded-5 px-3 text-primary fs-6 d-flex justify-content-center aline-center flex-column"
+                  >
+                    {task.department}
+                  </div>
+                  <div className="d-flex gap-2 RemainingTimeHandel justify-content-between ">
+                    {calculateRemainingTime(task.endDate).delay ? (
+                      <div>
+                        <div className="text-center d-none">
+                          <div className="form-control  fw-bold p-0">
+                            {calculateRemainingTime(task.endDate).days}{" "}
+                          </div>{" "}
+                          <div>Day</div>
+                        </div>
+                        <h5 className="btn btn-danger p-1 px-3 fw-bold">
+                          Late
+                        </h5>
+                      </div>
+                    ) : (
+                      <div className="text-center">
+                        <div
+                          style={{ boxShadow: "0 0 5px 2px gray inset" }}
+                          className="form-control fw-bold px-1 py-0"
+                        >
                           {calculateRemainingTime(task.endDate).days}{" "}
                         </div>{" "}
                         <div>Day</div>
                       </div>
-                      <h5 className="btn btn-danger p-1 px-3 fw-bold">Late</h5>
-                    </div>
-                  ) : (
-                    <div className="text-center">
-                      <div
-                        style={{ boxShadow: "0 0 5px 2px gray inset" }}
-                        className="form-control fw-bold px-1 py-0"
-                      >
-                        {calculateRemainingTime(task.endDate).days}{" "}
-                      </div>{" "}
-                      <div>Day</div>
-                    </div>
-                  )}
-                  {calculateRemainingTime(task.endDate).delay ? (
-                    <div className="text-center d-none">
-                      <div className="form-control  fw-bold p-0">
-                        {calculateRemainingTime(task.endDate).hours}{" "}
-                      </div>{" "}
-                      <div>Min</div>
-                    </div>
-                  ) : (
-                    <div className="text-center">
-                      <div
-                        style={{ boxShadow: "0 0 5px 2px gray inset" }}
-                        className="form-control fw-bold px-1 py-0"
-                      >
-                        {calculateRemainingTime(task.endDate).hours}{" "}
-                      </div>{" "}
-                      <div>Hrs</div>
-                    </div>
-                  )}
-                  {calculateRemainingTime(task.endDate).delay ? (
-                    <div className="text-center d-none">
-                      <div className="form-control fw-bold p-0">
-                        {calculateRemainingTime(task.endDate).minutes}{" "}
-                      </div>{" "}
-                      <div>Min</div>
-                    </div>
-                  ) : (
-                    <div className="text-center">
-                      <div
-                        style={{ boxShadow: "0 0 5px 2px gray inset" }}
-                        className="form-control fw-bold px-1 py-0"
-                      >
-                        {calculateRemainingTime(task.endDate).minutes}{" "}
-                      </div>{" "}
-                      <div>Min</div>
-                    </div>
-                  )}
-                </div>
-              </summary>
-              <div
-                style={{ position: "relative" }}
-                className="row p-1 my-2 mx-0 bg-light text-dark rounded"
-              >
-                <div style={{ height: "fit-content" }} className="form-control">
+                    )}
+                    {calculateRemainingTime(task.endDate).delay ? (
+                      <div className="text-center d-none">
+                        <div className="form-control  fw-bold p-0">
+                          {calculateRemainingTime(task.endDate).hours}{" "}
+                        </div>{" "}
+                        <div>Min</div>
+                      </div>
+                    ) : (
+                      <div className="text-center">
+                        <div
+                          style={{ boxShadow: "0 0 5px 2px gray inset" }}
+                          className="form-control fw-bold px-1 py-0"
+                        >
+                          {calculateRemainingTime(task.endDate).hours}{" "}
+                        </div>{" "}
+                        <div>Hrs</div>
+                      </div>
+                    )}
+                    {calculateRemainingTime(task.endDate).delay ? (
+                      <div className="text-center d-none">
+                        <div className="form-control fw-bold p-0">
+                          {calculateRemainingTime(task.endDate).minutes}{" "}
+                        </div>{" "}
+                        <div>Min</div>
+                      </div>
+                    ) : (
+                      <div className="text-center">
+                        <div
+                          style={{ boxShadow: "0 0 5px 2px gray inset" }}
+                          className="form-control fw-bold px-1 py-0"
+                        >
+                          {calculateRemainingTime(task.endDate).minutes}{" "}
+                        </div>{" "}
+                        <div>Min</div>
+                      </div>
+                    )}
+                  </div>
+                </summary>
+                <div
+                  style={{ position: "relative" }}
+                  className="row p-1 my-2 mx-0 bg-light text-dark rounded"
+                >
                   <div
                     style={{ height: "fit-content" }}
-                    className="text-start fs-6 form-control"
+                    className="form-control"
                   >
-                    <h6 className="fw-bold">Task Discription</h6>
-                    <div className="row justify-between">
-                      <div className="col-10">{task.description}</div>
-                      <div
-                        className="col-2 d-flex"
-                        style={{ width: "6rem", borderRadius: "50%" }}
-                      >
-                        <CircularProgressbar
-                          className="fw-bold"
-                          value={calculateProgress(task)}
-                          text={`${calculateProgress(task).toFixed(2)}%`}
-                          styles={buildStyles({
-                            pathColor: "#28a745",
-                            textColor: "#28a745"
-                          })}
-                        />
+                    <div
+                      style={{ height: "fit-content" }}
+                      className="text-start fs-6 form-control"
+                    >
+                      <h6 className="fw-bold">Task Discription</h6>
+                      <div className="row justify-between">
+                        <div className="col-10">{task.description}</div>
+                        <div
+                          className="col-2 d-flex"
+                          style={{ width: "6rem", borderRadius: "50%" }}
+                        >
+                          <CircularProgressbar
+                            className="fw-bold"
+                            value={calculateProgress(task)}
+                            text={`${calculateProgress(task).toFixed(2)}%`}
+                            styles={buildStyles({
+                              pathColor: "#28a745",
+                              textColor: "#28a745",
+                            })}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div
-                    style={{ height: "fit-content" }}
-                    className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
-                  >
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
+                    <div
+                      style={{ height: "fit-content" }}
+                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
                     >
-                      Task Durations <br /> <span>{task.duration} days</span>{" "}
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
+                      <p
+                        style={{ fontSize: "1rem" }}
+                        className="col-6 col-sm-6 col-md-2"
+                      >
+                        Task Durations <br /> <span>{task.duration} days</span>{" "}
+                      </p>
+                      <p
+                        style={{ fontSize: "1rem" }}
+                        className="col-6 col-sm-6 col-md-2"
+                      >
+                        Created By <br /> <span>{task.managerEmail}</span>
+                      </p>
+                      <p
+                        style={{ fontSize: "1rem" }}
+                        className="col-6 col-sm-6 col-md-2"
+                      >
+                        Start Date <br />{" "}
+                        <span>
+                          {new Date(task.startDate).toLocaleDateString()}
+                        </span>
+                      </p>
+                      <p
+                        style={{ fontSize: "1rem" }}
+                        className="col-6 col-sm-6 col-md-2"
+                      >
+                        End Date <br />{" "}
+                        <span>
+                          {new Date(task.endDate).toLocaleDateString()}
+                        </span>
+                      </p>
+                      <p
+                        style={{ fontSize: "1rem" }}
+                        className="col-6 col-sm-6 col-md-2"
+                      >
+                        <span>
+                          Task Status <br /> {task.status}
+                        </span>
+                      </p>
+                    </div>
+                    <div
+                      style={{ height: "fit-content" }}
+                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
                     >
-                      Created By <br /> <span>{task.managerEmail}</span>
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
+                      <p>
+                        <span className="fw-bold">Remarks : </span>{" "}
+                        {task.comment}
+                      </p>
+                    </div>
+                    <div
+                      style={{ height: "fit-content" }}
+                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
                     >
-                      Start Date <br />{" "}
-                      <span>
-                        {new Date(task.startDate).toLocaleDateString()}
-                      </span>
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      End Date <br />{" "}
-                      <span>{new Date(task.endDate).toLocaleDateString()}</span>
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      <span>
-                        Task Status <br /> {task.status}
-                      </span>
-                    </p>
-                  </div>
-                  <div
-                    style={{ height: "fit-content" }}
-                    className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
-                  >
-                    <p>
-                      <span className="fw-bold">Remarks : </span> {task.comment}
-                    </p>
-                  </div>
-                  <div
-                    style={{ height: "fit-content" }}
-                    className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
-                  >
-                    <h6 className="fw-bold">Forwarded Members Status</h6>
-                    <Table striped bordered hover>
-                      <thead>
-                        <tr>
-                          <th>S. No</th>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Designation</th>
-                          <th>Task Status</th>
-                          <th>Remarks</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {task.employees.map((taskemp, i) => (
-                          <tr key={i}>
-                            <td
-                              style={{
-                                backgroundColor:
-                                  taskemp.emptaskStatus === "Completed"
-                                    ? "rgba(25, 201, 84, 0.436)"
-                                    : taskemp.emptaskStatus === "Rejected"
-                                    ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit"
-                              }}
-                            >
-                              {i + 1}
-                            </td>
-                            <td
-                              style={{
-                                backgroundColor:
-                                  taskemp.emptaskStatus === "Completed"
-                                    ? "rgba(25, 201, 84, 0.436)"
-                                    : taskemp.emptaskStatus === "Rejected"
-                                    ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit"
-                              }}
-                            >
-                              {taskemp.empname}
-                            </td>
-                            <td
-                              style={{
-                                backgroundColor:
-                                  taskemp.emptaskStatus === "Completed"
-                                    ? "rgba(25, 201, 84, 0.436)"
-                                    : taskemp.emptaskStatus === "Rejected"
-                                    ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit"
-                              }}
-                            >
-                              {taskemp.empemail}
-                            </td>
-                            <td
-                              style={{
-                                backgroundColor:
-                                  taskemp.emptaskStatus === "Completed"
-                                    ? "rgba(25, 201, 84, 0.436)"
-                                    : taskemp.emptaskStatus === "Rejected"
-                                    ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit"
-                              }}
-                            >
-                              {taskemp.empdesignation}
-                            </td>
-                            <td
-                              style={{
-                                backgroundColor:
-                                  taskemp.emptaskStatus === "Completed"
-                                    ? "rgba(25, 201, 84, 0.436)"
-                                    : taskemp.emptaskStatus === "Rejected"
-                                    ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit"
-                              }}
-                            >
-                              {taskemp.emptaskStatus}
-                            </td>
-                            <td
-                              style={{
-                                backgroundColor:
-                                  taskemp.emptaskStatus === "Completed"
-                                    ? "rgba(25, 201, 84, 0.436)"
-                                    : taskemp.emptaskStatus === "Rejected"
-                                    ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit"
-                              }}
-                            >
-                              {taskemp.empTaskComment}
-                            </td>
+                      <h6 className="fw-bold">Forwarded Members Status</h6>
+                      <Table striped bordered hover>
+                        <thead>
+                          <tr>
+                            <th>S. No</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Designation</th>
+                            <th>Task Status</th>
+                            <th>Remarks</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </div>
-                  <div
-                    style={{ height: "fit-content" }}
-                    className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
-                  >
-                    <button
-                      className="btn btn-primary col-2 d-flex justify-center aline-center gap-2"
-                      onClick={() =>
-                        forwordTaskToEmployee(
-                          task._id,
-                          task.department,
-                          task.Taskname
-                        )
-                      }
+                        </thead>
+                        <tbody>
+                          {task.employees.map((taskemp, i) => (
+                            <tr key={i}>
+                              <td
+                                style={{
+                                  backgroundColor:
+                                    taskemp.emptaskStatus === "Completed"
+                                      ? "rgba(25, 201, 84, 0.436)"
+                                      : taskemp.emptaskStatus === "Rejected"
+                                      ? "rgba(214, 92, 44, 0.636)"
+                                      : "inherit",
+                                }}
+                              >
+                                {i + 1}
+                              </td>
+                              <td
+                                style={{
+                                  backgroundColor:
+                                    taskemp.emptaskStatus === "Completed"
+                                      ? "rgba(25, 201, 84, 0.436)"
+                                      : taskemp.emptaskStatus === "Rejected"
+                                      ? "rgba(214, 92, 44, 0.636)"
+                                      : "inherit",
+                                }}
+                              >
+                                {taskemp.empname}
+                              </td>
+                              <td
+                                style={{
+                                  backgroundColor:
+                                    taskemp.emptaskStatus === "Completed"
+                                      ? "rgba(25, 201, 84, 0.436)"
+                                      : taskemp.emptaskStatus === "Rejected"
+                                      ? "rgba(214, 92, 44, 0.636)"
+                                      : "inherit",
+                                }}
+                              >
+                                {taskemp.empemail}
+                              </td>
+                              <td
+                                style={{
+                                  backgroundColor:
+                                    taskemp.emptaskStatus === "Completed"
+                                      ? "rgba(25, 201, 84, 0.436)"
+                                      : taskemp.emptaskStatus === "Rejected"
+                                      ? "rgba(214, 92, 44, 0.636)"
+                                      : "inherit",
+                                }}
+                              >
+                                {taskemp.empdesignation}
+                              </td>
+                              <td
+                                style={{
+                                  backgroundColor:
+                                    taskemp.emptaskStatus === "Completed"
+                                      ? "rgba(25, 201, 84, 0.436)"
+                                      : taskemp.emptaskStatus === "Rejected"
+                                      ? "rgba(214, 92, 44, 0.636)"
+                                      : "inherit",
+                                }}
+                              >
+                                {taskemp.emptaskStatus}
+                              </td>
+                              <td
+                                style={{
+                                  backgroundColor:
+                                    taskemp.emptaskStatus === "Completed"
+                                      ? "rgba(25, 201, 84, 0.436)"
+                                      : taskemp.emptaskStatus === "Rejected"
+                                      ? "rgba(214, 92, 44, 0.636)"
+                                      : "inherit",
+                                }}
+                              >
+                                {taskemp.empTaskComment}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </div>
+                    <div
+                      style={{ height: "fit-content" }}
+                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
                     >
-                      <IoCheckmarkDoneSharp /> Forward Task
-                    </button>
-                    <button
-                      className="btn btn-warning col-2 d-flex justify-center aline-center gap-2"
-                      onClick={() => showPdf(task._id)}
-                    >
-                      <BsFiletypeDoc /> View Docs
-                    </button>
-                    <button
-                      className="btn btn-success col-2 d-flex justify-center aline-center gap-2"
-                      onClick={() =>
-                        completeTask(task._id, task.adminMail, task.Taskname)
-                      }
-                      disabled={calculateProgress(task) !== 100}
-                    >
-                      <FaCheck />
-                      Complete Task
-                    </button>
+                      <button
+                        className="btn btn-primary col-2 d-flex justify-center aline-center gap-2"
+                        onClick={() =>
+                          forwordTaskToEmployee(
+                            task._id,
+                            task.department,
+                            task.Taskname
+                          )
+                        }
+                      >
+                        <IoCheckmarkDoneSharp /> Forward Task
+                      </button>
+                      <button
+                        className="btn btn-warning col-2 d-flex justify-center aline-center gap-2"
+                        onClick={() => showPdf(task._id)}
+                      >
+                        <BsFiletypeDoc /> View Docs
+                      </button>
+                      <button
+                        className="btn btn-success col-2 d-flex justify-center aline-center gap-2"
+                        onClick={() =>
+                          completeTask(task._id, task.adminMail, task.Taskname)
+                        }
+                        disabled={calculateProgress(task) !== 100}
+                      >
+                        <FaCheck />
+                        Complete Task
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </details>
-          ))}
+              </details>
+            ))
+        ) : (
+          <div
+            className="d-flex flex-column gap-3 align-items-center justify-content-center"
+            style={{ height: "80vh" }}
+          >
+            <img
+              style={{ width: "30%", height: "auto" }}
+              src={ActiveTask}
+              alt=""
+            />
+            <p>Sorry, there are no tasks assigned yet.</p>
+          </div>
+        )}
       </div>
 
       <Modal
@@ -744,7 +791,7 @@ const ManagerActiveTask = () => {
                       <span
                         style={{
                           boxShadow: "-3px 3px 5px rgba(204, 201, 201, 0.767)",
-                          width: "fit-content"
+                          width: "fit-content",
                         }}
                         className="selected-employee-email d-flex btn gap-2 aline-center  btn-light py-1 px-2 m-1"
                         onClick={() => removeSelectedEmployee(employee.Email)}

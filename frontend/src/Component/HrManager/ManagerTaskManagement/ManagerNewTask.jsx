@@ -7,39 +7,42 @@ import { toast } from "react-hot-toast";
 import { BsFiletypeDoc } from "react-icons/bs";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import BASE_URL from "../../../Pages/config/config";
+import AssignTask from "../../../img/Task/AssignTask.svg";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 
 const ManagerNewTask = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [, setIsAccepted] = useState(false);
-  const [, setIsRejected] = useState(false);
   const [empData, setEmpData] = useState(null);
+  const [status, setStatus] = useState({ accepted: false, rejected: false });
+  const { darkMode } = useTheme();
 
   const taskId = uuidv4();
-const name = localStorage.getItem("Name")
+  const name = localStorage.getItem("Name");
   const email = localStorage.getItem("Email");
   const id = localStorage.getItem("_id");
 
   const { socket } = useContext(AttendanceContext);
+
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
-    
         setEmpData(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   };
-  useEffect(()=>{
-    loadEmployeeData()
-},[])
+
+  useEffect(() => {
+    loadEmployeeData();
+  }, []);
 
   const calculateRemainingTime = (endDate) => {
     const now = new Date();
@@ -47,11 +50,8 @@ const name = localStorage.getItem("Name")
     let remainingTime = endDateTime - now;
 
     if (remainingTime < 0) {
-      // If remaining time is negative, consider it as delay
-      remainingTime = Math.abs(remainingTime);
       return { delay: true, days: 0, hours: 0, minutes: 0 };
     } else {
-      // Calculate remaining days, hours, minutes, and seconds
       const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
       const hours = Math.floor(
         (remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
@@ -62,353 +62,311 @@ const name = localStorage.getItem("Name")
       return { delay: false, days, hours, minutes };
     }
   };
+
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/tasks`);
-      console.log(response.data);
       setTasks(response.data);
     } catch (error) {
       console.error("Error fetching tasks:", error.message);
       setError("Error fetching tasks. Please try again later.");
     } finally {
       setLoading(false);
-      // Schedule the next update after 1 minute (adjust as needed)
     }
   };
 
   useEffect(() => {
     fetchData();
-
-    return () => clearTimeout();
   }, []);
 
-  const AcceptTask = async (taskID, taskName, adminMail) => {
-    try {
-      setIsAccepted(true);
+  const handleTaskAction = async (taskID, taskName, adminMail, action) => {
+    const actionMapping = {
+      accept: {
+        setStatus: setStatus,
+        statusKey: "accepted",
+        newStatus: "Pending",
+        message: "Accepted",
+        toastMessage: "Task Accepted successfully!",
+      },
+      reject: {
+        setStatus: setStatus,
+        statusKey: "rejected",
+        newStatus: "Rejected",
+        message: "Rejected",
+        toastMessage: "Task Rejected",
+      },
+    };
 
-      // Prompt the user for Accept remarks
-      const AcceptTaskRemark = prompt("Enter remarks for Accept Task:");
+    const actionConfig = actionMapping[action];
+    if (!actionConfig) return;
 
-      if (AcceptTaskRemark === null) {
-        // If the user clicks Cancel in the prompt, do nothing
-        setIsAccepted(false);
-        return;
-      }
+    const { setStatus, statusKey, newStatus, message, toastMessage } =
+      actionConfig;
+    setStatus((prev) => ({ ...prev, [statusKey]: true }));
 
-      // Update the task status to "Cancelled" in the database
-      await axios.put(`${BASE_URL}/api/tasks/${taskID}`, {
-        status: "Pending",
-        comment: AcceptTaskRemark
-      });
+    const remark = prompt(`Enter remarks for ${message} Task:`);
 
-      // Display success notification
-      toast.success("Task Accepteed successfully!");
-      if(empData.profile){
-        const taskNotificationData = {
-          taskId,
-          taskName,
-          senderMail: email,
-          adminMail,
-          Account: 1,
-          message: `Task Accepted`,
-          messageBy: name,
-          profile: empData.profile.image_url,
-          status: "unseen",
-          path: "taskassign"
-        };
-
-        socket.emit("adminTaskNotification", taskNotificationData);
-      }else{
-        const taskNotificationData = {
-          taskId,
-          taskName,
-          senderMail: email,
-          adminMail,
-          Account: 1,
-          message: `Task Accepted`,
-          messageBy: null,
-          status: "unseen",
-          path: "taskassign"
-        };
-
-        socket.emit("adminTaskNotification", taskNotificationData);
-      }
-      // Update the UI by fetching the latest tasks
-      fetchData();
-    } catch (error) {
-      console.error("Error canceling task:", error.message);
-      toast.error("Failed to cancel task. Please try again.");
-    } finally {
-      setIsAccepted(false);
+    if (remark === null) {
+      setStatus((prev) => ({ ...prev, [statusKey]: false }));
+      return;
     }
-  };
-  const RejectTask = async (taskId,taskName, adminMail) => {
+
     try {
-      setIsRejected(true);
-      const RejectRemarks = prompt("Enter remarks for Reject Task:");
-
-      if (RejectRemarks === null) {
-        setIsRejected(false);
-        return;
-      }
-
-      await axios.put(`${BASE_URL}/api/tasks/${taskId}`, {
-        status: "Rejected",
-        comment: RejectRemarks
+      await axios.put(`${BASE_URL}/api/tasks/${taskID}`, {
+        status: newStatus,
+        comment: remark,
       });
 
-      toast.success("Task Rejected");
-      if(empData.profile){
-        const taskNotificationData = {
-          taskId,
-          taskName,
-          senderMail: email,
-          adminMail,
-          Account: 1,
-          message: `Task Rejected`,
-          messageBy: name,
-          profile: empData.profile.image_url,
-          status: "unseen",
-          path: "taskreject"
-        };
+      toast.success(toastMessage);
 
-        socket.emit("adminTaskNotification", taskNotificationData);
-      }else{
-        const taskNotificationData = {
-          taskId,
-          taskName,
-          senderMail: email,
-          adminMail,
-          Account: 1,
-          message: `Task Rejected`,
-          messageBy: null,
-          status: "unseen",
-          path: "taskreject"
-        };
+      const taskNotificationData = {
+        taskId,
+        taskName,
+        senderMail: email,
+        adminMail,
+        Account: 1,
+        message: `Task ${message}`,
+        messageBy: empData?.profile?.image_url ? name : null,
+        profile: empData?.profile?.image_url,
+        status: "unseen",
+        path: action === "accept" ? "taskassign" : "taskreject",
+      };
 
-        socket.emit("adminTaskNotification", taskNotificationData);
-      }
+      socket.emit("adminTaskNotification", taskNotificationData);
       fetchData();
     } catch (error) {
-      console.error("Error Rejecting task:", error.message);
-      toast.error("Failed to Reject task. Please try again.");
+      console.error(`Error ${message.toLowerCase()} task:`, error.message);
+      toast.error(`Failed to ${message.toLowerCase()} task. Please try again.`);
     } finally {
-      setIsRejected(false);
+      setStatus((prev) => ({ ...prev, [statusKey]: false }));
     }
   };
 
   return (
     <div className="p-4">
-      <h1 className="fs-2 text-muted fw-bolder text-uppercase">⭐ New Task</h1>
-      <p className="text-muted">You can view all New task here!</p>{" "}
-      <h1 className="fs-3 fw-bolder text-uppercase "></h1>
+      <h5 style={{ fontWeight: "600" }} className="p-0 m-0 text-uppercase">
+        New Task (
+        {
+          tasks.filter(
+            (task) => task.status === "Assigned" && task.managerEmail === email
+          ).length
+        }
+        )
+      </h5>
+      <p className="text-muted p-0 m-0">You can view all new tasks here!</p>
       {loading && (
-        <div
-          style={{ width: "100%", height: "100%" }}
-          className="d-flex aline-center gap-2"
-        >
+        <div className="d-flex align-items-center gap-2">
           <div
             className="spinner-grow bg-primary"
             style={{ width: "1rem", height: "1rem" }}
             role="status"
           ></div>
-
           <span className="text-primary fw-bold">Loading...</span>
         </div>
       )}
       <div
+        className="mt-2"
         style={{
           overflowY: "scroll",
-          height: "80vh",
+          maxHeight: "80vh",
           scrollbarWidth: "thin",
           scrollbarGutter: "stable",
-          scrollMargin: "1rem"
+          scrollMargin: "1rem",
+          backgroundColor: darkMode
+            ? "var(--primaryDashMenuColor)"
+            : "var(--primaryDashColorDark)",
         }}
       >
-        {tasks
-          .filter(
-            (task) => task.status === "Assigned" && task.managerEmail === email
-          )
-          .map((task, index) => (
-            <details
-              style={{
-                boxShadow: "-1px 1px 10px gray"
-              }}
-              className="p-1 position-relative mt-3 fs-4 rounded mx-3"
-              key={task.id}
-            >
-              <summary
-                style={{
-                  height: "fit-content",
-                  background:
-                    "linear-gradient(165deg,#11009E, #700B97, 90%, #C84B31)"
-                }}
-                className="d-flex justify-content-between aline-center form-control text-white "
+        {tasks.filter(
+          (task) => task.status === "Assigned" && task.managerEmail === email
+        ).length > 0 ? (
+          tasks
+            .filter(
+              (task) =>
+                task.status === "Assigned" && task.managerEmail === email
+            )
+            .map((task, index) => (
+              <details
+                style={{ boxShadow: "-1px 1px 10px gray" }}
+                className="p-1 position-relative mt-3 fs-4 rounded mx-3"
+                key={task.id}
               >
-                <div className="fw-bold fs-5 d-flex justify-content-center flex-column">
-                  # Task {index + 1} : {task.Taskname}
-                </div>
-                <div
-                  style={{ position: "absolute", top: "-10px", left: "20px" }}
-                  className="fw-bold bg-white rounded-5 px-3 text-primary fs-6 d-flex justify-content-center aline-center flex-column"
+                <summary
+                  style={{
+                    height: "fit-content",
+                    background:
+                      "linear-gradient(165deg,#11009E, #700B97, 90%, #C84B31)",
+                  }}
+                  className="d-flex justify-content-between align-items-center form-control text-white"
                 >
-                  {task.department}
-                </div>
-                <div className="d-flex gap-2 RemainingTimeHandel justify-content-between ">
-                  {calculateRemainingTime(task.endDate).delay ? (
-                    <div>
-                      <div className="text-center d-none">
-                        <div className="form-control  fw-bold p-0">
-                          {calculateRemainingTime(task.endDate).days}{" "}
-                        </div>{" "}
-                        <div>Day</div>
+                  <div className="fw-bold fs-5 d-flex justify-content-center flex-column">
+                    # Task {index + 1} : {task.Taskname}
+                  </div>
+                  <div
+                    style={{ position: "absolute", top: "-10px", left: "20px" }}
+                    className="fw-bold bg-white rounded-5 px-3 text-primary fs-6 d-flex justify-content-center align-items-center flex-column"
+                  >
+                    {task.department}
+                  </div>
+                  <div className="d-flex gap-2 justify-content-between">
+                    {calculateRemainingTime(task.endDate).delay ? (
+                      <div>
+                        <h5 className="btn btn-danger p-1 px-3 fw-bold">
+                          Late
+                        </h5>
                       </div>
-                      <h5 className="btn btn-danger p-1 px-3 fw-bold">Late</h5>
-                    </div>
-                  ) : (
-                    <div className="text-center">
-                      <div
-                        style={{ boxShadow: "0 0 5px 2px gray inset" }}
-                        className="form-control fw-bold px-1 py-0"
-                      >
-                        {calculateRemainingTime(task.endDate).days}{" "}
-                      </div>{" "}
-                      <div>Day</div>
-                    </div>
-                  )}
-                  {calculateRemainingTime(task.endDate).delay ? (
-                    <div className="text-center d-none">
-                      <div className="form-control  fw-bold p-0">
-                        {calculateRemainingTime(task.endDate).hours}{" "}
-                      </div>{" "}
-                      <div>Min</div>
-                    </div>
-                  ) : (
-                    <div className="text-center">
-                      <div
-                        style={{ boxShadow: "0 0 5px 2px gray inset" }}
-                        className="form-control fw-bold px-1 py-0"
-                      >
-                        {calculateRemainingTime(task.endDate).hours}{" "}
-                      </div>{" "}
-                      <div>Hrs</div>
-                    </div>
-                  )}
-                  {calculateRemainingTime(task.endDate).delay ? (
-                    <div className="text-center d-none">
-                      <div className="form-control fw-bold p-0">
-                        {calculateRemainingTime(task.endDate).minutes}{" "}
-                      </div>{" "}
-                      <div>Min</div>
-                    </div>
-                  ) : (
-                    <div className="text-center">
-                      <div
-                        style={{ boxShadow: "0 0 5px 2px gray inset" }}
-                        className="form-control fw-bold px-1 py-0"
-                      >
-                        {calculateRemainingTime(task.endDate).minutes}{" "}
-                      </div>{" "}
-                      <div>Min</div>
-                    </div>
-                  )}
-                </div>
-              </summary>
-              <div
-                style={{ position: "relative" }}
-                className="row p-1 my-2 mx-0 bg-light text-dark rounded"
-              >
-                <div style={{ height: "fit-content" }} className="form-control">
-                  <p
-                    style={{ height: "fit-content" }}
-                    className="text-start fs-6 form-control"
-                  >
-                    <h6 className="fw-bold">Task Discription</h6>{" "}
-                    {task.description}
-                  </p>
+                    ) : (
+                      <>
+                        <div className="text-center">
+                          <div
+                            style={{ boxShadow: "0 0 5px 2px gray inset" }}
+                            className="form-control fw-bold px-1 py-0"
+                          >
+                            {calculateRemainingTime(task.endDate).days}
+                          </div>
+                          <div>Day</div>
+                        </div>
+                        <div className="text-center">
+                          <div
+                            style={{ boxShadow: "0 0 5px 2px gray inset" }}
+                            className="form-control fw-bold px-1 py-0"
+                          >
+                            {calculateRemainingTime(task.endDate).hours}
+                          </div>
+                          <div>Hrs</div>
+                        </div>
+                        <div className="text-center">
+                          <div
+                            style={{ boxShadow: "0 0 5px 2px gray inset" }}
+                            className="form-control fw-bold px-1 py-0"
+                          >
+                            {calculateRemainingTime(task.endDate).minutes}
+                          </div>
+                          <div>Min</div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </summary>
+                <div
+                  style={{ position: "relative" }}
+                  className="row p-1 my-2 mx-0 bg-light text-dark rounded"
+                >
                   <div
                     style={{ height: "fit-content" }}
-                    className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
+                    className="form-control"
                   >
                     <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
+                      style={{ height: "fit-content" }}
+                      className="text-start fs-6 form-control"
                     >
-                      Task Durations <br /> <span>{task.duration} days</span>{" "}
+                      <h6 className="fw-bold">Task Description</h6>{" "}
+                      {task.description}
                     </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
+                    <div
+                      style={{ height: "fit-content" }}
+                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
                     >
-                      Created By <br /> <span>{task.managerEmail}</span>
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      Start Date <br />{" "}
-                      <span>
-                        {new Date(task.startDate).toLocaleDateString()}
-                      </span>
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      End Date <br />{" "}
-                      <span>{new Date(task.endDate).toLocaleDateString()}</span>
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      <span>
+                      <p
+                        style={{ fontSize: "1rem" }}
+                        className="col-6 col-sm-6 col-md-2"
+                      >
+                        Task Durations <br /> <span>{task.duration} days</span>
+                      </p>
+                      <p
+                        style={{ fontSize: "1rem" }}
+                        className="col-6 col-sm-6 col-md-2"
+                      >
+                        Created By <br /> <span>{task.managerEmail}</span>
+                      </p>
+                      <p
+                        style={{ fontSize: "1rem" }}
+                        className="col-6 col-sm-6 col-md-2"
+                      >
+                        Start Date <br />{" "}
+                        <span>
+                          {new Date(task.startDate).toLocaleDateString()}
+                        </span>
+                      </p>
+                      <p
+                        style={{ fontSize: "1rem" }}
+                        className="col-6 col-sm-6 col-md-2"
+                      >
+                        End Date <br />{" "}
+                        <span>
+                          {new Date(task.endDate).toLocaleDateString()}
+                        </span>
+                      </p>
+                      <p
+                        style={{ fontSize: "1rem" }}
+                        className="col-6 col-sm-6 col-md-2"
+                      >
                         Task Status <br /> {task.status}
-                      </span>
-                    </p>
-                  </div>
-                  <div
-                    style={{ height: "fit-content" }}
-                    className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
-                  >
-                    <p>
-                      <span className="fw-bold">Remarks : </span> {task.comment}
-                    </p>
-                  </div>
-                  <div
-                    style={{ height: "fit-content" }}
-                    className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
-                  >
-                    <button
-                      className="btn btn-info col-2 d-flex justify-center aline-center gap-2"
-                      onClick={() =>
-                        AcceptTask(task._id, task.Taskname, task.adminMail)
-                      }
+                      </p>
+                    </div>
+                    <div
+                      style={{ height: "fit-content" }}
+                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
                     >
-                      <IoCheckmarkDoneSharp />
-                      Accept
-                    </button>
-                    <button
-                      className="btn btn-primary col-2 d-flex justify-center aline-center gap-2"
-                      onClick={() =>
-                        RejectTask(task._id, task.Taskname, task.adminMail)
-                      }
+                      <p>
+                        <span className="fw-bold">Remarks: </span>{" "}
+                        {task.comment}
+                      </p>
+                    </div>
+                    <div
+                      style={{ height: "fit-content" }}
+                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
                     >
-                      <BsFiletypeDoc />
-                      View Docs
-                    </button>
-                    <button
-                      className="btn btn-primary col-2 d-flex justify-center aline-center gap-2"
-                      onClick={() => RejectTask(task._id,task.Taskname, task.adminMail)}
-                    >
-                      <MdCancel />
-                      Reject
-                    </button>
+                      <button
+                        className="btn btn-info col-2 d-flex justify-center align-items-center gap-2"
+                        onClick={() =>
+                          handleTaskAction(
+                            task._id,
+                            task.Taskname,
+                            task.adminMail,
+                            "accept"
+                          )
+                        }
+                      >
+                        <IoCheckmarkDoneSharp />
+                        Accept
+                      </button>
+                      <button className="btn btn-primary col-2 d-flex justify-center align-items-center gap-2">
+                        <BsFiletypeDoc />
+                        View Docs
+                      </button>
+                      <button
+                        className="btn btn-primary col-2 d-flex justify-center align-items-center gap-2"
+                        onClick={() =>
+                          handleTaskAction(
+                            task._id,
+                            task.Taskname,
+                            task.adminMail,
+                            "reject"
+                          )
+                        }
+                      >
+                        <MdCancel />
+                        Reject
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </details>
-          ))}
+              </details>
+            ))
+        ) : (
+          <div
+            className="d-flex flex-column gap-3  align-items-center justify-content-center"
+            style={{ height: "80vh" }}
+          >
+            <img
+              style={{ width: "30%", height: "auto" }}
+              src={AssignTask}
+              alt=""
+            />
+            <p>Sorry, there are no tasks assigned yet.</p>
+          </div>
+        )}
       </div>
     </div>
   );

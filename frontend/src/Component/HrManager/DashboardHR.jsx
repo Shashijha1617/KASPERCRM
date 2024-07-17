@@ -28,14 +28,20 @@ const DashboardHR = (props) => {
   };
 
   return (
-    <div style={{ backgroundColor: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)" }}>
+    <div
+      style={{
+        backgroundColor: darkMode
+          ? "var(--secondaryDashMenuColor)"
+          : "var(--secondaryDashColorDark)",
+      }}
+    >
       <SidebarSlider />
       <Router>
         <div className="dashboard-grid-manager">
           <div
             style={{
               transform: isOpen ? "translateX(0%)" : "translateX(-500%)",
-              transition: "1s ease"
+              transition: "1s ease",
             }}
             className="sidebarsmall d-flex "
           >
@@ -55,7 +61,7 @@ const DashboardHR = (props) => {
           <div className="mainbar-grid">
             <MainContent />
             <div
-              style={{ zIndex: "50", position: 'absolute', bottom: '0' }}
+              style={{ zIndex: "50", position: "absolute", bottom: "0" }}
               className="HrPannelFooter bg-dark w-100 text-white"
             >
               <Footer />

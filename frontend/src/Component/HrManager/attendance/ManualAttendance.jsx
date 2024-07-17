@@ -19,7 +19,7 @@ function ManualAttendance() {
     attencenceID,
     setAttencenceID,
     message,
-    setMessage
+    setMessage,
   } = useContext(AttendanceContext);
 
   useEffect(() => {
@@ -27,8 +27,8 @@ function ManualAttendance() {
       try {
         const response = await axios.get(`${BASE_URL}/api/employee`, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         });
         setEmployees(response.data);
       } catch (error) {
@@ -108,7 +108,7 @@ function ManualAttendance() {
         date: new Date().getDate(),
         loginTime: [currentTime],
         loginTimeMs: [currentTimeMs],
-        status: "login"
+        status: "login",
       });
       alert("Login time recorded successfully");
     } catch (error) {
@@ -133,7 +133,7 @@ function ManualAttendance() {
         date: new Date().getDate(),
         logoutTime: [currentTime],
         logoutTimeMs: [currentTimeMs],
-        status: "Logout"
+        status: "Logout",
       });
       setMessage("Logout time recorded successfully");
     } catch (error) {
@@ -160,7 +160,7 @@ function ManualAttendance() {
         date: new Date().getDate(),
         ResumeTime: [currentTime],
         resumeTimeMS: [currentTimeMs],
-        status: "Login"
+        status: "Login",
       });
 
       setMessage("Resumed time recorded successfully");
@@ -188,7 +188,7 @@ function ManualAttendance() {
         date: new Date().getDate(),
         breakTime: [currentTime],
         breakTimeMs: [currentTimeMs],
-        status: "Break"
+        status: "Break",
       });
       setMessage("Break time recorded successfully");
     } catch (error) {
@@ -213,7 +213,7 @@ function ManualAttendance() {
           <option value="">-- Select User --</option>
           {employees.map((employee) => (
             <option key={employee._id} value={employee._id}>
-              {employee.empID}  {employee.FirstName}
+              {employee.empID} {employee.FirstName}
             </option>
           ))}
         </select>

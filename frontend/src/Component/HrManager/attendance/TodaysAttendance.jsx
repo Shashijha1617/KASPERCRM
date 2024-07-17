@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { AiOutlineMore } from "react-icons/ai";
+import { AiOutlineMore, AiOutlineNumber } from "react-icons/ai";
 import { RxCaretSort, RxCounterClockwiseClock } from "react-icons/rx";
-import { MdNearbyError } from "react-icons/md";
+import { MdFreeBreakfast, MdNearbyError } from "react-icons/md";
+import noRecordFound from "../../../img/Attendance/noRecordFound.svg";
 import {
   HiOutlineLogin,
   HiOutlineLogout,
-  HiStatusOnline
+  HiStatusOnline,
 } from "react-icons/hi";
 import { FaUserClock } from "react-icons/fa6";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
@@ -15,6 +16,7 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../../../Pages/config/config";
+import { TbListDetails } from "react-icons/tb";
 
 const TodaysAttendance = () => {
   const [activeCategory, setActiveCategory] = useState(null);
@@ -85,7 +87,7 @@ const TodaysAttendance = () => {
       "Wednesday",
       "Thursday",
       "Friday",
-      "Saturday"
+      "Saturday",
     ];
     return days[s];
   };
@@ -154,14 +156,14 @@ const TodaysAttendance = () => {
             user.attendance.totalLogAfterBreak
           ).toUpperCase()
         : "--",
-      Mark: getAttendanceMark(user).toUpperCase()
+      Mark: getAttendanceMark(user).toUpperCase(),
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
 
     // Add the caption at the top of the worksheet
     XLSX.utils.sheet_add_aoa(worksheet, [["Kasper", "123 New Delhi 110044"]], {
-      origin: -1
+      origin: -1,
     });
 
     const workbook = XLSX.utils.book_new();
@@ -171,17 +173,20 @@ const TodaysAttendance = () => {
   };
 
   return (
-    <div className="container-fluid pb-5">
+    <div className="container-fluid">
       <div
         style={{
           color: darkMode
             ? "var(--primaryDashColorDark)"
-            : "var(--primaryDashMenuColor)"
+            : "var(--primaryDashMenuColor)",
         }}
         className="d-flex  justify-content-between py-3"
       >
-        <h6 className="fw-bold my-auto ">Today's Attendance</h6>
-        <div className="d-flex gap-2">
+        <div>
+          <h5 className=" m-0 ">Today's Attendance</h5>
+          <p>You can see today's attendance of employee here</p>
+        </div>
+        <div className="d-flex gap-2 my-auto">
           <input
             value={searchQuery}
             onChange={handleInputChange}
@@ -209,285 +214,255 @@ const TodaysAttendance = () => {
           </span>
         </div>
       </div>
-      <div style={{ maxHeight: "76vh", overflow: "auto" }}>
-        <table
-          className="table"
-          style={{ fontSize: ".8rem", fontWeight: "normal" }}
-        >
-          <thead>
-            <tr style={{ position: "sticky", top: "0", zIndex: "1" }}>
-              <th
-                colSpan={2}
-                onClick={() => handleSort("FirstName")}
-                style={{
-                  background: darkMode
-                    ? "var(--primaryDashMenuColor)"
-                    : "var(--primaryDashColorDark)",
-                  color: darkMode
-                    ? "var(--primaryDashColorDark)"
-                    : "var(--primaryDashMenuColor)",
-                  border: "none",
-                  whiteSpace: "pre"
-                }}
-              >
-                <RxCaretSort /> Employee Name {renderSortIcon("FirstName")}
-              </th>
+      <div
+        className={`${
+          sortedAndFilteredData.length > 0 ? "border border-1 border-black" : ""
+        }  `}
+        style={{ maxHeight: "78vh", overflow: "auto" }}
+      >
+        {sortedAndFilteredData.length > 0 ? (
+          <table
+            className="table"
+            style={{ fontSize: ".8rem", fontWeight: "normal" }}
+          >
+            <thead>
+              <tr style={{ position: "sticky", top: "0", zIndex: "1" }}>
+                <th
+                  colSpan={2}
+                  onClick={() => handleSort("FirstName")}
+                  style={{
+                    background: darkMode
+                      ? "var(--primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                    color: darkMode
+                      ? "var(--primaryDashColorDark)"
+                      : "var(--primaryDashMenuColor)",
+                    border: "none",
+                    whiteSpace: "pre",
+                  }}
+                >
+                  <RxCaretSort /> Employee Name {renderSortIcon("FirstName")}
+                </th>
 
-              <th
-                onClick={() => handleSort("FirstName")}
-                style={{
-                  background: darkMode
-                    ? "var(--primaryDashMenuColor)"
-                    : "var(--primaryDashColorDark)",
-                  color: darkMode
-                    ? "var(--primaryDashColorDark)"
-                    : "var(--primaryDashMenuColor)",
-                  border: "none",
-                  whiteSpace: "pre"
-                }}
-              >
-                <RxCaretSort /> Emp ID {renderSortIcon("FirstName")}
-              </th>
+                <th
+                  onClick={() => handleSort("FirstName")}
+                  style={{
+                    background: darkMode
+                      ? "var(--primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                    color: darkMode
+                      ? "var(--primaryDashColorDark)"
+                      : "var(--primaryDashMenuColor)",
+                    border: "none",
+                    whiteSpace: "pre",
+                  }}
+                >
+                  <RxCaretSort /> Emp ID {renderSortIcon("FirstName")}
+                </th>
 
-              <th
-                style={{
-                  background: darkMode
-                    ? "var(--primaryDashMenuColor)"
-                    : "var(--primaryDashColorDark)",
-                  color: darkMode
-                    ? "var(--primaryDashColorDark)"
-                    : "var(--primaryDashMenuColor)",
-                  border: "none",
-                  whiteSpace: "pre"
-                }}
-              >
-                {" "}
-                <HiOutlineLogin /> Login Time{" "}
-              </th>
+                <th
+                  style={{
+                    background: darkMode
+                      ? "var(--primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                    color: darkMode
+                      ? "var(--primaryDashColorDark)"
+                      : "var(--primaryDashMenuColor)",
+                    border: "none",
+                    whiteSpace: "pre",
+                  }}
+                >
+                  {" "}
+                  <HiOutlineLogin /> Login Time{" "}
+                </th>
 
-              <th
-                style={{
-                  background: darkMode
-                    ? "var(--primaryDashMenuColor)"
-                    : "var(--primaryDashColorDark)",
-                  color: darkMode
-                    ? "var(--primaryDashColorDark)"
-                    : "var(--primaryDashMenuColor)",
-                  border: "none",
-                  whiteSpace: "pre"
-                }}
-              >
-                {" "}
-                Logout Time <HiOutlineLogout />{" "}
-              </th>
+                <th
+                  style={{
+                    background: darkMode
+                      ? "var(--primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                    color: darkMode
+                      ? "var(--primaryDashColorDark)"
+                      : "var(--primaryDashMenuColor)",
+                    border: "none",
+                    whiteSpace: "pre",
+                  }}
+                >
+                  {" "}
+                  Logout Time <HiOutlineLogout />{" "}
+                </th>
 
-              <th
-                style={{
-                  background: darkMode
-                    ? "var(--primaryDashMenuColor)"
-                    : "var(--primaryDashColorDark)",
-                  color: darkMode
-                    ? "var(--primaryDashColorDark)"
-                    : "var(--primaryDashMenuColor)",
-                  border: "none",
-                  whiteSpace: "pre"
-                }}
-              >
-                {" "}
-                <RxCounterClockwiseClock /> Log Count{" "}
-              </th>
+                <th
+                  style={{
+                    background: darkMode
+                      ? "var(--primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                    color: darkMode
+                      ? "var(--primaryDashColorDark)"
+                      : "var(--primaryDashMenuColor)",
+                    border: "none",
+                    whiteSpace: "pre",
+                  }}
+                >
+                  {" "}
+                  <AiOutlineNumber /> Log Count{" "}
+                </th>
 
-              <th
-                style={{
-                  background: darkMode
-                    ? "var(--primaryDashMenuColor)"
-                    : "var(--primaryDashColorDark)",
-                  color: darkMode
-                    ? "var(--primaryDashColorDark)"
-                    : "var(--primaryDashMenuColor)",
-                  border: "none",
-                  whiteSpace: "pre"
-                }}
-              >
-                {" "}
-                Total Break{" "}
-              </th>
+                <th
+                  style={{
+                    background: darkMode
+                      ? "var(--primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                    color: darkMode
+                      ? "var(--primaryDashColorDark)"
+                      : "var(--primaryDashMenuColor)",
+                    border: "none",
+                    whiteSpace: "pre",
+                  }}
+                >
+                  {" "}
+                  <AiOutlineNumber /> Break Count
+                </th>
+                <th
+                  style={{
+                    background: darkMode
+                      ? "var(--primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                    color: darkMode
+                      ? "var(--primaryDashColorDark)"
+                      : "var(--primaryDashMenuColor)",
+                    border: "none",
+                    whiteSpace: "pre",
+                  }}
+                >
+                  <MdFreeBreakfast />
+                  Total Break{" "}
+                </th>
 
-              <th
-                style={{
-                  background: darkMode
-                    ? "var(--primaryDashMenuColor)"
-                    : "var(--primaryDashColorDark)",
-                  color: darkMode
-                    ? "var(--primaryDashColorDark)"
-                    : "var(--primaryDashMenuColor)",
-                  border: "none",
-                  whiteSpace: "pre"
-                }}
-              >
-                {" "}
-                <FaUserClock /> Total Login{" "}
-              </th>
+                <th
+                  style={{
+                    background: darkMode
+                      ? "var(--primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                    color: darkMode
+                      ? "var(--primaryDashColorDark)"
+                      : "var(--primaryDashMenuColor)",
+                    border: "none",
+                    whiteSpace: "pre",
+                  }}
+                >
+                  <FaUserClock /> Total Login
+                </th>
 
-              <th
-                style={{
-                  background: darkMode
-                    ? "var(--primaryDashMenuColor)"
-                    : "var(--primaryDashColorDark)",
-                  color: darkMode
-                    ? "var(--primaryDashColorDark)"
-                    : "var(--primaryDashMenuColor)",
-                  border: "none",
-                  whiteSpace: "pre"
-                }}
-              >
-                {" "}
-                Status <HiStatusOnline />
-              </th>
+                <th
+                  style={{
+                    background: darkMode
+                      ? "var(--primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                    color: darkMode
+                      ? "var(--primaryDashColorDark)"
+                      : "var(--primaryDashMenuColor)",
+                    border: "none",
+                    whiteSpace: "pre",
+                  }}
+                >
+                  <HiStatusOnline /> Status
+                </th>
 
-              <th
-                style={{
-                  background: darkMode
-                    ? "var(--primaryDashMenuColor)"
-                    : "var(--primaryDashColorDark)",
-                  color: darkMode
-                    ? "var(--primaryDashColorDark)"
-                    : "var(--primaryDashMenuColor)",
-                  border: "none",
-                  whiteSpace: "pre"
-                }}
-              >
-                {" "}
-                <IoCheckmarkDoneOutline /> Mark{" "}
-              </th>
+                <th
+                  style={{
+                    background: darkMode
+                      ? "var(--primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                    color: darkMode
+                      ? "var(--primaryDashColorDark)"
+                      : "var(--primaryDashMenuColor)",
+                    border: "none",
+                    whiteSpace: "pre",
+                  }}
+                >
+                  {" "}
+                  <IoCheckmarkDoneOutline /> Mark{" "}
+                </th>
 
-              {/* <th style={{ background: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)", background: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)", border: 'none' }} className="text-center"> Break Count</th> */}
-
-              <th
-                style={{
-                  background: darkMode
-                    ? "var(--primaryDashMenuColor)"
-                    : "var(--primaryDashColorDark)",
-                  color: darkMode
-                    ? "var(--primaryDashColorDark)"
-                    : "var(--primaryDashMenuColor)",
-                  border: "none"
-                }}
-              >
-                Details
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedAndFilteredData.length > 0 ? (
-              sortedAndFilteredData.map((user) => {
+                <th
+                  style={{
+                    background: darkMode
+                      ? "var(--primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                    color: darkMode
+                      ? "var(--primaryDashColorDark)"
+                      : "var(--primaryDashMenuColor)",
+                    border: "none",
+                  }}
+                >
+                  <TbListDetails />
+                  Details
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedAndFilteredData.map((user) => {
                 const mark = getAttendanceMark(user);
+                const rowBodyStyle = {
+                  position: "sticky",
+                  top: "0",
+                  verticalAlign: "middle",
+                  background: darkMode
+                    ? "var(--secondaryDashMenuColor)"
+                    : "var(--secondaryDashColorDark)",
+                  color: darkMode
+                    ? "var(--secondaryDashColorDark)"
+                    : "var(--primaryDashMenuColor)",
+                };
+
                 return (
-                  <tr
-                    style={{ position: "sticky", top: "0" }}
-                    key={user.userId}
-                  >
+                  <tr key={user.userId}>
                     <td
                       className="border-0"
                       style={{
-                        background: darkMode
-                          ? "var(--primaryDashMenuColor)"
-                          : "var(--secondaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
+                        ...rowBodyStyle,
                         border: "none",
-                        whiteSpace: "pre",
-                        verticalAlign: "middle"
+                        verticalAlign: "middle",
                       }}
                     >
                       <div
+                        className="profile-image bg-white mx-auto border-0"
                         style={{
                           height: "35px",
                           width: "35px",
                           overflow: "hidden",
-                          borderRadius: "50%"
+                          borderRadius: "50%",
                         }}
-                        className="profile-image bg-white  mx-auto border-0"
                       >
                         <img
                           style={{
                             height: "100%",
                             width: "100%",
-                            overflow: "hidden",
                             borderRadius: "50%",
-                            objectFit: "cover"
+                            objectFit: "cover",
                           }}
-                          className=" border-0"
+                          className="border-0"
                           src={
-                            user?.data?.profile?.image_url
-                              ? user?.data?.profile?.image_url
-                              : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
+                            user?.data?.profile?.image_url ||
+                            "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
                           }
                           alt=""
                         />
                       </div>
                     </td>
-                    <td
-                      style={{
-                        background: darkMode
-                          ? "var(--primaryDashMenuColor)"
-                          : "var(--secondaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
-                        border: "none",
-                        whiteSpace: "pre",
-                        verticalAlign: "middle"
-                      }}
-                    >
+                    <td style={rowBodyStyle}>
                       <span className="text-capitalize">
                         {user.FirstName} {user.LastName}
                       </span>
                     </td>
-                    <td
-                      style={{
-                        background: darkMode
-                          ? "var(--primaryDashMenuColor)"
-                          : "var(--secondaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
-                        border: "none",
-                        whiteSpace: "pre",
-                        verticalAlign: "middle"
-                      }}
-                    >
+                    <td style={rowBodyStyle}>
                       <span>{user.empID}</span>
                     </td>
-                    <td
-                      style={{
-                        background: darkMode
-                          ? "var(--primaryDashMenuColor)"
-                          : "var(--secondaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
-                        border: "none",
-                        whiteSpace: "pre",
-                        verticalAlign: "middle"
-                      }}
-                    >
+                    <td style={rowBodyStyle}>
                       {user.attendance ? user.attendance.loginTime[0] : "--"}
                     </td>
-                    <td
-                      style={{
-                        background: darkMode
-                          ? "var(--primaryDashMenuColor)"
-                          : "var(--secondaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
-                        border: "none",
-                        whiteSpace: "pre",
-                        verticalAlign: "middle"
-                      }}
-                    >
+                    <td style={rowBodyStyle}>
                       {user.attendance
                         ? user.attendance.logoutTime[
                             user.attendance.logoutTime.length - 1
@@ -495,53 +470,28 @@ const TodaysAttendance = () => {
                         : "--"}
                     </td>
                     <td
-                      style={{
-                        background: darkMode
-                          ? "var(--primaryDashMenuColor)"
-                          : "var(--secondaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
-                        border: "none",
-                        whiteSpace: "pre",
-                        verticalAlign: "middle"
-                      }}
                       className="text-uppercase text-center"
+                      style={rowBodyStyle}
                     >
                       {user.attendance
                         ? user.attendance.logoutTime.length
                         : "--"}
                     </td>
-                    <td
-                      style={{
-                        background: darkMode
-                          ? "var(--primaryDashMenuColor)"
-                          : "var(--secondaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
-                        border: "none",
-                        whiteSpace: "pre",
-                        verticalAlign: "middle"
-                      }}
-                    >
+                    <td className="text-center" style={rowBodyStyle}>
+                      {user.attendance
+                        ? user.attendance.breakTime.length
+                        : "--"}
+                    </td>
+                    <td style={rowBodyStyle}>
                       <span>
-                        {user.attendance ?convertMinutesToHoursAndMinutes( user.attendance.totalBrake) : "--"}
+                        {user.attendance
+                          ? convertMinutesToHoursAndMinutes(
+                              user.attendance.totalBrake
+                            )
+                          : "--"}
                       </span>
                     </td>
-                    <td
-                      style={{
-                        background: darkMode
-                          ? "var(--primaryDashMenuColor)"
-                          : "var(--secondaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
-                        border: "none",
-                        whiteSpace: "pre",
-                        verticalAlign: "middle"
-                      }}
-                    >
+                    <td style={rowBodyStyle}>
                       {user.attendance
                         ? convertMinutesToHoursAndMinutes(
                             user.attendance.totalLogAfterBreak
@@ -550,37 +500,14 @@ const TodaysAttendance = () => {
                     </td>
                     <td
                       className="text-capitalize text-start"
-                      style={{
-                        background: darkMode
-                          ? "var(--primaryDashMenuColor)"
-                          : "var(--secondaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
-                        border: "none",
-                        whiteSpace: "pre",
-                        verticalAlign: "middle"
-                      }}
+                      style={rowBodyStyle}
                     >
                       {user.attendance ? user.attendance.status : "--"}
                     </td>
-                    <td
-                      style={{
-                        background: darkMode
-                          ? "var(--primaryDashMenuColor)"
-                          : "var(--secondaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
-                        border: "none",
-                        whiteSpace: "pre",
-                        verticalAlign: "middle"
-                      }}
-                      className="text-start"
-                    >
+                    <td className="text-start" style={rowBodyStyle}>
                       <span
                         style={{ fontSize: ".8rem" }}
-                        className={`py-1 px-3 rounded-5 shadow-sm ${
+                        className={`py-1 px-3 fw-bold border border-1 border-black rounded-5 shadow-sm ${
                           mark === "Present"
                             ? "text-success"
                             : mark === "Late"
@@ -593,19 +520,7 @@ const TodaysAttendance = () => {
                         {mark}
                       </span>
                     </td>
-                    {/* <td style={{ verticalAlign: "middle", textAlign: 'center' }} className='text-center'>{user.attendance ? user.attendance.breakTime.length : '--'}</td> */}
-                    <td
-                      style={{
-                        background: darkMode
-                          ? "var(--primaryDashMenuColor)"
-                          : "var(--secondaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
-                        border: "none"
-                      }}
-                      className="text-center"
-                    >
+                    <td className="text-center" style={rowBodyStyle}>
                       <Link to="/hr/viewAttenDance">
                         <button
                           style={{
@@ -615,11 +530,11 @@ const TodaysAttendance = () => {
                             color: darkMode
                               ? "var(--secondaryDashColorDark)"
                               : "var(--primaryDashMenuColor)",
-                            border: "none"
+                            border: "none",
                           }}
                           onMouseEnter={() => setActiveCategory(user)}
                           onMouseLeave={() => setActiveCategory(null)}
-                          className=" btn p-0 fw-bold fs-5 position-relative"
+                          className="btn p-0 fw-bold fs-5 position-relative"
                         >
                           <AiOutlineMore />
                         </button>
@@ -627,27 +542,42 @@ const TodaysAttendance = () => {
                     </td>
                   </tr>
                 );
-              })
-            ) : (
-              <tr>
-                <td
-                  colSpan="10"
-                  style={{ height: "30vh", width: "94%", position: "absolute" }}
-                  className="d-flex flex-column justify-content-center align-items-center gap-1"
-                >
-                  <span className="fw-bolder " style={{ fontSize: "2rem" }}>
-                    <MdNearbyError
-                      className="text-danger"
-                      style={{ fontSize: "2.3rem" }}
-                    />{" "}
-                    OOPS!
-                  </span>
-                  <h6 className="p-0 m-0">Record not found.</h6>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <div
+            style={{
+              height: "80vh",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              wordSpacing: "5px",
+              flexDirection: "column",
+              gap: "2rem",
+            }}
+          >
+            <img
+              style={{
+                height: "auto",
+                width: "20%",
+              }}
+              src={noRecordFound}
+              alt="img"
+            />
+            <p
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var( --primaryDashMenuColor)",
+              }}
+            >
+              User details not found{" "}
+              {searchQuery && `using ( ${searchQuery} ) keyword `}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

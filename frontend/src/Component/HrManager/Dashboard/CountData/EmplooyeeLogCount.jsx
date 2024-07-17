@@ -26,30 +26,30 @@ const EmployeeLogCount = (props) => {
       },
     },
     fill: {
-      type: 'gradient',
+      type: "gradient",
       gradient: {
-        shade: 'dark',
-        type: 'radial',
+        shade: "dark",
+        type: "radial",
         shadeIntensity: 0.5,
-        gradientToColors: ['#09cc40', '#f21606', '#eecd27'],
+        gradientToColors: ["#09cc40", "#f21606", "#eecd27"],
         inverseColors: false,
         opacityFrom: 1,
         opacityTo: 1,
-        stops: [0, 100]
-      }
+        stops: [0, 100],
+      },
     },
     stroke: {
       show: false,
     },
-    colors: ["#09cc40", '#f21606', '#eecd27'],
+    colors: ["#09cc40", "#f21606", "#eecd27"],
     dataLabels: {
       enabled: true,
     },
     legend: {
       show: true,
       labels: {
-        colors: "white"
-      }
+        colors: "white",
+      },
     },
   });
 
@@ -78,12 +78,12 @@ const EmployeeLogCount = (props) => {
                 data["Account"] === 1
                   ? "Admin"
                   : data["Account"] === 2
-                    ? "HR"
-                    : data["Account"] === 3
-                      ? "Employee"
-                      : data["Account"] === 4
-                        ? "Manager"
-                        : "",
+                  ? "HR"
+                  : data["Account"] === 3
+                  ? "Employee"
+                  : data["Account"] === 4
+                  ? "Manager"
+                  : "",
               RoleName: data["role"][0] ? data["role"][0]["RoleName"] : "",
               FirstName: data["FirstName"],
               MiddleName: data["MiddleName"],
@@ -112,26 +112,55 @@ const EmployeeLogCount = (props) => {
       });
   };
 
-
   useEffect(() => {
     loadEmployeeData();
   }, []);
 
-
   useEffect(() => {
-    const loggedInCount = rowData.filter((data) => data.loginStatus === "loggedIn").length;
-    const loggedOutCount = rowData.filter((data) => data.loginStatus === "loggedOut").length;
-    const inactiveCount = rowData.filter((data) => data.loginStatus !== "loggedOut" && data.loginStatus !== "loggedIn").length;
+    const loggedInCount = rowData.filter(
+      (data) => data.loginStatus === "loggedIn"
+    ).length;
+    const loggedOutCount = rowData.filter(
+      (data) => data.loginStatus === "loggedOut"
+    ).length;
+    const inactiveCount = rowData.filter(
+      (data) =>
+        data.loginStatus !== "loggedOut" && data.loginStatus !== "loggedIn"
+    ).length;
 
     setChartSeries([loggedInCount, loggedOutCount, inactiveCount]);
   }, [rowData]);
 
-
   return (
-    <div style={{ height: '220px', background: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)", color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)", }} className="ChartCard shadow p-2 ">
-      <div >
-      </div><h6 style={{ width: 'fit-content', boxShadow: '0 0 10px 1px rgba(0,0,0,.2) inset' }} className="fw-bolder d-flex px-3 rounded-5 py-1">Login Status </h6>
-      <Chart options={chartOptions} series={chartSeries} type="donut" />
+    <div
+      style={{
+        height: "220px",
+        background: darkMode
+          ? "var(--primaryDashMenuColor)"
+          : "var(--primaryDashColorDark)",
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--primaryDashMenuColor)",
+      }}
+      className="ChartCard shadow p-2 "
+    >
+      <div></div>
+      <h6
+        style={{
+          width: "fit-content",
+          boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
+        }}
+        className="fw-bolder d-flex px-3 rounded-5 py-1"
+      >
+        Login Status{" "}
+      </h6>
+      <Chart
+        width="100%"
+        height="335px"
+        options={chartOptions}
+        series={chartSeries}
+        type="donut"
+      />
     </div>
   );
 };
