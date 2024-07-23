@@ -129,7 +129,7 @@ const EducationForm = (props) => {
     SchoolUniversityData: props.editData["SchoolUniversity"],
     DegreeData: props.editData["Degree"],
     GradeData: props.editData["Grade"],
-    PassingOfYearData: props.editData["PassingOfYear"]
+    PassingOfYearData: props.editData["PassingOfYear"],
   });
 
   const onSchoolUniversityDataChange = (e) => {

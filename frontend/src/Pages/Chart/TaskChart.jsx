@@ -17,8 +17,8 @@ const TaskChart = () => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         if (Array.isArray(response.data)) {
@@ -36,7 +36,7 @@ const TaskChart = () => {
         console.error("Error fetching employee data:", error);
         setError("Error fetching employee data. Please try again later.");
       });
-  };  
+  };
 
   const loadTaskData = async () => {
     try {
@@ -120,7 +120,7 @@ const TaskChart = () => {
         task.status === "Pending" &&
         task.managerEmail === email &&
         !calculateRemainingTime(task.endDate).delay
-    ).length
+    ).length,
   };
 
   console.log(taskStatusCounts);
@@ -129,30 +129,30 @@ const TaskChart = () => {
     options: {
       chart: {
         id: "task-status-chart",
-        type: "bar"
+        type: "bar",
       },
       fill: {
         opacity: 1,
-        colors: ["var(--primaryDashColorDark)"]
+        colors: ["var(--primaryDashColorDark)"],
       },
       xaxis: {
         categories: Object.keys(taskStatusCounts),
         title: {
-          text: "Task Status"
-        }
+          text: "Task Status",
+        },
       },
       yaxis: {
         title: {
-          text: "Number of Tasks"
-        }
-      }
+          text: "Number of Tasks",
+        },
+      },
     },
     series: [
       {
         name: "Task Status",
-        data: Object.values(taskStatusCounts)
-      }
-    ]
+        data: Object.values(taskStatusCounts),
+      },
+    ],
   };
 
   return (
@@ -164,15 +164,15 @@ const TaskChart = () => {
           : "var(--primaryDashColorDark)",
         color: darkMode
           ? "var(--primaryDashColorDark)"
-          : "var(--primaryDashMenuColor)"
+          : "var(--primaryDashMenuColor)",
       }}
-      className="ChartCard shadow p-2 pb-0"
+      className="ChartCard p-2 shadow"
     >
       <div className="ChartHeader">
         <h6
           style={{
             width: "fit-content",
-            boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset"
+            boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
           }}
           className="fw-bolder d-flex px-3 rounded-5 py-1"
         >

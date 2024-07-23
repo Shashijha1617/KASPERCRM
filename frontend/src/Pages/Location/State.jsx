@@ -24,7 +24,7 @@ class State extends Component {
   state = {
     table: true,
     editForm: false,
-    editData: {}
+    editData: {},
   };
 
   render() {
@@ -57,33 +57,33 @@ class State extends Component {
         {/* <Route path="/admin/state/form" exact component={() => <StateForm onStateSubmit={this.handleStateSubmit} />} /> */}
 
         {/* <StateTable/> */}
-        </React.Fragment>
+      </React.Fragment>
 
       //  </Router>
     );
   }
-  handleStateSubmit = event => {
+  handleStateSubmit = (event) => {
     event.preventDefault();
     console.log("id", event.target[0].value, event.target[1].value);
     this.setState({ table: true });
 
     let body = {
       CountryID: event.target[0].value,
-      StateName: event.target[1].value
+      StateName: event.target[1].value,
     };
     //  let body= "CompanyID=" + event.target[0].value + "&State=" + event.target[1].value;
     //  let body= "debru";
     axios
       .post(`${BASE_URL}/api/state`, body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
-      .then(res => {
+      .then((res) => {
         this.setState({ table: false });
         this.setState({ table: true });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
     // this.setState({ loading: true });
@@ -94,7 +94,7 @@ class State extends Component {
     console.log("clicked1");
     this.setState({ table: false });
   };
-  handleEditState = e => {
+  handleEditState = (e) => {
     console.log(e);
     console.log("clicked6");
     this.setState({ editForm: true });
@@ -117,21 +117,21 @@ class State extends Component {
     // this.setState({ table: true });
     let body = {
       CountryID: newInfo.target[0].value,
-      StateName: newInfo.target[1].value
+      StateName: newInfo.target[1].value,
     };
     console.log("update", body);
     axios
       .put(`${BASE_URL}/api/state/` + info["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
-      .then(res => {
+      .then((res) => {
         // this.componentDidMount();
         this.setState({ table: false });
         this.setState({ table: true });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
 

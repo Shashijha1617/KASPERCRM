@@ -158,7 +158,7 @@ app.post("/api/tasks", upload.single("file"), async (req, res) => {
     adminMail: adminMail,
     employee: [{ type: mongoose.Schema.Types.ObjectId, ref: "Employee" }]
   });
-  console.log("newPdf ====", newPdf);
+  // console.log("newPdf ====", newPdf);
 
   // console.log(Taskname, path, description, department, managerEmail, comment, duration, status, startDate, endDate);
   try {
@@ -177,7 +177,6 @@ app.post("/api/tasks", upload.single("file"), async (req, res) => {
 //////
 
 app.get("/api/getTask", async (req, res) => {
-  console.log;
   try {
     Task.find({}).then((data) => {
       res.send({ status: "ok........", data: data });
@@ -253,7 +252,7 @@ io.on("connection", (socket) => {
   //abhay:- here user is connecting and we are storing socket id and Mail
   socket.on("userConnected", (userData) => {
     users[socket.id] = { email: userData.email, socketId: socket.id };
-    console.log("heelloo", users);
+    // console.log("heelloo", users);
   });
   //abhay:- when browser get closed or user get offline than this is automatically get trigger no need to trigger it manually
   socket.on("disconnect", () => {
@@ -353,7 +352,7 @@ io.on("connection", (socket) => {
           messageBy,
           profile
         } = data;
-        console.log(managerEmail);
+        // console.log(managerEmail);
 
         employee.Notification.unshift({
           path,
@@ -380,7 +379,7 @@ io.on("connection", (socket) => {
           messageBy,
           profile
         } = data;
-        console.log(users);
+        // console.log(users);
 
         employee.Notification.unshift({
           path,
@@ -408,7 +407,7 @@ io.on("connection", (socket) => {
         let targetUser = Object.values(users).find(
           (user) => user.email === val
         );
-        console.log(employee);
+        // console.log(employee);
         if (employee && targetUser) {
           const {
             senderMail,
@@ -557,7 +556,7 @@ io.on("connection", (socket) => {
       if (manager && targetManager) {
         const { message, status, path, taskId, messageBy, profile } = data;
 
-        console.log(data);
+        // console.log(data);
 
         manager.Notification.unshift({
           message,
@@ -881,7 +880,7 @@ io.on("connection", (socket) => {
   socket.on("loginUser", async (data) => {
     try {
       const { manager, user } = data;
-      console.log("manager", manager, user);
+      // console.log("manager", manager, user);
       let currentTime = new Date().toLocaleTimeString();
       let data1 = {
         message: `${user} login at ${currentTime}`
@@ -889,7 +888,7 @@ io.on("connection", (socket) => {
       let targetUser = Object.values(users).find(
         (user) => user.email === manager
       );
-      console.log("user", targetUser);
+      // console.log("user", targetUser);
       if (targetUser) {
         io.to(targetUser.socketId).emit("userLogin", data1);
       }
@@ -900,7 +899,7 @@ io.on("connection", (socket) => {
   socket.on("logoutUser", async (data) => {
     try {
       const { manager, user } = data;
-      console.log(manager, user);
+      // console.log(manager, user);
       let currentTime = new Date().toLocaleTimeString();
       let data1 = {
         message: `${user} logout at ${currentTime}`
@@ -908,7 +907,7 @@ io.on("connection", (socket) => {
       let targetUser = Object.values(users).find(
         (user) => user.email === manager
       );
-      console.log("user", targetUser);
+      // console.log("user", targetUser);
       if (targetUser) {
         io.to(targetUser.socketId).emit("userLogout", data1);
       }

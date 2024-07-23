@@ -2,22 +2,12 @@ import React, { useState, useEffect } from "react";
 // import "./LeaveApplicationHRTable.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
-import { RingLoader } from "react-spinners";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
 import BASE_URL from "../../../../Pages/config/config";
 
 import { css } from "@emotion/core";
-import {
-  Form,
-  Button,
-  Col,
-  Row,
-  Table,
-  Dropdown,
-  DropdownButton
-} from "react-bootstrap";
 
 // *************csv & pdf **************//
 import jsPDF from "jspdf";
@@ -50,8 +40,8 @@ const LeaveApplicationHRTable = (props) => {
     axios
       .get(`${BASE_URL}/api/leave-application-hr/`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         leaveApplicationHRObj = response.data;
@@ -78,7 +68,7 @@ const LeaveApplicationHRTable = (props) => {
             FromDate: data["FromDate"].slice(0, 10),
             ToDate: data["ToDate"].slice(0, 10),
             Reasonforleave: data["Reasonforleave"],
-            Status: status(data["Status"])
+            Status: status(data["Status"]),
           };
 
           rowDataT.push(temp);
@@ -100,14 +90,11 @@ const LeaveApplicationHRTable = (props) => {
     console.log(e1, e2);
     if (window.confirm("Are you sure to delete this record? ") == true) {
       axios
-        .delete(
-          `${BASE_URL}/api/leave-application-hr/` + e1 + "/" + e2,
-          {
-            headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
-          }
-        )
+        .delete(`${BASE_URL}/api/leave-application-hr/` + e1 + "/" + e2, {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        })
         .then((res) => {
           loadLeaveApplicationHRData();
         })
@@ -125,7 +112,7 @@ const LeaveApplicationHRTable = (props) => {
       const doc = new jsPDF({
         orientation: "landscape",
         unit: "mm",
-        format: [pdfWidth, pdfHeight]
+        format: [pdfWidth, pdfHeight],
       });
 
       doc.setFontSize(18);
@@ -136,7 +123,7 @@ const LeaveApplicationHRTable = (props) => {
         "Start Date",
         "End Date",
         "Remarks",
-        "Status"
+        "Status",
       ];
       const data = rowData.map((row) => [
         row.empID,
@@ -146,13 +133,13 @@ const LeaveApplicationHRTable = (props) => {
         row.Reasonforleave,
         row.Status,
 
-        "" // Action column - you can customize this based on your requirements
+        "", // Action column - you can customize this based on your requirements
       ]);
       doc.setFontSize(12);
       doc.autoTable({
         head: [headers],
         body: data,
-        startY: 25
+        startY: 25,
       });
 
       doc.save("leaveApplication_data.pdf");

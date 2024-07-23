@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { FaCheck } from "react-icons/fa6";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
-import { MdDeleteForever } from "react-icons/md";
+import { MdDeleteForever, MdOutlineAssignmentInd } from "react-icons/md";
 import { Toaster, toast } from "react-hot-toast";
 import Modal from "react-bootstrap/Modal";
 import Table from "react-bootstrap/esm/Table";
@@ -13,6 +13,9 @@ import { v4 as uuid } from "uuid";
 import BASE_URL from "../../../Pages/config/config";
 import ActiveTask from "../../../img/Task/ActiveTask.svg";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import "./TaskManagement.css";
+import { HiDocumentSearch } from "react-icons/hi";
+import { IoMdDoneAll } from "react-icons/io";
 
 const ManagerActiveTask = () => {
   const [modalShow, setModalShow] = React.useState(false);
@@ -30,16 +33,14 @@ const ManagerActiveTask = () => {
   const [isForwardButtonDisabled, setIsForwardButtonDisabled] = useState(true);
   const email = localStorage.getItem("Email");
   const [employeeData, setEmployeeData] = useState([]);
-  const [searchData, setSearchData] = useState("");
   const [rowData, setRowData] = useState([]);
-  const [rowIndex, setRowIndex] = useState(null);
-  const [moreInfo, setMoreInfo] = useState(false);
   const [taskDepartment, setTaskDepartment] = useState("");
   const { socket } = useContext(AttendanceContext);
   const [taskName, setTaskName] = useState("");
   const [allImage, setAllImage] = useState(null);
   const [empData, setEmpData] = useState(null);
   const { darkMode } = useTheme();
+  const [flash, setFlash] = useState(false);
 
   const loadEmployeeData = () => {
     axios
@@ -206,7 +207,6 @@ const ManagerActiveTask = () => {
     }
   };
 
-  const askStatus = async (taskId) => {};
   const completeTask = async (taskId, taskName, adminMail) => {
     try {
       setIsCompleting(true);
@@ -352,18 +352,41 @@ const ManagerActiveTask = () => {
     window.open(`${BASE_URL}/${require[0].pdf}`, "_blank", "noreferrer");
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFlash((prevFlash) => !prevFlash);
+    }, 15000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="p-4">
-      <h5 style={{ fontWeight: "600" }} className="p-0 m-0 text-uppercase">
-        Active Task (
-        {
-          tasks.filter(
-            (task) => task.status === "Pending" && task.managerEmail === email
-          ).length
-        }
-        )
-      </h5>
-      <p className="text-muted p-0 m-0">You can view all active tasks here!</p>
+    <div
+      style={{
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--primaryDashMenuColor)",
+      }}
+      className="p-4"
+    >
+      <div
+        style={{
+          color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--primaryDashMenuColor)",
+        }}
+      >
+        <h5 style={{ fontWeight: "600" }} className="p-0 m-0 text-uppercase">
+          Active Task (
+          {
+            tasks.filter(
+              (task) => task.status === "Pending" && task.managerEmail === email
+            ).length
+          }
+          )
+        </h5>
+        <p className="p-0 m-0">You can view all active tasks here!</p>
+      </div>
 
       {loading && (
         <div className="d-flex align-items-center gap-2">
@@ -375,13 +398,10 @@ const ManagerActiveTask = () => {
       {error && <p className="text-danger">{error}</p>}
 
       <div
-        className="mt-2"
+        className="mt-2 pt-2  pb-3"
         style={{
-          overflowY: "scroll",
+          overflowY: "auto",
           maxHeight: "80vh",
-          scrollbarWidth: "thin",
-          scrollbarGutter: "stable",
-          scrollMargin: "1rem",
           backgroundColor: darkMode
             ? "var(--primaryDashMenuColor)"
             : "var(--primaryDashColorDark)",
@@ -396,18 +416,26 @@ const ManagerActiveTask = () => {
             )
             .map((task, index) => (
               <details
-                style={{
-                  boxShadow: "-1px 1px 10px gray",
-                }}
-                className="p-1 position-relative mt-3 fs-4 rounded mx-3"
+                className="border   position-relative mt-3 fs-4  mx-3"
                 key={task.id}
               >
                 <summary
-                  style={{ height: "fit-content" }}
-                  className="d-flex justify-content-between aline-center form-control bg-dark  text-white"
+                  style={{
+                    height: "fit-content",
+                    minHeight: "3.5rem",
+                    background:
+                      "linear-gradient(165deg,#11009E, #700B97, 90%, #C84B31)",
+                  }}
+                  className="d-flex justify-content-between align-items-center pt-3 my-auto rounded-0 form-control text-white"
                 >
-                  <div className="fw-bold fs-5 d-flex justify-content-center flex-column">
-                    # Task {index + 1} : {task.Taskname}
+                  <div className="d-flex justify-content-center gap-1 flex-column">
+                    <h5 className="m-0 p-0">
+                      # Task {index + 1} : {task.Taskname}
+                    </h5>
+
+                    <p style={{ fontSize: ".8rem" }} className="m-0  p-0">
+                      Createor: {task.managerEmail}
+                    </p>
                   </div>
                   <div
                     style={{ position: "absolute", top: "-10px", left: "20px" }}
@@ -419,20 +447,28 @@ const ManagerActiveTask = () => {
                     {calculateRemainingTime(task.endDate).delay ? (
                       <div>
                         <div className="text-center d-none">
-                          <div className="form-control  fw-bold p-0">
-                            {calculateRemainingTime(task.endDate).days}{" "}
-                          </div>{" "}
+                          <div className="form-control fw-bold p-0">
+                            {calculateRemainingTime(task.endDate).days}
+                          </div>
                           <div>Day</div>
                         </div>
-                        <h5 className="btn btn-danger p-1 px-3 fw-bold">
+                        <h5
+                          className={`btn btn-danger p-1 my-auto px-3 fw-bold ${
+                            flash ? "flash" : ""
+                          }`}
+                        >
                           Late
                         </h5>
                       </div>
                     ) : (
                       <div className="text-center">
                         <div
-                          style={{ boxShadow: "0 0 5px 2px gray inset" }}
-                          className="form-control fw-bold px-1 py-0"
+                          className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                          style={{
+                            boxShadow: "0 0 5px 2px gray inset",
+                            height: "30px",
+                            minWidth: "30px",
+                          }}
                         >
                           {calculateRemainingTime(task.endDate).days}{" "}
                         </div>{" "}
@@ -441,7 +477,14 @@ const ManagerActiveTask = () => {
                     )}
                     {calculateRemainingTime(task.endDate).delay ? (
                       <div className="text-center d-none">
-                        <div className="form-control  fw-bold p-0">
+                        <div
+                          className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                          style={{
+                            boxShadow: "0 0 5px 2px gray inset",
+                            height: "30px",
+                            minWidth: "30px",
+                          }}
+                        >
                           {calculateRemainingTime(task.endDate).hours}{" "}
                         </div>{" "}
                         <div>Min</div>
@@ -449,8 +492,12 @@ const ManagerActiveTask = () => {
                     ) : (
                       <div className="text-center">
                         <div
-                          style={{ boxShadow: "0 0 5px 2px gray inset" }}
-                          className="form-control fw-bold px-1 py-0"
+                          className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                          style={{
+                            boxShadow: "0 0 5px 2px gray inset",
+                            height: "30px",
+                            minWidth: "30px",
+                          }}
                         >
                           {calculateRemainingTime(task.endDate).hours}{" "}
                         </div>{" "}
@@ -459,7 +506,14 @@ const ManagerActiveTask = () => {
                     )}
                     {calculateRemainingTime(task.endDate).delay ? (
                       <div className="text-center d-none">
-                        <div className="form-control fw-bold p-0">
+                        <div
+                          className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                          style={{
+                            boxShadow: "0 0 5px 2px gray inset",
+                            height: "30px",
+                            minWidth: "30px",
+                          }}
+                        >
                           {calculateRemainingTime(task.endDate).minutes}{" "}
                         </div>{" "}
                         <div>Min</div>
@@ -467,8 +521,12 @@ const ManagerActiveTask = () => {
                     ) : (
                       <div className="text-center">
                         <div
-                          style={{ boxShadow: "0 0 5px 2px gray inset" }}
-                          className="form-control fw-bold px-1 py-0"
+                          className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                          style={{
+                            boxShadow: "0 0 5px 2px gray inset",
+                            height: "30px",
+                            minWidth: "30px",
+                          }}
                         >
                           {calculateRemainingTime(task.endDate).minutes}{" "}
                         </div>{" "}
@@ -479,27 +537,36 @@ const ManagerActiveTask = () => {
                 </summary>
                 <div
                   style={{ position: "relative" }}
-                  className="row p-1 my-2 mx-0 bg-light text-dark rounded"
+                  className="row p-1 my-2 mx-0 rounded"
                 >
                   <div
-                    style={{ height: "fit-content" }}
-                    className="form-control"
+                    style={{
+                      height: "fit-content",
+                      backgroundColor: darkMode
+                        ? "var(--primaryDashMenuColor)"
+                        : "var(--primaryDashColorDark)",
+                    }}
+                    className=""
                   >
                     <div
                       style={{ height: "fit-content" }}
-                      className="text-start fs-6 form-control"
+                      className="text-start fs-6"
                     >
                       <h6 className="fw-bold">Task Discription</h6>
                       <div className="row justify-between">
-                        <div className="col-10">{task.description}</div>
+                        <div className="col-11">{task.description}</div>
                         <div
-                          className="col-2 d-flex"
-                          style={{ width: "6rem", borderRadius: "50%" }}
+                          className="col-1 d-flex"
+                          style={{
+                            width: "6rem",
+                            height: "6rem",
+                            borderRadius: "50%",
+                          }}
                         >
                           <CircularProgressbar
                             className="fw-bold"
                             value={calculateProgress(task)}
-                            text={`${calculateProgress(task).toFixed(2)}%`}
+                            text={`${calculateProgress(task).toFixed(0)}%`}
                             styles={buildStyles({
                               pathColor: "#28a745",
                               textColor: "#28a745",
@@ -511,23 +578,23 @@ const ManagerActiveTask = () => {
 
                     <div
                       style={{ height: "fit-content" }}
-                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
+                      className="row d-flex pt-3 mx-1 justify-content-between"
                     >
                       <p
                         style={{ fontSize: "1rem" }}
-                        className="col-6 col-sm-6 col-md-2"
+                        className="col-12 col-sm-6 col-md-2"
                       >
                         Task Durations <br /> <span>{task.duration} days</span>{" "}
                       </p>
                       <p
                         style={{ fontSize: "1rem" }}
-                        className="col-6 col-sm-6 col-md-2"
+                        className="col-12 col-sm-6 col-md-2"
                       >
-                        Created By <br /> <span>{task.managerEmail}</span>
+                        122112
                       </p>
                       <p
                         style={{ fontSize: "1rem" }}
-                        className="col-6 col-sm-6 col-md-2"
+                        className="col-12 col-sm-6 col-md-2"
                       >
                         Start Date <br />{" "}
                         <span>
@@ -536,7 +603,7 @@ const ManagerActiveTask = () => {
                       </p>
                       <p
                         style={{ fontSize: "1rem" }}
-                        className="col-6 col-sm-6 col-md-2"
+                        className="col-12 col-sm-6 col-md-2"
                       >
                         End Date <br />{" "}
                         <span>
@@ -545,27 +612,29 @@ const ManagerActiveTask = () => {
                       </p>
                       <p
                         style={{ fontSize: "1rem" }}
-                        className="col-6 col-sm-6 col-md-2"
+                        className="col-12 col-sm-6 col-md-2"
                       >
                         <span>
                           Task Status <br /> {task.status}
                         </span>
                       </p>
-                    </div>
-                    <div
-                      style={{ height: "fit-content" }}
-                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
-                    >
-                      <p>
-                        <span className="fw-bold">Remarks : </span>{" "}
-                        {task.comment}
+                      <p
+                        style={{ fontSize: "1rem" }}
+                        className="col-12 col-sm-6 col-md-2"
+                      >
+                        <span>
+                          Remarks <br /> {task.comment}
+                        </span>
                       </p>
                     </div>
+
                     <div
                       style={{ height: "fit-content" }}
-                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
+                      className="row d-flex pt-3 rounded mx-1 justify-content-between"
                     >
-                      <h6 className="fw-bold">Forwarded Members Status</h6>
+                      <h6 className="fw-bold m-0 p-0 my-1">
+                        Forwarded Members Status
+                      </h6>
                       <Table striped bordered hover>
                         <thead>
                           <tr>
@@ -659,10 +728,10 @@ const ManagerActiveTask = () => {
                     </div>
                     <div
                       style={{ height: "fit-content" }}
-                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
+                      className="d-flex  pt-3 rounded mx-1 justify-content-between"
                     >
                       <button
-                        className="btn btn-primary col-2 d-flex justify-center aline-center gap-2"
+                        className="btn btn-primary rounded-5 d-flex justify-center aline-center gap-2"
                         onClick={() =>
                           forwordTaskToEmployee(
                             task._id,
@@ -671,23 +740,27 @@ const ManagerActiveTask = () => {
                           )
                         }
                       >
-                        <IoCheckmarkDoneSharp /> Forward Task
+                        <MdOutlineAssignmentInd />{" "}
+                        <span className="d-none d-md-flex">Forward Task</span>
                       </button>
                       <button
-                        className="btn btn-warning col-2 d-flex justify-center aline-center gap-2"
+                        className="btn btn-warning rounded-5 d-flex justify-center aline-center gap-2"
                         onClick={() => showPdf(task._id)}
                       >
-                        <BsFiletypeDoc /> View Docs
+                        <HiDocumentSearch />{" "}
+                        <span className="d-none d-md-flex">
+                          View attachment
+                        </span>
                       </button>
                       <button
-                        className="btn btn-success col-2 d-flex justify-center aline-center gap-2"
+                        className="btn btn-success rounded-5 d-flex justify-center aline-center gap-2"
                         onClick={() =>
                           completeTask(task._id, task.adminMail, task.Taskname)
                         }
                         disabled={calculateProgress(task) !== 100}
                       >
-                        <FaCheck />
-                        Complete Task
+                        <IoMdDoneAll />
+                        <span className="d-none d-md-flex">Complete Task</span>
                       </button>
                     </div>
                   </div>
@@ -747,11 +820,11 @@ const ManagerActiveTask = () => {
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col">Select</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Email</th>
-                      <th scope="col">Contact</th>
-                      <th scope="col">Designation</th>
+                      <th>Select</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Contact</th>
+                      <th>Designation</th>
                     </tr>
                   </thead>
 

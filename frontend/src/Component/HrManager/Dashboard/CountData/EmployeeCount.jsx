@@ -15,8 +15,8 @@ const AdminEmployeeTable = (props) => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         if (Array.isArray(response.data)) {
@@ -30,14 +30,14 @@ const AdminEmployeeTable = (props) => {
                 data["Account"] === 1
                   ? "Admin"
                   : data["Account"] === 2
-                    ? "HR"
-                    : data["Account"] === 3
-                      ? "Employee"
-                      : data["Account"] === 4
-                        ? "Manager"
-                        : "",
+                  ? "HR"
+                  : data["Account"] === 3
+                  ? "Employee"
+                  : data["Account"] === 4
+                  ? "Manager"
+                  : "",
               RoleName: data["role"][0] ? data["role"][0]["RoleName"] : "",
-              loginStatus: data["loginStatus"]
+              loginStatus: data["loginStatus"],
             };
             setRowData((prevData) => [...prevData, temp]);
           });
@@ -54,48 +54,79 @@ const AdminEmployeeTable = (props) => {
     loadEmployeeData();
   }, []);
 
-  const adminCount = rowData.filter(
-    (data) => data.Account === "Admin"
-  ).length;
+  const adminCount = rowData.filter((data) => data.Account === "Admin").length;
   const managerCount = rowData.filter(
     (data) => data.Account === "Manager"
   ).length;
 
   const hrCount = rowData.filter((data) => data.Account === "HR").length;
-  const employeeCount = rowData.filter((data) => data.Account === "Employee").length;
-
+  const employeeCount = rowData.filter(
+    (data) => data.Account === "Employee"
+  ).length;
 
   return (
     <div className="container-fluid  ">
-      <div style={{ height: '220px', width: '100%', position: 'relative' }} className="EmpcountCard shadow row justify-content-center py-0 gap-0 my-4  mx-0">
-        <div style={{
-          position: 'absolute',
-          top: "0",
-          left: 0,
-          height: '220px', width: '100%', background: darkMode ? "var( --primaryDashMenuColor)" : "var(--primaryDashColorDark)", color: darkMode ? "var(--primaryDashColorDark)" : "var( --primaryDashMenuColor)"
-        }} className="EmpcountCardBG-card-inner rounded-1">
+      <div
+        style={{ height: "220px", width: "100%", position: "relative" }}
+        className="EmpcountCard shadow row justify-content-center py-0 gap-0 my-4  mx-0"
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: "0",
+            left: 0,
+            height: "220px",
+            width: "100%",
+            background: darkMode
+              ? "var( --primaryDashMenuColor)"
+              : "var(--primaryDashColorDark)",
+            color: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var( --primaryDashMenuColor)",
+          }}
+          className="EmpcountCardBG-card-inner rounded-1"
+        >
           <div className="pl-4 pr-1 h-100 py-1 d-flex flex-column justify-content-between align-items-start">
             <div className="d-flex h-75 flex-column justify-content-evenly align-items-start w-100">
-              <span className="d-flex justify-content-between align-items-center w-100">Admin  <b>{adminCount}</b></span>
-              <span className="d-flex justify-content-between align-items-center w-100">Hr <b>{hrCount}</b></span>
-              <span className="d-flex justify-content-between align-items-center w-100">Manager <b>{managerCount}</b></span>
-              <span className="d-flex justify-content-between align-items-center w-100">Employee <b>{employeeCount}</b></span>
+              <span className="d-flex justify-content-between align-items-center w-100">
+                Admin <b>{adminCount}</b>
+              </span>
+              <span className="d-flex justify-content-between align-items-center w-100">
+                Hr <b>{hrCount}</b>
+              </span>
+              <span className="d-flex justify-content-between align-items-center w-100">
+                Manager <b>{managerCount}</b>
+              </span>
+              <span className="d-flex justify-content-between align-items-center w-100">
+                Employee <b>{employeeCount}</b>
+              </span>
             </div>
-            <span className="bg-light w-100 text-center rounded-5 py-0  mb-2"><Link to="/hr/employee" style={{ textDecoration: 'none' }} > <span >View User List</span></Link></span>
+            <span className="bg-light w-100 text-center rounded-5 py-0  mb-2">
+              <Link to="/hr/employee" style={{ textDecoration: "none" }}>
+                {" "}
+                <span>View User List</span>
+              </Link>
+            </span>
           </div>
         </div>
-        <div className="EmpcountCardBG col-4  rounded-3 d-flex justify-content-center align-items-center shadow-sm">
-          <div style={{
-            height: '130px', width: '130px', border: '5px solid white', boxShadow: '0px 0px 5px 20px rgba(256,256,256,.5)',
-            position: 'relative', zIndex: 2
-          }} className="rounded-circle d-flex justify-content-center align-items-center  flex-column text-white">{rowData.length} <span>Total Users</span></div>
-
+        <div className="EmpcountCardBG col-4  w-100 rounded-3 d-flex justify-content-center align-items-center shadow-sm">
+          <div
+            style={{
+              height: "130px",
+              width: "130px",
+              border: "5px solid white",
+              boxShadow: "0px 0px 5px 20px rgba(256,256,256,.5)",
+              position: "relative",
+              zIndex: 2,
+            }}
+            className="rounded-circle d-flex justify-content-center align-items-center  flex-column text-white"
+          >
+            {rowData.length} <span>Total Users</span>
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
-
 
 export default AdminEmployeeTable;

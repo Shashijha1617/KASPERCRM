@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Button } from "react-bootstrap";
@@ -110,7 +110,11 @@ const AdminSalaryTable = (props) => {
 
   // Generate array of page numbers
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(sortedAndFilteredData.length / itemsPerPage); i++) {
+  for (
+    let i = 1;
+    i <= Math.ceil(sortedAndFilteredData.length / itemsPerPage);
+    i++
+  ) {
     pageNumbers.push(i);
   }
 
@@ -118,8 +122,12 @@ const AdminSalaryTable = (props) => {
     <div>
       <div
         style={{
-          background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-          color: darkMode ? "var(--secondaryDashColorDark)" : "var(--primaryDashMenuColor)",
+          background: darkMode
+            ? "var(--secondaryDashMenuColor)"
+            : "var(--secondaryDashColorDark)",
+          color: darkMode
+            ? "var(--secondaryDashColorDark)"
+            : "var(--primaryDashMenuColor)",
         }}
         className=" row mx-auto mb-3 py-1 mt-2"
       >
@@ -140,7 +148,10 @@ const AdminSalaryTable = (props) => {
                 value={searchQuery}
                 onChange={handleSearchInputChange}
               />
-              <LuSearch className="text-black" style={{ position: "absolute", top: "30%", left: "5%" }} />
+              <LuSearch
+                className="text-black"
+                style={{ position: "absolute", top: "30%", left: "5%" }}
+              />
             </div>
             <Button
               className="my-auto d-flex gap-1 my-auto"
@@ -157,20 +168,32 @@ const AdminSalaryTable = (props) => {
       {!loading ? (
         <div className="row m-auto">
           <div
-            style={{ minHeight: "68vh", maxHeight: "68vh", overflow: "auto", width: "100%" }}
+            style={{
+              minHeight: "68vh",
+              maxHeight: "68vh",
+              overflow: "auto",
+              width: "100%",
+            }}
             className="mb-2"
           >
-            <table className="table table-striped" style={{ fontSize: ".9rem" }}>
+            <table
+              className="table table-striped"
+              style={{ fontSize: ".9rem" }}
+            >
               <thead>
                 <tr style={{ position: "sticky", top: "0", zIndex: "3" }}>
                   <th
                     style={{
                       cursor: "pointer",
                       whiteSpace: "pre",
-                      background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--primaryDashColorDark)",
-                      color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
-                      position: 'sticky',
-                      top: '-10px'
+                      background: darkMode
+                        ? "var(--secondaryDashMenuColor)"
+                        : "var(--primaryDashColorDark)",
+                      color: darkMode
+                        ? "var(--primaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                      position: "sticky",
+                      top: "-10px",
                     }}
                     className="py-2 px-0 text-center fw-normal border-0"
                   >
@@ -180,10 +203,14 @@ const AdminSalaryTable = (props) => {
                     style={{
                       cursor: "pointer",
                       whiteSpace: "pre",
-                      background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--primaryDashColorDark)",
-                      color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
-                      position: 'sticky',
-                      top: '-10px'
+                      background: darkMode
+                        ? "var(--secondaryDashMenuColor)"
+                        : "var(--primaryDashColorDark)",
+                      color: darkMode
+                        ? "var(--primaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                      position: "sticky",
+                      top: "-10px",
                     }}
                     className="py-2 fw-normal  border-0"
                   >
@@ -193,10 +220,14 @@ const AdminSalaryTable = (props) => {
                     style={{
                       cursor: "pointer",
                       whiteSpace: "pre",
-                      background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--primaryDashColorDark)",
-                      color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
-                      position: 'sticky',
-                      top: '-10px'
+                      background: darkMode
+                        ? "var(--secondaryDashMenuColor)"
+                        : "var(--primaryDashColorDark)",
+                      color: darkMode
+                        ? "var(--primaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                      position: "sticky",
+                      top: "-10px",
                     }}
                     className="py-2 fw-normal border-0"
                   >
@@ -206,10 +237,14 @@ const AdminSalaryTable = (props) => {
                     style={{
                       cursor: "pointer",
                       whiteSpace: "pre",
-                      background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--primaryDashColorDark)",
-                      color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
-                      position: 'sticky',
-                      top: '-10px'
+                      background: darkMode
+                        ? "var(--secondaryDashMenuColor)"
+                        : "var(--primaryDashColorDark)",
+                      color: darkMode
+                        ? "var(--primaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                      position: "sticky",
+                      top: "-10px",
                     }}
                     className="py-2 fw-normal border-0"
                   >
@@ -219,10 +254,14 @@ const AdminSalaryTable = (props) => {
                     style={{
                       cursor: "pointer",
                       whiteSpace: "pre",
-                      background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--primaryDashColorDark)",
-                      color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
-                      position: 'sticky',
-                      top: '-10px'
+                      background: darkMode
+                        ? "var(--secondaryDashMenuColor)"
+                        : "var(--primaryDashColorDark)",
+                      color: darkMode
+                        ? "var(--primaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                      position: "sticky",
+                      top: "-10px",
                     }}
                     className="py-2 fw-normal border-0"
                   >
@@ -232,10 +271,14 @@ const AdminSalaryTable = (props) => {
                     style={{
                       cursor: "pointer",
                       whiteSpace: "pre",
-                      background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--primaryDashColorDark)",
-                      color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
-                      position: 'sticky',
-                      top: '-10px'
+                      background: darkMode
+                        ? "var(--secondaryDashMenuColor)"
+                        : "var(--primaryDashColorDark)",
+                      color: darkMode
+                        ? "var(--primaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                      position: "sticky",
+                      top: "-10px",
                     }}
                     className="py-2 fw-normal border-0"
                   >
@@ -245,10 +288,14 @@ const AdminSalaryTable = (props) => {
                     style={{
                       cursor: "pointer",
                       whiteSpace: "pre",
-                      background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--primaryDashColorDark)",
-                      color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
-                      position: 'sticky',
-                      top: '-10px'
+                      background: darkMode
+                        ? "var(--secondaryDashMenuColor)"
+                        : "var(--primaryDashColorDark)",
+                      color: darkMode
+                        ? "var(--primaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                      position: "sticky",
+                      top: "-10px",
                     }}
                     className="py-2 fw-normal border-0"
                   >
@@ -258,10 +305,14 @@ const AdminSalaryTable = (props) => {
                     style={{
                       cursor: "pointer",
                       whiteSpace: "pre",
-                      background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--primaryDashColorDark)",
-                      color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
-                      position: 'sticky',
-                      top: '-10px'
+                      background: darkMode
+                        ? "var(--secondaryDashMenuColor)"
+                        : "var(--primaryDashColorDark)",
+                      color: darkMode
+                        ? "var(--primaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                      position: "sticky",
+                      top: "-10px",
                     }}
                     className="py-2 fw-normal border-0"
                   >
@@ -271,10 +322,14 @@ const AdminSalaryTable = (props) => {
                     style={{
                       cursor: "pointer",
                       whiteSpace: "pre",
-                      background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--primaryDashColorDark)",
-                      color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
-                      position: 'sticky',
-                      top: '-10px'
+                      background: darkMode
+                        ? "var(--secondaryDashMenuColor)"
+                        : "var(--primaryDashColorDark)",
+                      color: darkMode
+                        ? "var(--primaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                      position: "sticky",
+                      top: "-10px",
                     }}
                     className="py-2 fw-normal border-0"
                   >
@@ -284,10 +339,14 @@ const AdminSalaryTable = (props) => {
                     style={{
                       cursor: "pointer",
                       whiteSpace: "pre",
-                      background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--primaryDashColorDark)",
-                      color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
-                      position: 'sticky',
-                      top: '-10px'
+                      background: darkMode
+                        ? "var(--secondaryDashMenuColor)"
+                        : "var(--primaryDashColorDark)",
+                      color: darkMode
+                        ? "var(--primaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                      position: "sticky",
+                      top: "-10px",
                     }}
                     className="py-2 fw-normal border-0"
                   >
@@ -295,10 +354,14 @@ const AdminSalaryTable = (props) => {
                   </th>
                   <th
                     style={{
-                      background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--primaryDashColorDark)",
-                      color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
-                      position: 'sticky',
-                      top: '-10px'
+                      background: darkMode
+                        ? "var(--secondaryDashMenuColor)"
+                        : "var(--primaryDashColorDark)",
+                      color: darkMode
+                        ? "var(--primaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                      position: "sticky",
+                      top: "-10px",
                     }}
                     className="py-2 fw-normal text-center border-0"
                   >
@@ -314,13 +377,20 @@ const AdminSalaryTable = (props) => {
                         style={{
                           verticalAlign: "middle",
                           whiteSpace: "pre",
-                          background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                          color: darkMode ? "var(--secondaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                          background: darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                          color: darkMode
+                            ? "var(--secondaryDashColorDark)"
+                            : "var(--primaryDashMenuColor)",
                         }}
                         className="text-capitalize px-0 py-1 border-0"
                       >
                         <div className="d-flex flex-nowrap gap-2">
-                          <div className="mx-auto" style={{ height: "35px", width: "35px" }}>
+                          <div
+                            className="mx-auto"
+                            style={{ height: "35px", width: "35px" }}
+                          >
                             <img
                               style={{
                                 height: "100%",
@@ -343,8 +413,12 @@ const AdminSalaryTable = (props) => {
                         style={{
                           verticalAlign: "middle",
                           whiteSpace: "pre",
-                          background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                          color: darkMode ? "var(--secondaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                          background: darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                          color: darkMode
+                            ? "var(--secondaryDashColorDark)"
+                            : "var(--primaryDashMenuColor)",
                         }}
                         className=" border-0"
                       >
@@ -354,8 +428,12 @@ const AdminSalaryTable = (props) => {
                         style={{
                           verticalAlign: "middle",
                           whiteSpace: "pre",
-                          background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                          color: darkMode ? "var(--secondaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                          background: darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                          color: darkMode
+                            ? "var(--secondaryDashColorDark)"
+                            : "var(--primaryDashMenuColor)",
                         }}
                         className=" border-0"
                       >
@@ -365,8 +443,12 @@ const AdminSalaryTable = (props) => {
                         style={{
                           verticalAlign: "middle",
                           whiteSpace: "pre",
-                          background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                          color: darkMode ? "var(--secondaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                          background: darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                          color: darkMode
+                            ? "var(--secondaryDashColorDark)"
+                            : "var(--primaryDashMenuColor)",
                         }}
                         className=" border-0"
                       >
@@ -376,8 +458,12 @@ const AdminSalaryTable = (props) => {
                         style={{
                           verticalAlign: "middle",
                           whiteSpace: "pre",
-                          background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                          color: darkMode ? "var(--secondaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                          background: darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                          color: darkMode
+                            ? "var(--secondaryDashColorDark)"
+                            : "var(--primaryDashMenuColor)",
                         }}
                         className=" border-0"
                       >
@@ -387,8 +473,12 @@ const AdminSalaryTable = (props) => {
                         style={{
                           verticalAlign: "middle",
                           whiteSpace: "pre",
-                          background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                          color: darkMode ? "var(--secondaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                          background: darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                          color: darkMode
+                            ? "var(--secondaryDashColorDark)"
+                            : "var(--primaryDashMenuColor)",
                         }}
                         className="text-uppercase  border-0"
                       >
@@ -398,8 +488,12 @@ const AdminSalaryTable = (props) => {
                         style={{
                           verticalAlign: "middle",
                           whiteSpace: "pre",
-                          background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                          color: darkMode ? "var(--secondaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                          background: darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                          color: darkMode
+                            ? "var(--secondaryDashColorDark)"
+                            : "var(--primaryDashMenuColor)",
                         }}
                         className="text-uppercase border-0"
                       >
@@ -409,8 +503,12 @@ const AdminSalaryTable = (props) => {
                         style={{
                           verticalAlign: "middle",
                           whiteSpace: "pre",
-                          background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                          color: darkMode ? "var(--secondaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                          background: darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                          color: darkMode
+                            ? "var(--secondaryDashColorDark)"
+                            : "var(--primaryDashMenuColor)",
                         }}
                         className="text-capitalize border-0"
                       >
@@ -420,8 +518,12 @@ const AdminSalaryTable = (props) => {
                         style={{
                           verticalAlign: "middle",
                           whiteSpace: "pre",
-                          background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                          color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                          background: darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                          color: darkMode
+                            ? "var(--primaryDashColorDark)"
+                            : "var(--primaryDashMenuColor)",
                         }}
                         className="text-uppercase border-0"
                       >
@@ -431,8 +533,12 @@ const AdminSalaryTable = (props) => {
                         style={{
                           verticalAlign: "middle",
                           whiteSpace: "pre",
-                          background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                          color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                          background: darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                          color: darkMode
+                            ? "var(--primaryDashColorDark)"
+                            : "var(--primaryDashMenuColor)",
                         }}
                         className="border-0"
                       >
@@ -442,13 +548,20 @@ const AdminSalaryTable = (props) => {
                         style={{
                           verticalAlign: "middle",
                           whiteSpace: "pre",
-                          background: darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                          color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                          background: darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                          color: darkMode
+                            ? "var(--primaryDashColorDark)"
+                            : "var(--primaryDashMenuColor)",
                         }}
                         className="border-0"
                       >
                         <div className="d-flex  gap-3 justify-content-around">
-                          <button onClick={() => onSalaryDelete(item.data._id)} className="btn text-danger p-0 d-flex align-items-center border-0">
+                          <button
+                            onClick={() => onSalaryDelete(item.data._id)}
+                            className="btn text-danger p-0 d-flex align-items-center border-0"
+                          >
                             <IoTrashBin />
                           </button>
                           <FontAwesomeIcon
@@ -461,9 +574,20 @@ const AdminSalaryTable = (props) => {
                     </tr>
                   ))
                 ) : (
-                  <div style={{ height: "30vh", width: "94%", position: "absolute" }} className="d-flex flex-column justify-content-center align-items-center gap-1">
+                  <div
+                    style={{
+                      height: "30vh",
+                      width: "94%",
+                      position: "absolute",
+                    }}
+                    className="d-flex flex-column justify-content-center align-items-center gap-1"
+                  >
                     <span className="fw-bolder" style={{ fontSize: "2rem" }}>
-                      <MdNearbyError className="text-danger" style={{ fontSize: "2.3rem" }} /> OOPS!
+                      <MdNearbyError
+                        className="text-danger"
+                        style={{ fontSize: "2.3rem" }}
+                      />{" "}
+                      OOPS!
                     </span>
                     <h6 className="p-0 m-0">Record not found.</h6>
                   </div>
@@ -472,14 +596,23 @@ const AdminSalaryTable = (props) => {
             </table>
           </div>
           <div className="container-fluid p-2 px-3 d-flex justify-content-between stickey-bottom">
-            <Button className="d-flex gap-2" onClick={handlePaginationPrev} disabled={currentPage === 1}>
+            <Button
+              className="d-flex gap-2"
+              onClick={handlePaginationPrev}
+              disabled={currentPage === 1}
+            >
               <GrFormPrevious className="my-auto" /> Previous
             </Button>
             <div className="pagination d-flex flex-nowrap gap-2">
               {pageNumbers.map((number) => (
                 <Button
                   key={number}
-                  style={{ backgroundColor: currentPage === number ? "active" : "white", border: "none", color: "gray" }}
+                  style={{
+                    backgroundColor:
+                      currentPage === number ? "active" : "white",
+                    border: "none",
+                    color: "gray",
+                  }}
                   onClick={() => setCurrentPage(number)}
                   className={currentPage === number ? "active" : ""}
                 >
@@ -492,13 +625,23 @@ const AdminSalaryTable = (props) => {
               className="d-flex gap-3"
               disabled={indexOfLastItem >= sortedAndFilteredData.length}
             >
-              <span className="">Next</span> <GrFormPrevious className="my-auto" style={{ rotate: "180deg" }} />
+              <span className="">Next</span>{" "}
+              <GrFormPrevious
+                className="my-auto"
+                style={{ rotate: "180deg" }}
+              />
             </Button>
           </div>
         </div>
       ) : (
         <div id="loading-bar">
-          <RingLoader css={override} sizeUnit={"px"} size={50} color={"#0000ff"} loading={true} />
+          <RingLoader
+            css={override}
+            sizeUnit={"px"}
+            size={50}
+            color={"#0000ff"}
+            loading={true}
+          />
         </div>
       )}
     </div>

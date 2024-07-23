@@ -15,16 +15,15 @@ const LeaveApplicationHR = (props) => {
   const email = localStorage.getItem("Email");
   const name = localStorage.getItem("Name");
   const id = localStorage.getItem("_id");
-  console.log("helo");
+
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
-    
         setEmpData(response.data);
       })
       .catch((error) => {
@@ -45,18 +44,14 @@ const LeaveApplicationHR = (props) => {
       FromDate: event.target[1].value,
       ToDate: event.target[2].value,
       Status: event.target[3].value,
-      Reasonforleave: event.target[4].value
+      Reasonforleave: event.target[4].value,
     };
     axios
-      .post(
-        `${BASE_URL}/api/leave-application-hr/` + props.data["_id"],
-        body,
-        {
-          headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
-        }
-      )
+      .post(`${BASE_URL}/api/leave-application-hr/` + props.data["_id"], body, {
+        headers: {
+          authorization: localStorage.getItem("token") || "",
+        },
+      })
       .then((res) => {
         setTable(false);
         setTable(true);
@@ -84,43 +79,45 @@ const LeaveApplicationHR = (props) => {
     console.log("clicked1");
     setTable(true);
   };
-  const restoringLeave =(email, leaveType,totalLeaveRequired)=>{
-    console.log(email, leaveType,totalLeaveRequired)
+  const restoringLeave = (email, leaveType, totalLeaveRequired) => {
+    console.log(email, leaveType, totalLeaveRequired);
     axios
-    .post(
-      `${BASE_URL}/api/rejectedLeave`,{email, leaveType,totalLeaveRequired},
-      {
-        headers: {
-          authorization: localStorage.getItem("token") || ""
+      .post(
+        `${BASE_URL}/api/rejectedLeave`,
+        { email, leaveType, totalLeaveRequired },
+        {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
         }
-      }
-    ).then((res)=>{
-      console.log(res)
-    }).catch((err)=>{
-      console.log(err)
-    })
-  }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleEditFormClose = () => {
     console.log("clicked5");
     setEditForm(false);
   };
   function dateDifference(date1, date2) {
-   
     const firstDate = new Date(date1);
     const secondDate = new Date(date2);
-   
+
     const differenceInTime = secondDate.getTime() - firstDate.getTime();
     const differenceInDays = differenceInTime / (1000 * 3600 * 24);
     return Math.abs(differenceInDays);
-}
+  }
   const handleLeaveApplicationHREditUpdate = (info, newInfo) => {
-    console.log(info)
+    console.log(info);
     newInfo.preventDefault();
     console.log("zero data", newInfo.target[0].value);
     let body = {
       Status: newInfo.target[3].value,
-      updatedBy: `${empData["FirstName"]} ${empData["LastName"]}`
+      updatedBy: `${empData["FirstName"]} ${empData["LastName"]}`,
     };
 
     const taskId = uuid();
@@ -128,19 +125,15 @@ const LeaveApplicationHR = (props) => {
     if (body.Status === "2") {
       leaveStatus = "Approved";
       axios
-        .put(
-          `${BASE_URL}/api/leave-application-hr/` + info["_id"],
-          body,
-          {
-            headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
-          }
-        )
+        .put(`${BASE_URL}/api/leave-application-hr/` + info["_id"], body, {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        })
         .then((res) => {
           setTable(false);
           setTable(true);
-         
+
           if (empData.profile) {
             const data = {
               taskId,
@@ -150,7 +143,7 @@ const LeaveApplicationHR = (props) => {
               messageBy: name,
               profile: empData.profile.image_url,
               status: "unseen",
-              path: empData.Account === 1 ? "createLeave" : "leaveApplication"
+              path: empData.Account === 1 ? "createLeave" : "leaveApplication",
             };
 
             socket.emit("leaveManagerStatusNotification", data);
@@ -163,7 +156,7 @@ const LeaveApplicationHR = (props) => {
               messageBy: name,
               profile: null,
               status: "unseen",
-              path: empData.Account === 1 ? "createLeave" : "leaveApplication"
+              path: empData.Account === 1 ? "createLeave" : "leaveApplication",
             };
 
             socket.emit("leaveManagerStatusNotification", data);
@@ -178,31 +171,28 @@ const LeaveApplicationHR = (props) => {
       body["reasonOfRejection"] = reason;
 
       axios
-        .put(
-          `${BASE_URL}/api/leave-application-hr/` + info["_id"],
-          body,
-          {
-            headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
-          }
-        )
+        .put(`${BASE_URL}/api/leave-application-hr/` + info["_id"], body, {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        })
         .then((res) => {
           setTable(false);
           setTable(true);
           console.log("hello");
-        let totalLeaveRequired=  dateDifference(info.FromDate, info.ToDate) +1;
-          restoringLeave(info.employee[0].Email,info.Leavetype,totalLeaveRequired);
+          let totalLeaveRequired =
+            dateDifference(info.FromDate, info.ToDate) + 1;
+          restoringLeave(info.Email, info.Leavetype, totalLeaveRequired);
           if (empData.profile) {
             const data = {
               taskId,
-              employeeEmail: info.employee[0].Email,
+              employeeEmail: info.Email,
               hrEmail: info.hrEmail,
               message: `Leave ${leaveStatus}`,
               messageBy: name,
               profile: empData.profile.image_url,
               status: "unseen",
-              path: empData.Account === 1 ? "createLeave" : "leaveApplication"
+              path: empData.Account === 1 ? "createLeave" : "leaveApplication",
             };
 
             socket.emit("leaveManagerStatusNotification", data);
@@ -215,7 +205,7 @@ const LeaveApplicationHR = (props) => {
               messageBy: name,
               profile: null,
               status: "unseen",
-              path: empData.Account === 1 ? "createLeave" : "leaveApplication"
+              path: empData.Account === 1 ? "createLeave" : "leaveApplication",
             };
 
             socket.emit("leaveManagerStatusNotification", data);

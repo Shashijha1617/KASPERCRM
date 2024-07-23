@@ -251,7 +251,7 @@ const SelfAttendance = () => {
                 Select a year:
               </label>
               <select
-                className="form-select rounded-0 shadow"
+                className="form-select my-0 rounded-0 shadow"
                 id="year"
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(parseInt(e.target.value))}
@@ -276,7 +276,7 @@ const SelfAttendance = () => {
                 Select a month:
               </label>
               <select
-                className="form-select rounded-0 shadow"
+                className="form-select my-0 rounded-0 shadow"
                 id="month"
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
@@ -297,7 +297,14 @@ const SelfAttendance = () => {
           className="border border-1 border-black"
           style={{ overflow: "auto", maxHeight: "77vh" }}
         >
-          <table style={{ position: "relative" }} className="table">
+          <table
+            style={{
+              fontSize: ".9rem",
+              fontWeight: "normal",
+              position: "relative",
+            }}
+            className="table"
+          >
             <thead>
               <tr style={{ position: "sticky", zIndex: "10", top: "-2px" }}>
                 <th
@@ -438,6 +445,8 @@ const SelfAttendance = () => {
                                     color: darkMode
                                       ? "var(--primaryDashColorDark)"
                                       : "var(--primaryDashMenuColor)",
+                                    fontSize: ".8rem",
+                                    fontWeight: "normal",
                                   }}
                                   className="btn"
                                 >
@@ -451,6 +460,8 @@ const SelfAttendance = () => {
                                     color: darkMode
                                       ? "var(--primaryDashColorDark)"
                                       : "var(--primaryDashMenuColor)",
+                                    fontSize: ".9rem",
+                                    fontWeight: "normal",
                                   }}
                                   className="btn"
                                 >
@@ -486,7 +497,7 @@ const SelfAttendance = () => {
                                 onMouseLeave={handleInfoMouseLeave}
                               >
                                 <span
-                                  style={{ scale: "0.7" }}
+                                  style={{ scale: "0.7", fontSize: ".9rem" }}
                                   className="bg-warning py-0  text-white  px-2 rounded-5 my-auto"
                                 >
                                   {date.breakTime.length}
@@ -496,8 +507,8 @@ const SelfAttendance = () => {
                                     color: darkMode
                                       ? "var(--primaryDashColorDark)"
                                       : "var(--primaryDashMenuColor)",
+                                    fontSize: ".9rem",
                                   }}
-                                  className="fs-6"
                                 >
                                   {millisecondsToTime(date.totalBrake)}
                                 </span>{" "}
@@ -507,12 +518,18 @@ const SelfAttendance = () => {
                                 />
                               </div>
 
-                              <div
-                                style={{ zIndex: "5", top: "0", right: "0%" }}
-                                className="position-absolute"
-                              >
-                                {!isInfoHovering &&
-                                  hoveredDate === date.date && ( // Check if info button is hovered and the date is the hovered date
+                              {!isInfoHovering &&
+                                hoveredDate === date.date && ( // Check if info button is hovered and the date is the hovered date
+                                  <div
+                                    style={{
+                                      zIndex: "5",
+                                      top: "0",
+                                      right: "0%",
+                                      minHeight: "2px",
+                                      overflow: "auto",
+                                    }}
+                                    className="position-absolute bg-white"
+                                  >
                                     <table className="table table-bordered table-striped">
                                       <thead>
                                         <tr className="shadow-sm p-0">
@@ -562,8 +579,8 @@ const SelfAttendance = () => {
                                         )}
                                       </tbody>
                                     </table>
-                                  )}
-                              </div>
+                                  </div>
+                                )}
                             </td>
                             <td style={rowBodyStyle}>
                               {millisecondsToTime(date.totalLogAfterBreak)}

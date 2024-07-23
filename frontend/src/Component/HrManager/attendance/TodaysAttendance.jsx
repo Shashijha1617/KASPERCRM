@@ -50,14 +50,18 @@ const TodaysAttendance = () => {
   const getAttendanceMark = (user) => {
     // Check if user and attendance are defined
     if (!user || !user.attendance) {
-      return "Absent";
+      return (
+        <span className="btn btn-outline-danger py-0 rounded-5">Absent</span>
+      );
     }
 
     const loginTime = user.attendance.loginTime && user.attendance.loginTime[0];
 
     // Check if loginTime exists and is a string
     if (typeof loginTime !== "string") {
-      return "Absent";
+      return (
+        <span className="btn btn-outline-danger py-0 rounded-5">Absent</span>
+      );
     }
 
     // Split loginTime only if it exists
@@ -65,18 +69,26 @@ const TodaysAttendance = () => {
 
     // Check if loginHour and loginMinute are valid numbers
     if (isNaN(loginHour) || isNaN(loginMinute)) {
-      return "Absent";
+      return (
+        <span className="btn btn-outline-danger py-0 rounded-5">Absent</span>
+      );
     }
 
     // Check login time against criteria
     if (loginHour > 9 || (loginHour === 9 && loginMinute > 45)) {
-      return "Half Day";
+      return (
+        <span className="btn btn-outline-warning py-0 rounded-5">Half Day</span>
+      );
     } else if (loginHour > 9 || (loginHour === 9 && loginMinute > 30)) {
-      return "Late";
+      return <span className="btn btn-outline-info py-0 rounded-5">Late</span>;
     }
 
     // If loginTime exists, consider the user present, otherwise absent
-    return loginTime ? "Present" : "Absent";
+    return loginTime ? (
+      <span className="btn btn-outline-success py-0 rounded-5">Present</span>
+    ) : (
+      <span className="btn btn-outline-danger py-0 rounded-5">Absent</span>
+    );
   };
 
   const status = (s) => {
@@ -183,8 +195,27 @@ const TodaysAttendance = () => {
         className="d-flex  justify-content-between py-3"
       >
         <div>
-          <h5 className=" m-0 ">Today's Attendance</h5>
-          <p>You can see today's attendance of employee here</p>
+          <h5
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+              fontWeight: "600",
+            }}
+            className=" m-0"
+          >
+            Today's Attendance
+          </h5>
+          <p
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+            }}
+            className=" m-0"
+          >
+            You can see today's attendance of employee here
+          </p>
         </div>
         <div className="d-flex gap-2 my-auto">
           <input
@@ -505,20 +536,7 @@ const TodaysAttendance = () => {
                       {user.attendance ? user.attendance.status : "--"}
                     </td>
                     <td className="text-start" style={rowBodyStyle}>
-                      <span
-                        style={{ fontSize: ".8rem" }}
-                        className={`py-1 px-3 fw-bold border border-1 border-black rounded-5 shadow-sm ${
-                          mark === "Present"
-                            ? "text-success"
-                            : mark === "Late"
-                            ? "text-info"
-                            : mark === "Half Day"
-                            ? "text-warning"
-                            : "text-danger"
-                        }`}
-                      >
-                        {mark}
-                      </span>
+                      {mark}
                     </td>
                     <td className="text-center" style={rowBodyStyle}>
                       <Link to="/hr/viewAttenDance">

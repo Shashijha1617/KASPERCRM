@@ -18,14 +18,14 @@ const LeaveApplicationEmp = (props) => {
   const email = localStorage.getItem("Email");
   const name = localStorage.getItem("Name");
   const id = localStorage.getItem("_id");
-  const { darkMode } = useTheme()
+  const { darkMode } = useTheme();
   const { socket } = useContext(AttendanceContext);
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         console.log(response.data);
@@ -50,7 +50,7 @@ const LeaveApplicationEmp = (props) => {
       Status: 1,
       managerEmail: event.target[4].value,
       hrEmail: event.target[5].value,
-      Reasonforleave: event.target[6].value
+      Reasonforleave: event.target[6].value,
     };
     console.log(body);
     axios
@@ -59,8 +59,8 @@ const LeaveApplicationEmp = (props) => {
         body,
         {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         }
       )
       .then((res) => {
@@ -78,7 +78,7 @@ const LeaveApplicationEmp = (props) => {
             messageBy: name,
             profile: empData.profile.image_url,
             status: "unseen",
-            path: "leaveApplication"
+            path: "leaveApplication",
           };
           socket.emit("leaveNotification", data);
         } else {
@@ -90,7 +90,7 @@ const LeaveApplicationEmp = (props) => {
             messageBy: name,
             profile: null,
             status: "unseen",
-            path: "leaveApplication"
+            path: "leaveApplication",
           };
           socket.emit("leaveNotification", data);
         }
@@ -132,7 +132,7 @@ const LeaveApplicationEmp = (props) => {
       Status: newInfo.target[3].value,
       managerEmail: newInfo.target[4].value,
       hrEmail: newInfo.target[5].value,
-      Reasonforleave: newInfo.target[6].value
+      Reasonforleave: newInfo.target[6].value,
     };
 
     console.log("update", body);
@@ -143,8 +143,8 @@ const LeaveApplicationEmp = (props) => {
         body,
         {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         }
       )
       .then((res) => {
@@ -157,7 +157,7 @@ const LeaveApplicationEmp = (props) => {
 
     setEditForm(false);
   };
-  const handleAddFormGenderChange = () => { };
+  const handleAddFormGenderChange = () => {};
 
   return (
     <React.Fragment>

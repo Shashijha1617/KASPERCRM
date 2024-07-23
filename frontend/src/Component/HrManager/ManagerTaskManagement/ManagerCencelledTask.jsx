@@ -35,13 +35,19 @@ const ManagerCencelledTask = () => {
 
   return (
     <div className="p-4">
-      <h5 style={{ fontWeight: "600" }} className="p-0 m-0 text-uppercase">
-        Cancelled Task (
-        {tasks.filter((task) => task.status === "Cancelled").length})
-      </h5>
-      <p className="text-muted p-0 m-0">
-        You can view all Cancelled tasks here!
-      </p>
+      <div
+        style={{
+          color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--primaryDashMenuColor)",
+        }}
+      >
+        <h5 style={{ fontWeight: "600" }} className=" m-0 p-0  text-uppercase">
+          Cancelled Task (
+          {tasks.filter((task) => task.status === "Cancelled").length})
+        </h5>
+        <p className="m-0 p-0">You can view all Cancelled tasks here!</p>{" "}
+      </div>
       {loading && (
         <div
           style={{ width: "100%", height: "100%" }}
@@ -57,7 +63,7 @@ const ManagerCencelledTask = () => {
         </div>
       )}
       <div
-        className="mt-2"
+        className="mt-2 d-flex flex-column gap-2 pt-2 pb-3"
         style={{
           overflowY: "scroll",
           maxHeight: "80vh",
@@ -221,7 +227,15 @@ const ManagerCencelledTask = () => {
               src={RejectedTask}
               alt=""
             />
-            <p>Sorry, there are no tasks assigned yet.</p>
+            <p
+              style={{
+                color: darkMode
+                  ? "var(--primaryDashColorDark)"
+                  : "var(--primaryDashMenuColor)",
+              }}
+            >
+              Sorry, there are no tasks assigned yet.
+            </p>
           </div>
         )}
       </div>

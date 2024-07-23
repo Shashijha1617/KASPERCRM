@@ -24,7 +24,7 @@ class Country extends Component {
   state = {
     table: true,
     editForm: false,
-    editData: {}
+    editData: {},
   };
 
   render() {
@@ -40,17 +40,17 @@ class Country extends Component {
               editData={this.state.editData}
             />
           ) : (
-              <CountryTable
-                onAddCountry={this.handleAddCountry}
-                onEditCountry={this.handleEditCountry}
-              />
-            )
-        ) : (
-            <CountryForm
-              onCountrySubmit={this.handleCountrySubmit}
-              onFormClose={this.handleFormClose}
+            <CountryTable
+              onAddCountry={this.handleAddCountry}
+              onEditCountry={this.handleEditCountry}
             />
-          )}
+          )
+        ) : (
+          <CountryForm
+            onCountrySubmit={this.handleCountrySubmit}
+            onFormClose={this.handleFormClose}
+          />
+        )}
 
         {/* <div>debru</div> */}
         {/* <Route path="/admin/country/table" exact component={CountryTable} /> */}
@@ -62,27 +62,27 @@ class Country extends Component {
       //  </Router>
     );
   }
-  handleCountrySubmit = event => {
+  handleCountrySubmit = (event) => {
     event.preventDefault();
     console.log("name", event.target[0].value);
     this.setState({ table: true });
 
     let body = {
-      CountryName: event.target[0].value
+      CountryName: event.target[0].value,
     };
     //  let body= "CompanyID=" + event.target[0].value + "&Country=" + event.target[1].value;
     //  let body= "debru";
     axios
       .post(`${BASE_URL}/api/country`, body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
-      .then(res => {
+      .then((res) => {
         this.setState({ table: false });
         this.setState({ table: true });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
     // this.setState({ loading: true });
@@ -93,7 +93,7 @@ class Country extends Component {
     console.log("clicked1");
     this.setState({ table: false });
   };
-  handleEditCountry = e => {
+  handleEditCountry = (e) => {
     console.log(e);
     console.log("clicked6");
     this.setState({ editForm: true });
@@ -123,15 +123,15 @@ class Country extends Component {
     axios
       .put(`${BASE_URL}/api/country/` + info["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
-      .then(res => {
+      .then((res) => {
         // this.componentDidMount();
         this.setState({ table: false });
         this.setState({ table: true });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
 

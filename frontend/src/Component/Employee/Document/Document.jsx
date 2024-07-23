@@ -26,8 +26,8 @@ const Document = (props) => {
     try {
       await axios.post(`${BASE_URL}/upload`, formData, {
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
       // Clear form fields and files after successful upload
       setTitle("");
@@ -68,14 +68,14 @@ const Document = (props) => {
       CompanyName: newInfo.target[0].value,
       Designation: newInfo.target[1].value,
       FromDate: newInfo.target[2].value,
-      ToDate: newInfo.target[3].value
+      ToDate: newInfo.target[3].value,
     };
     console.log("update", body);
     axios
       .put(`${BASE_URL}/api/work-experience/` + info["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((res) => {
         setTable(false);

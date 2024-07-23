@@ -2,24 +2,20 @@ import React, { useState, useEffect } from "react";
 import "./PositionTable.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
-import {
-  Button,
-  Table,
-} from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
+import Position from "../../img/Position/Position.svg";
 import BASE_URL from "../config/config";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 
-const override = css`
-  display: block;
-  margin: 0 auto;
-  margin-top: 45px;
-  border-color: red;
-`;
-
-const PositionTable = ({ updateTotalPositions, onAddPosition, onEditPosition }) => {
+const PositionTable = ({
+  updateTotalPositions,
+  onAddPosition,
+  onEditPosition,
+}) => {
   const [positionData, setPositionData] = useState([]);
   const [loading, setLoading] = useState(true);
   const { darkMode } = useTheme();
@@ -65,73 +61,183 @@ const PositionTable = ({ updateTotalPositions, onAddPosition, onEditPosition }) 
     }
   };
 
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var( --secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var( --secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var( --primaryDashMenuColor)",
+    border: "none",
+  };
+
   return (
-    <div style={{ height: "100vh", width: "100%", scrollbarWidth: "thin" }} className="p-4">
-      <div className="d-flex justify-between mb-3">
-        <div>
-          <h6 style={{ color: darkMode ? "var(--secondaryDashColorDark)" : "var(--secondaryDashMenuColor)" }} className="fw-bold my-auto"> Position Details<span className="text-warning"> ( {positionData.length} ) </span>  </h6>
+    <div className="container-fluid py-2">
+      <div className="d-flex justify-content-between py-2">
+        <div className="my-auto">
+          <h5
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+              fontWeight: "600",
+            }}
+            className=" m-0"
+          >
+            Position Details ( {positionData.length} )
+          </h5>
+          <p
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+            }}
+            className=" m-0"
+          >
+            You can see all position's list here
+          </p>
         </div>
-        <Button className="my-auto shadow-sm" variant="primary" onClick={onAddPosition}>
-          <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-          Create Position
-        </Button>
+        <button
+          className="btn btn-primary gap-1 d-flex  my-auto align-items-center justify-content-center"
+          onClick={onAddPosition}
+        >
+          <AiOutlinePlusCircle className="fs-4" />
+          <span className="d-none d-md-flex">Create Position</span>
+        </button>
       </div>
+
       <div id="clear-both" />
-      <Table className="table">
-        <thead>
-          <tr>
-            <th
-              style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }}
-              className="py-1"
+      {loading && (
+        <div className="d-flex justify-content-center">
+          <RingLoader size={50} color={"#0000ff"} loading={true} />
+        </div>
+      )}
+
+      <div
+        className="border border-1 border-dark "
+        style={{
+          color: darkMode
+            ? "var(--secondaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+          overflow: "auto",
+          maxHeight: "80vh",
+          position: "relative",
+        }}
+      >
+        {positionData.length > 0 ? (
+          <Table className="table" style={{ fontSize: ".9rem" }}>
+            <thead>
+              <tr>
+                <th style={rowHeadStyle}>Company</th>
+                <th style={rowHeadStyle}>Position</th>
+                <th style={rowHeadStyle} className="text-end">
+                  Edit
+                </th>
+                <th style={rowHeadStyle} className="text-end">
+                  Delete
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {positionData.map((data, index) => (
+                <tr key={index}>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {data.company[0].CompanyName}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {data.PositionName}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    <button
+                      onClick={() => onEditPosition(data)}
+                      style={{
+                        cursor: "pointer",
+                        fontSize: ".9rem",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--secondaryDashMenuColor)",
+                      }}
+                      title="Update"
+                      className="btn d-flex ms-auto gap-3 align-items-center"
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                      <span className="d-none d-md-flex">Edit</span>
+                    </button>
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    <button
+                      onClick={() => onPositionDelete(data._id)}
+                      style={{
+                        cursor: "pointer",
+                        fontSize: ".9rem",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--secondaryDashMenuColor)",
+                      }}
+                      title="Delete"
+                      className="btn d-flex ms-auto gap-3 align-items-center"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+
+                      <span className="d-none d-md-flex">Delete</span>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        ) : (
+          <div
+            style={{
+              height: "80vh",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              wordSpacing: "5px",
+              flexDirection: "column",
+              gap: "2rem",
+            }}
+          >
+            <img
+              style={{
+                height: "auto",
+                width: "20%",
+              }}
+              src={Position}
+              alt="img"
+            />
+            <p
+              className="text-center w-75 mx-auto"
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var( --primaryDashMenuColor)",
+              }}
             >
-              Company
-            </th>
-            <th
-              style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }}
-              className="py-1"
-            >
-              Position
-            </th>
-            <th
-              style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }}
-              className="py-1 text-end"
-            >
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {positionData.map((data, index) => (
-            <tr key={index}>
-              <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize">{data.company[0].CompanyName}</td>
-              <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize">{data.PositionName}</td>
-              <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }}>
-                <div className="d-flex wrap-nowrap justify-content-end gap-3">
-                  <button
-                    onClick={() => onEditPosition(data)}
-                    style={{ cursor: "pointer" }}
-                    title="Update"
-                    className="btn btn-outline-primary py-1"
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                    <span>Edit</span>
-                  </button>
-                  <button
-                    onClick={() => onPositionDelete(data._id)}
-                    style={{ cursor: "pointer" }}
-                    title="Delete"
-                    className="btn btn-outline-danger py-1"
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                    <span>Delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      {loading && <RingLoader css={override} size={150} />}
+              Position not created yet, to create new role click on "+ Create
+              Position" button.
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

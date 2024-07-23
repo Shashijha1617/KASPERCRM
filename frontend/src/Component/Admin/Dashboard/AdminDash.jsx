@@ -1,42 +1,37 @@
 import React from "react";
 import "../AdminDash.css";
-import UpcomingBirthdays from "../../../Pages/AddEmployee/UpcomingBirthdays";
 import TaskChart from "../Dashboard/Chart/TaskChart";
-
 import DepartmentChart from "../../../Pages/Chart/DepartmentChart";
-import HolidayList from "../../../Pages/LeaveCalendar/HolidayList";
-import EmployeeCount from "./CountData/EmployeeCount";
-import LeaveCount from "./CountData/LeavesCount";
 import DailyAttendChart from "../../../Pages/Chart/DailyAttendChart";
-import NoticeBoard from "../Notification/NoticeBoard";
+import MyTodaysLoginData from "../../Employee/WelcomeBoard/MyTodaysLoginData/MyTodaysLoginData";
+import WelcomeBoard from "../../../Pages/WelcomeBoard/WelcomeBoard";
+import AdminEmployeeTable from "../../HrManager/Dashboard/CountData/EmployeeCount";
+import EmployeeLogCount from "../../HrManager/Dashboard/CountData/EmplooyeeLogCount";
 
 const AdminDash = () => {
   return (
-    <div>
-      <div className="hrdashgrid-container container-fluid py-3">
-        <div className="hrdashgrid dash-1">
-          <EmployeeCount />
+    <div className="container-fluid ">
+      <MyTodaysLoginData />
+      <div className="row justif-content-between align-items-center">
+        <div className="col-6 col-md-6 col-lg-4">
+          <WelcomeBoard />
         </div>
-        <div className="hrdashgrid dash-3">
-          <LeaveCount />
+        <div className="col-6 col-md-6 col-lg-4">
+          <AdminEmployeeTable />
         </div>
-        <div className="hrdashgrid dash-7 px-3">
+        <div className="col-12 col-md-6 col-lg-4">
+          <EmployeeLogCount />
+        </div>
+      </div>
+      <div className="row row-gap-3 my-2">
+        <div className="col-12 col-md-6 col-lg-3">
           <DailyAttendChart />
         </div>
-        <div className="hrdashgrid dash-5 px-3">
+        <div className="col-12 col-md-6 col-lg-3">
           <DepartmentChart />
         </div>
-        <div className="hrdashgrid dash-4 px-3">
+        <div className="col-12 col-lg-6 ">
           <TaskChart />
-        </div>
-        <div className="hrdashgrid dash-2">
-          <UpcomingBirthdays />
-        </div>
-        <div className="hrdashgrid dash-6">
-          <HolidayList />
-        </div>
-        <div className="hrdashgrid dash-8">
-          <NoticeBoard />
         </div>
       </div>
     </div>

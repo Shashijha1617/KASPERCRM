@@ -9,8 +9,11 @@ import "jspdf-autotable";
 import { BsFillFileEarmarkPdfFill } from "react-icons/bs";
 import { LuSearch } from "react-icons/lu";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
-import { MdNearbyError } from "react-icons/md";
+import LeaveLight from "../../img/Leave/LeaveLight.svg";
+import LeaveDark from "../../img/Leave/LeaveDark.svg";
 import BASE_URL from "../../Pages/config/config";
+import { useLocation } from "react-router-dom/cjs/react-router-dom";
+
 const override = css`
   display: block;
   margin: 0 auto;
@@ -27,7 +30,9 @@ const LeaveApplicationHRTable = (props) => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [filteredData, setFilteredData] = useState([]);
   const { darkMode } = useTheme();
-
+  const location = useLocation();
+  console.log(location);
+  const email = localStorage.getItem("Email");
   const formatDate = (dateString) => {
     const dateParts = dateString.split("-");
     return `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
@@ -35,24 +40,26 @@ const LeaveApplicationHRTable = (props) => {
 
   const loadLeaveApplicationHRData = () => {
     axios
-      .get(`${BASE_URL}/api/leave-application-hr/`, {
-        headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
-      })
+      .post(
+        `${BASE_URL}/api/leave-application-hr/`,
+        { hr: email },
+        {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        }
+      )
       .then((response) => {
         const leaveApplicationHRObj = response.data;
+
         setLeaveApplicationHRData(leaveApplicationHRObj);
         setLoading(false);
 
         const rowDataT = leaveApplicationHRObj.map((data) => {
           return {
             data,
-            empID: data?.employee?.[0]?.empID,
-            Name:
-              data?.employee?.[0]?.FirstName +
-              " " +
-              data?.employee?.[0]?.LastName,
+            empID: data?.empID,
+            Name: data?.FirstName + " " + data?.LastName,
             Leavetype: data?.Leavetype,
             CreatedOn: formatDate(data?.createdOn?.slice(0, 10)),
             FromDate: formatDate(data["FromDate"]?.slice(0, 10)),
@@ -60,12 +67,13 @@ const LeaveApplicationHRTable = (props) => {
             Days: calculateDays(data?.FromDate, data?.ToDate),
             Reasonforleave: data?.Reasonforleave,
             Status: status(data?.Status),
+            empObjID: data?.empObjID,
           };
         });
 
         setRowData(rowDataT);
         setFilteredData(rowDataT);
-        props.updateTotalLeaves(leaveApplicationHRObj.length);
+        // props.updateTotalLeaves(leaveApplicationHRObj.length);
       })
       .catch((error) => {
         console.log(error);
@@ -167,51 +175,37 @@ const LeaveApplicationHRTable = (props) => {
     }
   };
 
-  const renderSortIcon = (field) => {
-    if (sortColumn === field) {
-      return sortDirection === "asc" ? "▴" : "▾";
-    }
-    return null;
-  };
-
-  const sortData = (columnName) => {
-    let newSortDirection = "asc";
-
-    if (sortColumn === columnName && sortDirection === "asc") {
-      newSortDirection = "desc";
-    }
-
-    const sortedData = [...filteredData];
-
-    sortedData.sort((a, b) => {
-      const valueA = a[columnName];
-      const valueB = b[columnName];
-
-      let comparison = 0;
-
-      if (valueA > valueB) {
-        comparison = 1;
-      } else if (valueA < valueB) {
-        comparison = -1;
-      }
-
-      return sortDirection === "desc" ? comparison * -1 : comparison;
-    });
-
-    setFilteredData(sortedData);
-    setSortColumn(columnName);
-    setSortDirection(newSortDirection);
-  };
-
   const approvedLeaves = filteredData.filter(
     (data) => data.Status === "Pending"
   ).length;
 
+  const rowHeadStyle = {
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+    whiteSpace: "pre",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
+
   return (
     <div className="container-fluid">
-      <div className="d-flex flex-column justify-between m-2 mt-3">
+      <div className="d-flex flex-column justify-between m-0 mt-3">
         <div className="d-flex justify-content-between aline-items-center">
-          <div>
+          <div className="my-auto">
             <h5
               style={{
                 color: darkMode
@@ -263,290 +257,142 @@ const LeaveApplicationHRTable = (props) => {
       </div>
 
       <div id="clear-both" />
-      {!loading ? (
-        <div>
-          <div
-            style={{
-              maxHeight: "76vh",
-              overflow: "auto",
-              position: "relative",
-            }}
-            className="table-responsive border border-1 border-black"
-          >
+
+      <div>
+        <div
+          style={{
+            maxHeight: "76vh",
+            overflow: "auto",
+            position: "relative",
+          }}
+          className="table-responsive border border-1 border-black"
+        >
+          {filteredData.length > 0 ? (
             <table className="table" style={{ fontSize: ".9rem" }}>
               <thead>
                 <tr className="shadow">
-                  <th
-                    colSpan={2}
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Employee Name
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Emp ID
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Leave Type
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Start Date
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    End Date
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    CreatedOn
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Days
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Status
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Remarks
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Actions
-                  </th>
+                  <th style={rowHeadStyle}>Profile</th>
+                  <th style={rowHeadStyle}>Employee Name</th>
+                  <th style={rowHeadStyle}>Emp ID</th>
+                  <th style={rowHeadStyle}>Leave Type</th>
+                  <th style={rowHeadStyle}>Start Date</th>
+                  <th style={rowHeadStyle}>End Date</th>
+                  <th style={rowHeadStyle}>CreatedOn</th>
+                  <th style={rowHeadStyle}>Days</th>
+                  <th style={rowHeadStyle}>Status</th>
+                  <th style={rowHeadStyle}>Remarks</th>
+                  <th style={rowHeadStyle}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredData.length > 0 ? (
-                  filteredData
-                    .filter((e) => e.Status == "Pending")
-                    .map((data, index) => {
-                      const rowBodyStyle = {
-                        position: "sticky",
-                        top: "0",
-                        verticalAlign: "middle",
-                        background: darkMode
-                          ? "var(--secondaryDashMenuColor)"
-                          : "var(--secondaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
-                      };
-                      return (
-                        <tr key={index}>
-                          <td style={rowBodyStyle} className="py-1">
-                            <div style={{ height: "35px", width: "35px" }}>
-                              <img
-                                style={{
-                                  height: "100%",
-                                  width: "100%",
-                                  borderRadius: "50%",
-                                  overflow: "hidden",
-                                  objectFit: "cover",
-                                }}
-                                src={
-                                  data?.data?.profile?.image_url
-                                    ? data?.data?.profile?.image_url
-                                    : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
+                {filteredData
+                  .filter((e) => e.Status == "Pending")
+                  .map((data, index) => {
+                    return (
+                      <tr key={index}>
+                        <td style={rowBodyStyle} className="py-1">
+                          <div style={{ height: "35px", width: "35px" }}>
+                            <img
+                              style={{
+                                height: "100%",
+                                width: "100%",
+                                borderRadius: "50%",
+                                overflow: "hidden",
+                                objectFit: "cover",
+                              }}
+                              src={
+                                data?.data?.profile?.image_url
+                                  ? data?.data?.profile?.image_url
+                                  : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
+                              }
+                              alt=""
+                            />
+                          </div>
+                        </td>
+                        <td style={rowBodyStyle}>{data.Name}</td>
+                        <td style={rowBodyStyle}>{data.empID}</td>
+                        <td style={rowBodyStyle}>{data.Leavetype}</td>
+                        <td style={rowBodyStyle}>{data.FromDate}</td>
+                        <td style={rowBodyStyle}>{data.ToDate}</td>
+                        <td style={rowBodyStyle}>
+                          <span>{data.CreatedOn}</span>
+                        </td>
+                        <td style={rowBodyStyle}>
+                          <span>{data.Days}</span>
+                        </td>
+                        <td style={rowBodyStyle}>
+                          <span className=" text-white bg-warning px-2 py-0 rounded-5">
+                            {data.Status}
+                          </span>
+                        </td>
+                        <td style={rowBodyStyle}>{data.Reasonforleave}</td>
+                        <td style={rowBodyStyle}>
+                          <div
+                            className="d-flex gap-3 py-2"
+                            style={{ cursor: "pointer" }}
+                          >
+                            <p title="Update" className="m-auto text-primary">
+                              <FontAwesomeIcon
+                                className="m-auto"
+                                icon={faEdit}
+                                onClick={() =>
+                                  props.onEditLeaveApplicationHR(data.data)
                                 }
-                                alt=""
                               />
-                            </div>
-                          </td>
-                          <td style={rowBodyStyle}>{data.Name}</td>
-                          <td style={rowBodyStyle}>{data.empID}</td>
-                          <td style={rowBodyStyle}>{data.Leavetype}</td>
-                          <td style={rowBodyStyle}>{data.FromDate}</td>
-                          <td style={rowBodyStyle}>{data.ToDate}</td>
-                          <td style={rowBodyStyle}>
-                            <span>{data.CreatedOn}</span>
-                          </td>
-                          <td style={rowBodyStyle}>
-                            <span>{data.Days}</span>
-                          </td>
-                          <td style={rowBodyStyle}>
-                            <span className=" text-white bg-warning px-2 py-0 rounded-5">
-                              {data.Status}
-                            </span>
-                          </td>
-                          <td style={rowBodyStyle}>{data.Reasonforleave}</td>
-                          <td style={rowBodyStyle}>
-                            <div
-                              className="d-flex gap-3 py-2"
-                              style={{ cursor: "pointer" }}
-                            >
-                              <p title="Update" className="m-auto text-primary">
-                                <FontAwesomeIcon
-                                  className="m-auto"
-                                  icon={faEdit}
-                                  onClick={() =>
-                                    props.onEditLeaveApplicationHR(data.data)
-                                  }
-                                />
-                              </p>
-                              <p title="Delete" className="m-auto text-danger">
-                                <FontAwesomeIcon
-                                  className="m-auto"
-                                  icon={faTrash}
-                                  onClick={() =>
-                                    onLeaveApplicationHRDelete(
-                                      data.data["employee"][0]["_id"],
-                                      data.data["_id"]
-                                    )
-                                  }
-                                />
-                              </p>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })
-                ) : (
-                  <div
-                    style={{
-                      height: "30vh",
-                      width: "94%",
-                      position: "absolute",
-                    }}
-                    className="d-flex flex-column justify-content-center align-items-center gap-1"
-                  >
-                    <span className="fw-bolder " style={{ fontSize: "2rem" }}>
-                      <MdNearbyError
-                        className="text-danger"
-                        style={{ fontSize: "2.3rem" }}
-                      />{" "}
-                      OOPS!
-                    </span>
-                    <h6 className="p-0 m-0">Record not found.</h6>
-                  </div>
-                )}
+                            </p>
+                            <p title="Delete" className="m-auto text-danger">
+                              <FontAwesomeIcon
+                                className="m-auto"
+                                icon={faTrash}
+                                onClick={() =>
+                                  onLeaveApplicationHRDelete(
+                                    data.empObjID,
+                                    data.data["_id"]
+                                  )
+                                }
+                              />
+                            </p>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
-          </div>
+          ) : (
+            <div
+              style={{
+                height: "80vh",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                wordSpacing: "5px",
+                flexDirection: "column",
+                gap: "2rem",
+              }}
+            >
+              <img
+                style={{
+                  height: "auto",
+                  width: "25%",
+                }}
+                src={darkMode ? LeaveDark : LeaveLight}
+                alt="img"
+              />
+              <p
+                style={{
+                  color: darkMode
+                    ? "var(--secondaryDashColorDark)"
+                    : "var( --primaryDashMenuColor)",
+                }}
+              >
+                No Leave requests found.
+              </p>
+            </div>
+          )}
         </div>
-      ) : (
-        <div id="loading-bar">
-          <RingLoader
-            sizeUnit={"px"}
-            size={50}
-            color={"#0000ff"}
-            loading={true}
-          />
-        </div>
-      )}
+      </div>
     </div>
   );
 };

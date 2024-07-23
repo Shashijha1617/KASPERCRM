@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./CityTable.css";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
-import { Button } from "react-bootstrap";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import { FaRegEdit } from "react-icons/fa";
-import { AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import BASE_URL from "../config/config";
 
 const override = css`
@@ -24,7 +21,6 @@ const CityTable = ({ onAddCity, onEditCity }) => {
   const [rowData, setRowData] = useState([]);
   const { darkMode } = useTheme();
 
-
   useEffect(() => {
     loadCityData();
   }, []);
@@ -39,7 +35,7 @@ const CityTable = ({ onAddCity, onEditCity }) => {
       .then((response) => {
         const cityObj = response.data;
         console.log("response", response.data);
-        setCityData(response.data);
+        setCityData(cityObj);
         setLoading(false);
 
         const rowDataT = cityObj.map((data) => ({
@@ -57,7 +53,7 @@ const CityTable = ({ onAddCity, onEditCity }) => {
   };
 
   const onCityDelete = (id) => {
-    if (window.confirm("Are you sure to delete this record ? ")) {
+    if (window.confirm("Are you sure to delete this record?")) {
       axios
         .delete(`${BASE_URL}/api/city/${id}`, {
           headers: {
@@ -71,56 +67,127 @@ const CityTable = ({ onAddCity, onEditCity }) => {
           console.log(err);
           if (err.response && err.response.status === 403) {
             window.alert(err.response.data);
+          } else {
+            window.alert("An error occurred while deleting the record.");
           }
         });
     }
   };
 
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
+
   return (
-    <div className="p-4">
+    <div className="container-fluid py-2">
       <div className="d-flex justify-between align-items-start mb-3">
         <div className="my-auto">
-          <h6 style={{ color: darkMode ? "var(--secondaryDashColorDark)" : "var(--secondaryDashMenuColor)" }} className="fw-bold my-auto"> City Details<span className="text-warning"> ( {cityData.length} ) </span>  </h6>
+          <h5
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+              fontWeight: "600",
+            }}
+            className="m-0"
+          >
+            City Details ({cityData.length})
+          </h5>
+          <p
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+            }}
+            className="m-0"
+          >
+            You can see all city's list here.
+          </p>
         </div>
-
-        <Button
-          variant="primary"
-          className="my-auto"
-          id="add-button"
+        <button
+          className="btn btn-primary gap-1 d-flex my-auto align-items-center justify-content-center"
           onClick={onAddCity}
         >
-          <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-          Add new City
-        </Button>
+          <AiOutlinePlusCircle className="fs-4" />
+          <span className="d-none d-md-flex">Add City</span>
+        </button>
       </div>
       <div id="clear-both" />
 
       {!loading ? (
         <table className="table">
           <thead>
-            <tr style={{ position: 'sticky', top: '0' }}>
-              <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }} className="py-1">Country</th>
-              <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }} className="py-1">State</th>
-              <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }} className="py-1">City</th>
-              <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }} className="py-1 text-end">Action</th>
+            <tr style={{ position: "sticky", top: "0" }}>
+              <th style={rowHeadStyle}>Country</th>
+              <th style={rowHeadStyle}>State</th>
+              <th style={rowHeadStyle}>City</th>
+              <th style={rowHeadStyle} className="text-end">
+                Edit
+              </th>
+              <th style={rowHeadStyle} className="text-end">
+                Delete
+              </th>
             </tr>
           </thead>
           <tbody>
             {cityData.map((items, index) => (
               <tr className="text-capitalize" key={index}>
-                <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }}>{items.state[0].country[0].CountryName}</td>
-                <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }}>{items.state[0].StateName}</td>
-                <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }}>{items.CityName}</td>
-                <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-end"><button
-                  onClick={onEditCity}
-                  style={{
-                    zIndex: "1",
-                    cursor: "pointer"
-                  }}
-                  className="btn btn-outline-primary py-1 mr-2"
-                >
-                  <FaRegEdit /> Edit
-                </button>
+                <td style={rowBodyStyle}>
+                  {items.state[0].country[0].CountryName}
+                </td>
+                <td style={rowBodyStyle}>{items.state[0].StateName}</td>
+                <td style={rowBodyStyle}>{items.CityName}</td>
+                <td style={rowBodyStyle}>
+                  <button
+                    onClick={() => onEditCity(items)}
+                    style={{
+                      cursor: "pointer",
+                      color: darkMode
+                        ? "var(--secondaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                    }}
+                    className="btn ms-auto d-flex gap-3 align-items-center"
+                  >
+                    <FaRegEdit /> <span className="d-none d-md-flex">Edit</span>
+                  </button>
+                </td>
+                <td style={rowBodyStyle}>
+                  <button
+                    onClick={() => onCityDelete(items._id)}
+                    style={{
+                      cursor: "pointer",
+                      color: darkMode
+                        ? "var(--secondaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                    }}
+                    className="btn ms-auto d-flex gap-3 align-items-center"
+                  >
+                    <AiOutlineDelete />{" "}
+                    <span className="d-none d-md-flex">Delete</span>
+                  </button>
                 </td>
               </tr>
             ))}

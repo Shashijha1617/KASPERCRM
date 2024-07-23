@@ -8,8 +8,9 @@ import { css } from "@emotion/core";
 import { Button } from "react-bootstrap";
 import { FaRegEdit } from "react-icons/fa";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
-import { AiFillDelete } from "react-icons/ai";
 import BASE_URL from "../config/config";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+
 const override = css`
   display: block;
   margin: 0 auto;
@@ -20,68 +21,18 @@ const override = css`
 const CountryTable = (props) => {
   const [countryData, setCountryData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [rowData, setRowData] = useState([]);
   const { darkMode } = useTheme();
-
-  const renderButton = (params) => (
-    <FontAwesomeIcon
-      icon={faTrash}
-      onClick={() => onCountryDelete(params.data.data["_id"])}
-    />
-  );
-
-  const renderEditButton = (params) => (
-    <FontAwesomeIcon
-      icon={faEdit}
-      onClick={() => props.onEditCountry(params.data.data)}
-    />
-  );
-
-  const columnDefs = [
-    {
-      headerName: "Country",
-      field: "CountryName",
-      sortable: true
-    },
-    {
-      headerName: "",
-      field: "edit",
-      filter: false,
-      width: 30,
-      cellRendererFramework: renderEditButton
-    },
-    {
-      headerName: "",
-      field: "delete",
-      filter: false,
-      width: 30,
-      cellRendererFramework: renderButton
-    }
-  ];
-
-  const defaultColDef = {
-    resizable: true,
-    width: 1180,
-    filter: "agTextColumnFilter"
-  };
-
-  const getRowHeight = () => 35;
 
   const loadCountryData = useCallback(() => {
     axios
       .get(`${BASE_URL}/api/country`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setCountryData(response.data);
         setLoading(false);
-        const rowDataT = response.data.map((data) => ({
-          data,
-          CountryName: data["CountryName"]
-        }));
-        setRowData(rowDataT);
       })
       .catch((error) => {
         console.log(error);
@@ -93,12 +44,12 @@ const CountryTable = (props) => {
   }, [loadCountryData]);
 
   const onCountryDelete = (id) => {
-    if (window.confirm("Are you sure to delete this record ? ")) {
+    if (window.confirm("Are you sure to delete this record?")) {
       axios
         .delete(`${BASE_URL}/api/country/${id}`, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
         .then(() => {
           loadCountryData();
@@ -112,69 +63,70 @@ const CountryTable = (props) => {
     }
   };
 
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
+
   return (
-    <div className="container-fluid mb-5">
-      <div style={{ position: 'sticky', top: '0' }} className="d-flex justify-between aline-items-start mb-3">
-        <h6 style={{ color: darkMode ? "var(--secondaryDashColorDark)" : "var(--secondaryDashMenuColor)" }} className="fw-bold my-auto"> Country Details<span className="text-warning"> ( {countryData.length} ) </span>  </h6>
-        <Button
-          variant="primary"
-          id="add-button"
+    <div className="container-fluid py-2">
+      <div className="d-flex justify-content-between py-2">
+        <div className="my-auto">
+          <h5
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+              fontWeight: "600",
+            }}
+            className=" m-0"
+          >
+            Country Details ({countryData.length})
+          </h5>
+          <p
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+            }}
+            className=" m-0"
+          >
+            You can see all country list here.
+          </p>
+        </div>
+        <button
+          className="btn btn-primary gap-1 d-flex  my-auto align-items-center justify-content-center"
           onClick={props.onAddCountry}
         >
-          <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-          Add
-        </Button>
+          <AiOutlinePlusCircle className="fs-4" />
+          <span className="d-none d-md-flex">Add Country</span>
+        </button>
       </div>
 
-
       <div id="clear-both" />
-      {!loading ? (
-        <div
-          style={{
-            overflow: "auto",
-            height: "75vh",
-            width: "100%",
-            scrollbarWidth: "thin",
-            position: 'relative'
-          }}
-        >         <table className="table">
-            <thead>
-              <tr style={{ position: 'sticky', top: '0' }}>
-                <th
-                  style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }}
-                  className="py-1"
-                >
-                  Country
-                </th>
-                <th
-                  style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }}
-                  className="py-1 text-end"
-                >
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {countryData.map((items, index) => (
-                <tr key={index}>
-                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }}>{items.CountryName}</td>
-                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-end">
-                    <button
-                      onClick={() => props.onEditCountry(items)}
-                      style={{
-                        zIndex: "1",
-                        cursor: "pointer",
-                      }}
-                      className="btn btn-outline-primary py-1"
-                    >
-                      <FaRegEdit /> Edit </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table></div>
-
-      ) : (
+      {loading && (
         <div id="loading-bar">
           <RingLoader
             css={override}
@@ -185,6 +137,67 @@ const CountryTable = (props) => {
           />
         </div>
       )}
+      <div
+        className="border border-1 border-dark"
+        style={{
+          color: darkMode
+            ? "var(--secondaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+          overflow: "auto",
+          maxHeight: "80vh",
+          position: "relative",
+        }}
+      >
+        <table className="table" style={{ fontSize: ".9rem" }}>
+          <thead>
+            <tr style={{ position: "sticky", top: "0" }}>
+              <th style={rowHeadStyle}>Country</th>
+              <th className="text-end" style={rowHeadStyle}>
+                Edit
+              </th>
+              <th className="text-end" style={rowHeadStyle}>
+                Delete
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {countryData.map((item, index) => (
+              <tr key={index}>
+                <td style={rowBodyStyle}>{item.CountryName}</td>
+                <td style={rowBodyStyle}>
+                  <button
+                    onClick={() => props.onEditCountry(item)}
+                    style={{
+                      cursor: "pointer",
+                      color: darkMode
+                        ? "var(--secondaryDashColorDark)"
+                        : "var( --primaryDashMenuColor)",
+                    }}
+                    className="btn ms-auto  d-flex gap-3 align-items-center"
+                  >
+                    <FaRegEdit /> <span className="d-none d-md-flex">Edit</span>
+                  </button>
+                </td>
+                <td style={rowBodyStyle}>
+                  <button
+                    onClick={() => onCountryDelete(item._id)}
+                    style={{
+                      cursor: "pointer",
+                      color: darkMode
+                        ? "var(--secondaryDashColorDark)"
+                        : "var( --primaryDashMenuColor)",
+                    }}
+                    className="btn  ms-auto d-flex gap-3 align-items-center"
+                  >
+                    <FontAwesomeIcon icon={faTrash} />{" "}
+                    <span className="d-none d-md-flex">Delete</span>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

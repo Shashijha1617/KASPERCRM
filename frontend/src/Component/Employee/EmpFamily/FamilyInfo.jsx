@@ -19,15 +19,15 @@ const FamilyInfo = (props) => {
       Name: event.target[0].value,
       Relationship: event.target[1].value,
       DOB: event.target[2].value,
-      Occupation: event.target[3].value
+      Occupation: event.target[3].value,
       // parentMobile: event.target[4].value
     };
 
     axios
       .post(`${BASE_URL}/api/family-info/` + props.data["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((res) => {
         setTable(false);
@@ -67,7 +67,7 @@ const FamilyInfo = (props) => {
       Name: newInfo.target[0].value,
       Relationship: newInfo.target[1].value,
       DOB: newInfo.target[2].value,
-      Occupation: newInfo.target[3].value
+      Occupation: newInfo.target[3].value,
       // parentMobile: newInfo.target[4].value
     };
 
@@ -76,8 +76,8 @@ const FamilyInfo = (props) => {
     axios
       .put(`${BASE_URL}/api/family-info/` + info["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((res) => {
         setTable(false);

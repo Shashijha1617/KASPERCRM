@@ -20,14 +20,14 @@ const WorkExperience = (props) => {
       CompanyName: event.target[0].value,
       Designation: event.target[1].value,
       FromDate: event.target[2].value,
-      ToDate: event.target[3].value
+      ToDate: event.target[3].value,
     };
 
     axios
       .post(`${BASE_URL}/api/work-experience/` + props.data["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((res) => {
         setTable(false);
@@ -67,14 +67,14 @@ const WorkExperience = (props) => {
       CompanyName: newInfo.target[0].value,
       Designation: newInfo.target[1].value,
       FromDate: newInfo.target[2].value,
-      ToDate: newInfo.target[3].value
+      ToDate: newInfo.target[3].value,
     };
     console.log("update", body);
     axios
       .put(`${BASE_URL}/api/work-experience/` + info["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((res) => {
         setTable(false);

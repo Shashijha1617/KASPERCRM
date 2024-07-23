@@ -7,6 +7,7 @@ import "./leave.css";
 import LeaveTable from "./LeaveTable";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../config/config";
+
 const LeaveCalendar = () => {
   const [date, setDate] = useState(new Date());
   const [holidayName, setHolidayName] = useState("");
@@ -15,6 +16,7 @@ const LeaveCalendar = () => {
   const [holidaysData, setHolidaysData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredHolidays, setFilteredHolidays] = useState([]);
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
   const [filterYear, setFilterYear] = useState(currentYear);
@@ -22,19 +24,20 @@ const LeaveCalendar = () => {
   const { darkMode } = useTheme();
 
   const formatDate = (date) => {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    return date.toISOString().split("T")[0];
   };
 
   const handleAddHoliday = async () => {
     if (date && holidayName) {
-      const formattedDate = formatDate(date);
+      const formattedDate = new Date(date);
+
       const newHoliday = {
         holidayDate: formattedDate.getDate(),
         holidayMonth: formattedDate.getMonth() + 1,
         holidayYear: formattedDate.getFullYear(),
         holidayDay: formattedDate.getDay(),
         holidayName,
-        holidayType
+        holidayType,
       };
 
       try {
@@ -47,10 +50,11 @@ const LeaveCalendar = () => {
           const responseData = response.data;
           setHolidays((prevHolidays) => [
             ...prevHolidays,
-            responseData.newHoliday
+            responseData.newHoliday,
           ]);
           setHolidayName("");
           setHolidayType("National Holiday");
+          setShowModal(false); // Close modal on successful addition
           alert("Holiday Added Successfully");
         } else {
           console.error("Failed to add holiday:", response.statusText);
@@ -64,14 +68,18 @@ const LeaveCalendar = () => {
   useEffect(() => {
     const fetchHolidays = async () => {
       try {
-        const response = await axios.get("${BASE_URL}/api/holidays");
+        const response = await axios.get(`${BASE_URL}/api/holidays`);
 
         if (response.status === 200) {
           const data = response.data;
           setHolidaysData(data);
-          setFilteredHolidays(data.filter(holiday =>
-            holiday.holidayYear === currentYear && holiday.holidayMonth === currentMonth
-          ));
+          setFilteredHolidays(
+            data.filter(
+              (holiday) =>
+                holiday.holidayYear === currentYear &&
+                holiday.holidayMonth === currentMonth
+            )
+          );
         } else {
           console.error("Failed to fetch holiday data:", response.statusText);
         }
@@ -81,7 +89,7 @@ const LeaveCalendar = () => {
     };
 
     fetchHolidays();
-  }, []);
+  }, [currentYear, currentMonth]);
 
   useEffect(() => {
     filterHolidays();
@@ -90,19 +98,20 @@ const LeaveCalendar = () => {
   const filterHolidays = () => {
     let filtered = [...holidaysData];
 
-    // Filter by year
     if (filterYear) {
-      filtered = filtered.filter(holiday => holiday.holidayYear === parseInt(filterYear));
+      filtered = filtered.filter(
+        (holiday) => holiday.holidayYear === parseInt(filterYear)
+      );
     }
 
-    // Filter by month
     if (filterMonth) {
-      filtered = filtered.filter(holiday => holiday.holidayMonth === parseInt(filterMonth));
+      filtered = filtered.filter(
+        (holiday) => holiday.holidayMonth === parseInt(filterMonth)
+      );
     }
 
-    // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(holiday =>
+      filtered = filtered.filter((holiday) =>
         holiday.holidayName.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
@@ -110,31 +119,29 @@ const LeaveCalendar = () => {
     setFilteredHolidays(filtered);
   };
 
-  // Convert date to local timezone format
-  const toLocalDate = (date) => {
-    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-    return localDate.toISOString().split("T")[0];
-  };
-
   return (
     <div className="container-fluid pt-3">
-      <h6 style={{ color: darkMode ? "var(--secondaryDashColorDark)" : "var(--secondaryDashMenuColor)" }} className="fw-bold mb-3 my-auto">Holiday Calendar</h6>
+      <h6
+        style={{
+          color: darkMode
+            ? "var(--secondaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+        }}
+        className="fw-bold mb-3 my-auto"
+      >
+        Holiday Calendar
+      </h6>
       <div className="row container-fluid row-gap-3 py-2 justify-content-between">
-        <div style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var(--secondaryDashMenuColor)", border: 'none' }} className="col-12 col-lg-4 d-flex flex-column gap-3 py-2 rounded-2">
+        <div className="col-12 col-lg-4">
           <Calendar
             className="w-100 bg-white rounded-2 text-black shadow-sm"
             value={date}
-            onChange={(selectedDate) => setDate(new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000))}
+            onChange={(selectedDate) => setDate(new Date(selectedDate))}
             tileContent={({ date, view }) => {
               if (view === "month") {
-                const formattedDate = new Date(date);
-                formattedDate.setDate(formattedDate.getDate());
-                const formattedDateString = formattedDate
-                  .toISOString()
-                  .split("T")[0];
-
+                const formattedDate = formatDate(date);
                 const holiday = holidays.find(
-                  (holiday) => holiday.date === formattedDateString
+                  (holiday) => holiday.date === formattedDate
                 );
 
                 if (holiday) {
@@ -148,43 +155,13 @@ const LeaveCalendar = () => {
               }
             }}
           />
-          <div className="">
-            <div className="mb-3">
-              <input
-                type="date"
-                className="form-control"
-                value={toLocalDate(date)}
-                onChange={(e) => setDate(new Date(e.target.value))}
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Holiday Name"
-                value={holidayName}
-                onChange={(e) => setHolidayName(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <select
-                className="form-select"
-                value={holidayType}
-                onChange={(e) => setHolidayType(e.target.value)}
-              >
-                <option value="National Holiday">National Holiday</option>
-                <option value="Gazetted Holiday">Gazetted Holiday</option>
-                <option value="Restricted Holiday">Restricted Holiday</option>
-              </select>
-            </div>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleAddHoliday}
-            >
-              Add Holiday
-            </button>
-          </div>
+          <button
+            type="button"
+            className="btn btn-primary mt-3"
+            onClick={() => setShowModal(true)}
+          >
+            Add Holiday
+          </button>
         </div>
 
         <div className="col-12 col-lg-8">
@@ -197,6 +174,86 @@ const LeaveCalendar = () => {
             filterMonth={filterMonth}
             setFilterMonth={setFilterMonth}
           />
+        </div>
+      </div>
+
+      {/* Modal */}
+      <div
+        className={`modal fade ${showModal ? "show" : ""}`}
+        style={{ display: showModal ? "block" : "none" }}
+        tabIndex="-1"
+        role="dialog"
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Add Holiday</h5>
+              <button
+                type="button"
+                className="close"
+                onClick={() => setShowModal(false)}
+              >
+                <span>&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="mb-3" style={{ position: "relative" }}>
+                <input
+                  type="date"
+                  className="form-control"
+                  value={formatDate(date)}
+                  onChange={(e) => setDate(new Date(e.target.value))}
+                />
+                <div
+                  style={{
+                    height: "100%",
+                    width: "80%",
+                    position: "absolute",
+                    top: "0",
+                    left: "0",
+                  }}
+                >
+                  {" "}
+                </div>
+              </div>
+              <div className="mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Holiday Name"
+                  value={holidayName}
+                  onChange={(e) => setHolidayName(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <select
+                  className="form-select"
+                  value={holidayType}
+                  onChange={(e) => setHolidayType(e.target.value)}
+                >
+                  <option value="National Holiday">National Holiday</option>
+                  <option value="Gazetted Holiday">Gazetted Holiday</option>
+                  <option value="Restricted Holiday">Restricted Holiday</option>
+                </select>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setShowModal(false)}
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleAddHoliday}
+              >
+                Add Holiday
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -15,11 +15,11 @@ const MyTodaysLoginData = (props) => {
     const loadPersonalInfoData = async () => {
       try {
         const response = await axios.get(
-          `${BASE_URL}/api/personal-info/` + props.data["_id"],
+          `${BASE_URL}/api/personal-info/` + employeeId,
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         );
         console.log(response.data.FirstName);
@@ -82,7 +82,9 @@ const MyTodaysLoginData = (props) => {
       >
         <div className="col-md-8 col-12">
           <span className="fs-5 text-white">Total Break</span>
-          <p className="text-white fs-5 m-0">{convertMinutesToHoursAndMinutes(attendanceData.totalBrake)}</p>
+          <p className="text-white fs-5 m-0">
+            {convertMinutesToHoursAndMinutes(attendanceData.totalBrake)}
+          </p>
         </div>
         <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center text-white fs-1">
           <MdCoffee />
@@ -94,7 +96,9 @@ const MyTodaysLoginData = (props) => {
       >
         <div className="col-md-8 col-12">
           <span className="fs-5 text-white">Total Login</span>
-          <p className="text-white fs-5 m-0">{convertMinutesToHoursAndMinutes(attendanceData.totalLoginTime)}</p>
+          <p className="text-white fs-5 m-0">
+            {convertMinutesToHoursAndMinutes(attendanceData.totalLoginTime)}
+          </p>
         </div>
         <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center text-white fs-1">
           <BsFillBriefcaseFill />

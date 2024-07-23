@@ -9,7 +9,7 @@ const ManagerCompletedTask = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/tasks`, {
-        params: { status: "Completed" } // Filter by status "Completed"
+        params: { status: "Completed" }, // Filter by status "Completed"
       });
 
       setTasks(response.data);
@@ -28,7 +28,7 @@ const ManagerCompletedTask = () => {
   return (
     <div className="p-4">
       <h1 className="fs-2 text-muted fw-bolder text-uppercase">
-        ✅ Completed Tasks (
+        Completed Tasks (
         {tasks.filter((task) => task.status === "Completed").length})
       </h1>
       <p className="text-muted">You can view all Completed task here!</p>{" "}
@@ -52,7 +52,7 @@ const ManagerCompletedTask = () => {
           height: "80vh",
           scrollbarWidth: "thin",
           scrollbarGutter: "stable",
-          scrollMargin: "1rem"
+          scrollMargin: "1rem",
         }}
         className="d-flex flex-column gap-3"
       >
@@ -63,7 +63,7 @@ const ManagerCompletedTask = () => {
           .map((task, index) => (
             <details
               style={{
-                boxShadow: "-1px 1px 10px gray"
+                boxShadow: "-1px 1px 10px gray",
               }}
               className="p-1 position-relative mt-3 fs-4 rounded mx-3"
               key={task.id}
@@ -72,7 +72,7 @@ const ManagerCompletedTask = () => {
                 style={{
                   height: "fit-content",
                   background:
-                    "linear-gradient(165deg,#11009E, #700B97, 90%, #C84B31)"
+                    "linear-gradient(165deg,#11009E, #700B97, 90%, #C84B31)",
                 }}
                 className="d-flex justify-content-between aline-center form-control text-white"
               >
@@ -99,7 +99,7 @@ const ManagerCompletedTask = () => {
                     height: "100%",
                     zIndex: "5",
                     backgroundColor: "rgba(0, 128, 0, 0.384)",
-                    textShadow: "-5px 5px 5px rgba(128, 128, 128, 0.422)"
+                    textShadow: "-5px 5px 5px rgba(128, 128, 128, 0.422)",
                   }}
                   className="watermark form-control   position-absolute d-flex justify-content-center aline-center"
                 >

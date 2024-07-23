@@ -9,7 +9,7 @@ class Company extends Component {
   state = {
     table: true,
     editForm: false,
-    editData: {}
+    editData: {},
   };
 
   render() {
@@ -23,21 +23,21 @@ class Company extends Component {
               editData={this.state.editData}
             />
           ) : (
-              <CompanyTable
-                onAddCompany={this.handleAddCompany}
-                onEditCompany={this.handleEditCompany}
-              />
-            )
-        ) : (
-            <CompanyForm
-              onCompanySubmit={this.handleCompanySubmit}
-              onFormClose={this.handleFormClose}
+            <CompanyTable
+              onAddCompany={this.handleAddCompany}
+              onEditCompany={this.handleEditCompany}
             />
-          )}
+          )
+        ) : (
+          <CompanyForm
+            onCompanySubmit={this.handleCompanySubmit}
+            onFormClose={this.handleFormClose}
+          />
+        )}
       </React.Fragment>
     );
   }
-  handleCompanySubmit = event => {
+  handleCompanySubmit = (event) => {
     event.preventDefault();
     console.log("id", event.target[0].value, event.target[1].value);
     this.setState({ table: true });
@@ -59,14 +59,14 @@ class Company extends Component {
     axios
       .post(`${BASE_URL}/api/company`, body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
-      .then(res => {
+      .then((res) => {
         this.setState({ table: false });
         this.setState({ table: true });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -74,7 +74,7 @@ class Company extends Component {
     console.log("clicked1");
     this.setState({ table: false });
   };
-  handleEditCompany = e => {
+  handleEditCompany = (e) => {
     console.log(e);
     console.log("clicked6");
     this.setState({ editForm: true });
@@ -110,20 +110,17 @@ class Company extends Component {
     };
     console.log("update", body);
     axios
-      .put(
-        `${BASE_URL}/api/company/` + info["_id"],
-        body, {
+      .put(`${BASE_URL}/api/company/` + info["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
-      }
-      )
-      .then(res => {
+          authorization: localStorage.getItem("token") || "",
+        },
+      })
+      .then((res) => {
         // this.componentDidMount();
         this.setState({ table: false });
         this.setState({ table: true });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
 

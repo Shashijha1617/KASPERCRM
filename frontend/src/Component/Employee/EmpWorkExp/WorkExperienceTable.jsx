@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
-import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { FaRegEdit } from "react-icons/fa";
+import { FaPlus, FaRegEdit } from "react-icons/fa";
 import "./WorkExperienceTable.css";
+import SearchLight from "../../../img/Attendance/SearchLight.svg";
 import BASE_URL from "../../../Pages/config/config.js";
-import InnerDashContainer from "../../InnerDashContainer.jsx";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext.js";
 const override = css`
   display: block;
@@ -32,8 +30,8 @@ const WorkExperienceTable = (props) => {
     axios
       .get(`${BASE_URL}/api/work-experience/` + localStorage.getItem("_id"), {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         workExperienceObj = response.data;
@@ -47,7 +45,7 @@ const WorkExperienceTable = (props) => {
             CompanyName: data["CompanyName"],
             Designation: data["Designation"],
             FromDate: data["FromDate"].slice(0, 10),
-            ToDate: data["ToDate"].slice(0, 10)
+            ToDate: data["ToDate"].slice(0, 10),
           };
 
           rowDataT.push(temp);
@@ -65,8 +63,8 @@ const WorkExperienceTable = (props) => {
       axios
         .delete(`${BASE_URL}/api/work-experience/` + e1 + "/" + e2, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
         .then((res) => {
           loadWorkExperienceData();
@@ -111,62 +109,82 @@ const WorkExperienceTable = (props) => {
     );
   };
 
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
+
   return (
     <div className="container-fluid">
       <div id="table-outer-div-scroll">
-        <h2 id="role-title">
-          <h6 style={{ color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)" }} className="fw-bold my-auto">Employee Work Experience Details <span className="text-warning"> ( {rowData.length} ) </span></h6>
-          {props.back
-            ? "of " + props.data["FirstName"] + " " + props.data["LastName"]
-            : ""}
-        </h2>
-
-        {props.back ? (
-          <Link to="/hr/employee">
-            <Button variant="primary" id="add-button">
-              Back
-            </Button>
-          </Link>
-        ) : (
-          <Button
-            variant="primary"
-            id="add-button"
-            onClick={props.onAddWorkExperience}
+        <div className="d-flex justify-content-between my-2">
+          <h6
+            style={{
+              color: darkMode
+                ? "var(--primaryDashColorDark)"
+                : "var(--primaryDashMenuColor)",
+            }}
+            className="fw-bold my-auto"
           >
-            <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-            Add Experience
-          </Button>
-        )}
+            Work Experience ( {rowData.length} )
+          </h6>
+
+          <div className="py-1">
+            <button
+              className="btn btn-primary d-flex align-items-center justify-content-center gap-2"
+              onClick={props.onAddWorkExperience}
+            >
+              <FaPlus />
+              <span className="d-none d-md-flex">Add Experience</span>
+            </button>
+          </div>
+        </div>
 
         <div id="clear-both" />
 
-        {!loading ? (
+        {loading && (
+          <div id="loading-bar">
+            <RingLoader
+              css={override}
+              sizeUnit={"px"}
+              size={50}
+              color={"#0000ff"}
+              loading={true}
+            />
+          </div>
+        )}
+
+        {rowData.length > 0 ? (
           <table className="table">
             <thead>
               <tr>
-                <th
-                  style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}
-                >
-                  Company Name
-                </th>
-                <th
-                  style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}
-                >
-                  Designation
-                </th>
-                <th
-                  style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}
-                >
-                  FromDate
-                </th>
-                <th
-                  style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}
-                >
-                  ToDate
-                </th>
-                <th
-                  style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}
-                  className="text-end">
+                <th style={rowHeadStyle}>Company Name</th>
+                <th style={rowHeadStyle}>Designation</th>
+                <th style={rowHeadStyle}>FromDate</th>
+                <th style={rowHeadStyle}>ToDate</th>
+                <th style={rowHeadStyle} className="text-end">
                   Action
                 </th>
               </tr>
@@ -174,17 +192,25 @@ const WorkExperienceTable = (props) => {
             <tbody>
               {rowData.map((items, index) => (
                 <tr key={index}>
-                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize">{items.CompanyName}</td>
-                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize">{items.Designation}</td>
-                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize">{items.FromDate}</td>
-                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize">{items.ToDate}</td>
-                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize text-end">
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.CompanyName}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.Designation}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.FromDate}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.ToDate}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize text-end">
                     {" "}
                     <button
                       onClick={() => props.onEditWorkExperience(items.data)}
                       style={{
                         zIndex: "1",
-                        cursor: "pointer"
+                        cursor: "pointer",
                       }}
                       className="btn btn-outline-primary"
                     >
@@ -196,14 +222,36 @@ const WorkExperienceTable = (props) => {
             </tbody>
           </table>
         ) : (
-          <div id="loading-bar">
-            <RingLoader
-              css={override}
-              sizeUnit={"px"}
-              size={50}
-              color={"#0000ff"}
-              loading={true}
+          <div
+            style={{
+              height: "65vh",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              wordSpacing: "5px",
+              flexDirection: "column",
+              gap: "2rem",
+            }}
+          >
+            <img
+              style={{
+                height: "auto",
+                width: "30%",
+              }}
+              src={SearchLight}
+              alt="img"
             />
+            <p
+              className="text-center w-75 mx-auto"
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var( --primaryDashMenuColor)",
+              }}
+            >
+              Details not available Please add.
+            </p>
           </div>
         )}
       </div>

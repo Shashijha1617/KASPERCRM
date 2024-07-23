@@ -7,9 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTrash,
   faEdit,
-  faInfoCircle
+  faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
@@ -22,13 +21,6 @@ import "jspdf-autotable";
 // import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { FiSearch } from "react-icons/fi";
 // *************csv & pdf **************//
-
-const override = css`
-  display: block;
-  margin: 0 auto;
-  margin-top: 45px;
-  border-color: red;
-`;
 
 const AdminEmployeeTable = (props) => {
   const [employeeData, setEmployeeData] = useState([]);
@@ -44,8 +36,8 @@ const AdminEmployeeTable = (props) => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         // Ensure that response.data is an array
@@ -86,7 +78,7 @@ const AdminEmployeeTable = (props) => {
               PositionName: data["position"][0]
                 ? data["position"][0]["PositionName"]
                 : "",
-              DateOfJoining: data["DateOfJoining"].slice(0, 10)
+              DateOfJoining: data["DateOfJoining"].slice(0, 10),
             };
 
             // Use set function to update state
@@ -106,8 +98,8 @@ const AdminEmployeeTable = (props) => {
       axios
         .delete(`${BASE_URL}/api/employee/${e}`, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
         .then(() => {
           loadEmployeeData();
@@ -123,7 +115,7 @@ const AdminEmployeeTable = (props) => {
     const doc = new jsPDF({
       orientation: "landscape",
       unit: "mm",
-      format: [297, 210]
+      format: [297, 210],
     });
 
     doc.setFontSize(18);
@@ -139,7 +131,7 @@ const AdminEmployeeTable = (props) => {
       "Role",
       "Position",
       "Department",
-      "D.O.J"
+      "D.O.J",
     ];
     const data = rowData.map((row) => [
       row.empID,
@@ -153,13 +145,13 @@ const AdminEmployeeTable = (props) => {
       row.PositionName,
       row.DepartmentName,
       row.DateOfJoining,
-      ""
+      "",
     ]);
     doc.setFontSize(12);
     doc.autoTable({
       head: [headers],
       body: data,
-      startY: 25
+      startY: 25,
     });
 
     doc.save("employee_data.pdf ");

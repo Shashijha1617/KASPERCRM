@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import BASE_URL from "../../../Pages/config/config";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 
 const ManagerRejectedTask = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { darkMode } = useTheme();
 
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/tasks`, {
-        params: { status: "Completed" } // Filter by status "Completed"
+        params: { status: "Completed" }, // Filter by status "Completed"
       });
 
       setTasks(response.data);
@@ -28,10 +30,19 @@ const ManagerRejectedTask = () => {
 
   return (
     <div className="p-4">
-      <h1 className="fs-2 text-muted fw-bolder text-uppercase">
-        🔴 Rejected Tasks
-      </h1>
-      <p className="text-muted">You can view all rejected task here!</p>{" "}
+      <div
+        style={{
+          color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--primaryDashMenuColor)",
+        }}
+      >
+        <h5 style={{ fontWeight: "600" }} className="p-0 m-0 text-uppercase">
+          Rejected Tasks (
+          {tasks.filter((task) => task.status === "Rejected").length})
+        </h5>
+        <p className="p-0 m-0">You can view all rejected task here!</p>
+      </div>
       {loading && (
         <div
           style={{ width: "100%", height: "100%" }}
@@ -47,21 +58,24 @@ const ManagerRejectedTask = () => {
         </div>
       )}
       <div
+        className="mt-2 d-flex flex-column gap-2 pt-2 pb-3"
         style={{
           overflowY: "scroll",
-          height: "80vh",
+          maxHeight: "80vh",
           scrollbarWidth: "thin",
           scrollbarGutter: "stable",
-          scrollMargin: "1rem"
+          scrollMargin: "1rem",
+          backgroundColor: darkMode
+            ? "var(--primaryDashMenuColor)"
+            : "var(--primaryDashColorDark)",
         }}
-        className="d-flex flex-column gap-3"
       >
         {tasks
           .filter((task) => task.status === "Rejected")
           .map((task, index) => (
             <details
               style={{
-                boxShadow: "-1px 1px 10px gray"
+                boxShadow: "-1px 1px 10px gray",
               }}
               className="p-1 position-relative mt-3 fs-4 rounded mx-3"
               key={task.id}
@@ -94,8 +108,8 @@ const ManagerRejectedTask = () => {
                     width: "99.4%",
                     height: "100%",
                     zIndex: "5",
-                    backgroundColor: "rgba(5, 128, 8, 0.384)",
-                    textShadow: "-5px 5px 5px rgba(128, 128, 128, 0.422)"
+                    backgroundColor: "rgba(128, 5, 5, 0.384)",
+                    textShadow: "-5px 5px 5px rgba(128, 128, 128, 0.422)",
                   }}
                   className="watermark form-control   position-absolute d-flex justify-content-center aline-center"
                 >

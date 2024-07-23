@@ -1,15 +1,23 @@
 import React, { useState } from "react";
-import { BsBuildingsFill } from "react-icons/bs";
+import { BsBuildings, BsBuildingsFill } from "react-icons/bs";
 import { FaAddressBook, FaRegUserCircle } from "react-icons/fa";
-import { FaUserCircle } from "react-icons/fa";
 import { FaCalendarCheck } from "react-icons/fa6";
-import { MdDashboard, MdMenuOpen, MdTaskAlt } from "react-icons/md";
+import {
+  MdMenuOpen,
+  MdOutlineDashboardCustomize,
+  MdOutlineLocationOn,
+  MdTaskAlt,
+} from "react-icons/md";
 import { TbDeviceIpadMinus } from "react-icons/tb";
 import { MdHolidayVillage } from "react-icons/md";
 import { FcLeave } from "react-icons/fc";
 import { NavLink } from "react-router-dom/cjs/react-router-dom";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
+import { IoCalendarOutline } from "react-icons/io5";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { GoKey, GoTasklist } from "react-icons/go";
+import { LuPartyPopper } from "react-icons/lu";
 
 const Sidebar = () => {
   const [activeCategory, setActiveCategory] = useState(null);
@@ -18,12 +26,12 @@ const Sidebar = () => {
 
   const allLinks = [
     {
-      icon: <MdDashboard />,
+      icon: <MdOutlineDashboardCustomize />,
       name: "Dashboard",
       navLinks: [{ to: "/manager/dashboard", label: "Dashboard" }],
     },
     {
-      icon: <FaCalendarCheck />,
+      icon: <IoMdCheckmarkCircleOutline />,
       name: "Attendance",
       navLinks: [
         { to: "/manager/attenDance", label: "Create Attendance" },
@@ -33,15 +41,16 @@ const Sidebar = () => {
       ],
     },
     {
-      icon: <FcLeave />,
+      icon: <IoCalendarOutline />,
       name: "Leave",
       navLinks: [
+        { to: "/manager/leaveBalance", label: "Leave Balance" },
         { to: "/manager/createLeave", label: "Apply Leave" },
         { to: "/manager/leaveApplication", label: "View ALL Leave " },
       ],
     },
     {
-      icon: <MdTaskAlt />,
+      icon: <GoTasklist />,
       name: "Task",
       navLinks: [
         { to: "/manager/newTask", label: "Assign New Task" },
@@ -52,7 +61,7 @@ const Sidebar = () => {
       ],
     },
     {
-      icon: <TbDeviceIpadMinus />,
+      icon: <GoKey />,
       name: "Administration",
       navLinks: [
         { to: "/manager/role", label: "Role" },
@@ -61,7 +70,7 @@ const Sidebar = () => {
       ],
     },
     {
-      icon: <BsBuildingsFill />,
+      icon: <BsBuildings />,
       name: "Company",
       navLinks: [
         { to: "/manager/company", label: "Company List" },
@@ -69,7 +78,7 @@ const Sidebar = () => {
       ],
     },
     {
-      icon: <FaAddressBook />,
+      icon: <MdOutlineLocationOn />,
       name: "Address",
       navLinks: [
         { to: "/manager/country", label: "Country" },
@@ -78,7 +87,7 @@ const Sidebar = () => {
       ],
     },
     {
-      icon: <MdHolidayVillage />,
+      icon: <LuPartyPopper />,
       name: "Holiday",
       navLinks: [{ to: "/manager/holiday", label: "Leave Calendar" }],
     },
@@ -105,8 +114,9 @@ const Sidebar = () => {
         backgroundColor: darkMode
           ? "var(--primaryDashMenuColor)"
           : "var(--primaryDashColorDark)",
+        padding: ".5rem 1rem .5rem .5rem",
       }}
-      className="d-none d-sm-flex flex-column gap-2 p-2"
+      className="d-none d-sm-flex flex-column gap-2"
     >
       <h3
         style={{ borderBottom: "3px solid green" }}
@@ -116,7 +126,7 @@ const Sidebar = () => {
           style={{ display: !extended ? "none" : "block" }}
           className="my-auto fs-4"
         >
-          HR
+          Manager
         </p>
         <span
           onClick={ExtendClick}

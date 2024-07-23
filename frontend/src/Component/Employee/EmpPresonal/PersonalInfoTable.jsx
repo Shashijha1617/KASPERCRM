@@ -13,10 +13,12 @@ import {
   FaCamera,
   FaFileAudio,
   FaFileImage,
+  FaGraduationCap,
   FaRegFileImage,
-  FaRegFilePdf
+  FaRegFilePdf,
+  FaSuitcase,
 } from "react-icons/fa";
-import { IoMdDownload } from "react-icons/io";
+import { IoMdDownload, IoMdPerson } from "react-icons/io";
 import FloralAbstract from "./FloralAbstract.jpg";
 import { GoDotFill } from "react-icons/go";
 import { IoArrowBackCircle, IoEye } from "react-icons/io5";
@@ -25,8 +27,12 @@ import WorkExperience from "../EmpWorkExp/WorkExperience";
 import Document from "../Document/Document.jsx";
 import FamilyInfo from "../EmpFamily/FamilyInfo";
 import BASE_URL from "../../../Pages/config/config.js";
-import InnerDashContainer from "../../InnerDashContainer.jsx";
+
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min.js";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext.js";
+import { PiOfficeChairFill } from "react-icons/pi";
+import { BsFilePdfFill } from "react-icons/bs";
+import { MdFamilyRestroom } from "react-icons/md";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -43,6 +49,7 @@ const PersonalInfoTable = (props) => {
   const [activeSection, setActiveSection] = useState("personalInfo");
   const [showDownloadbtn, setShowDownloadbtn] = useState(null);
   const [visibleDocs, setVisibleDocs] = useState([]);
+  const { darkMode } = useTheme();
 
   const id =
     location === "employee" ? props.data["_id"] : localStorage.getItem("_id");
@@ -50,8 +57,8 @@ const PersonalInfoTable = (props) => {
     axios
       .get(`${BASE_URL}/api/personal-info/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         const data = response.data;
@@ -86,15 +93,15 @@ const PersonalInfoTable = (props) => {
             data["Account"] === 1
               ? "Admin"
               : data["Account"] === 2
-                ? "HR"
-                : data["Account"] === 3
-                  ? "Employee"
-                  : data["Account"] === 4
-                    ? "Manager"
-                    : "",
+              ? "HR"
+              : data["Account"] === 3
+              ? "Employee"
+              : data["Account"] === 4
+              ? "Manager"
+              : "",
           PositionName: data["position"][0]
             ? data["position"][0]["PositionName"]
-            : ""
+            : "",
         };
 
         console.log(temp);
@@ -119,8 +126,8 @@ const PersonalInfoTable = (props) => {
       axios
         .delete(`${BASE_URL}/api/personalInfo/${e}`, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
         .then(() => {
           loadPersonalInfoData();
@@ -168,8 +175,8 @@ const PersonalInfoTable = (props) => {
           `${BASE_URL}/api/personal-info/${id}`,
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         );
         setEmail(response.data.Email);
@@ -292,520 +299,618 @@ const PersonalInfoTable = (props) => {
     )
   ).length;
 
+  const rowBodyStyle = {
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+  };
+
   return (
-    <div style={{ height: '95vh', overflow: 'auto' }} className="p-0 m-0 container-fluid">
+    <div
+      // style={{ height: "95vh", overflow: "auto" }}
+      className="container-fluid"
+    >
       <div id="clear-both" />
       {!loading ? (
-        <div style={{ position: "relative" }} className="row">
-          <div
-            style={{
-              height: "35rem",
-            }}
-            className="col-12 row mx-auto justify-content-center gap-3 w-100"
-          >
-            <Link to="/hr/employee">
-              <button
-                className="btn fw-bold d-flex gap-3 "
-                style={{ background: "white", color: "black" }}
-                id="add-button"
-              >
-                <IoArrowBackCircle className="my-auto fs-5" />{" "}
-                <span my-auto>Back</span>
-              </button>
-            </Link>
+        <div className="d-flex flex-column">
+          <Link to="/hr/employee">
+            <button
+              className="btn fw-bold d-flex gap-3 "
+              style={{
+                background: "white",
+                color: "black",
+              }}
+              id="add-button"
+            >
+              <IoArrowBackCircle className="my-auto fs-5" />{" "}
+              <span my-auto>Back</span>
+            </button>
+          </Link>
+          <div style={{ position: "relative" }} className="row">
             <div
               style={{
-                height: "33rem",
-                background: `url(${FloralAbstract})`,
-                backgroundPosition: "center",
-                backgroundSize: "cover",
-                overflow: "hidden"
+                height: "35rem",
               }}
-              className="col-12 m-0 p-0 rounded-3 col-lg-3 bg-white shadow"
+              className="col-12 row mx-auto justify-content-center gap-3 w-100"
             >
-              {rowData.map((items, index) => {
-                return (
-                  <div
-                    style={{
-                      backgroundColor: "rgba(258,258,258,.95)",
-                      position: "relative"
-                    }}
-                    className="d-flex flex-column gap-3 py-2 h-100"
-                    key={index}
-                  >
+              <div
+                style={{
+                  minHeight: "30rem",
+                  background: `url(${FloralAbstract})`,
+                  backgroundPosition: "center",
+                  backgroundSize: "cover",
+                  overflow: "hidden",
+                }}
+                className="col-12 m-0 p-0 rounded-0 col-lg-3 bg-white shadow"
+              >
+                {rowData.map((items, index) => {
+                  return (
                     <div
-                      className="d-flex flex-column gap-2"
-                      style={{ width: "100%", padding: "1rem 1rem" }}
+                      style={{
+                        backgroundColor: darkMode
+                          ? "rgba(258,258,258,.95)"
+                          : "rgba(0,0,0,.95)",
+                        position: "relative",
+                      }}
+                      className="d-flex flex-column gap-3 py-2 h-100"
+                      key={index}
                     >
                       <div
-                        className="mx-auto"
+                        className="d-flex flex-column gap-2"
+                        style={{ width: "100%", padding: "1rem 1rem" }}
+                      >
+                        <div
+                          className="mx-auto"
+                          style={{
+                            height: "120px",
+                            width: "120px",
+                            border: "6px solid #39A7FF",
+                            borderRadius: "50%",
+                            position: "relative",
+                          }}
+                        >
+                          <img
+                            style={{
+                              height: "100%",
+                              width: "100%",
+                              borderRadius: "50%",
+                              objectFit: "cover",
+                            }}
+                            src={
+                              items?.data?.profile?.image_url
+                                ? items?.data?.profile?.image_url
+                                : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
+                            }
+                            alt="employee"
+                          />
+                          {/* <button
+                            style={{
+                              height: "30px",
+                              width: "30px",
+                              borderRadius: "50%",
+                              border: "3px solid white",
+                              position: "absolute",
+                              bottom: "0",
+                              right: "0",
+                              overflow: "hidden",
+                              cursor: "pointer",
+                            }}
+                            className="btn bg-primary text-white d-flex p-1 "
+                          >
+                            <FaCamera
+                              style={{
+                                height: "100%",
+                                width: "100%",
+                              }}
+                              className="m-auto"
+                            />
+                          </button> */}
+                        </div>
+                        <p
+                          style={{ position: "absolute", top: "0", left: "0" }}
+                          className="btn btn-success px-2 py-0 m-2 rounded-5 fw-bold shadow"
+                        >
+                          {items.empID}
+                        </p>
+                        {/* <p className="m-auto fw-bold fs-6">{items.empID}</p> */}
+                        <h3
+                          style={{
+                            color: darkMode
+                              ? "var(--secondaryDashColorDark)"
+                              : "var(--primaryDashMenuColor)",
+                          }}
+                          className="text-capitalize my-0 fw-bold  text-center"
+                        >
+                          {items.FirstName} {personalInfoData.LastName}
+                        </h3>
+                        <p
+                          style={{
+                            color: darkMode
+                              ? "var(--secondaryDashColorDark)"
+                              : "var(--primaryDashMenuColor)",
+                          }}
+                          className="text-capitalize my-0 fw-bold text-center"
+                        >
+                          {items.RoleName}
+                        </p>
+                      </div>
+                      <div className="d-flex flex-column justify-content-between gap-2">
+                        <div
+                          style={rowBodyStyle}
+                          className="p-2 fw-bold mx-3 d-flex px-3 justify-content-between shadow rounded-5"
+                        >
+                          <span
+                            style={{ alignItems: "center" }}
+                            className="my-auto d-flex gap-2 "
+                          >
+                            <GoDotFill className="text-primary fs-4" />
+                            Total Assigned Task
+                          </span>{" "}
+                          <span className="fw-bold  text-primary my-auto">
+                            {pendingTasksCount}
+                          </span>
+                        </div>
+                        <div
+                          style={rowBodyStyle}
+                          className="p-2 fw-bold mx-3 d-flex px-3 justify-content-between shadow rounded-5"
+                        >
+                          <span
+                            style={{ alignItems: "center" }}
+                            className="my-auto d-flex gap-2 "
+                          >
+                            <GoDotFill className="text-warning fs-4" />
+                            Total Active Task
+                          </span>{" "}
+                          <span className="fw-bold text-warning my-auto">
+                            {acceptedTasksCount}
+                          </span>
+                        </div>
+                        <div
+                          style={rowBodyStyle}
+                          className="p-2 px-3 fw-bold mx-3 d-flex   justify-content-between shadow rounded-5"
+                        >
+                          <span
+                            style={{ alignItems: "center" }}
+                            className="my-auto d-flex gap-2 "
+                          >
+                            {" "}
+                            <GoDotFill className="text-danger fs-4" />
+                            Total Rejected Task
+                          </span>{" "}
+                          <span className="fw-bold my-auto text-danger">
+                            {rejectedTasksCount}
+                          </span>
+                        </div>
+                        <div
+                          style={rowBodyStyle}
+                          className="p-2 px-3 fw-bold  mx-3 d-flex justify-content-between shadow rounded-5"
+                        >
+                          <span
+                            style={{ alignItems: "center" }}
+                            className="my-auto d-flex gap-2 "
+                          >
+                            <GoDotFill className="text-success fs-4" />
+                            Total Completed Task
+                          </span>{" "}
+                          <span className="fw-bold my-auto text-success">
+                            {completedTasksCount}
+                          </span>
+                        </div>
+                      </div>
+                      <span
+                        onClick={() => props.onEditPersonalInfo(items.data)}
                         style={{
-                          height: "120px",
-                          width: "120px",
-                          border: "6px solid #39A7FF",
-                          borderRadius: "50%",
-                          position: "relative"
+                          borderBottom:
+                            activeSection === "documentDetails"
+                              ? "3px solid yellow"
+                              : "none",
+                          borderRadius: "0",
+                          position: "absolute",
+                          bottom: "0",
+                          left: "0",
+                          cursor: "pointer",
                         }}
+                        className="btn px-3 w-100 fw-bold btn-primary "
                       >
-                        <img
-                          style={{
-                            height: "100%",
-                            width: "100%",
-                            borderRadius: "50%",
-                            objectFit: "cover"
-                          }}
-                          src={
-                            items?.data?.profile?.image_url
-                              ? items?.data?.profile?.image_url
-                              : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
-                          }
-                          alt="employee"
-                        />
-                        <button
-                          style={{
-                            height: "30px",
-                            width: "30px",
-                            borderRadius: "50%",
-                            border: "3px solid white",
-                            position: "absolute",
-                            bottom: "0",
-                            right: "0"
-                          }}
-                          className="btn btn-primary text-white d-flex p-1 "
-                        >
-                          <FaCamera className="m-auto" />
-                        </button>
-                      </div>
-                      <p
-                        style={{ position: "absolute", top: "0", left: "0" }}
-                        className="btn btn-success px-2 py-0 m-2 rounded-5 fw-bold shadow"
-                      >
-                        {items.empID}
-                      </p>
-                      {/* <p className="m-auto fw-bold fs-6">{items.empID}</p> */}
-                      <h3 className="text-capitalize my-0 fw-bold text-muted text-center">
-                        {items.FirstName} {personalInfoData.LastName}
-                      </h3>
-                      <p className="text-capitalize my-0 fw-bold text-center">
-                        {items.RoleName}
-                      </p>
+                        Update Details
+                      </span>
                     </div>
-                    <div className="d-flex flex-column justify-content-between gap-2">
-                      <div className="p-2 fw-bold mx-3 d-flex bg-white justify-content-between shadow rounded-5">
-                        <span
-                          style={{ alignItems: "center" }}
-                          className="my-auto d-flex gap-2 "
-                        >
-                          <GoDotFill className="text-primary fs-4" />
-                          Total Assigned Task
-                        </span>{" "}
-                        <span className="fw-bold  text-primary my-auto">
-                          {pendingTasksCount}
-                        </span>
-                      </div>
-                      <div className="p-2 fw-bold mx-3 d-flex bg-white justify-content-between shadow rounded-5">
-                        <span
-                          style={{ alignItems: "center" }}
-                          className="my-auto d-flex gap-2 "
-                        >
-                          <GoDotFill className="text-warning fs-4" />
-                          Total Active Task
-                        </span>{" "}
-                        <span className="fw-bold text-warning my-auto">
-                          {acceptedTasksCount}
-                        </span>
-                      </div>
-                      <div className="p-2 fw-bold mx-3 d-flex  bg-white justify-content-between shadow rounded-5">
-                        <span
-                          style={{ alignItems: "center" }}
-                          className="my-auto d-flex gap-2 "
-                        >
-                          {" "}
-                          <GoDotFill className="text-danger fs-4" />
-                          Total Rejected Task
-                        </span>{" "}
-                        <span className="fw-bold my-auto text-danger">
-                          {rejectedTasksCount}
-                        </span>
-                      </div>
-                      <div className="p-2 fw-bold  bg-white mx-3 d-flex justify-content-between shadow rounded-5">
-                        <span
-                          style={{ alignItems: "center" }}
-                          className="my-auto d-flex gap-2 "
-                        >
-                          <GoDotFill className="text-success fs-4" />
-                          Total Completed Task
-                        </span>{" "}
-                        <span className="fw-bold my-auto text-success">
-                          {completedTasksCount}
-                        </span>
-                      </div>
-                    </div>
+                  );
+                })}
+              </div>
+              <div
+                className="col-12 rounded-0 col-lg-7 p-0 m-0  border shadow"
+                style={rowBodyStyle}
+              >
+                <div
+                  id="personalinfo"
+                  style={{ height: "33rem", overflow: "hidden" }}
+                >
+                  <div
+                    style={{
+                      background: darkMode
+                        ? "var(--secondaryDashMenuColor)"
+                        : "var(--secondaryDashColorDark)",
+                      color: darkMode
+                        ? "var(--secondaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                      maxWidth: "100%",
+                      overflow: "auto",
+                    }}
+                    className="shift-pages w-100 shadow-sm d-flex justify-content-around px-0 mb-3"
+                  >
                     <span
-                      onClick={() => props.onEditPersonalInfo(items.data)}
+                      onClick={() => onToggleSection("personalInfo")}
                       style={{
-                        borderBottom:
-                          activeSection === "documentDetails"
-                            ? "3px solid blue"
+                        whiteSpace: "pre",
+                        borderTop:
+                          activeSection === "personalInfo"
+                            ? "8px solid blue"
                             : "none",
                         borderRadius: "0",
-                        position: "absolute",
-                        bottom: "0",
-                        left: "0",
-                        cursor: "pointer"
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
                       }}
-                      className="btn px-3 w-100 fw-bold btn-primary "
+                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 fw-bold"
                     >
-                      Update Details
+                      Personal
+                    </span>
+                    <span
+                      onClick={() => onToggleSection("companyInfo")}
+                      style={{
+                        whiteSpace: "pre",
+                        borderTop:
+                          activeSection === "companyInfo"
+                            ? "8px solid blue"
+                            : "none",
+                        borderRadius: "0",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
+                      }}
+                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 fw-bold"
+                    >
+                      Company
+                    </span>
+                    <span
+                      onClick={() => onToggleSection("Educationalinfo")}
+                      style={{
+                        whiteSpace: "pre",
+                        borderTop:
+                          activeSection === "Educationalinfo"
+                            ? "8px solid blue"
+                            : "none",
+                        borderRadius: "0",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
+                      }}
+                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 fw-bold"
+                    >
+                      Education
+                    </span>
+
+                    <span
+                      onClick={() => onToggleSection("Document")}
+                      style={{
+                        whiteSpace: "pre",
+                        borderTop:
+                          activeSection === "Document"
+                            ? "8px solid blue"
+                            : "none",
+                        borderRadius: "0",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
+                      }}
+                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 fw-bold"
+                    >
+                      Documents
+                    </span>
+
+                    <span
+                      onClick={() => onToggleSection("WorkExperience")}
+                      style={{
+                        whiteSpace: "pre",
+                        borderTop:
+                          activeSection === "WorkExperience"
+                            ? "8px solid blue"
+                            : "none",
+                        borderRadius: "0",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
+                      }}
+                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 fw-bold"
+                    >
+                      Experience
+                    </span>
+                    <span
+                      onClick={() => onToggleSection("otherInfo")}
+                      style={{
+                        whiteSpace: "pre",
+                        borderTop:
+                          activeSection === "otherInfo"
+                            ? "8px solid blue"
+                            : "none",
+                        borderRadius: "0",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
+                      }}
+                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 fw-bold"
+                    >
+                      Family
                     </span>
                   </div>
-                );
-              })}
-            </div>
-            <div
-              id="personalinfo"
-              style={{ height: "33rem", overflow: "hidden" }}
-              className="col-12 rounded col-lg-7 p-0 m-0 bg-white shadow"
-            >
-              <div className="shift-pages w-100 shadow-sm d-flex justify-content-around px-2 mb-1">
-                <span
-                  onClick={() => onToggleSection("personalInfo")}
-                  style={{
-                    whiteSpace: "pre",
-                    borderBottom:
-                      activeSection === "personalInfo"
-                        ? "3px solid blue"
-                        : "none",
-                    borderRadius: "0"
-                  }}
-                  className="btn py-2 px-0 fw-bold"
-                >
-                  Personal
-                </span>
-                <span
-                  onClick={() => onToggleSection("companyInfo")}
-                  style={{
-                    whiteSpace: "pre",
-                    borderBottom:
-                      activeSection === "companyInfo"
-                        ? "3px solid blue"
-                        : "none",
-                    borderRadius: "0"
-                  }}
-                  className="btn py-2 px-0 fw-bold"
-                >
-                  Company
-                </span>
-                <span
-                  onClick={() => onToggleSection("Educationalinfo")}
-                  style={{
-                    whiteSpace: "pre",
-                    borderBottom:
-                      activeSection === "Educationalinfo"
-                        ? "3px solid blue"
-                        : "none",
-                    borderRadius: "0"
-                  }}
-                  className="btn py-2 px-0 fw-bold"
-                >
-                  Education
-                </span>
+                  {activeSection === "personalInfo" && (
+                    <div className="row">
+                      <div
+                        className="pb-5"
+                        id="companyinfo"
+                        style={{
+                          overflow: "hidden auto",
+                          height: "29rem",
+                          width: "100%",
+                          scrollbarWidth: "thin",
+                        }}
+                      >
+                        {rowData.map((items, index) => {
+                          return (
+                            <div className="row w-100 container-fluid mx-auto justify-content-start py-3 row-gap-2">
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold">
+                                  First Name
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm text-capitalize"
+                                  value={items.FirstName}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold">
+                                  Last Name
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm text-capitalize"
+                                  value={items.LastName}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Phone Number
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm"
+                                  value={items.ContactNo}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Emergency Contact
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm"
+                                  value={items.EmergencyContactNo}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Presonal Email
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm"
+                                  value={items.presonalEmail}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Gender
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control text-capitalize rounded-1 shadow-sm"
+                                  value={items.Gender}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Date of Birth
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm"
+                                  value={items.DOB.slice(0, 10)}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Blood Group
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm"
+                                  value={items.BloodGroup}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  PAN Number
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm text-uppercase"
+                                  value={items.PANcardNo}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Present Address
+                                </label>
 
-                <span
-                  onClick={() => onToggleSection("Document")}
-                  style={{
-                    whiteSpace: "pre",
-                    borderBottom:
-                      activeSection === "Document"
-                        ? "3px solid blue"
-                        : "none",
-                    borderRadius: "0"
-                  }}
-                  className="btn py-2 px-0 fw-bold"
-                >
-                  Documents
-                </span>
+                                <textarea
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm text-capitalize"
+                                  value={items.PresentAddress}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Permanent Address
+                                </label>
 
-                <span
-                  onClick={() => onToggleSection("WorkExperience")}
-                  style={{
-                    whiteSpace: "pre",
-                    borderBottom:
-                      activeSection === "WorkExperience"
-                        ? "3px solid blue"
-                        : "none",
-                    borderRadius: "0"
-                  }}
-                  className="btn py-2 px-0 fw-bold"
-                >
-                  Work Experience{" "}
-                </span>
-                <span
-                  onClick={() => onToggleSection("otherInfo")}
-                  style={{
-                    whiteSpace: "pre",
-                    borderBottom:
-                      activeSection === "otherInfo"
-                        ? "3px solid blue"
-                        : "none",
-                    borderRadius: "0"
-                  }}
-                  className="btn py-2 px-0 fw-bold"
-                >
-                  Dependents
-                </span>
+                                <textarea
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm text-capitalize"
+                                  value={items.PermanetAddress}
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  {activeSection === "companyInfo" && (
+                    <div className="row">
+                      <div
+                        style={{
+                          overflow: "hidden auto",
+                          height: "29rem",
+                          scrollbarWidth: "thin",
+                        }}
+                      >
+                        {rowData.map((items, index) => {
+                          return (
+                            <div className="row container-fluid mx-auto justify-content-start py-3 row-gap-3">
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Employee ID
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm text-uppercase"
+                                  value={items.empID}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Work Email
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm"
+                                  value={items.Email}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Role
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm text-capitalize"
+                                  value={items.RoleName}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Position
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm text-capitalize"
+                                  value={items.PositionName}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Department
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm text-capitalize"
+                                  value={items.DepartmentName}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Date of Joining
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm"
+                                  value={items.DateOfJoining}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Account Access
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm"
+                                  value={items.Account}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Reporting Manager
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm"
+                                  value={items.reportManager}
+                                />
+                              </div>
+                              <div className="col-12 col-sm-6 d-flex flex-column">
+                                <label htmlFor="" className=" fw-bold ">
+                                  Reporting HR
+                                </label>
+                                <input
+                                  type="text"
+                                  className="form-control rounded-1 shadow-sm"
+                                  value={items.reportHr}
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  {activeSection === "Educationalinfo" && (
+                    <div className="w-100 container ">
+                      <Education />
+                    </div>
+                  )}
+
+                  {activeSection === "Document" && (
+                    <div className="w-100 container ">
+                      <Document />
+                    </div>
+                  )}
+                  {activeSection === "WorkExperience" && (
+                    <div className="w-100 container ">
+                      <WorkExperience />
+                    </div>
+                  )}
+                  {activeSection === "otherInfo" && (
+                    <div className="w-100 container ">
+                      <FamilyInfo />
+                    </div>
+                  )}
+                </div>
               </div>
-              {activeSection === "personalInfo" && (
-                <div className="row">
-                  <div
-                    className="pb-5"
-                    id="companyinfo"
-                    style={{
-                      overflow: "hidden auto",
-                      height: "29rem",
-                      scrollbarWidth: "thin"
-                    }}
-                  >
-                    {rowData.map((items, index) => {
-                      return (
-                        <div className="row justify-content-evenly py-3 row-gap-3">
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              First Name
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm text-capitalize"
-                              value={items.FirstName}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Last Name
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm text-capitalize"
-                              value={items.LastName}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Phone Number
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm"
-                              value={items.ContactNo}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Emergency Contact
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm"
-                              value={items.EmergencyContactNo}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Presonal Email
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm"
-                              value={items.presonalEmail}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Date of Birth
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm"
-                              value={items.DOB.slice(0, 10)}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Blood Group
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm"
-                              value={items.BloodGroup}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              PAN Number
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm text-uppercase"
-                              value={items.PANcardNo}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Present Address
-                            </label>
-
-                            <textarea
-                              type="text"
-                              className="form-control rounded-1 shadow-sm text-capitalize"
-                              value={items.PresentAddress}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Permanent Address
-                            </label>
-
-                            <textarea
-                              type="text"
-                              className="form-control rounded-1 shadow-sm text-capitalize"
-                              value={items.PermanetAddress}
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-              {activeSection === "companyInfo" && (
-                <div className="row">
-                  <div
-                    style={{
-                      overflow: "hidden auto",
-                      height: "29rem",
-                      scrollbarWidth: "thin"
-                    }}
-                  >
-                    {rowData.map((items, index) => {
-                      return (
-                        <div className="row justify-content-evenly py-3 row-gap-3">
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Employee ID
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm text-uppercase"
-                              value={items.empID}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Work Email
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm"
-                              value={items.Email}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Role
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm text-capitalize"
-                              value={items.RoleName}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Position
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm text-capitalize"
-                              value={items.PositionName}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Department
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm text-capitalize"
-                              value={items.DepartmentName}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Date of Joining
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm"
-                              value={items.DateOfJoining}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Account Access
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm"
-                              value={items.Account}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Reporting Manager
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm"
-                              value={items.reportManager}
-                            />
-                          </div>
-                          <div className="col-12 col-sm-5 d-flex flex-column">
-                            <label htmlFor="" className=" fw-bold text-muted">
-                              Reporting HR
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control rounded-1 shadow-sm"
-                              value={items.reportHr}
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-              {activeSection === "Educationalinfo" && (
-                <div className="w-100 container ">
-                  <Education />
-                </div>
-              )}
-
-              {activeSection === "Document" && (
-                <div className="w-100 container ">
-                  <Document />
-                </div>
-              )}
-              {activeSection === "WorkExperience" && (
-                <div className="w-100 container ">
-                  <WorkExperience />
-                </div>
-              )}
-              {activeSection === "otherInfo" && (
-                <div className="w-100 container ">
-                  <FamilyInfo />
-                </div>
-              )}
             </div>
           </div>
         </div>

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import "./DepartmentTable.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "react-bootstrap";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
+import Position from "../../img/Position/Position.svg";
 import BASE_URL from "../config/config";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 const DepartmentTable = ({ onAddDepartment, onEditDepartment }) => {
   const [departmentData, setDepartmentData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,8 +20,8 @@ const DepartmentTable = ({ onAddDepartment, onEditDepartment }) => {
     axios
       .get(`${BASE_URL}/api/department`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setDepartmentData(response.data);
@@ -36,8 +37,8 @@ const DepartmentTable = ({ onAddDepartment, onEditDepartment }) => {
       axios
         .delete(`${BASE_URL}/api/department/${id}`, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
         .then(() => {
           loadDepartmentData();
@@ -51,161 +52,163 @@ const DepartmentTable = ({ onAddDepartment, onEditDepartment }) => {
     }
   };
 
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var( --secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var( --secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var( --primaryDashMenuColor)",
+    border: "none",
+  };
+
   return (
-    <div className="p-4">
-      <div className="d-flex justify-between align-items-start mb-3">
+    <div className="container-fluid py-2">
+      <div className="d-flex justify-content-between py-2">
         <div className="my-auto">
-          <h6
+          <h5
             style={{
               color: darkMode
                 ? "var(--secondaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)"
+                : "var(--secondaryDashMenuColor)",
+              fontWeight: "600",
             }}
-            className="fw-bold my-auto"
+            className=" m-0"
           >
-            {" "}
-            Department Details{" "}
-            <span className="text-warning">
-              {" "}
-              ( {departmentData.length} ){" "}
-            </span>{" "}
-          </h6>
+            Department Details ( {departmentData.length} )
+          </h5>
+          <p
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+            }}
+            className=" m-0"
+          >
+            You can see all department's list here
+          </p>
         </div>
-        <Button
-          className="my-auto"
-          variant="primary shadow-sm"
+        <button
+          className="btn btn-primary gap-1 d-flex  my-auto align-items-center justify-content-center"
           onClick={onAddDepartment}
         >
-          <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-          Create Department
-        </Button>
+          <AiOutlinePlusCircle className="fs-4" />
+          <span className="d-none d-md-flex">Create Department</span>
+        </button>
       </div>
-      <table className="table">
-        <thead>
-          <tr>
-            <th
+      <div
+        className="border border-1 border-dark "
+        style={{
+          color: darkMode
+            ? "var(--secondaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+          overflow: "auto",
+          maxHeight: "80vh",
+          position: "relative",
+        }}
+      >
+        {departmentData.length > 0 ? (
+          <table className="table">
+            <thead>
+              <tr>
+                <th style={rowHeadStyle}>Company</th>
+                <th style={rowHeadStyle}>Department</th>
+                <th style={rowHeadStyle} className="text-end">
+                  Edit
+                </th>
+                <th style={rowHeadStyle} className="text-end">
+                  Delete
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {departmentData.map((items, index) => (
+                <tr key={index}>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.company[0].CompanyName}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.DepartmentName}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    <button
+                      onClick={() => onEditDepartment(items)}
+                      style={{ cursor: "pointer" }}
+                      title="Update"
+                      className="btn d-flex ms-auto gap-3 align-items-center"
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                      <span className="d-none d-md-flex">Edit</span>
+                    </button>
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    <button
+                      onClick={() => onDepartmentDelete(items._id)}
+                      style={{ cursor: "pointer" }}
+                      title="Delete"
+                      className="btn d-flex ms-auto gap-3 align-items-center"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                      <span className="d-none d-md-flex">Delete</span>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div
+            style={{
+              height: "80vh",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              wordSpacing: "5px",
+              flexDirection: "column",
+              gap: "2rem",
+            }}
+          >
+            <img
               style={{
-                verticalAlign: "middle",
-                whiteSpace: "pre",
-                background: darkMode
-                  ? "var(--primaryDashMenuColor)"
-                  : "var(--primaryDashColorDark)",
-                color: darkMode
-                  ? "var(--primaryDashColorDark)"
-                  : "var( --secondaryDashMenuColor)",
-                border: "none"
+                height: "auto",
+                width: "20%",
               }}
-              className="py-1"
-            >
-              Company
-            </th>
-            <th
+              src={Position}
+              alt="img"
+            />
+            <p
+              className="text-center w-75 mx-auto"
               style={{
-                verticalAlign: "middle",
-                whiteSpace: "pre",
-                background: darkMode
-                  ? "var(--primaryDashMenuColor)"
-                  : "var(--primaryDashColorDark)",
                 color: darkMode
-                  ? "var(--primaryDashColorDark)"
-                  : "var( --secondaryDashMenuColor)",
-                border: "none"
+                  ? "var(--secondaryDashColorDark)"
+                  : "var( --primaryDashMenuColor)",
               }}
-              className="py-1"
             >
-              Department
-            </th>
-            <th
-              style={{
-                verticalAlign: "middle",
-                whiteSpace: "pre",
-                background: darkMode
-                  ? "var(--primaryDashMenuColor)"
-                  : "var(--primaryDashColorDark)",
-                color: darkMode
-                  ? "var(--primaryDashColorDark)"
-                  : "var( --secondaryDashMenuColor)",
-                border: "none"
-              }}
-              className="py-1"
-            >
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {departmentData.map((items, index) => (
-            <tr key={index}>
-              <td
-                style={{
-                  verticalAlign: "middle",
-                  whiteSpace: "pre",
-                  background: darkMode
-                    ? "var( --secondaryDashMenuColor)"
-                    : "var(----secondaryDashMenuColor)",
-                  color: darkMode
-                    ? "var(----secondaryDashMenuColor)"
-                    : "var( --primaryDashMenuColor)",
-                  border: "none"
-                }}
-                className="text-capitalize"
-              >
-                {items.company[0].CompanyName}
-              </td>
-              <td
-                style={{
-                  verticalAlign: "middle",
-                  whiteSpace: "pre",
-                  background: darkMode
-                    ? "var( --secondaryDashMenuColor)"
-                    : "var(----secondaryDashMenuColor)",
-                  color: darkMode
-                    ? "var(----secondaryDashMenuColor)"
-                    : "var( --primaryDashMenuColor)",
-                  border: "none"
-                }}
-                className="text-capitalize"
-              >
-                {items.DepartmentName}
-              </td>
-              <td
-                style={{
-                  verticalAlign: "middle",
-                  whiteSpace: "pre",
-                  background: darkMode
-                    ? "var( --secondaryDashMenuColor)"
-                    : "var(----secondaryDashMenuColor)",
-                  color: darkMode
-                    ? "var(----secondaryDashMenuColor)"
-                    : "var( --primaryDashMenuColor)",
-                  border: "none"
-                }}
-              >
-                <div className="d-flex wrap-nowrap justify-content-end gap-3">
-                  <span
-                    onClick={() => onEditDepartment(items)}
-                    style={{ cursor: "pointer" }}
-                    title="Update"
-                    className="text-primary d-flex align-items-center gap-2 px-4 shadow-sm rounded-5"
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                    <span>Edit</span>
-                  </span>
-                  <span
-                    onClick={() => onDepartmentDelete(items._id)}
-                    style={{ cursor: "pointer" }}
-                    title="Delete"
-                    className="text-danger d-flex align-items-center gap-2 px-4 shadow-sm rounded-5"
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                    <span>Delete</span>
-                  </span>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              Department not created yet, to create new role click on "+ Create
+              Department" button.
+            </p>
+          </div>
+        )}
+      </div>
+
       {loading && <div>Loading...</div>}
     </div>
   );

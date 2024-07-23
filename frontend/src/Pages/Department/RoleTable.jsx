@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import "./RoleTable.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
-import { Button } from "react-bootstrap";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
+import Position from "../../img/Position/Position.svg";
 import BASE_URL from "../config/config";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -18,7 +19,7 @@ const override = css`
 const RoleTable = (props) => {
   const [roleData, setRoleData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { darkMode } = useTheme()
+  const { darkMode } = useTheme();
 
   useEffect(() => {
     loadRoleData();
@@ -62,84 +63,70 @@ const RoleTable = (props) => {
     }
   };
 
-  return (
-    <div
-      style={{ height: "100vh", width: "100%", scrollbarWidth: "thin" }}
-      className="p-4"
-    >
-      <div className="d-flex justify-between aline-items-start mb-3">
-        <div className=" my-auto">
-          <h6 style={{ color: darkMode ? "var(--secondaryDashColorDark)" : "var(--secondaryDashMenuColor)" }} className="fw-bold my-auto"> Role Details  <span className="text-warning"> ( {roleData.length} ) </span>  </h6>
-        </div>
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var( --secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
 
-        <Button
-          variant="primary"
-          className="my-auto shadow-sm"
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var( --secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var( --primaryDashMenuColor)",
+    border: "none",
+  };
+
+  return (
+    <div className="container-fluid py-2">
+      <div className="d-flex justify-content-between py-2">
+        <div className="my-auto">
+          <h5
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+              fontWeight: "600",
+            }}
+            className=" m-0"
+          >
+            Role Details ( {roleData.length} )
+          </h5>
+          <p
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+            }}
+            className=" m-0"
+          >
+            You can see all role's list here
+          </p>
+        </div>
+        <button
+          className="btn btn-primary gap-1 d-flex  my-auto align-items-center justify-content-center"
           onClick={props.onAddRole}
         >
-          <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-          Create Role
-        </Button>
+          <AiOutlinePlusCircle className="fs-4" />
+          <span className="d-none d-md-flex">Create Role</span>
+        </button>
       </div>
+
       <div id="clear-both" />
-      {!loading ? (
-        <table className="table">
-          <thead>
-            <tr>
-              <th
-                style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }}
-                className="py-1"
-              >
-                Company
-              </th>
-              <th
-                style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }}
-                className="py-1"
-              >
-                Role
-              </th>
-              <th
-                style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }}
-                className="py-1 text-end"
-              >
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {roleData.map((data, index) => (
-              <tr key={index}>
-                <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize">
-                  {data["company"][0]["CompanyName"]}
-                </td>
-                <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize">{data["RoleName"]}</td>
-                <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }}>
-                  <div className="d-flex wrap-nowrap justify-content-end gap-3">
-                    <button
-                      onClick={() => props.onEditRole(data)}
-                      style={{ cursor: "pointer" }}
-                      title="Update"
-                      className="btn py-1 btn-outline-primary"
-                    >
-                      <FontAwesomeIcon icon={faEdit} />
-                      <span>Edit</span>
-                    </button>
-                    <button
-                      onClick={() => onRoleDelete(data["_id"])}
-                      style={{ cursor: "pointer" }}
-                      title="Delete"
-                      className="btn py-1 btn-outline-danger"
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                      <span>Delete</span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
+      {loading && (
         <div id="loading-bar">
           <RingLoader
             css={override}
@@ -150,6 +137,117 @@ const RoleTable = (props) => {
           />
         </div>
       )}
+
+      <div
+        className="border border-1 border-dark "
+        style={{
+          color: darkMode
+            ? "var(--secondaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+          overflow: "auto",
+          maxHeight: "80vh",
+          position: "relative",
+        }}
+      >
+        {roleData.length > 0 ? (
+          <table
+            className="table"
+            style={{ fontSize: ".9rem", position: "relative" }}
+          >
+            <thead>
+              <tr>
+                <th style={rowHeadStyle}>Company</th>
+                <th style={rowHeadStyle}>Role</th>
+                <th style={rowHeadStyle} className="text-end">
+                  Edit
+                </th>
+                <th style={rowHeadStyle} className="text-end">
+                  Delete
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {roleData.map((data, index) => (
+                <tr key={index}>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {data["company"][0]["CompanyName"]}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {data["RoleName"]}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    <button
+                      onClick={() => props.onEditRole(data)}
+                      style={{
+                        cursor: "pointer",
+                        fontSize: ".9rem",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--secondaryDashMenuColor)",
+                      }}
+                      title="Update"
+                      className="btn d-flex ms-auto gap-3 align-items-center"
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                      <span className="d-none d-md-flex">Edit</span>
+                    </button>
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    <button
+                      onClick={() => onRoleDelete(data["_id"])}
+                      style={{
+                        cursor: "pointer",
+                        fontSize: ".9rem",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--secondaryDashMenuColor)",
+                      }}
+                      title="Delete"
+                      className="btn d-flex ms-auto gap-3 align-items-center"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                      <span className="d-none d-md-flex">Delete</span>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div
+            style={{
+              height: "80vh",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              wordSpacing: "5px",
+              flexDirection: "column",
+              gap: "2rem",
+            }}
+          >
+            <img
+              style={{
+                height: "auto",
+                width: "20%",
+              }}
+              src={Position}
+              alt="img"
+            />
+            <p
+              className="text-center w-75 mx-auto"
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var( --primaryDashMenuColor)",
+              }}
+            >
+              Role not created yet, to create new role click on "+ Create Role"
+              button.
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

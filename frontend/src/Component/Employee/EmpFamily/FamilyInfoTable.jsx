@@ -2,15 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./FamilyInfoTable.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
-import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import BASE_URL from "../../../Pages/config/config";
-import InnerDashContainer from "../../InnerDashContainer";
+import SearchLight from "../../../img/Attendance/SearchLight.svg";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
-import { FaRegEdit } from "react-icons/fa";
+import { FaPlus, FaRegEdit } from "react-icons/fa";
 
 const override = css`
   display: block;
@@ -31,8 +29,8 @@ const FamilyInfoTable = (props) => {
     axios
       .get(`${BASE_URL}/api/family-info/` + localStorage.getItem("_id"), {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         familyInfoObj.push(response.data);
@@ -44,7 +42,7 @@ const FamilyInfoTable = (props) => {
           Name: data["Name"],
           Relationship: data["Relationship"],
           DOB: data["DOB"].slice(0, 10),
-          Occupation: data["Occupation"]
+          Occupation: data["Occupation"],
         }));
         setRowData(tempRowData);
       })
@@ -59,8 +57,8 @@ const FamilyInfoTable = (props) => {
       axios
         .delete(`${BASE_URL}/api/family-info/` + e1 + "/" + e2, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
         .then((res) => {
           loadFamilyInfoData();
@@ -103,62 +101,80 @@ const FamilyInfoTable = (props) => {
     );
   };
 
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
+
   return (
-    <div className="container-fluid py-2 mb-5">
-      <h2 id="role-title">
-        <h6 style={{ color: darkMode ? 'var(--primaryDashColorDark)' : "var(--primaryDashMenuColor)", }} className="fw-bold my-auto">Employee Family Details <span className="text-warning"> ( {rowData.length} ) </span></h6>
-        {props.back
-          ? "of " + props.data["FirstName"] + " " + props.data["LastName"]
-          : ""}
-      </h2>
-
-      {props.back ? (
-        <Link to="/hr/employee">
-          <Button variant="primary" id="add-button">
-            Back
-          </Button>
-        </Link>
-      ) : (
-        <Button
-          variant="primary"
-          id="add-button"
-          onClick={props.onAddFamilyInfo}
+    <div className="container-fluid">
+      <div className="d-flex justify-content-between mb-2">
+        <h6
+          style={{
+            color: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var(--primaryDashMenuColor)",
+          }}
+          className="fw-bold my-auto"
         >
-          <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-          Add Member
-        </Button>
-      )}
+          Family Details ( {rowData.length} )
+        </h6>
 
+        <div className="py-1">
+          <button
+            className="btn btn-primary d-flex align-items-center justify-content-center gap-2"
+            onClick={props.onAddFamilyInfo}
+          >
+            <FaPlus />
+            <span className="d-none d-md-flex">Add Member</span>
+          </button>
+        </div>
+      </div>
       <div id="clear-both" />
 
-      {!loading ? (
+      {loading && (
+        <div id="loading-bar">
+          <RingLoader
+            css={override}
+            sizeUnit={"px"}
+            size={50}
+            color={"#0000ff"}
+            loading={true}
+          />
+        </div>
+      )}
+      {rowData > 0 ? (
         <div>
-          <table className="table" style={{ fontSize: '.9rem' }}>
+          <table className="table" style={{ fontSize: ".9rem" }}>
             <thead>
               <tr>
-                <th
-                  style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}
-                >
-                  Name
-                </th>
-                <th
-                  style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}
-                >
-                  Relationship
-                </th>
-                <th
-                  style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}
-                >
-                  DOB
-                </th>
-                <th
-                  style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}
-                >
-                  Occupation
-                </th>
-                <th
-                  style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}
-                  className="text-end" >
+                <th style={rowHeadStyle}>Name</th>
+                <th style={rowHeadStyle}>Relationship</th>
+                <th style={rowHeadStyle}>DOB</th>
+                <th style={rowHeadStyle}>Occupation</th>
+                <th style={rowHeadStyle} className="text-end">
                   Action
                 </th>
               </tr>
@@ -166,17 +182,25 @@ const FamilyInfoTable = (props) => {
             <tbody>
               {rowData.map((items, index) => (
                 <tr key={index}>
-                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize" >{items.Name}</td>
-                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize" >{items.Relationship}</td>
-                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize" >{items.DOB}</td>
-                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize" >{items.Occupation}</td>
-                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize text-end" >
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.Name}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.Relationship}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.DOB}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.Occupation}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize text-end">
                     {" "}
                     <button
                       onClick={() => props.onEditFamilyInfo(items.data)}
                       style={{
                         zIndex: "1",
-                        cursor: "pointer"
+                        cursor: "pointer",
                       }}
                       className="btn btn-outline-primary"
                     >
@@ -189,14 +213,36 @@ const FamilyInfoTable = (props) => {
           </table>
         </div>
       ) : (
-        <div id="loading-bar">
-          <RingLoader
-            css={override}
-            sizeUnit={"px"}
-            size={50}
-            color={"#0000ff"}
-            loading={true}
+        <div
+          style={{
+            height: "65vh",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            wordSpacing: "5px",
+            flexDirection: "column",
+            gap: "2rem",
+          }}
+        >
+          <img
+            style={{
+              height: "auto",
+              width: "30%",
+            }}
+            src={SearchLight}
+            alt="img"
           />
+          <p
+            className="text-center w-75 mx-auto"
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var( --primaryDashMenuColor)",
+            }}
+          >
+            Member's details not available, please add member.
+          </p>
         </div>
       )}
     </div>

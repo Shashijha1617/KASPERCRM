@@ -5,18 +5,24 @@ import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../config/config";
 const DailyAttendChart = () => {
   const [attendanceData, setAttendanceData] = useState([]);
+  const { darkMode } = useTheme();
   const [statusCounts, setStatusCounts] = useState({
     Present: 0,
     Late: 0,
     "Half Day": 0,
     Absent: 0,
   });
-  const { darkMode } = useTheme();
 
   const [chartOption, setChartOption] = useState({
     options: {
       labels: ["Late", "Present", "Half Day", "Absent"],
       colors: ["#FFC764", "#00FFAB", "#FF884B", "#F65A83"],
+      legend: {
+        show: true,
+        labels: {
+          colors: darkMode ? "black" : "white",
+        },
+      },
       plotOptions: {
         pie: {
           donut: {
@@ -88,9 +94,13 @@ const DailyAttendChart = () => {
     setChartOption({
       options: {
         labels: ["Late", "Present", "Half Day", "Absent"],
-        colors: ["#FFC764", "#00FFAB", "#FF884B", "#F65A83"],
+        colors: ["#FFC764", "#00FFAB", "#FF884B", "#f65a67"],
         legend: {
           position: "bottom",
+          show: true,
+          labels: {
+            colors: darkMode ? "black" : "white",
+          },
         },
         plotOptions: {
           pie: {
@@ -99,6 +109,7 @@ const DailyAttendChart = () => {
                 show: true,
                 total: {
                   show: true,
+                  colors: darkMode ? "black" : "white",
                 },
               },
             },

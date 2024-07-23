@@ -3,21 +3,22 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Chart from "react-apexcharts";
 import "./chart.css";
-import { FaChartLine } from "react-icons/fa6";
 import BASE_URL from "../../../../Pages/config/config";
+import { useTheme } from "../../../../Context/TheamContext/ThemeContext";
 
 const TaskChart = () => {
   const [departmentData, setDepartmentData] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { darkMode } = useTheme();
 
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         if (Array.isArray(response.data)) {
@@ -108,7 +109,7 @@ const TaskChart = () => {
       (task) =>
         task.status === "Assigned" &&
         !calculateRemainingTime(task.endDate).delay
-    ).length
+    ).length,
 
     // Rejected: tasks.filter((task) => task.status === "Rejected").length,
     // Active: tasks.filter((task) => task.status === "Pending").length,
@@ -126,94 +127,116 @@ const TaskChart = () => {
     series: [
       {
         name: "Total Employee",
-        data: Object.values(departmentCounts)
-      }
+        data: Object.values(departmentCounts),
+      },
     ],
     options: {
       chart: {
         type: "bar",
-        height: 350
+        height: 350,
       },
       plotOptions: {
         bar: {
           horizontal: false,
           columnWidth: "40%",
-          endingShape: "rounded"
-        }
+          endingShape: "rounded",
+        },
       },
       dataLabels: {
-        enabled: false
+        enabled: false,
       },
       stroke: {
         show: true,
         width: 2,
-        colors: ["transparent"]
+        colors: ["transparent"],
       },
       xaxis: {
         categories: Object.keys(departmentCounts),
         title: {
-          text: "Department Wise Employee"
-        }
+          text: "Department Wise Employee",
+        },
       },
       yaxis: {
         title: {
-          text: "Number of Employee"
-        }
+          text: "Number of Employee",
+        },
       },
 
       fill: {
         opacity: 1,
-        colors: ["rgb(100, 150, 200)"] // Change bar colors
+        colors: ["rgb(100, 150, 200)"], // Change bar colors
       },
       tooltip: {
         y: {
           formatter: function (val) {
             return " " + val + "";
-          }
+          },
         },
         markers: {
-          colors: "yellow"
-        }
-      }
-    }
+          colors: "yellow",
+        },
+      },
+    },
+    legend: {
+      show: true,
+      labels: {
+        colors: darkMode ? "black" : "white",
+      },
+    },
   };
   const taskStatusChartData = {
     options: {
       chart: {
         id: "task-status-chart",
-        type: "bar"
+        type: "bar",
       },
       fill: {
-        colors: ["var(--primaryDashColorDark)"]
+        colors: ["var(--primaryDashColorDark)"],
       },
       xaxis: {
         categories: Object.keys(taskStatusCounts),
         title: {
-          text: "Task Status"
-        }
+          text: "Task Status",
+        },
       },
       yaxis: {
         title: {
-          text: "Number of Tasks"
-        }
-      }
+          text: "Number of Tasks",
+        },
+      },
     },
     series: [
       {
         name: "Task Status",
-        data: Object.values(taskStatusCounts)
-      }
-    ]
+        data: Object.values(taskStatusCounts),
+      },
+    ],
+    legend: {
+      show: true,
+      labels: {
+        colors: darkMode ? "black" : "white",
+      },
+    },
   };
 
   return (
-    <div style={{ height: "fit-content" }} className="ChartCard p-2 pb-0">
+    <div
+      style={{
+        background: darkMode
+          ? "var(--primaryDashMenuColor)"
+          : "var(--primaryDashColorDark)",
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--primaryDashMenuColor)",
+      }}
+      className="ChartCard shadow py-2 px-3 pt-3"
+    >
       <div className="ChartHeader">
         <h6
           style={{
             width: "fit-content",
             boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
-            color: "var(--primaryDashColorDark)"
+            color: "var(--primaryDashColorDark)",
           }}
           className="fw-bolder d-flex px-3 rounded-5 py-1"
         >
@@ -225,7 +248,7 @@ const TaskChart = () => {
           options={taskStatusChartData.options}
           series={taskStatusChartData.series}
           type="bar"
-          height="340px"
+          height="300px"
         />
       </div>
     </div>

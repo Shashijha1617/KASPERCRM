@@ -5,11 +5,13 @@ import EducationTable from "./EducationTable.jsx";
 import EducationForm from "./EducationForm.jsx";
 import EducationFormEdit from "./EducationFormEdit.jsx";
 import BASE_URL from "../../../Pages/config/config.js";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext.js";
 
 const Education = (props) => {
   const [table, setTable] = useState(true);
   const [editForm, setEditForm] = useState(false);
   const [editData, setEditData] = useState({});
+  const { darkMode } = useTheme();
 
   const handleEducationSubmit = (event) => {
     event.preventDefault();
@@ -19,14 +21,14 @@ const Education = (props) => {
       SchoolUniversity: event.target[0].value,
       Degree: event.target[1].value,
       Grade: event.target[2].value,
-      PassingOfYear: event.target[3].value
+      PassingOfYear: event.target[3].value,
     };
 
     axios
       .post(`${BASE_URL}/api/education/${props.data["_id"]}`, body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then(() => {
         setTable(false);
@@ -61,14 +63,14 @@ const Education = (props) => {
       SchoolUniversity: newInfo.target[0].value,
       Degree: newInfo.target[1].value,
       Grade: newInfo.target[2].value,
-      PassingOfYear: newInfo.target[3].value
+      PassingOfYear: newInfo.target[3].value,
     };
 
     axios
       .put(`${BASE_URL}/api/education/${info["_id"]}`, body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then(() => {
         setTable(false);
@@ -94,7 +96,7 @@ const Education = (props) => {
           <EducationTable
             onAddEducation={handleAddEducation}
             onEditEducation={handleEditEducation}
-            data={props.data}
+            data={props.data} // Ensure props.data is correctly passed here
             back={props.back}
           />
         )
@@ -102,7 +104,6 @@ const Education = (props) => {
         <EducationForm
           onEducationSubmit={handleEducationSubmit}
           onFormClose={handleFormClose}
-          // onGenderChange={handleAddFormGenderChange}
         />
       )}
     </>

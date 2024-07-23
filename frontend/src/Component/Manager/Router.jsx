@@ -28,6 +28,7 @@ import LeaveApplication from "../../Pages/ApplyLeave/LeaveApplication.jsx";
 import Notification from "./Notification/Notification.jsx";
 import PersonalInfo from "../Employee/EmpPresonal/PersonalInfo.jsx";
 import SelfAttendance from "../HrManager/attendance/SelfAttendance.jsx";
+import LeaveBalance from "../HrManager/LeaveStatus/LeaveBalance.jsx";
 
 const MainContent = () => {
   return (
@@ -47,7 +48,6 @@ const MainContent = () => {
           exact
           component={LeaveApplicationHR}
         />
-
         <Route path="/manager/city" exact component={City} />
         <Route path="/manager/dashboard" exact component={Dashboard} />
         {/* <Route path="/manager/task" exact component={TaskAssign} /> */}
@@ -83,7 +83,7 @@ const MainContent = () => {
         <Route path="/manager/myAttendance" exact component={SelfAttendance} />
         <Route path="/manager/notification" exact component={Notification} />
         <Route path="/manager/createLeave" exact component={LeaveApplication} />
-
+        <Route path="/manager/LeaveBalance" exact component={LeaveBalance} />
         <Route
           exact
           path="/manager/personal-info"

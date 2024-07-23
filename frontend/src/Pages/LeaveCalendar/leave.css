@@ -41,3 +41,22 @@
     border-radius: 20px;
     border: none;
 }
+
+/* Add to leave.css or your stylesheet */
+.modal-backdrop.show {
+    backdrop-filter: blur(5px); /* Adjust the blur intensity as needed */
+  }
+  
+  .modal.show .modal-dialog {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .modal-dialog {
+    max-width: 600px; /* Adjust the width as needed */
+  }
+  
+  .modal-content {
+    border-radius: 0.5rem; /* Optional: adjust to your design */
+  }
+  

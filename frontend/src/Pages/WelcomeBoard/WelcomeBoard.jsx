@@ -45,13 +45,12 @@ const WelcomeBoard = () => {
       className="d-flex align-items-center shadow rounded-3 m-0 justify-content-center p-2"
     >
       {employeeData && (
-        <div className="d-flex gap-2 justify-content-between flex-column align-items-center ">
-          <h4 className="my-auto">
-            Welcome Back,{" "}
+        <div className="d-flex gap-3 flex-column align-items-center ">
+          <h4 className="my-0 p-0  gap-1 d-flex flex-column align-items-center ">
+            <span className="m-0">Welcome Back,</span>
             <span className="fw-bolder text-capitalize">
               {employeeData.FirstName} {employeeData.LastName}
             </span>{" "}
-            👋
           </h4>
           <HrAttendance />
         </div>

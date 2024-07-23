@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { PiInfoFill } from "react-icons/pi";
-import { FaCheck } from "react-icons/fa6";
 import { MdCancel, MdEdit } from "react-icons/md";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -26,7 +24,7 @@ const AdminAssignedTask = () => {
     startDate: "",
     endDate: "",
     managerEmail: "",
-    duration: 0
+    duration: 0,
   });
   const [totalAssignedTasks, setTotalAssignedTasks] = useState(0);
 
@@ -112,7 +110,7 @@ const AdminAssignedTask = () => {
       // Update the task status to "Cancelled" in the database
       await axios.put(`${BASE_URL}/api/tasks/${taskId}`, {
         status: "Cancelled",
-        comment: cancellationRemarks
+        comment: cancellationRemarks,
       });
 
       // Display success notification
@@ -139,7 +137,7 @@ const AdminAssignedTask = () => {
         startDate: taskToUpdate.startDate,
         endDate: taskToUpdate.endDate,
         managerEmail: taskToUpdate.managerEmail,
-        duration: taskToUpdate.duration
+        duration: taskToUpdate.duration,
       });
 
       setShowUpdateModal(true);
@@ -160,7 +158,7 @@ const AdminAssignedTask = () => {
         startDate: updatedTask.startDate,
         endDate: updatedTask.endDate,
         managerEmail: updatedTask.managerEmail,
-        duration: updatedTask.duration
+        duration: updatedTask.duration,
       });
 
       // Display success notification
@@ -203,15 +201,17 @@ const AdminAssignedTask = () => {
           height: "80vh",
           scrollbarWidth: "thin",
           scrollbarGutter: "stable",
-          scrollMargin: "1rem"
+          scrollMargin: "1rem",
         }}
       >
         {tasks
-          .filter((task) => task.status === "Assigned"|| task.status==="Pending")
+          .filter(
+            (task) => task.status === "Assigned" || task.status === "Pending"
+          )
           .map((task, index) => (
             <details
               style={{
-                boxShadow: "-1px 1px 10px gray"
+                boxShadow: "-1px 1px 10px gray",
               }}
               className="p-1 position-relative mt-3 fs-4 rounded mx-3"
               key={task.id}
@@ -219,7 +219,7 @@ const AdminAssignedTask = () => {
               <summary
                 style={{
                   height: "fit-content",
-                  background: "linear-gradient(#1D267D, #2F58CD)"
+                  background: "linear-gradient(#1D267D, #2F58CD)",
                 }}
                 className="d-flex justify-content-between aline-center form-control  text-white"
               >
@@ -418,7 +418,7 @@ const AdminAssignedTask = () => {
                 onChange={(e) =>
                   setUpdatedTask({
                     ...updatedTask,
-                    description: e.target.value
+                    description: e.target.value,
                   })
                 }
               />
@@ -432,7 +432,7 @@ const AdminAssignedTask = () => {
                   onChange={(e) =>
                     setUpdatedTask({
                       ...updatedTask,
-                      startDate: e.target.value
+                      startDate: e.target.value,
                     })
                   }
                 />
@@ -445,7 +445,7 @@ const AdminAssignedTask = () => {
                   onChange={(e) =>
                     setUpdatedTask({
                       ...updatedTask,
-                      endDate: e.target.value
+                      endDate: e.target.value,
                     })
                   }
                 />

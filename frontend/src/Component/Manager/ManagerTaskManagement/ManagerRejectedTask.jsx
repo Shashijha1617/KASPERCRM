@@ -9,7 +9,7 @@ const ManagerRejectedTask = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/tasks`, {
-        params: { status: "Completed" } // Filter by status "Completed"
+        params: { status: "Completed" }, // Filter by status "Completed"
       });
 
       setTasks(response.data);
@@ -51,7 +51,7 @@ const ManagerRejectedTask = () => {
           height: "80vh",
           scrollbarWidth: "thin",
           scrollbarGutter: "stable",
-          scrollMargin: "1rem"
+          scrollMargin: "1rem",
         }}
         className="d-flex flex-column gap-3"
       >
@@ -60,7 +60,7 @@ const ManagerRejectedTask = () => {
           .map((task, index) => (
             <details
               style={{
-                boxShadow: "-1px 1px 10px gray"
+                boxShadow: "-1px 1px 10px gray",
               }}
               className="p-1 position-relative mt-3 fs-4 rounded mx-3"
               key={task.id}
@@ -93,8 +93,8 @@ const ManagerRejectedTask = () => {
                     width: "99.4%",
                     height: "100%",
                     zIndex: "5",
-                    backgroundColor: "rgba(5, 128, 8, 0.384)",
-                    textShadow: "-5px 5px 5px rgba(128, 128, 128, 0.422)"
+                    backgroundColor: "rgba(128, 5, 5, 0.384)",
+                    textShadow: "-5px 5px 5px rgba(128, 128, 128, 0.422)",
                   }}
                   className="watermark form-control   position-absolute d-flex justify-content-center aline-center"
                 >

@@ -4,6 +4,7 @@ import "./chart.css";
 import axios from "axios";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../config/config";
+
 const DepartmentChart = () => {
   const [departmentData, setDepartmentData] = useState([]);
   const { darkMode } = useTheme();
@@ -12,7 +13,10 @@ const DepartmentChart = () => {
     options: {
       labels: [],
       legend: {
-        position: "bottom"
+        position: "bottom",
+        labels: {
+          colors: darkMode ? ["#FFFFFF"] : ["#000000"],
+        },
       },
       fill: {
         colors: [
@@ -21,8 +25,8 @@ const DepartmentChart = () => {
           "#dc4e07",
           "#FF407D",
           "#9F70FD",
-          "#FE7A36"
-        ]
+          "#FE7A36",
+        ],
       },
       plotOptions: {
         pie: {
@@ -30,22 +34,22 @@ const DepartmentChart = () => {
             labels: {
               show: true,
               total: {
-                show: true
-              }
-            }
-          }
-        }
-      }
+                show: true,
+              },
+            },
+          },
+        },
+      },
     },
-    series: []
+    series: [],
   });
 
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         if (Array.isArray(response.data)) {
@@ -76,121 +80,84 @@ const DepartmentChart = () => {
     const labels = Object.keys(departmentCounts);
     const series = labels.map((label) => departmentCounts[label]);
 
-    setChartOption({
+    setChartOption((prev) => ({
+      ...prev,
       options: {
+        ...prev.options,
         labels: labels,
-        fill: {
-          colors: [
-            "#008DDA",
-            "#4CCD99",
-            "#dc4e07",
-            "#FF407D",
-            "#9F70FD",
-            "#FE7A36"
-          ]
-        },
         legend: {
-          position: "bottom",
+          ...prev.options.legend,
           labels: {
-            colors: [
-              "#008DDA",
-              "#4CCD99",
-              "#dc4e07",
-              "#FF407D",
-              "#9F70FD",
-              "#FE7A36"
-            ]
-          }
+            colors: darkMode ? "black" : "white",
+          },
         },
         plotOptions: {
+          ...prev.options.plotOptions,
           pie: {
+            ...prev.options.plotOptions.pie,
             donut: {
+              ...prev.options.plotOptions.pie.donut,
               labels: {
-                colors: [
-                  "#008DDA",
-                  "#4CCD99",
-                  "#dc4e07",
-                  "#FF407D",
-                  "#9F70FD",
-                  "#FE7A36"
-                ],
-                show: true,
+                ...prev.options.plotOptions.pie.donut.labels,
                 total: {
-                  show: true,
-                  colors: [
-                    "#008DDA",
-                    "#4CCD99",
-                    "#dc4e07",
-                    "#FF407D",
-                    "#9F70FD",
-                    "#FE7A36"
-                  ]
-                }
+                  ...prev.options.plotOptions.pie.donut.labels.total,
+                  color: darkMode ? "#FFFFFF" : "#000000",
+                },
               },
-              colors: [
-                "#008DDA",
-                "#4CCD99",
-                "#dc4e07",
-                "#FF407D",
-                "#9F70FD",
-                "#FE7A36"
-              ]
-            }
-          }
-        }
+            },
+          },
+        },
       },
-      series: series
-    });
+      series: series,
+    }));
   };
 
   useEffect(() => {
     updateChartOptions();
-  }, [departmentData]);
+  }, [departmentData, darkMode]);
 
   return (
-    <>
+    <div
+      style={{
+        height: "fit-content",
+        background: darkMode
+          ? "var(--primaryDashMenuColor)"
+          : "var(--primaryDashColorDark)",
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--primaryDashMenuColor)",
+      }}
+      className="ChartCard p-2 shadow"
+    >
       <div
         style={{
-          height: "fit-content",
           background: darkMode
             ? "var(--primaryDashMenuColor)"
             : "var(--primaryDashColorDark)",
           color: darkMode
             ? "var(--primaryDashColorDark)"
-            : "var(--primaryDashMenuColor)"
+            : "var(--primaryDashMenuColor)",
         }}
-        className="ChartCard p-2 shadow"
+        className="ChartHeader"
       >
-        <div
+        <h6
           style={{
-            background: darkMode
-              ? "var(--primaryDashMenuColor)"
-              : "var(--primaryDashColorDark)",
-            color: darkMode
-              ? "var(--primaryDashColorDark)"
-              : "var(--primaryDashMenuColor)"
+            width: "fit-content",
+            boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
           }}
-          className="ChartHeader"
+          className="fw-bolder d-flex px-3 rounded-5 py-1"
         >
-          <h6
-            style={{
-              width: "fit-content",
-              boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset"
-            }}
-            className="fw-bolder d-flex px-3 rounded-5 py-1"
-          >
-            Employee By Department
-          </h6>
-        </div>
-        <Chart
-          options={chartOption.options}
-          series={chartOption.series}
-          type="donut"
-          width="100%"
-          height="380"
-        />
+          Employee By Department
+        </h6>
       </div>
-    </>
+      <Chart
+        options={chartOption.options}
+        series={chartOption.series}
+        type="donut"
+        width="100%"
+        height="335px"
+      />
+    </div>
   );
 };
 

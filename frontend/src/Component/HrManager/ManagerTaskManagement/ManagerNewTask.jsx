@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { MdCancel } from "react-icons/md";
-import { IoCheckmarkDoneSharp } from "react-icons/io5";
+import { MdOutlineCancel } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-hot-toast";
-import { BsFiletypeDoc } from "react-icons/bs";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import BASE_URL from "../../../Pages/config/config";
 import AssignTask from "../../../img/Task/AssignTask.svg";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import { RiAttachmentLine } from "react-icons/ri";
+import { IoMdDoneAll } from "react-icons/io";
 
 const ManagerNewTask = () => {
   const [tasks, setTasks] = useState([]);
@@ -16,6 +16,7 @@ const ManagerNewTask = () => {
   const [error, setError] = useState(null);
   const [empData, setEmpData] = useState(null);
   const [status, setStatus] = useState({ accepted: false, rejected: false });
+  const [currentTime, setCurrentTime] = useState(new Date());
   const { darkMode } = useTheme();
 
   const taskId = uuidv4();
@@ -44,13 +45,20 @@ const ManagerNewTask = () => {
     loadEmployeeData();
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000); // Update every second
+    return () => clearInterval(interval);
+  }, []);
+
   const calculateRemainingTime = (endDate) => {
-    const now = new Date();
+    const now = currentTime;
     const endDateTime = new Date(endDate);
     let remainingTime = endDateTime - now;
 
     if (remainingTime < 0) {
-      return { delay: true, days: 0, hours: 0, minutes: 0 };
+      return { delay: true, days: 0, hours: 0, minutes: 0, seconds: 0 };
     } else {
       const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
       const hours = Math.floor(
@@ -59,7 +67,8 @@ const ManagerNewTask = () => {
       const minutes = Math.floor(
         (remainingTime % (1000 * 60 * 60)) / (1000 * 60)
       );
-      return { delay: false, days, hours, minutes };
+      const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+      return { delay: false, days, hours, minutes, seconds };
     }
   };
 
@@ -144,16 +153,26 @@ const ManagerNewTask = () => {
 
   return (
     <div className="p-4">
-      <h5 style={{ fontWeight: "600" }} className="p-0 m-0 text-uppercase">
-        New Task (
-        {
-          tasks.filter(
-            (task) => task.status === "Assigned" && task.managerEmail === email
-          ).length
-        }
-        )
-      </h5>
-      <p className="text-muted p-0 m-0">You can view all new tasks here!</p>
+      <div
+        style={{
+          color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--primaryDashMenuColor)",
+        }}
+      >
+        <h5 style={{ fontWeight: "600" }} className="p-0 m-0 text-uppercase">
+          New Task (
+          {
+            tasks.filter(
+              (task) =>
+                task.status === "Assigned" && task.managerEmail === email
+            ).length
+          }
+          )
+        </h5>
+        <p className="p-0 m-0">You can view all new tasks here!</p>
+      </div>
+
       {loading && (
         <div className="d-flex align-items-center gap-2">
           <div
@@ -165,7 +184,7 @@ const ManagerNewTask = () => {
         </div>
       )}
       <div
-        className="mt-2"
+        className="mt-2 d-flex flex-column gap-2 pt-2 pb-3"
         style={{
           overflowY: "scroll",
           maxHeight: "80vh",
@@ -187,13 +206,13 @@ const ManagerNewTask = () => {
             )
             .map((task, index) => (
               <details
-                style={{ boxShadow: "-1px 1px 10px gray" }}
-                className="p-1 position-relative mt-3 fs-4 rounded mx-3"
+                className="p-1 shadow position-relative mt-3 fs-4 rounded mx-3"
                 key={task.id}
               >
                 <summary
                   style={{
                     height: "fit-content",
+                    minHeight: "3.5rem",
                     background:
                       "linear-gradient(165deg,#11009E, #700B97, 90%, #C84B31)",
                   }}
@@ -210,8 +229,8 @@ const ManagerNewTask = () => {
                   </div>
                   <div className="d-flex gap-2 justify-content-between">
                     {calculateRemainingTime(task.endDate).delay ? (
-                      <div>
-                        <h5 className="btn btn-danger p-1 px-3 fw-bold">
+                      <div className="">
+                        <h5 className="btn btn-danger my-auto  p-1 px-3 fw-bold">
                           Late
                         </h5>
                       </div>
@@ -219,8 +238,12 @@ const ManagerNewTask = () => {
                       <>
                         <div className="text-center">
                           <div
-                            style={{ boxShadow: "0 0 5px 2px gray inset" }}
-                            className="form-control fw-bold px-1 py-0"
+                            className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                            style={{
+                              boxShadow: "0 0 5px 2px gray inset",
+                              height: "30px",
+                              minWidth: "30px",
+                            }}
                           >
                             {calculateRemainingTime(task.endDate).days}
                           </div>
@@ -228,8 +251,12 @@ const ManagerNewTask = () => {
                         </div>
                         <div className="text-center">
                           <div
-                            style={{ boxShadow: "0 0 5px 2px gray inset" }}
-                            className="form-control fw-bold px-1 py-0"
+                            className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                            style={{
+                              boxShadow: "0 0 5px 2px gray inset",
+                              height: "30px",
+                              minWidth: "30px",
+                            }}
                           >
                             {calculateRemainingTime(task.endDate).hours}
                           </div>
@@ -237,84 +264,154 @@ const ManagerNewTask = () => {
                         </div>
                         <div className="text-center">
                           <div
-                            style={{ boxShadow: "0 0 5px 2px gray inset" }}
-                            className="form-control fw-bold px-1 py-0"
+                            className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                            style={{
+                              boxShadow: "0 0 5px 2px gray inset",
+                              height: "30px",
+                              minWidth: "30px",
+                            }}
                           >
                             {calculateRemainingTime(task.endDate).minutes}
                           </div>
                           <div>Min</div>
+                        </div>
+                        <div className="text-center">
+                          <div
+                            className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                            style={{
+                              boxShadow: "0 0 5px 2px gray inset",
+                              height: "30px",
+                              minWidth: "30px",
+                            }}
+                          >
+                            {calculateRemainingTime(task.endDate).seconds}
+                          </div>
+                          <div>Sec</div>
                         </div>
                       </>
                     )}
                   </div>
                 </summary>
                 <div
-                  style={{ position: "relative" }}
-                  className="row p-1 my-2 mx-0 bg-light text-dark rounded"
+                  style={{
+                    position: "relative",
+                    background: darkMode
+                      ? "var(--secondaryDashMenuColor)"
+                      : "var(--secondaryDashColorDark)",
+                    color: darkMode
+                      ? "var(--secondaryDashColorDark)"
+                      : "var(--primaryDashMenuColor)",
+                  }}
+                  className="row p-1 my-2 mx-0 rounded"
                 >
                   <div
-                    style={{ height: "fit-content" }}
-                    className="form-control"
+                    style={{
+                      height: "fit-content",
+                      background: darkMode
+                        ? "var(--secondaryDashMenuColor)"
+                        : "var(--secondaryDashColorDark)",
+                      color: darkMode
+                        ? "var(--secondaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                    }}
+                    className="form-control "
                   >
                     <p
-                      style={{ height: "fit-content" }}
-                      className="text-start fs-6 form-control"
+                      style={{
+                        height: "fit-content",
+                        background: darkMode
+                          ? "var(--secondaryDashMenuColor)"
+                          : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
+                      }}
+                      className="text-start fs-6  form-control"
                     >
                       <h6 className="fw-bold">Task Description</h6>{" "}
-                      {task.description}
+                      <p style={{ width: "100%" }}>{task.description}</p>
                     </p>
                     <div
-                      style={{ height: "fit-content" }}
-                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
+                      style={{
+                        height: "fit-content",
+                        background: darkMode
+                          ? "var(--secondaryDashMenuColor)"
+                          : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
+                      }}
+                      className="row form-control px-0 d-flex pt-3 rounded mx-0 justify-content-between"
                     >
                       <p
                         style={{ fontSize: "1rem" }}
-                        className="col-6 col-sm-6 col-md-2"
+                        className="col-12 col-sm-6 col-md-3 col-lg-2"
                       >
-                        Task Durations <br /> <span>{task.duration} days</span>
+                        <h6>Task Durations</h6>
+                        <span className="border px-2 py-1 rounded-3">
+                          {task.duration} days
+                        </span>
                       </p>
+
                       <p
                         style={{ fontSize: "1rem" }}
-                        className="col-6 col-sm-6 col-md-2"
+                        className="col-12 col-sm-6 col-md-3 col-lg-2"
                       >
-                        Created By <br /> <span>{task.managerEmail}</span>
-                      </p>
-                      <p
-                        style={{ fontSize: "1rem" }}
-                        className="col-6 col-sm-6 col-md-2"
-                      >
-                        Start Date <br />{" "}
-                        <span>
+                        <h6>Start Date</h6>
+                        <span className="border px-2 py-1 rounded-3">
                           {new Date(task.startDate).toLocaleDateString()}
                         </span>
                       </p>
                       <p
                         style={{ fontSize: "1rem" }}
-                        className="col-6 col-sm-6 col-md-2"
+                        className="col-12 col-sm-6 col-md-3 col-lg-2"
                       >
-                        End Date <br />{" "}
-                        <span>
+                        <h6>End Date</h6>
+                        <span className="border px-2 py-1 rounded-3">
                           {new Date(task.endDate).toLocaleDateString()}
                         </span>
                       </p>
                       <p
                         style={{ fontSize: "1rem" }}
-                        className="col-6 col-sm-6 col-md-2"
+                        className="col-12 col-sm-6 col-md-3 col-lg-2"
                       >
-                        Task Status <br /> {task.status}
+                        <h6>Task Status</h6>{" "}
+                        <span className="border px-2 py-1 rounded-3">
+                          {task.status}
+                        </span>
                       </p>
                     </div>
+                    <hr />
                     <div
-                      style={{ height: "fit-content" }}
-                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
+                      style={{
+                        height: "fit-content",
+                        background: darkMode
+                          ? "var(--secondaryDashMenuColor)"
+                          : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
+                        border: "none",
+                      }}
+                      className="row form-control px-0 d-flex pt-3 rounded mx-1 justify-content-between"
                     >
-                      <p>
-                        <span className="fw-bold">Remarks: </span>{" "}
+                      <p className="m-0">
+                        <span className="fw-bold">Remarks: </span>
                         {task.comment}
                       </p>
                     </div>
+                    <hr />
                     <div
-                      style={{ height: "fit-content" }}
+                      style={{
+                        height: "fit-content",
+                        background: darkMode
+                          ? "var(--secondaryDashMenuColor)"
+                          : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--secondaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
+                        border: "none",
+                      }}
                       className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
                     >
                       <button
@@ -328,12 +425,14 @@ const ManagerNewTask = () => {
                           )
                         }
                       >
-                        <IoCheckmarkDoneSharp />
-                        Accept
+                        <IoMdDoneAll />
+                        <span className="d-none d-lg-flex">Accept</span>
                       </button>
                       <button className="btn btn-primary col-2 d-flex justify-center align-items-center gap-2">
-                        <BsFiletypeDoc />
-                        View Docs
+                        <RiAttachmentLine />
+                        <span className="d-none d-lg-flex">
+                          View Attachment
+                        </span>
                       </button>
                       <button
                         className="btn btn-primary col-2 d-flex justify-center align-items-center gap-2"
@@ -346,10 +445,11 @@ const ManagerNewTask = () => {
                           )
                         }
                       >
-                        <MdCancel />
-                        Reject
+                        <MdOutlineCancel />
+                        <span className="d-none d-lg-flex">Reject</span>
                       </button>
                     </div>
+                    <hr />
                   </div>
                 </div>
               </details>
@@ -364,7 +464,15 @@ const ManagerNewTask = () => {
               src={AssignTask}
               alt=""
             />
-            <p>Sorry, there are no tasks assigned yet.</p>
+            <p
+              style={{
+                color: darkMode
+                  ? "var(--primaryDashColorDark)"
+                  : "var(--primaryDashMenuColor)",
+              }}
+            >
+              Sorry, there are no tasks assigned yet.
+            </p>
           </div>
         )}
       </div>

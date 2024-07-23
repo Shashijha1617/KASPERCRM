@@ -62,8 +62,8 @@ const ManagerNewTask = () => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setEmpData(response.data);
@@ -91,7 +91,7 @@ const ManagerNewTask = () => {
       // Update the task status to "Cancelled" in the database
       await axios.put(`${BASE_URL}/api/tasks/${taskID}`, {
         status: "Pending",
-        comment: AcceptTaskRemark
+        comment: AcceptTaskRemark,
       });
 
       // Display success notification
@@ -109,7 +109,7 @@ const ManagerNewTask = () => {
           messageBy: name,
           profile: empData.profile.image_url,
           status: "unseen",
-          path: "taskassign"
+          path: "taskassign",
         };
 
         socket.emit("adminTaskNotification", data);
@@ -123,7 +123,7 @@ const ManagerNewTask = () => {
           message: `Task Accepted`,
           messageBy: null,
           status: "unseen",
-          path: "taskassign"
+          path: "taskassign",
         };
 
         socket.emit("adminTaskNotification", data);
@@ -152,7 +152,7 @@ const ManagerNewTask = () => {
 
       await axios.put(`${BASE_URL}/api/tasks/${taskID}`, {
         status: "Rejected",
-        comment: RejectRemarks
+        comment: RejectRemarks,
       });
 
       toast.success("Task Rejected");
@@ -168,7 +168,7 @@ const ManagerNewTask = () => {
           messageBy: name,
           profile: empData.profile.image_url,
           status: "unseen",
-          path: "taskreject"
+          path: "taskreject",
         };
 
         socket.emit("adminTaskNotification", taskNotificationData);
@@ -182,7 +182,7 @@ const ManagerNewTask = () => {
           message: `Task Rejected`,
           messageBy: null,
           status: "unseen",
-          path: "taskreject"
+          path: "taskreject",
         };
 
         socket.emit("adminTaskNotification", taskNotificationData);
@@ -245,7 +245,7 @@ const ManagerNewTask = () => {
           height: "80vh",
           scrollbarWidth: "thin",
           scrollbarGutter: "stable",
-          scrollMargin: "1rem"
+          scrollMargin: "1rem",
         }}
       >
         {tasks
@@ -255,17 +255,18 @@ const ManagerNewTask = () => {
           .map((task, index) => (
             <details
               style={{
-                boxShadow: "-1px 1px 10px gray"
+                boxShadow: "-1px 1px 10px gray",
               }}
               className="p-1 position-relative mt-3 fs-4 rounded mx-3"
               key={task.id}
             >
               <summary
-                style={{
-                  height: "fit-content",
-                  background:
-                    "linear-gradient(165deg,#11009E, #700B97, 90%, #C84B31)"
-                }}
+                // style={{
+                //   height: "fit-content",
+                //   background:
+                //     "linear-gradient(165deg,#11009E, #700B97, 90%, #C84B31)",
+                // }}
+                style={{ height: "fit-content", minHeight: "4rem" }}
                 className="d-flex justify-content-between aline-center form-control text-white "
               >
                 <div className="fw-bold fs-5 d-flex justify-content-center flex-column">

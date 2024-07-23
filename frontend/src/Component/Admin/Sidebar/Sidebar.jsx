@@ -1,50 +1,50 @@
 import React, { useState } from "react";
-import { BsBuildingsFill } from "react-icons/bs";
-import { FaAddressBook } from "react-icons/fa";
-import { FaUserCircle } from "react-icons/fa";
-import { FaCalendarCheck } from "react-icons/fa6";
-import { MdDashboard, MdMenuOpen, MdTaskAlt } from "react-icons/md";
-import { TbDeviceIpadMinus } from "react-icons/tb";
-import { MdHolidayVillage } from "react-icons/md";
+import { FaRegUser } from "react-icons/fa";
+import { GoTasklist } from "react-icons/go";
+import { MdMenuOpen, MdOutlineDashboardCustomize } from "react-icons/md";
 import { AiOutlineFundProjectionScreen } from "react-icons/ai";
-import { FcLeave } from "react-icons/fc";
-
-// import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import { Link } from "react-router-dom";
-import { FaUserTie } from "react-icons/fa";
 import "./Sidebar.css";
+import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { IoCalendarOutline } from "react-icons/io5";
+import { LuKeyRound, LuPartyPopper } from "react-icons/lu";
+import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
+import { IoLocationOutline } from "react-icons/io5";
 
 const Sidebar = () => {
   const [activeCategory, setActiveCategory] = useState(null);
   const [extended, setExtended] = useState(false);
+  const { darkMode } = useTheme();
 
   const allLinks = [
     {
-      icon: <MdDashboard />,
+      icon: <MdOutlineDashboardCustomize />,
       name: "Dashboard",
-      navLinks: [{ to: "/admin/dashboard", label: "Dashboard" }]
+      navLinks: [{ to: "/admin/dashboard", label: "Dashboard" }],
     },
     {
-      icon: <FaUserTie />,
+      icon: <FaRegUser />,
       name: "Employee",
       navLinks: [
         // { to: "/admin/user", label: "Employee List" },
         { to: "/admin/employee", label: "Employee List" },
-        { to: "/admin/salary", label: "Salary" }
-      ]
+        { to: "/admin/salary", label: "Salary" },
+      ],
     },
     {
-      icon: <FaCalendarCheck />,
+      icon: <IoMdCheckmarkCircleOutline />,
       name: "Attendance",
       navLinks: [
         { to: "/admin/adminAttendance", label: "Create Attendance" },
         { to: "/admin/todaysAttendance", label: "TodaysAttendance" },
-        { to: "/admin/viewAttendance", label: "View Attendance" }
+        { to: "/admin/viewAttendance", label: "View Attendance" },
         // { to: "/admin/leave", label: "View Leave " }
-      ]
+      ],
     },
     {
-      icon: <FcLeave />,
+      icon: <IoCalendarOutline />,
       name: "Leave",
       navLinks: [
         { to: "/admin/applyLeave", label: "Apply Leave" },
@@ -52,11 +52,11 @@ const Sidebar = () => {
         { to: "/admin/leaveAccepted", label: "Accepted " },
         { to: "/admin/leaveRejected", label: "Rejected " },
         { to: "/admin/leaveAssign", label: "Leave Assign " },
-        { to: "/admin/allEmpLeave", label: "All Emp Leave Balance" }
-      ]
+        { to: "/admin/allEmpLeave", label: "All Emp Leave Balance" },
+      ],
     },
     {
-      icon: <MdTaskAlt />,
+      icon: <GoTasklist />,
       name: "Task",
       navLinks: [
         { to: "/admin/task", label: "Create New Task" },
@@ -64,56 +64,48 @@ const Sidebar = () => {
         // { to: "/admin/taskstatus", label: "Active Taask" },
         { to: "/admin/taskcancle", label: "Cancelled Task" },
         { to: "/admin/taskcomplete", label: "Completed Task" },
-        { to: "/admin/taskreject", label: "Rejected Task" }
-      ]
+        { to: "/admin/taskreject", label: "Rejected Task" },
+      ],
     },
     {
-      icon: <TbDeviceIpadMinus />,
+      icon: <LuKeyRound />,
       name: "Access",
       navLinks: [
         { to: "/admin/role", label: "Role" },
         { to: "/admin/position", label: "Position" },
-        { to: "/admin/department", label: "Department" }
-      ]
+        { to: "/admin/department", label: "Department" },
+      ],
     },
     {
-      icon: <BsBuildingsFill />,
+      icon: <HiOutlineBuildingOffice2 />,
       name: "Company",
       navLinks: [
-        { to: "/admin/company", label: "Company List" }
+        { to: "/admin/company", label: "Company List" },
         // { to: "/hr/employee", label: "Create Employee" },
-      ]
+      ],
     },
     {
-      icon: <FaAddressBook />,
+      icon: <IoLocationOutline />,
       name: "Address",
       navLinks: [
         { to: "/admin/country", label: "Country" },
         { to: "/admin/state", label: "State" },
-        { to: "/admin/city", label: "City" }
-      ]
+        { to: "/admin/city", label: "City" },
+      ],
     },
     {
-      icon: <MdHolidayVillage />,
+      icon: <LuPartyPopper />,
       name: "Holiday",
-      navLinks: [{ to: "/admin/leaveCal", label: "Leave Calendar" }]
+      navLinks: [{ to: "/admin/leaveCal", label: "Leave Calendar" }],
     },
-    // {
-    //   icon: <MdHolidayVillage />,
-    //   name: "Create team",
-    //   navLinks: [
-    //     { to: "/admin/addteam", label: "Add Team" },
-    //     { to: "/admin/teams", label: "view Team" }
-    //   ]
-    // },
     {
       icon: <AiOutlineFundProjectionScreen />,
       name: "Project",
       navLinks: [
         { to: "/admin/project-bid", label: "Project Bidding" },
-        { to: "/admin/portal-master", label: "Portal Master" }
-      ]
-    }
+        { to: "/admin/portal-master", label: "Portal Master" },
+      ],
+    },
   ];
 
   const ExtendClick = () => {
@@ -123,121 +115,208 @@ const Sidebar = () => {
   return (
     <div
       style={{
-        minHeight: "100%",
-        maxHeight: "100%",
+        minHeight: "100vh",
+        maxHeight: "100vh",
         overflowY: "auto",
         overflow: "inherit",
         width: "fit-content",
-        backgroundColor: "var(--primaryDashColorDark)"
+        borderRight: "1px solid rgba(90, 88, 88, 0.1)",
+        backgroundColor: darkMode
+          ? "var(--primaryDashMenuColor)"
+          : "var(--primaryDashColorDark)",
+        padding: ".5rem 1rem .5rem .5rem",
       }}
-      className="d-none d-sm-flex  flex-column gap-2 p-3"
+      className="d-none d-sm-flex flex-column gap-2"
     >
       <h3
         style={{ borderBottom: "3px solid green" }}
-        className="fw-bolder mt-0 text-success justify-content-between py-2 d-flex gap-2"
+        className="text-success justify-content-between py-2 d-flex gap-2"
       >
         <p
           style={{ display: !extended ? "none" : "block" }}
-          className="my-auto"
+          className="my-auto fs-4"
         >
-          ADMIN
-        </p>{" "}
+          Manager
+        </p>
         <span
           onClick={ExtendClick}
           style={{
             border: "none",
             outline: "none",
             cursor: "pointer",
-            transform: `rotate(${!extended ? "180deg" : "0deg"})`
+            color: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var(--primaryDashMenuColor)",
+            transform: `rotate(${!extended ? "180deg" : "0deg"})`,
           }}
-          className="my-auto p-0 fs-2 text-white"
+          className="my-auto p-0 fs-4"
         >
           <MdMenuOpen />
         </span>
       </h3>
 
-      {allLinks.map(({ icon, name, navLinks }) => (
-        <div
-          key={name}
-          onMouseEnter={() => setActiveCategory(name)}
-          onMouseLeave={() => setActiveCategory(null)}
-          className="position-relative"
-        >
-          <span
-            style={{
-              color: "var(--primaryDashMenuColor)",
-              height: "3rem",
-              outline: "none",
-              border: "none"
-            }}
-            className="p-0  text-start fw-bold gap-2 justify-between w-100 d-flex justify-content-between"
-          >
-            <div
-              style={{ width: "fit-content" }}
-              className="d-flex gap-2 my-auto"
-            >
-              <p
-                style={{
-                  height: "30px",
-                  width: "30px",
-                  alignItems: "center",
-                  color: activeCategory === name ? "#FF9209" : "white"
-                }}
-                className="m-auto d-flex rounded-5  justify-content-center fs-3"
-              >
-                {icon}
-              </p>
-              <p
-                style={{ display: !extended ? "none" : "block" }}
-                className="my-auto"
-              >
-                {name}
-              </p>
-            </div>
-            <span
-              style={{
-                transform: `rotate(${
-                  activeCategory === name ? "135deg" : "0deg"
-                })`,
-                transition: "1s ease",
-                display: !extended ? "none" : "block"
-              }}
-              className="my-auto fs-4"
-            >
-              +
-            </span>
-          </span>
-
+      <div
+        className="m-0 p-0"
+        style={{ maxHeight: "50px", overflow: "auto initial" }}
+      >
+        {allLinks.map(({ icon, name, navLinks }) => (
           <div
-            style={{
-              ...dropdownStyle,
-              display: activeCategory === name ? "flex" : "none",
-              backgroundColor: "var(--primaryDashColorDark)",
-              width: "fit-content"
-            }}
-            className="flex-column position-absolute top-0 start-100 py-2 px-2 gap-2 mt-2  "
+            key={name}
+            onMouseEnter={() => setActiveCategory(name)}
+            onMouseLeave={() => setActiveCategory(null)}
+            className="position-relative"
           >
-            {navLinks.map((link) => (
-              <Link className="text-decoration-none" key={link.to} to={link.to}>
-                <div className="text-decoration-none flex-nowrap text-start fw-bolder gap-3 text-white d-flex justify-content-between ">
-                  <div
-                    style={{ borderBottom: "1px solid white" }}
-                    className="d-flex gap-1 flex-nowrap"
+            {navLinks.length > 1 ? (
+              <span
+                style={{
+                  color: darkMode
+                    ? "var(--primaryDashColorDark)"
+                    : "var(--primaryDashMenuColor)",
+                  height: "3rem",
+                  outline: "none",
+                  border: "none",
+                }}
+                className="p-0 text-start gap-2 justify-between w-100 d-flex justify-content-between"
+              >
+                <div
+                  style={{ width: "fit-content" }}
+                  className="d-flex gap-2 my-auto"
+                >
+                  <p
+                    style={{
+                      height: "30px",
+                      width: "30px",
+                      alignItems: "center",
+                      color: darkMode
+                        ? "var(--primaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                    }}
+                    className="m-auto d-flex rounded-5 justify-content-center fs-5"
                   >
-                    <p className="m-0">{link.icon}</p>
-                    <p style={{ whiteSpace: "pre" }} className="m-auto">
-                      {link.label}
-                    </p>
-                  </div>
-                  <span style={{}} className="my-auto ">
-                    ›
-                  </span>
+                    {icon}
+                  </p>
+                  <p
+                    style={{ display: !extended ? "none" : "block" }}
+                    className="my-auto"
+                  >
+                    {name}
+                  </p>
                 </div>
-              </Link>
-            ))}
+                <span
+                  style={{
+                    transform: `rotate(${
+                      activeCategory === name ? "135deg" : "0deg"
+                    })`,
+                    transition: "1s ease",
+                    display: !extended ? "none" : "block",
+                  }}
+                  className="my-auto fs-4"
+                >
+                  +
+                </span>
+              </span>
+            ) : (
+              <OverlayTrigger
+                placement="right"
+                overlay={
+                  !extended ? (
+                    <Tooltip id={`tooltip-${name}`}>{name}</Tooltip>
+                  ) : (
+                    <span></span>
+                  )
+                }
+              >
+                <NavLink to={navLinks[0].to} className="text-decoration-none">
+                  <span
+                    style={{
+                      color: darkMode
+                        ? "var(--primaryDashColorDark)"
+                        : "var(--primaryDashMenuColor)",
+                      height: "3rem",
+                      outline: "none",
+                      border: "none",
+                    }}
+                    className="p-0 text-start gap-2 justify-between w-100 d-flex justify-content-between"
+                  >
+                    <div
+                      style={{ width: "fit-content" }}
+                      className="d-flex gap-2 my-auto"
+                    >
+                      <p
+                        style={{
+                          height: "30px",
+                          width: "30px",
+                          alignItems: "center",
+                          color: darkMode
+                            ? "var(--primaryDashColorDark)"
+                            : "var(--primaryDashMenuColor)",
+                        }}
+                        className="m-auto d-flex rounded-5 justify-content-center fs-5"
+                      >
+                        {icon}
+                      </p>
+                      <p
+                        style={{ display: !extended ? "none" : "block" }}
+                        className="my-auto"
+                      >
+                        {name}
+                      </p>
+                    </div>
+                  </span>
+                </NavLink>
+              </OverlayTrigger>
+            )}
+
+            {navLinks.length > 1 && (
+              <div
+                style={{
+                  ...dropdownStyle,
+                  display: activeCategory === name ? "flex" : "none",
+                  backgroundColor: darkMode
+                    ? "var(--primaryDashMenuColor)"
+                    : "var(--primaryDashColorDark)",
+                  width: "fit-content",
+                }}
+                className="flex-column position-absolute top-0 start-100 py-2 px-1 gap-2 mt-2 shadow-sm"
+              >
+                <p
+                  style={{
+                    display: extended ? "none" : "block",
+                    color: darkMode ? "green" : "orange",
+                  }}
+                  className="m-0 py-0 pl-1 fw-bold"
+                >
+                  {name}
+                </p>
+                {navLinks.map((link) => (
+                  <NavLink
+                    className="text-decoration-none"
+                    key={link.to}
+                    to={link.to}
+                  >
+                    <div
+                      style={{
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
+                      }}
+                      className="text-decoration-none flex-nowrap text-start gap-3 d-flex justify-content-between "
+                    >
+                      <div className="d-flex gap-1 flex-nowrap">
+                        <p className="m-0">{link.icon}</p>
+                        <p style={{ whiteSpace: "pre" }} className="m-auto">
+                          {link.label}
+                        </p>
+                      </div>
+                      <span className="my-auto ">›</span>
+                    </div>
+                  </NavLink>
+                ))}
+              </div>
+            )}
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
@@ -245,13 +324,13 @@ const Sidebar = () => {
 const buttonStyle = {
   outline: "none",
   border: "none",
-  height: "3rem"
+  height: "3rem",
 };
 
 const dropdownStyle = {
   width: "250px",
   zIndex: "5",
-  borderLeft: "5px solid white"
+  borderLeft: "5px solid white",
 };
 
 export default Sidebar;

@@ -8,6 +8,7 @@ import SearchDark from "../../../img/Attendance/SearchDark.svg";
 import SearchLight from "../../../img/Attendance/SearchLight.svg";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../../../Pages/config/config";
+import { AiOutlineFieldNumber } from "react-icons/ai";
 
 const AttendanceDetails = () => {
   const [employeeId, setEmployeeId] = useState("");
@@ -280,12 +281,22 @@ const AttendanceDetails = () => {
     if (loginTime) {
       const [loginHour, loginMinute] = loginTime.split(":").map(Number);
       if (loginHour > 9 || (loginHour === 9 && loginMinute > 45)) {
-        return "Half Day";
+        return (
+          <span className="btn btn-outline-warning py-0 rounded-5">
+            Half Day
+          </span>
+        );
       } else if (loginHour > 9 || (loginHour === 9 && loginMinute > 30)) {
-        return "Late";
+        return (
+          <span className="btn btn-outline-info py-0 rounded-5">Late</span>
+        );
       }
     }
-    return loginTime ? "Present" : "Absent";
+    return loginTime ? (
+      <span className="btn btn-outline-success py-0 rounded-5">Present</span>
+    ) : (
+      <span className="btn btn-outline-danger py-0 rounded-5">Absent</span>
+    );
   };
 
   const GetDay = (s) => {
@@ -304,7 +315,7 @@ const AttendanceDetails = () => {
 
   return (
     <div className="container-fluid d-flex flex-column gap-3">
-      <div className="d-flex justify-content-between my-2">
+      <div className="d-flex flex-column flex-lg-row gap-3 justify-content-between my-2">
         <div>
           <h5
             style={{
@@ -329,16 +340,16 @@ const AttendanceDetails = () => {
           </p>
         </div>
 
-        <div className="d-flex gap-3 my-auto">
-          <div>
+        <div className="d-flex gap-3 justify-content-start justify-content-md-end my-auto">
+          <div className="w-50">
             <select
-              className="form-select w-100 rounded-0  shadow-sm text-muted"
+              className="form-select rounded-0  shadow-sm text-muted"
               id="employeeId"
               value={employeeId}
               onChange={handleEmployeeChange}
             >
               <option value="" disabled>
-                --SELECT ANY EMPLOYEE--
+                --Select Employee--
               </option>
 
               {employees
@@ -413,7 +424,10 @@ const AttendanceDetails = () => {
           className="border border-1 border-dark "
           style={{ overflow: "auto", maxHeight: "65vh" }}
         >
-          <table className="table" style={{ fontSize: ".9rem" }}>
+          <table
+            className="table"
+            style={{ fontSize: ".9rem", fontWeight: "normal" }}
+          >
             <thead>
               <tr
                 style={{ position: "sticky", top: "0", zIndex: "3" }}
@@ -493,8 +507,22 @@ const AttendanceDetails = () => {
                     border: "none",
                   }}
                 >
-                  <RxCounterClockwiseClock />
-                  Log Count
+                  <AiOutlineFieldNumber /> Log Count
+                </th>
+                <th
+                  style={{
+                    verticalAlign: "middle",
+                    whiteSpace: "pre",
+                    background: darkMode
+                      ? "var(--primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                    color: darkMode
+                      ? "var(--primaryDashColorDark)"
+                      : "var(--primaryDashMenuColor)",
+                    border: "none",
+                  }}
+                >
+                  <AiOutlineFieldNumber /> Break Count
                 </th>
                 <th
                   style={{
@@ -521,232 +549,209 @@ const AttendanceDetails = () => {
                   .map((month) =>
                     month.dates
                       .sort((a, b) => a.date - b.date)
-                      .map((date) => (
-                        <tr
-                          className="shadow-sm"
-                          key={date.date}
-                          id={`attendance-row-${date.date}`}
-                          onMouseEnter={() => handleMouseEnter(date.date)}
-                          onMouseLeave={() => handleMouseLeave()}
-                        >
-                          <td
-                            style={{
-                              verticalAlign: "middle",
-                              whiteSpace: "pre",
-                              background: darkMode
-                                ? "var( --secondaryDashMenuColor)"
-                                : "var(--secondaryDashColorDark)",
-                              color: darkMode
-                                ? "var(--secondaryDashColorDark)"
-                                : "var( --primaryDashMenuColor)",
-                              border: "none",
-                            }}
-                            className="d-flex gap-2 align-items-center"
+                      .map((date) => {
+                        const rowBodyStyle = {
+                          verticalAlign: "middle",
+                          whiteSpace: "pre",
+                          background: darkMode
+                            ? "var( --secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                          color: darkMode
+                            ? "var(--secondaryDashColorDark)"
+                            : "var( --primaryDashMenuColor)",
+                          border: "none",
+                        };
+                        return (
+                          <tr
+                            className="shadow-sm"
+                            key={date.date}
+                            id={`attendance-row-${date.date}`}
+                            onMouseEnter={() => handleMouseEnter(date.date)}
+                            onMouseLeave={() => handleMouseLeave()}
                           >
-                            <span
-                              className=" d-flex btn align-items-center justify-content-center rounded-0"
-                              style={{
-                                height: "30px",
-                                width: "30px",
-                                border: `1px solid ${
-                                  darkMode
+                            <td
+                              style={rowBodyStyle}
+                              className="d-flex gap-2 align-items-center"
+                            >
+                              <span
+                                className=" d-flex btn align-items-center justify-content-center rounded-0"
+                                style={{
+                                  height: "30px",
+                                  width: "30px",
+                                  border: `1px solid ${
+                                    darkMode
+                                      ? "var(--primaryDashColorDark)"
+                                      : "var( --primaryDashMenuColor)"
+                                  }`,
+                                  color: darkMode
                                     ? "var(--primaryDashColorDark)"
-                                    : "var( --primaryDashMenuColor)"
-                                }`,
-                                color: darkMode
-                                  ? "var(--primaryDashColorDark)"
-                                  : "var( --primaryDashMenuColor)",
-                              }}
-                            >
-                              {String(date.date).padStart(2, "0")}
-                            </span>{" "}
-                            <span
-                              className="py-0 btn  d-flex align-items-center justify-content-center rounded-0"
-                              style={{
-                                height: "30px",
-                                width: "45px",
-                                border: `1px solid ${
-                                  darkMode
+                                    : "var( --primaryDashMenuColor)",
+                                }}
+                              >
+                                {String(date.date).padStart(2, "0")}
+                              </span>{" "}
+                              <span
+                                className="py-0 btn  d-flex align-items-center justify-content-center rounded-0"
+                                style={{
+                                  height: "30px",
+                                  width: "45px",
+                                  border: `1px solid ${
+                                    darkMode
+                                      ? "var(--primaryDashColorDark)"
+                                      : "var( --primaryDashMenuColor)"
+                                  }`,
+                                  color: darkMode
                                     ? "var(--primaryDashColorDark)"
-                                    : "var( --primaryDashMenuColor)"
-                                }`,
-                                color: darkMode
-                                  ? "var(--primaryDashColorDark)"
-                                  : "var( --primaryDashMenuColor)",
-                              }}
+                                    : "var( --primaryDashMenuColor)",
+                                }}
+                              >
+                                {" "}
+                                {GetDay(date.day)}
+                              </span>
+                            </td>
+                            <td style={rowBodyStyle} className="text-start">
+                              {getAttendanceMark(date)}
+                            </td>
+                            <td style={rowBodyStyle} className="text-uppercase">
+                              {date.loginTime[0] ? date.loginTime[0] : "--"}
+                            </td>
+                            <td style={rowBodyStyle} className="text-uppercase">
+                              {date.logoutTime[date.logoutTime.length - 1]
+                                ? date.logoutTime[date.logoutTime.length - 1]
+                                : "--"}
+                            </td>
+                            <td
+                              style={rowBodyStyle}
+                              className="position-relative"
                             >
-                              {" "}
-                              {GetDay(date.day)}
-                            </span>
-                          </td>
-                          <td
-                            style={{
-                              verticalAlign: "middle",
-                              whiteSpace: "pre",
-                              background: darkMode
-                                ? "var( --secondaryDashMenuColor)"
-                                : "var(--secondaryDashColorDark)",
-                              color: darkMode
-                                ? "var(--secondaryDashColorDark)"
-                                : "var( --primaryDashMenuColor)",
-                              border: "none",
-                            }}
-                            className="text-start"
-                          >
-                            <span
-                              className={`${
-                                getAttendanceMark(date) === "Present"
-                                  ? "text-success"
-                                  : getAttendanceMark(date) === "Late"
-                                  ? "text-info"
-                                  : getAttendanceMark(date) === "Half Day"
-                                  ? "text-warning"
-                                  : "text-danger"
-                              }`}
-                            >
-                              ● {getAttendanceMark(date)}
-                            </span>
-                          </td>
-                          <td
-                            style={{
-                              verticalAlign: "middle",
-                              whiteSpace: "pre",
-                              background: darkMode
-                                ? "var( --secondaryDashMenuColor)"
-                                : "var(--secondaryDashColorDark)",
-                              color: darkMode
-                                ? "var(--secondaryDashColorDark)"
-                                : "var( --primaryDashMenuColor)",
-                              border: "none",
-                            }}
-                            className="text-uppercase"
-                          >
-                            {date.loginTime[0]}
-                          </td>
-                          <td
-                            style={{
-                              verticalAlign: "middle",
-                              whiteSpace: "pre",
-                              background: darkMode
-                                ? "var( --secondaryDashMenuColor)"
-                                : "var(--secondaryDashColorDark)",
-                              color: darkMode
-                                ? "var(--secondaryDashColorDark)"
-                                : "var( --primaryDashMenuColor)",
-                              border: "none",
-                            }}
-                            className="text-uppercase"
-                          >
-                            {date.logoutTime[date.logoutTime.length - 1]}
-                          </td>
-                          <td
-                            style={{
-                              verticalAlign: "middle",
-                              whiteSpace: "pre",
-                              background: darkMode
-                                ? "var( --secondaryDashMenuColor)"
-                                : "var(--secondaryDashColorDark)",
-                              color: darkMode
-                                ? "var(--secondaryDashColorDark)"
-                                : "var( --primaryDashMenuColor)",
-                              border: "none",
-                            }}
-                            className="position-relative"
-                          >
-                            <div
-                              style={{
-                                display: "flex ",
-                                justifyContent: "start",
-                                alignItems: "center",
-                              }}
-                              className="fs-6 gap-2 "
-                              onMouseEnter={handleInfoMouseEnter}
-                              onMouseLeave={handleInfoMouseLeave}
-                            >
-                              <span>{date.loginTime.length} Logs</span>
-                            </div>
-                            <div
-                              style={{
-                                zIndex: "5",
-                                right: "100%",
-                                maxHeight: "30vh",
-                                overflow: "auto",
-                                top: "0",
-                              }}
-                              className="position-absolute"
-                            >
-                              {isInfoHovering && hoveredDate === date.date && (
-                                <table className="table table-bordered table-striped">
-                                  <thead>
-                                    <tr className="shadow-sm">
-                                      <th
-                                        style={{
-                                          whiteSpace: "pre",
-                                          backgroundColor:
-                                            "var(--secondaryDashColorDark)",
-                                          color: "var(--primaryDashMenuColor)",
-                                        }}
-                                      >
-                                        Login
-                                      </th>
-                                      <th
-                                        style={{
-                                          whiteSpace: "pre",
-                                          backgroundColor:
-                                            "var(--secondaryDashColorDark)",
-                                          color: "var(--primaryDashMenuColor)",
-                                        }}
-                                      >
-                                        Logout
-                                      </th>
-                                      <th
-                                        style={{
-                                          whiteSpace: "pre",
-                                          backgroundColor:
-                                            "var(--secondaryDashColorDark)",
-                                          color: "var(--primaryDashMenuColor)",
-                                        }}
-                                      >
-                                        Total Login
-                                      </th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {date.loginTime.map((loginTime, index) => (
-                                      <tr key={index}>
-                                        <td>{loginTime}</td>
-                                        <td>{date.logoutTime[index]}</td>
-                                        <td>
-                                          {convertMinutesToHoursAndMinutes(
-                                            date.LogData[index]
-                                          )}
-                                        </td>
-                                      </tr>
-                                    ))}
-                                  </tbody>
-                                </table>
+                              <div
+                                style={{
+                                  display: "flex ",
+                                  justifyContent: "start",
+                                  alignItems: "center",
+                                }}
+                                className="fs-6 gap-2 "
+                                onMouseEnter={handleInfoMouseEnter}
+                                onMouseLeave={handleInfoMouseLeave}
+                              >
+                                <span
+                                  className="py-0 btn  d-flex align-items-center justify-content-center"
+                                  style={{
+                                    height: "30px",
+                                    width: "30px",
+                                    borderRadius: "50%",
+                                    border: `1px solid ${
+                                      darkMode
+                                        ? "var(--primaryDashColorDark)"
+                                        : "var( --primaryDashMenuColor)"
+                                    }`,
+                                    color: darkMode
+                                      ? "var(--primaryDashColorDark)"
+                                      : "var( --primaryDashMenuColor)",
+                                  }}
+                                >
+                                  {" "}
+                                  {date.loginTime.length}
+                                </span>
+                              </div>
+                              <div
+                                style={{
+                                  zIndex: "5",
+                                  right: "100%",
+                                  maxHeight: "30vh",
+                                  overflow: "auto",
+                                  top: "0",
+                                }}
+                                className="position-absolute"
+                              >
+                                {isInfoHovering &&
+                                  hoveredDate === date.date && (
+                                    <table className="table table-bordered table-striped">
+                                      <thead>
+                                        <tr className="shadow-sm">
+                                          <th
+                                            style={{
+                                              whiteSpace: "pre",
+                                              backgroundColor:
+                                                "var(--secondaryDashColorDark)",
+                                              color:
+                                                "var(--primaryDashMenuColor)",
+                                            }}
+                                          >
+                                            Login
+                                          </th>
+                                          <th
+                                            style={{
+                                              whiteSpace: "pre",
+                                              backgroundColor:
+                                                "var(--secondaryDashColorDark)",
+                                              color:
+                                                "var(--primaryDashMenuColor)",
+                                            }}
+                                          >
+                                            Logout
+                                          </th>
+                                          <th
+                                            style={{
+                                              whiteSpace: "pre",
+                                              backgroundColor:
+                                                "var(--secondaryDashColorDark)",
+                                              color:
+                                                "var(--primaryDashMenuColor)",
+                                            }}
+                                          >
+                                            Total Login
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {date.loginTime.map(
+                                          (loginTime, index) => (
+                                            <tr key={index}>
+                                              <td>{loginTime}</td>
+                                              <td>{date.logoutTime[index]}</td>
+                                              <td>
+                                                {convertMinutesToHoursAndMinutes(
+                                                  date.LogData[index]
+                                                )}
+                                              </td>
+                                            </tr>
+                                          )
+                                        )}
+                                      </tbody>
+                                    </table>
+                                  )}
+                              </div>
+                            </td>
+                            <td style={rowBodyStyle}>
+                              <span
+                                className="py-0 btn  d-flex align-items-center justify-content-center"
+                                style={{
+                                  height: "30px",
+                                  width: "30px",
+                                  borderRadius: "50%",
+                                  border: `1px solid ${
+                                    darkMode
+                                      ? "var(--primaryDashColorDark)"
+                                      : "var( --primaryDashMenuColor)"
+                                  }`,
+                                  color: darkMode
+                                    ? "var(--primaryDashColorDark)"
+                                    : "var( --primaryDashMenuColor)",
+                                }}
+                              >
+                                {" "}
+                                {date.breakTime.length}
+                              </span>
+                            </td>
+                            <td style={rowBodyStyle}>
+                              {convertMinutesToHoursAndMinutes(
+                                date.totalLogAfterBreak
                               )}
-                            </div>
-                          </td>
-                          <td
-                            style={{
-                              verticalAlign: "middle",
-                              whiteSpace: "pre",
-                              background: darkMode
-                                ? "var( --secondaryDashMenuColor)"
-                                : "var(--secondaryDashColorDark)",
-                              color: darkMode
-                                ? "var(--secondaryDashColorDark)"
-                                : "var( --primaryDashMenuColor)",
-                              border: "none",
-                            }}
-                          >
-                            {convertMinutesToHoursAndMinutes(
-                              date.totalLogAfterBreak
-                            )}
-                          </td>
-                        </tr>
-                      ))
+                            </td>
+                          </tr>
+                        );
+                      })
                   )
               )}
             </tbody>
@@ -775,6 +780,7 @@ const AttendanceDetails = () => {
             alt="img"
           />
           <p
+            className="text-center w-75 mx-auto"
             style={{
               color: darkMode
                 ? "var(--secondaryDashColorDark)"

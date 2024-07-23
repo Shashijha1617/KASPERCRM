@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Form, Button, Col } from "react-bootstrap";
-import SalaryImage from "./SalaryImage.svg"
 import { TbReportMoney } from "react-icons/tb";
 import BASE_URL from "../config/config";
 const SalaryForm = (props) => {
@@ -12,8 +11,8 @@ const SalaryForm = (props) => {
       try {
         const response = await axios.get(`${BASE_URL}/api/employee`, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         });
         setEmployeeData(response.data);
       } catch (error) {
@@ -25,22 +24,21 @@ const SalaryForm = (props) => {
   }, []);
 
   return (
-
     <div className="container-fluid">
-      <h4 style={{ position: 'sticky', top: '-.5rem', zIndex: '5' }} className="text-muted d-flex gap-2 align-items-center bg-light py-3 text-capitalize fw-bold">
+      <h4
+        style={{ position: "sticky", top: "-.5rem", zIndex: "5" }}
+        className="text-muted d-flex gap-2 align-items-center bg-light py-3 text-capitalize fw-bold"
+      >
         <TbReportMoney /> Add Salary Details
       </h4>
       <Form
         id="form"
         onSubmit={props.onSalarySubmit}
-        style={{ color: 'var(--primaryDashMenuColor)', width: 'fit-content' }}
+        style={{ color: "var(--primaryDashMenuColor)", width: "fit-content" }}
         className=" fw-bold w-100 row mx-auto py-4 mb-5"
       >
-
         <div className="form-group col-12 col-md-6 py-2">
-          <Form.Label className="text-black">
-            Select Employee
-          </Form.Label>
+          <Form.Label className="text-black">Select Employee</Form.Label>
           <Col className="form-input p-0 ">
             <Form.Control as="select" required>
               <option value="" disabled selected>
@@ -48,7 +46,8 @@ const SalaryForm = (props) => {
               </option>
               {employeeData.map((data, index) => (
                 <option key={index} value={data["_id"]}>
-                  {data["empID"] + data["FirstName"] +
+                  {data["empID"] +
+                    data["FirstName"] +
                     " " +
                     data["MiddleName"] +
                     " " +
@@ -60,40 +59,28 @@ const SalaryForm = (props) => {
         </div>
 
         <div className="form-group col-12 col-md-6 ">
-          <Form.Label className="text-black">
-            Basic Salary
-          </Form.Label>
+          <Form.Label className="text-black">Basic Salary</Form.Label>
           <Col className="form-input p-0">
-            <Form.Control
-              type="number"
-              placeholder="Basic Salary"
-              required
-            />
+            <Form.Control type="number" placeholder="Basic Salary" required />
           </Col>
         </div>
 
         <div className="form-group col-12 col-md-6 ">
-          <Form.Label className="text-black">
-            Bank Name
-          </Form.Label>
+          <Form.Label className="text-black">Bank Name</Form.Label>
           <Col className="form-input p-0">
             <Form.Control type="text" placeholder="Bank Name" required />
           </Col>
         </div>
 
         <div className="form-group col-12 col-md-6 ">
-          <Form.Label className="text-black">
-            Account No
-          </Form.Label>
+          <Form.Label className="text-black">Account No</Form.Label>
           <Col className="form-input p-0">
             <Form.Control type="text" placeholder="Account No" required />
           </Col>
         </div>
 
         <div className="form-group col-12 col-md-6 ">
-          <Form.Label className="text-black">
-            Re-Enter Account No
-          </Form.Label>
+          <Form.Label className="text-black">Re-Enter Account No</Form.Label>
           <Col className="form-input p-0">
             <Form.Control
               type="text"
@@ -104,9 +91,7 @@ const SalaryForm = (props) => {
         </div>
 
         <div className="form-group col-12 col-md-6 ">
-          <Form.Label className="text-black">
-            Account Holder Name
-          </Form.Label>
+          <Form.Label className="text-black">Account Holder Name</Form.Label>
           <Col className="form-input p-0">
             <Form.Control
               type="text"
@@ -117,24 +102,16 @@ const SalaryForm = (props) => {
         </div>
 
         <div className="form-group col-12 col-md-6">
-          <Form.Label className="text-black">
-            IFSC Code
-          </Form.Label>
+          <Form.Label className="text-black">IFSC Code</Form.Label>
           <Col className="form-input p-0">
             <Form.Control type="text" placeholder="IFSC Code" required />
           </Col>
         </div>
 
         <div className="form-group col-12 col-md-6 ">
-          <Form.Label className="text-black">
-            Tax Deduction
-          </Form.Label>
+          <Form.Label className="text-black">Tax Deduction</Form.Label>
           <Col className="form-input p-0">
-            <Form.Control
-              type="number"
-              placeholder="Basic Salary"
-              required
-            />
+            <Form.Control type="number" placeholder="Basic Salary" required />
           </Col>
         </div>
 
@@ -142,10 +119,29 @@ const SalaryForm = (props) => {
           className="form-group row mx-auto d-flex justify-content-between m-auto"
           id="form-submit-button"
         >
-          <Button className="col-5  rounded-5 fw-bold" style={{ backgroundColor: 'var(--primaryDashColorDark)', color: 'var(--primaryDashMenuColor)', border: 'none', outline: 'none' }} type="submit">
+          <Button
+            className="col-5  rounded-5 fw-bold"
+            style={{
+              backgroundColor: "var(--primaryDashColorDark)",
+              color: "var(--primaryDashMenuColor)",
+              border: "none",
+              outline: "none",
+            }}
+            type="submit"
+          >
             Submit
           </Button>
-          <Button className="col-5  rounded-5 fw-bold" style={{ backgroundColor: 'red', color: 'white', border: 'none', outline: 'none' }} type="reset" onClick={props.onFormClose}>
+          <Button
+            className="col-5  rounded-5 fw-bold"
+            style={{
+              backgroundColor: "red",
+              color: "white",
+              border: "none",
+              outline: "none",
+            }}
+            type="reset"
+            onClick={props.onFormClose}
+          >
             cancel
           </Button>
         </div>
@@ -153,7 +149,8 @@ const SalaryForm = (props) => {
           className="form-group col-12 col-md-6 col-12 col-md-6"
           id="form-cancel-button"
         ></div>
-      </Form></div>
+      </Form>
+    </div>
   );
 };
 

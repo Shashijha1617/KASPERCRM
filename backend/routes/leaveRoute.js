@@ -29,7 +29,7 @@ leaveRoute.get(
   // verifyAdminHR,
   getAllLeaveApplication
 );
-leaveRoute.get(
+leaveRoute.post(
   "/leave-application-hr",
   verifyAdminHR,
   getAllLeaveApplicationHr

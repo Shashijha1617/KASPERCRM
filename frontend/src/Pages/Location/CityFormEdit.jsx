@@ -1,66 +1,62 @@
 import React, { Component } from "react";
-// import "./CityForm.css";
-import { HashRouter as Router, Route, Link } from "react-router-dom";
-// import { Form,Button } from "react-bootstrap";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import BASE_URL from "../config/config";
+
 class CityForm extends Component {
   state = {
     CityData: this.props.editData["CityName"],
     stateData: [],
     filteredStateData: [],
     countryData: [],
-    filteredCountryData: []
+    filteredCountryData: [],
   };
 
-  onChange(e) {
+  onChange = (e) => {
     this.setState({ CityData: e.target.value });
-  }
+  };
+
   loadCountryInfo = () => {
     axios
       .get(`${BASE_URL}/api/country`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
-      .then(response => {
+      .then((response) => {
         this.setState({ countryData: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
+
   loadStateInfo = () => {
     axios
       .get(`${BASE_URL}/api/state`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
-      .then(response => {
+      .then((response) => {
         this.setState({ stateData: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.loadCountryInfo();
     this.loadStateInfo();
   }
-  onCountryChange(e) {
-    console.log(e.target.value);
-    let currentCountry = e.target.value;
-    let filteredState = this.state.stateData.filter(
-      data => data["country"][0]["_id"] == currentCountry
+
+  onCountryChange = (e) => {
+    const currentCountry = e.target.value;
+    const filteredState = this.state.stateData.filter(
+      (data) => data["country"][0]["_id"] === currentCountry
     );
     this.setState({ filteredStateData: filteredState });
-  }
-
-  onSelectCountry = (e, data) => {
-    return this.props.editData["state"][0]["country"][0]["_id"] == data["_id"];
   };
 
   render() {
@@ -71,7 +67,9 @@ class CityForm extends Component {
         <div id="role-form-outer-div">
           <Form
             id="form"
-            onSubmit={e => this.props.onCityEditUpdate(this.props.editData, e)}
+            onSubmit={(e) =>
+              this.props.onCityEditUpdate(this.props.editData, e)
+            }
           >
             <Form.Group as={Row}>
               <Form.Label column sm={2}>
@@ -81,13 +79,16 @@ class CityForm extends Component {
                 <Form.Control
                   as="select"
                   name="country"
-                  onChange={this.onCountryChange.bind(this)}
+                  onChange={this.onCountryChange}
+                  defaultValue=""
                 >
-                  <option value="" disabled selected>
+                  <option value="" disabled>
                     Select your option
                   </option>
                   {this.state.countryData.map((data, index) => (
-                    <option value={data["_id"]}>{data["CountryName"]}</option>
+                    <option key={index} value={data["_id"]}>
+                      {data["CountryName"]}
+                    </option>
                   ))}
                 </Form.Control>
               </Col>
@@ -99,14 +100,15 @@ class CityForm extends Component {
               </Form.Label>
               <Col sm={10} className="form-input">
                 <Form.Control as="select" name="state" required>
-                  <option value="" disabled selected>
+                  <option value="" disabled>
                     Select your option
                   </option>
                   {this.state.filteredStateData.map((data, index) => (
                     <option
+                      key={index}
                       value={data["_id"]}
                       selected={
-                        this.props.editData["state"][0]["_id"] == data["_id"]
+                        this.props.editData["state"][0]["_id"] === data["_id"]
                       }
                     >
                       {data["StateName"]}
@@ -122,11 +124,11 @@ class CityForm extends Component {
               </Form.Label>
               <Col sm={10} className="form-input">
                 <Form.Control
-                  type="Text"
+                  type="text"
                   placeholder="City"
                   name="City"
                   required
-                  onChange={value => this.onChange(value)}
+                  onChange={this.onChange}
                   value={this.state.CityData}
                 />
               </Col>
@@ -140,7 +142,7 @@ class CityForm extends Component {
             <Form.Group as={Row} id="form-cancel-button">
               <Col sm={{ span: 10, offset: 2 }} id="form-cancel-button-inner">
                 <Button type="reset" onClick={this.props.onFormEditClose}>
-                  cancel
+                  Cancel
                 </Button>
               </Col>
             </Form.Group>
@@ -152,4 +154,3 @@ class CityForm extends Component {
 }
 
 export default CityForm;
-// onChange={value => this.onChange(value)}

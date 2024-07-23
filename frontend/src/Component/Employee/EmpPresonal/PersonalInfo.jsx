@@ -65,7 +65,7 @@ const PersonalInfo = ({ data, back }) => {
   };
 
   return (
-    <React.Fragment>
+    <div style={{ maxHeight: "95vh", overflow: "auto" }}>
       {table ? (
         editForm ? (
           <PersonalInfoFormEdit
@@ -85,7 +85,7 @@ const PersonalInfo = ({ data, back }) => {
       ) : (
         <div />
       )}
-    </React.Fragment>
+    </div>
   );
 };
 

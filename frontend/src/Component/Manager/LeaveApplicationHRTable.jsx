@@ -1,27 +1,17 @@
 import React, { useState, useEffect } from "react";
-import "./LeaveApplicationHRTable.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
-import BASE_URL from "../../Pages/config/config";
-import {
-  Form,
-  Button,
-  Col,
-  Row,
-  Table,
-  Dropdown,
-  DropdownButton,
-} from "react-bootstrap";
-
-// *************csv & pdf **************//
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { BsFillFileEarmarkPdfFill } from "react-icons/bs";
-// *************csv & pdf **************//
-
+import { LuSearch } from "react-icons/lu";
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
+import LeaveLight from "../../img/Leave/LeaveLight.svg";
+import LeaveDark from "../../img/Leave/LeaveDark.svg";
+import BASE_URL from "../../Pages/config/config";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -30,72 +20,88 @@ const override = css`
 `;
 
 const LeaveApplicationHRTable = (props) => {
+  console.log(props);
   const [leaveApplicationHRData, setLeaveApplicationHRData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchData, setSearchData] = useState("");
-  const [totalLeaves, setTotalLeaves] = useState(0);
-  const [sortColumn, setSortColumn] = useState(null);
-  const [sortDirection, setSortDirection] = useState("asc");
   const [rowData, setRowData] = useState([]);
-
-  // ...
-
-  let leaveApplicationHRObj = [];
-  let rowDataT = [];
+  const [sortColumn, setSortColumn] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortDirection, setSortDirection] = useState("asc");
+  const [filteredData, setFilteredData] = useState([]);
+  const { darkMode } = useTheme();
+  const email = localStorage.getItem("Email");
+  const formatDate = (dateString) => {
+    const dateParts = dateString.split("-");
+    return `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+  };
 
   const loadLeaveApplicationHRData = () => {
     axios
-      .get(`${BASE_URL}/api/leave-application-hr/`, {
-        headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
-      })
+      .post(
+        `${BASE_URL}/api/leave-application-hr/`,
+        { manager: email },
+        {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        }
+      )
       .then((response) => {
-        leaveApplicationHRObj = response.data;
-        console.log("response", response.data);
-        setLeaveApplicationHRData(response.data);
+        const leaveApplicationHRObj = response.data;
+        console.log(response.data);
+        setLeaveApplicationHRData(leaveApplicationHRObj);
         setLoading(false);
 
-        rowDataT = [];
-
-        leaveApplicationHRObj.map((data) => {
-          let temp = {
+        const rowDataT = leaveApplicationHRObj.map((data) => {
+          return {
             data,
-            empID:
-              data["employee"] &&
-              data["employee"][0] &&
-              data["employee"][0]["empID"],
-            Name:
-              data["employee"] &&
-              data["employee"][0] &&
-              data["employee"][0]["FirstName"] +
-                " " +
-                data["employee"][0]["LastName"],
-            Leavetype: data["Leavetype"],
-            FromDate: data["FromDate"].slice(0, 10),
-            ToDate: data["ToDate"].slice(0, 10),
-            Reasonforleave: data["Reasonforleave"],
-            Status: status(data["Status"]),
+            empID: data?.empID,
+            Name: data?.FirstName + " " + data?.LastName,
+            Leavetype: data?.Leavetype,
+            CreatedOn: formatDate(data?.createdOn?.slice(0, 10)),
+            FromDate: formatDate(data["FromDate"]?.slice(0, 10)),
+            ToDate: formatDate(data["ToDate"]?.slice(0, 10)),
+            Days: calculateDays(data?.FromDate, data?.ToDate),
+            Reasonforleave: data?.Reasonforleave,
+            Status: status(data?.Status),
+            empObjID: data.empObjID,
           };
-
-          rowDataT.push(temp);
         });
 
         setRowData(rowDataT);
-
-        setTotalLeaves(response.data.length);
-        props.updateTotalLeaves(response.data.length);
+        setFilteredData(rowDataT);
+        // props.updateTotalLeaves(leaveApplicationHRObj.length);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  // ...
+  useEffect(() => {
+    loadLeaveApplicationHRData();
+  }, []);
+
+  useEffect(() => {
+    filterData();
+  }, [searchQuery]);
+
+  const filterData = () => {
+    const filtered = rowData.filter((item) => {
+      return item.Name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+    setFilteredData(filtered);
+  };
+
+  const calculateDays = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // Add 1 to include both start and end dates
+    return diffDays;
+  };
 
   const onLeaveApplicationHRDelete = (e1, e2) => {
-    console.log(e1, e2);
-    if (window.confirm("Are you sure to delete this record? ") == true) {
+    if (window.confirm("Are you sure to delete this record? ")) {
       axios
         .delete(`${BASE_URL}/api/leave-application-hr/` + e1 + "/" + e2, {
           headers: {
@@ -112,74 +118,46 @@ const LeaveApplicationHRTable = (props) => {
   };
 
   const exportToPDF = () => {
-    window.confirm("Are you sure to download Leave record? ");
-    const { rowData } = this.state;
-    // Set A4 landscape dimensions
-    const pdfWidth = 297; // A4 width in mm
-    const pdfHeight = 210; // A4 height in mm
-    const doc = new jsPDF({
-      orientation: "landscape",
-      unit: "mm",
-      format: [pdfWidth, pdfHeight],
-    });
+    if (window.confirm("Are you sure to download Leave record? ")) {
+      const pdfWidth = 297;
+      const pdfHeight = 210;
+      const doc = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: [pdfWidth, pdfHeight],
+      });
 
-    doc.setFontSize(18);
-    doc.text("Employee Leave Details", pdfWidth / 2, 15, "center");
-    const headers = [
-      "Emp Id",
-      "Leave Type",
-      "Start Date",
-      "End Date",
-      "Remarks",
-      "Status",
-    ];
-    const data = rowData.map((row) => [
-      row.empID,
-      row.Leavetype,
-      row.FromDate,
-      row.ToDate,
-      row.Reasonforleave,
-      row.Status,
+      doc.setFontSize(18);
+      doc.text("Employee Leave Details", pdfWidth / 2, 15, "center");
+      const headers = [
+        "Emp Id",
+        "Leave Type",
+        "Start Date",
+        "End Date",
+        "Remarks",
+        "Days",
+        "CreatedOn",
+        "Status",
+      ];
+      const data = filteredData.map((row) => [
+        row.empID,
+        row.Leavetype,
+        row.FromDate,
+        row.ToDate,
+        row.Days,
+        row.CreatedOn,
+        row.Reasonforleave,
+        row.Status,
+      ]);
+      doc.setFontSize(12);
+      doc.autoTable({
+        head: [headers],
+        body: data,
+        startY: 25,
+      });
 
-      "", // Action column - you can customize this based on your requirements
-    ]);
-    doc.setFontSize(12);
-    doc.autoTable({
-      head: [headers],
-      body: data,
-      startY: 25,
-    });
-
-    doc.save("leaveApplication_data.pdf");
-  };
-
-  useEffect(() => {
-    loadLeaveApplicationHRData();
-  }, []);
-
-  const renderButton = (params) => {
-    console.log(params);
-    return (
-      <FontAwesomeIcon
-        icon={faTrash}
-        onClick={() =>
-          onLeaveApplicationHRDelete(
-            params.data.data["employee"][0]["_id"],
-            params.data.data["_id"]
-          )
-        }
-      />
-    );
-  };
-
-  const renderEditButton = (params) => {
-    console.log(params);
-    return (
-      <FontAwesomeIcon
-        icon={faEdit}
-        onClick={() => props.onEditLeaveApplicationHR(params.data.data)}
-      />
-    );
+      doc.save("leaveApplication_data.pdf");
+    }
   };
 
   const status = (s) => {
@@ -194,207 +172,224 @@ const LeaveApplicationHRTable = (props) => {
     }
   };
 
-  const renderSortIcon = (field) => {
-    if (sortColumn === field) {
-      return sortDirection === "asc" ? "▴" : "▾";
-    }
-    return null;
+  const approvedLeaves = filteredData.filter(
+    (data) => data.Status === "Pending"
+  ).length;
+
+  const rowHeadStyle = {
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+    whiteSpace: "pre",
   };
 
-  const sortData = (columnName) => {
-    const { rowData, sortColumn, sortDirection } = this.state;
-    let newSortDirection = "asc";
-
-    if (sortColumn === columnName && sortDirection === "asc") {
-      newSortDirection = "desc";
-    }
-
-    const sortedData = [...rowData];
-
-    sortedData.sort((a, b) => {
-      const valueA = a[columnName];
-      const valueB = b[columnName];
-
-      let comparison = 0;
-
-      if (valueA > valueB) {
-        comparison = 1;
-      } else if (valueA < valueB) {
-        comparison = -1;
-      }
-
-      return sortDirection === "desc" ? comparison * -1 : comparison;
-    });
-
-    setRowData(sortedData);
-    setSortColumn(columnName);
-    setSortDirection(newSortDirection);
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
   };
 
   return (
-    <div className="p-4">
-      <div className="d-flex justify-between">
-        <h3 className="fw-bold text-muted">Leave Request ({totalLeaves})</h3>
-
-        <button
-          className="btn px-3 d-flex justify-center  aline-center gap-2"
-          onClick={exportToPDF}
-        >
-          <BsFillFileEarmarkPdfFill className="text-danger fs-4" />
-          <p className="my-auto fs-5 fw-bold">PDF</p>
-        </button>
+    <div className="container-fluid">
+      <div className="d-flex flex-column justify-between m-0 mt-3">
+        <div className="d-flex justify-content-between aline-items-center">
+          <div className="my-auto">
+            <h5
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+              className="m-0 p-0 "
+            >
+              Leaves Request ( {approvedLeaves} )
+            </h5>
+            <p
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+              className="m-0 p-0 "
+            >
+              You can see all new leave requests here{" "}
+            </p>
+          </div>
+          <div className="d-flex gap-2 justify-content-between py-3">
+            <button
+              className="btn btn-danger rounded-0 py-0 shadow-sm d-flex justify-center  aline-center gap-2"
+              onClick={exportToPDF}
+            >
+              <BsFillFileEarmarkPdfFill className="fs-6" />
+              <p className="my-auto d-none d-md-flex fs-6">PDF</p>
+            </button>
+            <div className="searchholder p-0 d-flex  position-relative">
+              <input
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  paddingLeft: "15%",
+                }}
+                className="form-control border rounded-0"
+                type="text"
+                placeholder="Search by name"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <LuSearch
+                style={{ position: "absolute", top: "30%", left: "5%" }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="clear-both" />
-      {!loading ? (
+
+      <div>
         <div
-          className="mt-3"
           style={{
+            maxHeight: "76vh",
             overflow: "auto",
-            height: "85vh",
-            width: "100%",
-            scrollbarWidth: "thin",
+            position: "relative",
           }}
+          className="table-responsive border border-1 border-black"
         >
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th
-                  style={{
-                    cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white",
-                  }}
-                  onClick={() => sortData("empID")}
-                >
-                  Employee ID {renderSortIcon("empID")}
-                </th>
-                <th
-                  style={{
-                    cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white",
-                  }}
-                  onClick={() => sortData("Name")}
-                >
-                  Emp Name {renderSortIcon("Name")}
-                </th>
-                <th
-                  style={{
-                    cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white",
-                  }}
-                  onClick={() => sortData("Leavetype")}
-                >
-                  Leave Type {renderSortIcon("Leavetype")}
-                </th>
-                <th
-                  s
-                  style={{
-                    cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white",
-                  }}
-                  onClick={() => sortData("FromDate")}
-                >
-                  Start Date {renderSortIcon("FromDate")}
-                </th>
-                <th
-                  style={{
-                    cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white",
-                  }}
-                  onClick={() => sortData("ToDate")}
-                >
-                  End Date {renderSortIcon("ToDate")}
-                </th>
-                <th
-                  style={{
-                    cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white",
-                  }}
-                  onClick={() => sortData("Status")}
-                >
-                  Status {renderSortIcon("Status")}
-                </th>
-                <th
-                  style={{
-                    cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white",
-                  }}
-                  onClick={() => sortData("Reasonforleave")}
-                >
-                  Remarks {renderSortIcon("Reasonforleave")}
-                </th>
-                <th
-                  style={{
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white",
-                    textAlign: "center",
-                  }}
-                >
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rowData.map((data, index) => (
-                <tr key={index}>
-                  <td className="text-uppercase py-1">{data.empID}</td>
-                  <td className="py-1">{data.Name}</td>
-                  <td className="py-1">{data.Leavetype}</td>
-                  <td className="py-1">{data.FromDate}</td>
-                  <td className="py-1">{data.ToDate}</td>
-                  <td className="py-1">{data.Status}</td>
-                  <td className="py-1">{data.Reasonforleave}</td>
-                  <td className="py-1">
-                    <div
-                      className="d-flex gap-3 py-2"
-                      style={{ cursor: "pointer" }}
-                    >
-                      <p title="Update" className="m-auto text-primary">
-                        <FontAwesomeIcon
-                          className="m-auto"
-                          icon={faEdit}
-                          onClick={() =>
-                            props.onEditLeaveApplicationHR(data.data)
-                          }
-                        />
-                      </p>
-                      <p title="Delete" className="m-auto text-danger">
-                        <FontAwesomeIcon
-                          className="m-auto"
-                          icon={faTrash}
-                          onClick={() =>
-                            onLeaveApplicationHRDelete(
-                              data.data["employee"][0]["_id"],
-                              data.data["_id"]
-                            )
-                          }
-                        />
-                      </p>
-                    </div>
-                  </td>
+          {filteredData.length > 0 ? (
+            <table className="table" style={{ fontSize: ".9rem" }}>
+              <thead>
+                <tr className="shadow">
+                  <th style={rowHeadStyle}>Profile</th>
+                  <th style={rowHeadStyle}>Employee Name</th>
+                  <th style={rowHeadStyle}>Emp ID</th>
+                  <th style={rowHeadStyle}>Leave Type</th>
+                  <th style={rowHeadStyle}>Start Date</th>
+                  <th style={rowHeadStyle}>End Date</th>
+                  <th style={rowHeadStyle}>CreatedOn</th>
+                  <th style={rowHeadStyle}>Days</th>
+                  <th style={rowHeadStyle}>Status</th>
+                  <th style={rowHeadStyle}>Remarks</th>
+                  <th style={rowHeadStyle}>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredData
+                  .filter((e) => e.Status == "Pending")
+                  .map((data, index) => {
+                    return (
+                      <tr key={index}>
+                        <td style={rowBodyStyle} className="py-1">
+                          <div style={{ height: "35px", width: "35px" }}>
+                            <img
+                              style={{
+                                height: "100%",
+                                width: "100%",
+                                borderRadius: "50%",
+                                overflow: "hidden",
+                                objectFit: "cover",
+                              }}
+                              src={
+                                data?.data?.profile?.image_url
+                                  ? data?.data?.profile?.image_url
+                                  : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
+                              }
+                              alt=""
+                            />
+                          </div>
+                        </td>
+                        <td style={rowBodyStyle}>{data.Name}</td>
+                        <td style={rowBodyStyle}>{data.empID}</td>
+                        <td style={rowBodyStyle}>{data.Leavetype}</td>
+                        <td style={rowBodyStyle}>{data.FromDate}</td>
+                        <td style={rowBodyStyle}>{data.ToDate}</td>
+                        <td style={rowBodyStyle}>
+                          <span>{data.CreatedOn}</span>
+                        </td>
+                        <td style={rowBodyStyle}>
+                          <span>{data.Days}</span>
+                        </td>
+                        <td style={rowBodyStyle}>
+                          <span className=" text-white bg-warning px-2 py-0 rounded-5">
+                            {data.Status}
+                          </span>
+                        </td>
+                        <td style={rowBodyStyle}>{data.Reasonforleave}</td>
+                        <td style={rowBodyStyle}>
+                          <div
+                            className="d-flex gap-3 py-2"
+                            style={{ cursor: "pointer" }}
+                          >
+                            <p title="Update" className="m-auto text-primary">
+                              <FontAwesomeIcon
+                                className="m-auto"
+                                icon={faEdit}
+                                onClick={() =>
+                                  props.onEditLeaveApplicationHR(data.data)
+                                }
+                              />
+                            </p>
+                            <p title="Delete" className="m-auto text-danger">
+                              <FontAwesomeIcon
+                                className="m-auto"
+                                icon={faTrash}
+                                onClick={() =>
+                                  onLeaveApplicationHRDelete(
+                                    data.empObjID,
+                                    data.data["_id"]
+                                  )
+                                }
+                              />
+                            </p>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          ) : (
+            <div
+              style={{
+                height: "80vh",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                wordSpacing: "5px",
+                flexDirection: "column",
+                gap: "2rem",
+              }}
+            >
+              <img
+                style={{
+                  height: "auto",
+                  width: "25%",
+                }}
+                src={darkMode ? LeaveDark : LeaveLight}
+                alt="img"
+              />
+              <p
+                style={{
+                  color: darkMode
+                    ? "var(--secondaryDashColorDark)"
+                    : "var( --primaryDashMenuColor)",
+                }}
+              >
+                No Leave requests found.
+              </p>
+            </div>
+          )}
         </div>
-      ) : (
-        <div id="loading-bar">
-          <RingLoader
-            css={override}
-            sizeUnit={"px"}
-            size={50}
-            color={"#0000ff"}
-            loading={true}
-          />
-        </div>
-      )}
+      </div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import {
   MdMenuOpen,
   MdOutlineContacts,
   MdOutlineLocationOn,
-  MdTaskAlt
+  MdTaskAlt,
 } from "react-icons/md";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { LuLayoutDashboard } from "react-icons/lu";
@@ -25,17 +25,17 @@ const Sidebar = (props) => {
     {
       icon: <LuLayoutDashboard />,
       name: "Dashboard",
-      navLinks: [{ to: "/hr/dashboard", label: "Dashboard" }]
+      navLinks: [{ to: "/hr/dashboard", label: "Dashboard" }],
     },
     {
       icon: <PiUsersThree />,
       name: "Employee",
-      navLinks: [{ to: "/hr/employee", label: "Employee List" }]
+      navLinks: [{ to: "/hr/employee", label: "Employee List" }],
     },
     {
       icon: <IoCashOutline />,
       name: "Salary",
-      navLinks: [{ to: "/hr/salary", label: "Salary" }]
+      navLinks: [{ to: "/hr/salary", label: "Salary" }],
     },
     {
       icon: <TbUserCheck />,
@@ -45,8 +45,8 @@ const Sidebar = (props) => {
         { to: "/hr/AttendanceRegister", label: "Attendance Register" },
         { to: "/hr/todaysAttendance", label: "TodaysAttendance" },
         { to: "/hr/viewAttenDance", label: "View Attendance" },
-        { to: "/hr/manualAttand", label: "All Emp Attendance" }
-      ]
+        { to: "/hr/manualAttand", label: "All Emp Attendance" },
+      ],
     },
     {
       icon: <TbBeach />,
@@ -58,8 +58,8 @@ const Sidebar = (props) => {
         { to: "/hr/leaveRejected", label: "Rejected " },
         { to: "/hr/assignLeave", label: "Assign Leave" },
         { to: "/hr/allEmpLeave", label: "All Emp Leave" },
-        { to: "/hr/leaveBalance", label: "Leave Balance" }
-      ]
+        { to: "/hr/leaveBalance", label: "Leave Balance" },
+      ],
     },
     {
       icon: <MdTaskAlt />,
@@ -69,8 +69,8 @@ const Sidebar = (props) => {
         { to: "/hr/ActiveTask", label: "Active Task" },
         { to: "/hr/taskcancle", label: "Cancelled Task" },
         { to: "/hr/taskcomplete", label: "Completed Task" },
-        { to: "/hr/rejectTask", label: "Rejected Task" }
-      ]
+        { to: "/hr/rejectTask", label: "Rejected Task" },
+      ],
     },
     {
       icon: <MdOutlineContacts />,
@@ -78,13 +78,13 @@ const Sidebar = (props) => {
       navLinks: [
         { to: "/hr/role", label: "Role" },
         { to: "/hr/position", label: "Position" },
-        { to: "/hr/department", label: "Department" }
-      ]
+        { to: "/hr/department", label: "Department" },
+      ],
     },
     {
       icon: <HiOutlineBuildingOffice2 />,
       name: "Company",
-      navLinks: [{ to: "/hr/company", label: "Company List" }]
+      navLinks: [{ to: "/hr/company", label: "Company List" }],
     },
     {
       icon: <MdOutlineLocationOn />,
@@ -92,19 +92,19 @@ const Sidebar = (props) => {
       navLinks: [
         { to: "/hr/country", label: "Country" },
         { to: "/hr/state", label: "State" },
-        { to: "/hr/city", label: "City" }
-      ]
+        { to: "/hr/city", label: "City" },
+      ],
     },
     {
       icon: <ImCalendar />,
       name: "Holiday",
-      navLinks: [{ to: "/hr/holiday", label: "Holiday Calendar" }]
+      navLinks: [{ to: "/hr/holiday", label: "Holiday Calendar" }],
     },
     {
       icon: <FaRegCircleUser />,
       name: "Profile",
-      navLinks: [{ to: "/hr/personal-info", label: "Profile" }]
-    }
+      navLinks: [{ to: "/hr/personal-info", label: "Profile" }],
+    },
   ];
 
   const ExtendClick = () => {
@@ -122,7 +122,7 @@ const Sidebar = (props) => {
         borderRight: "1px solid rgba(90, 88, 88, 0.1)",
         backgroundColor: darkMode
           ? "var(--primaryDashMenuColor)"
-          : "var(--primaryDashColorDark)"
+          : "var(--primaryDashColorDark)",
       }}
       className="d-none d-sm-flex flex-column gap-2 p-2"
     >
@@ -145,7 +145,7 @@ const Sidebar = (props) => {
             color: darkMode
               ? "var(--primaryDashColorDark)"
               : "var(--primaryDashMenuColor)",
-            transform: `rotate(${!extended ? "180deg" : "0deg"})`
+            transform: `rotate(${!extended ? "180deg" : "0deg"})`,
           }}
           className="my-auto p-0 fs-4"
         >
@@ -172,7 +172,7 @@ const Sidebar = (props) => {
                     : "var(--primaryDashMenuColor)",
                   height: "3rem",
                   outline: "none",
-                  border: "none"
+                  border: "none",
                 }}
                 className="p-0 text-start gap-2 justify-between w-100 d-flex justify-content-between"
               >
@@ -187,7 +187,7 @@ const Sidebar = (props) => {
                       alignItems: "center",
                       color: darkMode
                         ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)"
+                        : "var(--primaryDashMenuColor)",
                     }}
                     className="m-auto d-flex rounded-5 justify-content-center fs-5"
                   >
@@ -206,7 +206,7 @@ const Sidebar = (props) => {
                       activeCategory === name ? "135deg" : "0deg"
                     })`,
                     transition: "1s ease",
-                    display: !extended ? "none" : "block"
+                    display: !extended ? "none" : "block",
                   }}
                   className="my-auto fs-4"
                 >
@@ -232,7 +232,7 @@ const Sidebar = (props) => {
                         : "var(--primaryDashMenuColor)",
                       height: "3rem",
                       outline: "none",
-                      border: "none"
+                      border: "none",
                     }}
                     className="p-0 text-start gap-2 justify-between w-100 d-flex justify-content-between"
                   >
@@ -247,7 +247,7 @@ const Sidebar = (props) => {
                           alignItems: "center",
                           color: darkMode
                             ? "var(--primaryDashColorDark)"
-                            : "var(--primaryDashMenuColor)"
+                            : "var(--primaryDashMenuColor)",
                         }}
                         className="m-auto d-flex rounded-5 justify-content-center fs-5"
                       >
@@ -273,14 +273,14 @@ const Sidebar = (props) => {
                   backgroundColor: darkMode
                     ? "var(--primaryDashMenuColor)"
                     : "var(--primaryDashColorDark)",
-                  width: "fit-content"
+                  width: "fit-content",
                 }}
                 className="flex-column position-absolute top-0 start-100 py-2 px-1 gap-2 mt-2 shadow-sm"
               >
                 <p
                   style={{
                     display: extended ? "none" : "block",
-                    color: darkMode ? "green" : "orange"
+                    color: darkMode ? "green" : "orange",
                   }}
                   className="m-0 py-0 pl-1 fw-bold"
                 >
@@ -296,7 +296,7 @@ const Sidebar = (props) => {
                       style={{
                         color: darkMode
                           ? "var(--primaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)"
+                          : "var(--primaryDashMenuColor)",
                       }}
                       className="text-decoration-none flex-nowrap text-start gap-3 d-flex justify-content-between "
                     >
@@ -322,13 +322,13 @@ const Sidebar = (props) => {
 const buttonStyle = {
   outline: "none",
   border: "none",
-  height: "3rem"
+  height: "3rem",
 };
 
 const dropdownStyle = {
   width: "250px",
   zIndex: "5",
-  borderLeft: "3px solid white"
+  borderLeft: "3px solid white",
 };
 
 export default Sidebar;

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import "./City.css";
 import axios from "axios";
@@ -75,7 +74,9 @@ const City = () => {
         },
       })
       .then((res) => {
-        console.log("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
+        console.log(
+          "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu"
+        );
         setEditForm(false);
         setTable(true);
       })
@@ -97,11 +98,13 @@ const City = () => {
           <CityTable onAddCity={handleAddCity} onEditCity={handleEditCity} />
         )
       ) : (
-        <CityForm onCitySubmit={handleCitySubmit} onFormClose={handleFormClose} />
+        <CityForm
+          onCitySubmit={handleCitySubmit}
+          onFormClose={handleFormClose}
+        />
       )}
     </React.Fragment>
   );
 };
 
 export default City;
-

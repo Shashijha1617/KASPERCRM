@@ -21,7 +21,6 @@ const HRDash = () => {
           <EmplooyeeLogCount />
         </div>
       </div>
-      {/* <LeaveCount /> */}
       <div className="row row-gap-3 my-2">
         <div className="col-12 col-md-6 col-lg-3">
           <DailyAttendChart />

@@ -26,24 +26,99 @@ const getAllLeaveApplication = async (req, res) => {
 
 // find  all LeaveApplication Admin Hr
 const getAllLeaveApplicationHr = async (req, res) => {
-  LeaveApplication.find()
-    // .populate({ path: "city", populate: { path: "state" } ,populate: { populate: { path: "country" } } })
-    .populate({
-      path: "employee"
-    })
-    // .select(" -role -position -department")
-    // .select("FirstName LastName MiddleName"
-    // )
-    .exec(function (err, leaveApplication) {
-      // console.log(filteredCompany);
-      if (err) {
-        console.log(err);
-        res.send("error");
-      } else {
-        res.send(leaveApplication);
-      }
-    });
+  const { hr, manager } = req.body;
+  if(hr){
+    try {
+      const leaveApplications = await LeaveApplication.aggregate([
+        {
+          $lookup: {
+            from: "employees", // The name of the employee collection
+            localField: "employee", // The field in the LeaveApplication collection that references the employee
+            foreignField: "_id", // The field in the employee collection to match
+            as: "employeeDetails"
+          }
+        },
+        {
+          $unwind: "$employeeDetails"
+        },
+        {
+          $match: {
+            "employeeDetails.reportHr": hr
+          }
+        },
+        {
+          $project: {
+            "FirstName": "$employeeDetails.FirstName",
+            "LastName": "$employeeDetails.LastName",
+            "empID": "$employeeDetails.empID",
+            "Email":"$employeeDetails.Email",
+            "empObjID":"$employeeDetails._id",
+            "Leavetype": 1,
+            "FromDate": 1,
+            "ToDate": 1,
+            "Reasonforleave": 1,
+            "Status": 1,
+            "createdOn": 1,
+            "reasonOfRejection": 1,
+            "updatedBy": 1,
+          }
+        }
+      ]);
+      console.log(leaveApplications);
+  
+      res.send(leaveApplications);
+    } catch (err) {
+      console.log(err);
+      res.send("error");
+    }
+  }else{
+    try {
+      const leaveApplications = await LeaveApplication.aggregate([
+        {
+          $lookup: {
+            from: "employees", // The name of the employee collection
+            localField: "employee", // The field in the LeaveApplication collection that references the employee
+            foreignField: "_id", // The field in the employee collection to match
+            as: "employeeDetails"
+          }
+        },
+        {
+          $unwind: "$employeeDetails"
+        },
+        {
+          $match: {
+            "employeeDetails.reportManager": manager
+          }
+        },
+        {
+          $project: {
+            "FirstName": "$employeeDetails.FirstName",
+            "LastName": "$employeeDetails.LastName",
+            "empID": "$employeeDetails.empID",
+            "Email":"$employeeDetails.Email",
+            "empObjID":"$employeeDetails._id",
+            "Leavetype": 1,
+            "FromDate": 1,
+            "ToDate": 1,
+            "Reasonforleave": 1,
+            "Status": 1,
+            "createdOn": 1,
+            "reasonOfRejection": 1,
+            "updatedBy": 1,
+          }
+        }
+      ]);
+      console.log(leaveApplications);
+  
+      res.send(leaveApplications);
+    } catch (err) {
+      console.log(err);
+      res.send("error");
+    }
+  }
+ 
 };
+
 
 // create a LeaveApplication
 const createLeaveApplication = async (req, res) => {

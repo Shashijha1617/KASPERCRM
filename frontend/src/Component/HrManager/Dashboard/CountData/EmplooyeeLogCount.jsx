@@ -48,8 +48,9 @@ const EmployeeLogCount = (props) => {
     legend: {
       show: true,
       labels: {
-        colors: "white",
+        colors: darkMode ? "black" : "white",
       },
+      position: "top",
     },
   });
 
