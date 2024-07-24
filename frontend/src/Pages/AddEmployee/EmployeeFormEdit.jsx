@@ -3,18 +3,21 @@ import axios from "axios";
 import { Form, Button, Col } from "react-bootstrap";
 import "./EmployeeFormEdit.css";
 import BASE_URL from "../config/config";
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
+import { MdOutlineCancel, MdOutlineDoneAll } from "react-icons/md";
 
 const EmployeeFormEdit = (props) => {
   const [roleData, setRoleData] = useState([]);
   const [positionData, setPositionData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
+  const { darkMode } = useTheme();
   const [filterManagerData, setFilterManagerData] = useState([
-    { Email: props.editData["reportManager"] }
+    { Email: props.editData["reportManager"] },
   ]);
   const [filterHrData, setFilterHrData] = useState([
     {
-      Email: props.editData["reportHr"]
-    }
+      Email: props.editData["reportHr"],
+    },
   ]);
   const [rowData, setRowData] = useState([]);
 
@@ -40,7 +43,7 @@ const EmployeeFormEdit = (props) => {
     props.editData["DateOfJoining"].slice(0, 10)
   );
   const [reportManager, setreportManagerData] = useState([
-    props.editData["reportManager"]
+    props.editData["reportManager"],
   ]);
   const [reportHr, setreportHrData] = useState([props.editData["reportHr"]]);
   console.log(reportManager);
@@ -55,8 +58,8 @@ const EmployeeFormEdit = (props) => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         if (Array.isArray(response.data)) {
@@ -76,7 +79,7 @@ const EmployeeFormEdit = (props) => {
                   : "",
               FirstName: data["FirstName"],
               LastName: data["LastName"],
-              empID: data["empID"]
+              empID: data["empID"],
             };
 
             // Use set function to update state
@@ -95,8 +98,8 @@ const EmployeeFormEdit = (props) => {
     axios
       .get(`${BASE_URL}/api/role`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setRoleData(response.data);
@@ -110,8 +113,8 @@ const EmployeeFormEdit = (props) => {
     axios
       .get(`${BASE_URL}/api/position`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setPositionData(response.data);
@@ -125,8 +128,8 @@ const EmployeeFormEdit = (props) => {
     axios
       .get(`${BASE_URL}/api/department`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setDepartmentData(response.data);
@@ -220,344 +223,334 @@ const EmployeeFormEdit = (props) => {
     props.onStatusChange(e);
   };
   console.log(roleData);
+
+  const DarkandLightColor = {
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+  };
+
   return (
-    <React.Fragment
-      style={{ height: "100vh", width: "100%" }}
-      className="registration-page py-4"
-    >
-      <h2
-        id="role-form-title"
-        className="text-center text-black text-uppercase fw-bold my-4"
+    <div className="container-fluid py-3">
+      <div className="my-auto">
+        <h5 style={DarkandLightColor} className="m-0 fw-bold">
+          Edit Employee Details
+        </h5>
+        <p style={DarkandLightColor} className="m-0">
+          You can edit user details here.
+        </p>
+      </div>
+      <Form
+        className="mt-3"
+        onSubmit={(e) => props.onEmployeeEditUpdate(props.editData, e)}
       >
-        Edit Employee Details
-      </h2>
-      <div id="role-form-outer-div">
-        <Form
-          id="form"
-          onSubmit={(e) => props.onEmployeeEditUpdate(props.editData, e)}
-        >
-          <div className="d-flex w-100 flex-column gap-2 rounded ">
-            <div className="row row-gap-3 ">
-              <div className="form-group col-12 col-md-6">
-                <Form.Label column sm={6}>
-                  Email
-                </Form.Label>
-                <Col sm={10} className="form-input">
-                  <Form.Control
-                    type="email"
-                    placeholder="Email"
-                    required
-                    value={emailData}
-                    disabled
-                    onChange={(value) => onEmailDataChange(value)}
-                  />
-                </Col>
-              </div>
-
-              <div className="form-group col-12 col-md-6">
-                <Form.Label column sm={6}>
-                  Account access
-                </Form.Label>
-                <Col sm={10} className="form-input">
-                  <Form.Control
-                    as="select"
-                    required
-                    onBlur={(e) => managerFilterHandler(e.target.value)}
-                  >
-                    <option value="1" selected={props.editData["Account"] == 1}>
-                      Admin
-                    </option>
-                    <option value="2" selected={props.editData["Account"] == 2}>
-                      HR
-                    </option>
-                    <option value="3" selected={props.editData["Account"] == 3}>
-                      Employee
-                    </option>
-                    <option value="4" selected={props.editData["Account"] == 4}>
-                      Manager
-                    </option>
-                  </Form.Control>
-                </Col>
-              </div>
-
-              <div className="form-group col-12 col-md-6">
-                <Form.Label column sm={6}>
-                  Role
-                </Form.Label>
-                <Col sm={10} className="form-input">
-                  <Form.Control as="select" name="role">
-                    <option disabled selected>
-                      Select your option
-                    </option>
-                    {roleData.map((data, index) => (
-                      <option
-                        key={index}
-                        value={data["_id"]}
-                        selected={
-                          props.editData["role"][0]["_id"] == data["_id"]
-                        }
-                      >
-                        {data["RoleName"]}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Col>
-              </div>
-              <div className="form-group col-12 col-md-6">
-                <Form.Label as="legend" column sm={6}>
-                  Gender
-                </Form.Label>
-                <Col sm={10}>
-                  <Form.Check
-                    inline
-                    type="radio"
-                    label="Male"
-                    value="male"
-                    name="gender"
-                    onChange={onGenderChange}
-                    checked={genderData == "male"}
-                    required
-                  />
-                  <Form.Check
-                    inline
-                    type="radio"
-                    label="Female"
-                    value="female"
-                    name="gender"
-                    onChange={onGenderChange}
-                    checked={genderData == "female"}
-                    required
-                  />
-                </Col>
-              </div>
-              <div className="form-group col-12 col-md-6">
-                <Form.Label column sm={6}>
-                  First Name
-                </Form.Label>
-                <Col sm={10} className="form-input">
-                  <Form.Control
-                    type="text"
-                    placeholder="First Name"
-                    required
-                    value={firstNameData}
-                    onChange={(value) => onFirstNameDataChange(value)}
-                  />
-                </Col>
-              </div>
-
-              <div className="form-group col-12 col-md-6">
-                <Form.Label column sm={6}>
-                  Last Name
-                </Form.Label>
-                <Col sm={10} className="form-input">
-                  <Form.Control
-                    type="text"
-                    placeholder="Last Name"
-                    required
-                    value={lastNameData}
-                    onChange={(value) => onLastNameDataChange(value)}
-                  />
-                </Col>
-              </div>
-              <div className="form-group col-12 col-md-6">
-                <Form.Label column sm={6}>
-                  DOB
-                </Form.Label>
-                <Col sm={10} className="form-input">
-                  <Form.Control
-                    type="date"
-                    placeholder="DOB"
-                    required
-                    //   value={this.props.editData["DOB"].slice(0, 10)}
-                    value={dobData}
-                    onChange={(value) => onDOBDataChange(value)}
-                  />
-                </Col>
-              </div>
-              <div className="form-group col-12 col-md-6">
-                <Form.Label column sm={6}>
-                  Contact No
-                </Form.Label>
-                <Col sm={10} className="form-input">
-                  <Form.Control
-                    type="text"
-                    placeholder="Contact No "
-                    required
-                    value={contactNoData}
-                    onChange={(value) => onContactNoDataChange(value)}
-                  />
-                </Col>
-              </div>
-
-              <div className="form-group col-12 col-md-6">
-                <Form.Label column sm={6}>
-                  Department
-                </Form.Label>
-                <Col sm={10} className="form-input">
-                  <Form.Control as="select" name="department" required>
-                    <option value="" disabled selected>
-                      Select your option
-                    </option>
-                    {departmentData.map((data, index) => (
-                      <option
-                        key={index}
-                        value={data["_id"]}
-                        selected={
-                          props.editData["department"][0]["_id"] == data["_id"]
-                        }
-                      >
-                        {data["DepartmentName"]}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Col>
-              </div>
-
-              <div className="form-group col-12 col-md-6">
-                <Form.Label column sm={6}>
-                  Position
-                </Form.Label>
-                <Col sm={10} className="form-input">
-                  <Form.Control as="select" name="position" required>
-                    <option value="" disabled selected>
-                      Select your option
-                    </option>
-                    {positionData.map((data, index) => (
-                      <option
-                        key={index}
-                        value={data["_id"]}
-                        selected={
-                          props.editData["position"][0]["_id"] == data["_id"]
-                        }
-                      >
-                        {data["PositionName"]}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Col>
-              </div>
-              <div className="form-group col-12 col-md-6">
-                <Form.Label column sm={6}>
-                  Date Of Joining
-                </Form.Label>
-                <Col sm={10} className="form-input">
-                  <Form.Control
-                    type="date"
-                    placeholder="Date Of Joining"
-                    required
-                    // value={this.props.editData["DateOfJoining"].slice(0, 10)}
-                    value={dateOfJoiningData}
-                    onChange={(value) => onDateOfJoiningDataChange(value)}
-                  />
-                </Col>
-              </div>
-
-              <div className="form-group col-12 col-md-6">
-                <Form.Label column sm={6}>
-                  Profile Image
-                </Form.Label>
-                <Col sm={10} className="form-input">
-                  <Form.Control
-                    type="file"
-                    //  value={profile}
-                    //  onChange={(value) => onProfileDataChange(value)}
-                  />
-                </Col>
-              </div>
-
-              <div className="form-group col-12 col-md-6 p-0">
-                <Form.Label column sm={12}>
-                  Reporting Manager
-                </Form.Label>
-                <Col sm={12} className="form-input">
-                  <Form.Control as="select" name="manager">
-                    <option disabled selected>
-                      Select your option
-                    </option>
-
-                    {filterManagerData.map((data, index) => (
-                      <option
-                        key={index}
-                        value={data["Email"]}
-                        selected={props.editData["reportManager"]}
-                      >
-                        {data["Email"]}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Col>
-              </div>
-              <div className="form-group col-12 col-md-6 p-0">
-                <Form.Label column sm={12}>
-                  Reporting Hr
-                </Form.Label>
-                <Col sm={12} className="form-input">
-                  <Form.Control as="select" name="hr">
-                    <option disabled selected>
-                      Select your option
-                    </option>
-                    {filterHrData.map((data, index) => (
-                      <option
-                        key={index}
-                        value={data["Email"]}
-                        selected={props.editData["reportHr"]}
-                      >
-                        {data["Email"]}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Col>
-              </div>
-              <div className="form-group col-12 col-md-6">
-                <Form.Label as="legend" column sm={6}>
-                  Status
-                </Form.Label>
-                <Col sm={10}>
-                  <Form.Check
-                    inline
-                    type="radio"
-                    label="active"
-                    value="active"
-                    name="status"
-                    onChange={onStatusChange}
-                    checked={status == "active"}
-                    required
-                  />
-                  <Form.Check
-                    inline
-                    type="radio"
-                    label="Inactive"
-                    value="Inactive"
-                    name="status"
-                    onChange={onStatusChange}
-                    checked={status == "Inactive"}
-                    required
-                  />
-                </Col>
-              </div>
-              <div
-                className="form-group col-12 col-md-6"
-                id="form-submit-button"
-              >
-                <Col sm={{ span: 10, offset: 2 }}>
-                  <Button type="submit">Submit</Button>
-                </Col>
-              </div>
-              <div
-                className="form-group col-12 col-md-6"
-                id="form-cancel-button"
-              >
-                <Col sm={{ span: 10, offset: 2 }} id="form-cancel-button-inner">
-                  <Button type="reset" onClick={onFormClose}>
-                    cancel
-                  </Button>
-                </Col>
+        <div className="d-flex w-100 flex-column gap-2 rounded ">
+          <div className="row row-gap-3 ">
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>Email</label>
+              <div className="form-input">
+                <input
+                  className="form-control rounded-0"
+                  type="email"
+                  placeholder="Email"
+                  required
+                  value={emailData}
+                  disabled
+                  onChange={(value) => onEmailDataChange(value)}
+                />
               </div>
             </div>
+
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>Account access</label>
+              <div className="form-input">
+                <select
+                  className="form-select rounded-0"
+                  as="select"
+                  required
+                  onBlur={(e) => managerFilterHandler(e.target.value)}
+                >
+                  <option value="1" selected={props.editData["Account"] == 1}>
+                    Admin
+                  </option>
+                  <option value="2" selected={props.editData["Account"] == 2}>
+                    HR
+                  </option>
+                  <option value="3" selected={props.editData["Account"] == 3}>
+                    Employee
+                  </option>
+                  <option value="4" selected={props.editData["Account"] == 4}>
+                    Manager
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>Role</label>
+              <div className="form-input">
+                <select className="form-select rounded-0" name="role">
+                  <option disabled selected>
+                    Select your option
+                  </option>
+                  {roleData.map((data, index) => (
+                    <option
+                      key={index}
+                      value={data["_id"]}
+                      selected={props.editData["role"][0]["_id"] == data["_id"]}
+                    >
+                      {data["RoleName"]}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>Gender</label>
+              <div className="d-flex align-items-center gap-2">
+                <Form.Check
+                  style={DarkandLightColor}
+                  className="d-flex align-items-center gap-2"
+                  inline
+                  type="radio"
+                  label="Male"
+                  value="male"
+                  name="gender"
+                  onChange={onGenderChange}
+                  checked={genderData == "male"}
+                  required
+                />
+                <Form.Check
+                  style={DarkandLightColor}
+                  className="d-flex align-items-center gap-2"
+                  inline
+                  type="radio"
+                  label="Female"
+                  value="female"
+                  name="gender"
+                  onChange={onGenderChange}
+                  checked={genderData == "female"}
+                  required
+                />
+              </div>
+            </div>
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>First Name</label>
+              <div className="form-input">
+                <input
+                  className="form-control rounded-0"
+                  type="text"
+                  placeholder="First Name"
+                  required
+                  value={firstNameData}
+                  onChange={(value) => onFirstNameDataChange(value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>Last Name</label>
+              <div className="form-input">
+                <input
+                  className="form-control rounded-0"
+                  type="text"
+                  placeholder="Last Name"
+                  required
+                  value={lastNameData}
+                  onChange={(value) => onLastNameDataChange(value)}
+                />
+              </div>
+            </div>
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>DOB</label>
+              <div className="form-input">
+                <input
+                  className="form-control rounded-0"
+                  type="date"
+                  placeholder="DOB"
+                  required
+                  //   value={this.props.editData["DOB"].slice(0, 10)}
+                  value={dobData}
+                  onChange={(value) => onDOBDataChange(value)}
+                />
+              </div>
+            </div>
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>Contact No</label>
+              <div className="form-input">
+                <input
+                  className="form-control rounded-0"
+                  type="text"
+                  placeholder="Contact No "
+                  required
+                  value={contactNoData}
+                  onChange={(value) => onContactNoDataChange(value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>Department</label>
+              <div className="form-input">
+                <select
+                  className="form-select rounded-0"
+                  name="department"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Select your option
+                  </option>
+                  {departmentData.map((data, index) => (
+                    <option
+                      key={index}
+                      value={data["_id"]}
+                      selected={
+                        props.editData["department"][0]["_id"] == data["_id"]
+                      }
+                    >
+                      {data["DepartmentName"]}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>Position</label>
+              <div className="form-input">
+                <select
+                  className="form-select rounded-0"
+                  name="position"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Select your option
+                  </option>
+                  {positionData.map((data, index) => (
+                    <option
+                      key={index}
+                      value={data["_id"]}
+                      selected={
+                        props.editData["position"][0]["_id"] == data["_id"]
+                      }
+                    >
+                      {data["PositionName"]}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>Date Of Joining</label>
+              <div className="form-input">
+                <input
+                  className="form-control rounded-0"
+                  type="date"
+                  placeholder="Date Of Joining"
+                  required
+                  // value={this.props.editData["DateOfJoining"].slice(0, 10)}
+                  value={dateOfJoiningData}
+                  onChange={(value) => onDateOfJoiningDataChange(value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>Profile Image</label>
+              <div className="form-input">
+                <input
+                  className="form-control rounded-0"
+                  type="file"
+                  //  value={profile}
+                  //  onChange={(value) => onProfileDataChange(value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>Reporting Manager</label>
+              <div className="form-input">
+                <select className="form-select rounded-0" name="manager">
+                  <option disabled selected>
+                    Select your option
+                  </option>
+
+                  {filterManagerData.map((data, index) => (
+                    <option
+                      key={index}
+                      value={data["Email"]}
+                      selected={props.editData["reportManager"]}
+                    >
+                      {data["Email"]}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>Reporting Hr</label>
+              <div className="form-input">
+                <select className="form-select rounded-0" name="hr">
+                  <option disabled selected>
+                    Select your option
+                  </option>
+                  {filterHrData.map((data, index) => (
+                    <option
+                      key={index}
+                      value={data["Email"]}
+                      selected={props.editData["reportHr"]}
+                    >
+                      {data["Email"]}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="col-12 col-md-6 col-lg-4">
+              <label style={DarkandLightColor}>Status</label>
+              <div className="d-flex align-items-center gap-2">
+                <Form.Check
+                  style={DarkandLightColor}
+                  className="d-flex align-items-center gap-2"
+                  inline
+                  type="radio"
+                  label="active"
+                  value="active"
+                  name="status"
+                  onChange={onStatusChange}
+                  checked={status == "active"}
+                  required
+                />
+                <Form.Check
+                  style={DarkandLightColor}
+                  className="d-flex align-items-center gap-2"
+                  inline
+                  type="radio"
+                  label="Inactive"
+                  value="Inactive"
+                  name="status"
+                  onChange={onStatusChange}
+                  checked={status == "Inactive"}
+                  required
+                />
+              </div>
+            </div>
+            <div className="d-flex align-items-center gap-3">
+              <button className="btn btn-primary" type="submit">
+                <MdOutlineDoneAll /> Submit
+              </button>
+              <button
+                className="btn btn-danger"
+                type="reset"
+                onClick={onFormClose}
+              >
+                <MdOutlineCancel /> cancel
+              </button>
+            </div>
           </div>
-        </Form>
-      </div>
-    </React.Fragment>
+        </div>
+      </Form>
+    </div>
   );
 };
 

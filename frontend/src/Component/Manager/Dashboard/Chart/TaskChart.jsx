@@ -209,10 +209,16 @@ const TaskChart = () => {
       className="ChartCard shadow py-2 px-3 pt-3"
     >
       <div className="ChartHeader">
-        <h5 className="fw-bolder d-flex gap-3 ">
-          <FaChartLine className="my-auto" />
+        <h6
+          style={{
+            width: "fit-content",
+            boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
+            color: "var(--primaryDashColorDark)",
+          }}
+          className="fw-bolder d-flex px-3 rounded-5 py-1"
+        >
           Task Progress Report
-        </h5>
+        </h6>
       </div>
       <div className="chartBody">
         <Chart

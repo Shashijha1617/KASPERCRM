@@ -3,6 +3,8 @@ import axios from "axios";
 import { Form, Button, Col } from "react-bootstrap";
 import { TbUsersPlus } from "react-icons/tb";
 import BASE_URL from "../config/config";
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
+import { MdOutlineCancel, MdOutlineDoneAll } from "react-icons/md";
 
 const EmployeeForm = (props) => {
   const [roleData, setRoleData] = useState([]);
@@ -11,6 +13,7 @@ const EmployeeForm = (props) => {
   const [rowData, setRowData] = useState([]);
   const [filterManagerData, setFilterManagerData] = useState([]);
   const [filterHrData, setFilterHrData] = useState([]);
+  const { darkMode } = useTheme();
   useEffect(() => {
     loadRoleInfo();
     loadPositionInfo();
@@ -21,8 +24,8 @@ const EmployeeForm = (props) => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         if (Array.isArray(response.data)) {
@@ -42,7 +45,7 @@ const EmployeeForm = (props) => {
                   : "",
               FirstName: data["FirstName"],
               LastName: data["LastName"],
-              empID: data["empID"]
+              empID: data["empID"],
             };
 
             // Use set function to update state
@@ -60,8 +63,8 @@ const EmployeeForm = (props) => {
     axios
       .get(`${BASE_URL}/api/role`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setRoleData(response.data);
@@ -75,8 +78,8 @@ const EmployeeForm = (props) => {
     axios
       .get(`${BASE_URL}/api/position`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setPositionData(response.data);
@@ -90,8 +93,8 @@ const EmployeeForm = (props) => {
     axios
       .get(`${BASE_URL}/api/department`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setDepartmentData(response.data);
@@ -123,521 +126,401 @@ const EmployeeForm = (props) => {
   };
   console.log(filterHrData);
   return (
-    <div className="container-fluid">
-      <h4
-        style={{ position: "sticky", top: "-.5rem", zIndex: "5" }}
-        className="text-muted d-flex gap-2 align-items-center bg-light py-3 text-capitalize fw-bold"
-      >
-        <TbUsersPlus />
-        Create New Employee
-      </h4>
-      <div className="row">
-        <div className="col-4"></div>
-        <div className="col-8">
-          {" "}
-          <Form
-            id="form"
-            onSubmit={props.onEmployeeSubmit}
-            className=" d-flex flex-column p-2 mb-5 rounded shadow-sm "
-            encType="multipart/form-data"
-          >
-            <div
-              style={{ letterSpacing: ".1rem" }}
-              className="d-flex w-100 fw-bold text-muted flex-column rounded "
+    <div className="container-fluid py-3">
+      <div className="my-auto">
+        <h5
+          style={{
+            color: darkMode
+              ? "var(--secondaryDashColorDark)"
+              : "var(--secondaryDashMenuColor)",
+            fontWeight: "600",
+          }}
+          className="m-0"
+        >
+          Create New Employee
+        </h5>
+        <p
+          style={{
+            color: darkMode
+              ? "var(--secondaryDashColorDark)"
+              : "var(--secondaryDashMenuColor)",
+          }}
+          className="m-0"
+        >
+          You can create new user here.
+        </p>
+      </div>
+
+      <div className="container-fluid">
+        <form
+          onSubmit={props.onEmployeeSubmit}
+          className=" row mt-3 m-0"
+          encType="multipart/form-data"
+        >
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
             >
-              <div className="row row-gap-1 ">
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    Email
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control type="email" placeholder="Email" />
-                  </Col>
-                </div>
-
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    Password
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control type="password" placeholder="Password" />
-                  </Col>
-                </div>
-
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    Account access
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control
-                      as="select"
-                      onBlur={(e) => managerFilterHandler(e.target.value)}
-                    >
-                      <option value="1">Admin</option>
-                      <option value="2">HR</option>
-                      <option value="3">Employee</option>
-                      <option value="4">Manager</option>
-                    </Form.Control>
-                  </Col>
-                </div>
-
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    Role
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control as="select" name="role">
-                      <option disabled selected>
-                        Select your option
-                      </option>
-                      {roleData.map((data, index) => (
-                        <option key={index} value={data["_id"]}>
-                          {data["RoleName"]}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Col>
-                </div>
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label as="legend" column sm={12}>
-                    Gender
-                  </Form.Label>
-                  <Col className="my-1" sm={12}>
-                    <Form.Check
-                      inline
-                      type="radio"
-                      label="Male"
-                      value="male"
-                      name="gender"
-                      onChange={props.onGenderChange}
-                    />
-                    <Form.Check
-                      inline
-                      type="radio"
-                      label="Female"
-                      value="female"
-                      name="gender"
-                      onChange={props.onGenderChange}
-                    />
-                  </Col>
-                </div>
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    First Name
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control type="text" placeholder="First Name" />
-                  </Col>
-                </div>
-                {/* <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    Middle Name
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control type="text" placeholder="Middle Name" />
-                  </Col>
-                </div> */}
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    Last Name
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control type="text" placeholder="Last Name" />
-                  </Col>
-                </div>
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    DOB
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control type="date" placeholder="DOB" />
-                  </Col>
-                </div>
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    Contact No
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control type="text" placeholder="Contact No " />
-                  </Col>
-                </div>
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    Department
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control as="select" name="department">
-                      <option value="" disabled selected>
-                        Select your option
-                      </option>
-                      {departmentData.map((data, index) => (
-                        <option key={index} value={data["_id"]}>
-                          {data["DepartmentName"]}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Col>
-                </div>
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    Position
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control as="select" name="position">
-                      <option value="" disabled selected>
-                        Select your option
-                      </option>
-                      {positionData.map((data, index) => (
-                        <option key={index} value={data["_id"]}>
-                          {data["PositionName"]}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Col>
-                </div>
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    Date Of Joining
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control type="date" placeholder="Date Of Joining" />
-                  </Col>
-                </div>
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    Profile Image
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control type="file" />
-                  </Col>
-                </div>
-
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    Reporting Manager
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control as="select" name="role">
-                      <option selected>Select your option</option>
-                      {filterManagerData.map((data, index) => (
-                        <option key={index} value={data["Email"]}>
-                          {data["Email"]}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Col>
-                </div>
-                <div className="form-group col-12 col-md-6 p-0">
-                  <Form.Label column sm={12}>
-                    Reporting Hr
-                  </Form.Label>
-                  <Col sm={12} className="form-input">
-                    <Form.Control as="select" name="role">
-                      <option selected>Select your option</option>
-                      {filterHrData.map((data, index) => (
-                        <option key={index} value={data.Email}>
-                          {data.Email}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Col>
-                </div>
-                <div
-                  className="form-group col-12 d-flex  gap-5"
-                  id="form-submit-button"
-                >
-                  <Button
-                    className="mx-2 px-5 rounded-5 fw-bold"
-                    style={{
-                      backgroundColor: "var(--primaryDashColorDark)",
-                      color: "var(--primaryDashMenuColor)",
-                      border: "none",
-                      outline: "none"
-                    }}
-                    type="submit"
-                  >
-                    Submit
-                  </Button>
-                  <button
-                    className="mx-2 px-5 fw-bold rounded-5 "
-                    style={{
-                      backgroundColor: "red",
-                      color: "white",
-                      border: "none",
-                      outline: "none"
-                    }}
-                    type="reset"
-                    onClick={props.onFormClose}
-                  >
-                    cancel
-                  </button>
-                </div>
-                <div
-                  className="form-group col-12 col-md-6 p-0"
-                  id="form-cancel-button"
-                ></div>
-              </div>
+              Email
+            </label>
+            <div className="form-input">
+              <input
+                className="form-control rounded-0"
+                type="email"
+                placeholder="Email"
+              />
             </div>
-          </Form>
-        </div>
+          </div>
+
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              Password
+            </label>
+            <div className="form-input">
+              <input
+                className="form-control rounded-0"
+                type="password"
+                placeholder="Password"
+              />
+            </div>
+          </div>
+
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              Account access
+            </label>
+            <div className="form-input">
+              <select
+                className="form-select rounded-0"
+                as="select"
+                onBlur={(e) => managerFilterHandler(e.target.value)}
+              >
+                <option value="1">Admin</option>
+                <option value="2">HR</option>
+                <option value="3">Employee</option>
+                <option value="4">Manager</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              Role
+            </label>
+            <div className="form-input">
+              <select className="form-select rounded-0" as="select" name="role">
+                <option disabled selected>
+                  Select your option
+                </option>
+                {roleData.map((data, index) => (
+                  <option key={index} value={data["_id"]}>
+                    {data["RoleName"]}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              Gender
+            </label>
+            <div className="d-flex align-items-center gap-2">
+              <Form.Check
+                style={{
+                  color: darkMode
+                    ? "var(--secondaryDashColorDark)"
+                    : "var(--secondaryDashMenuColor)",
+                }}
+                className="d-flex align-items-center gap-2"
+                inline
+                type="radio"
+                label="Male"
+                value="male"
+                name="gender"
+                onChange={props.onGenderChange}
+              />
+              <Form.Check
+                inline
+                style={{
+                  color: darkMode
+                    ? "var(--secondaryDashColorDark)"
+                    : "var(--secondaryDashMenuColor)",
+                }}
+                className="d-flex align-items-center gap-2"
+                type="radio"
+                label="Female"
+                value="female"
+                name="gender"
+                onChange={props.onGenderChange}
+              />
+            </div>
+          </div>
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              First Name
+            </label>
+            <div className="form-input">
+              <input
+                className="form-control rounded-0"
+                type="text"
+                placeholder="First Name"
+              />
+            </div>
+          </div>
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              Last Name
+            </label>
+            <div className="form-input">
+              <input
+                className="form-control rounded-0"
+                type="text"
+                placeholder="Last Name"
+              />
+            </div>
+          </div>
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              DOB
+            </label>
+            <div className="form-input">
+              <input
+                className="form-control rounded-0"
+                type="date"
+                placeholder="DOB"
+              />
+            </div>
+          </div>
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              Contact No
+            </label>
+            <div className="form-input">
+              <input
+                className="form-control rounded-0"
+                type="text"
+                placeholder="Contact No "
+              />
+            </div>
+          </div>
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              Department
+            </label>
+            <div className="form-input">
+              <select
+                className="form-select rounded-0"
+                as="select"
+                name="department"
+              >
+                <option value="" disabled selected>
+                  Select your option
+                </option>
+                {departmentData.map((data, index) => (
+                  <option key={index} value={data["_id"]}>
+                    {data["DepartmentName"]}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              Position
+            </label>
+            <div className="form-input">
+              <select
+                className="form-select rounded-0"
+                as="select"
+                name="position"
+              >
+                <option value="" disabled selected>
+                  Select your option
+                </option>
+                {positionData.map((data, index) => (
+                  <option key={index} value={data["_id"]}>
+                    {data["PositionName"]}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              Date Of Joining
+            </label>
+            <div className="form-input">
+              <input
+                className="form-control rounded-0"
+                type="date"
+                placeholder="Date Of Joining"
+              />
+            </div>
+          </div>
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              Profile Image
+            </label>
+            <div className="form-input">
+              <input className="form-control rounded-0" type="file" />
+            </div>
+          </div>
+
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              Reporting Manager
+            </label>
+            <div className="form-input">
+              <select className="form-select rounded-0" as="select" name="role">
+                <option selected>Select your option</option>
+                {filterManagerData.map((data, index) => (
+                  <option key={index} value={data["Email"]}>
+                    {data["Email"]}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="col-12 col-md-6 col-lg-4">
+            <label
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+            >
+              Reporting Hr
+            </label>
+            <div className="form-input">
+              <select className="form-select rounded-0" as="select" name="role">
+                <option selected>Select your option</option>
+                {filterHrData.map((data, index) => (
+                  <option key={index} value={data.Email}>
+                    {data.Email}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div
+            className="form-group col-12 d-flex  gap-5"
+            id="form-submit-button"
+          >
+            <button
+              className="btn btn-primary"
+              style={{
+                backgroundColor: "var(--primaryDashColorDark)",
+                color: "var(--primaryDashMenuColor)",
+                border: "none",
+                outline: "none",
+              }}
+              type="submit"
+            >
+              <MdOutlineDoneAll /> Submit
+            </button>
+            <button
+              className="btn btn-danger"
+              style={{
+                backgroundColor: "red",
+                color: "white",
+                border: "none",
+                outline: "none",
+              }}
+              type="reset"
+              onClick={props.onFormClose}
+            >
+              <MdOutlineCancel /> cancel
+            </button>
+          </div>
+          <div
+            className="col-12 col-md-6 col-lg-4"
+            id="form-cancel-button"
+          ></div>
+        </form>
       </div>
     </div>
-
-    // <div className="registration-page py-4 ">
-    //   <h2 className="text-center text-black text-uppercase fw-bold my-4">
-    //     Add New Employee
-    //   </h2>
-
-    //   <Form
-    //     id="form"
-    //     onSubmit={props.onEmployeeSubmit}
-    //     className="container d-flex flex-column m-10 empForm"
-    //     encType="multipart/form-data"
-    //   >
-    //     <div className="d-flex w-100 flex-column gap-6 rounded ">
-    //       <div style={{ padding: "80px" }} className="row row-gap-3 ">
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Email
-    //           </Form.Label>
-
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control type="email" placeholder="Email" />
-    //           </Col>
-    //         </div>
-
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Password
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control type="password" placeholder="Password" />
-    //           </Col>
-    //         </div>
-
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Account access
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control
-    //               as="select"
-    //               onBlur={(e) => managerFilterHandler(e.target.value)}
-    //             >
-    //               <option value="1">Admin</option>
-    //               <option value="2">HR</option>
-    //               <option value="3">Employee</option>
-    //               <option value="4">Manager</option>
-    //             </Form.Control>
-    //           </Col>
-    //         </div>
-
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Role
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control as="select" name="role">
-    //               <option disabled selected>
-    //                 Select your option
-    //               </option>
-    //               {roleData.map((data, index) => (
-    //                 <option key={index} value={data["_id"]}>
-    //                   {data["RoleName"]}
-    //                 </option>
-    //               ))}
-    //             </Form.Control>
-    //           </Col>
-    //         </div>
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label as="legend" column sm={6}>
-    //             Gender
-    //           </Form.Label>
-    //           <Col sm={10}>
-    //             <Form.Check
-    //               inline
-    //               type="radio"
-    //               label="Male"
-    //               value="male"
-    //               name="gender"
-    //               onChange={props.onGenderChange}
-    //             />
-    //             <Form.Check
-    //               inline
-    //               type="radio"
-    //               label="Female"
-    //               value="female"
-    //               name="gender"
-    //               onChange={props.onGenderChange}
-    //             />
-    //           </Col>
-    //         </div>
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             First Name
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control type="text" placeholder="First Name" />
-    //           </Col>
-    //         </div>
-    //         {/* <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Middle Name
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control type="text" placeholder="Middle Name" />
-    //           </Col>
-    //         </div> */}
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Last Name
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control type="text" placeholder="Last Name" />
-    //           </Col>
-    //         </div>
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             DOB
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control type="date" placeholder="DOB" />
-    //           </Col>
-    //         </div>
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Contact No
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control type="text" placeholder="Contact No " />
-    //           </Col>
-    //         </div>
-    //         {/* <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Employee Code
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control
-    //               type="text"
-    //               placeholder="Employee Code"
-
-    //             />
-    //           </Col>
-    //         </div> */}
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Department
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control as="select" name="department">
-    //               <option value="" disabled selected>
-    //                 Select your option
-    //               </option>
-    //               {departmentData.map((data, index) => (
-    //                 <option key={index} value={data["_id"]}>
-    //                   {data["DepartmentName"]}
-    //                 </option>
-    //               ))}
-    //             </Form.Control>
-    //           </Col>
-    //         </div>
-
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Position
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control as="select" name="position">
-    //               <option value="" disabled selected>
-    //                 Select your option
-    //               </option>
-    //               {positionData.map((data, index) => (
-    //                 <option key={index} value={data["_id"]}>
-    //                   {data["PositionName"]}
-    //                 </option>
-    //               ))}
-    //             </Form.Control>
-    //           </Col>
-    //         </div>
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Date Of Joining
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control type="date" placeholder="Date Of Joining" />
-    //           </Col>
-    //         </div>
-
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Profile Image
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control type="file" />
-    //           </Col>
-    //         </div>
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Reporting Manager
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control as="select" name="role">
-    //               <option selected>Select your option</option>
-    //               {filterManagerData.map((data, index) => (
-    //                 <option key={index} value={data["Email"]}>
-    //                   {data["Email"]}
-    //                 </option>
-    //               ))}
-    //             </Form.Control>
-    //           </Col>
-    //         </div>
-    //         <div className="form-group col-12 col-md-6">
-    //           <Form.Label column sm={6}>
-    //             Reporting Hr
-    //           </Form.Label>
-    //           <Col sm={10} className="form-input">
-    //             <Form.Control as="select" name="role">
-    //               <option selected>Select your option</option>
-    //               {filterHrData.map((data, index) => (
-    //                 <option key={index} value={data.Email}>
-    //                   {data.Email}
-    //                 </option>
-    //               ))}
-    //             </Form.Control>
-    //           </Col>
-    //         </div>
-
-    //         {/* <div className="form-group col-12 col-md-6">
-    //         <label>
-    //           Terminate Date
-    //         </label>
-    //         <Col sm={10} className="form-input">
-    //           <Form.Control
-    //             type="date"
-    //             placeholder="Terminate Date"
-    //           />
-    //         </Col>
-    //       </div> */}
-
-    //         <div
-    //           className="form-group col-12 d-flex  gap-5"
-    //           id="form-submit-button"
-    //         >
-    //           <Button className="mx-3" type="submit">
-    //             Submit
-    //           </Button>
-    //           <Button className="mx-3" type="reset" onClick={props.onFormClose}>
-    //             cancel
-    //           </Button>
-    //         </div>
-    //         <div
-    //           className="form-group col-12 col-md-6"
-    //           id="form-cancel-button"
-    //         ></div>
-    //       </div>
-    //     </div>
-    //   </Form>
-    // </div>
   );
 };
 

@@ -3,7 +3,11 @@ import "./EmployeeTable.css";
 import { LuSearch } from "react-icons/lu";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faEdit, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faEdit,
+  faInfoCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -13,8 +17,7 @@ import { FcNumericalSorting12, FcNumericalSorting21 } from "react-icons/fc";
 import BASE_URL from "../config/config";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { GrFormPrevious } from "react-icons/gr";
-import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import Pagination from "../../Utils/Pagination";
 
@@ -39,7 +42,7 @@ const AdminEmployeeTable = (props) => {
   const [itemsPerPage] = useState(10);
   const { darkMode } = useTheme();
 
-  const isFilterApplied = selectedFilter !== '';
+  const isFilterApplied = selectedFilter !== "";
 
   const loadEmployeeData = () => {
     axios
@@ -63,12 +66,12 @@ const AdminEmployeeTable = (props) => {
                 data["Account"] === 1
                   ? "Admin"
                   : data["Account"] === 2
-                    ? "HR"
-                    : data["Account"] === 3
-                      ? "Employee"
-                      : data["Account"] === 4
-                        ? "Manager"
-                        : "",
+                  ? "HR"
+                  : data["Account"] === 3
+                  ? "Employee"
+                  : data["Account"] === 4
+                  ? "Manager"
+                  : "",
               RoleName: data["role"][0] ? data["role"][0]["RoleName"] : "",
               FirstName: data["FirstName"],
               MiddleName: data["MiddleName"],
@@ -274,15 +277,13 @@ const AdminEmployeeTable = (props) => {
 
   filteredData = filteredData.sort(sortById);
 
-  const allCount = filteredData.filter((data) => data.Account === "").length;
-  const adminCount = filteredData.filter(
-    (data) => data.Account === "Admin"
-  ).length;
-  const hrCount = filteredData.filter((data) => data.Account === "HR").length;
-  const managerCount = filteredData.filter(
+  const allCount = rowData.filter((data) => data.Account === "").length;
+  const adminCount = rowData.filter((data) => data.Account === "Admin").length;
+  const hrCount = rowData.filter((data) => data.Account === "HR").length;
+  const managerCount = rowData.filter(
     (data) => data.Account === "Manager"
   ).length;
-  const employeeCount = filteredData.filter(
+  const employeeCount = rowData.filter(
     (data) => data.Account === "Employee"
   ).length;
 
@@ -303,6 +304,21 @@ const AdminEmployeeTable = (props) => {
     pageNumbers.push(i);
   }
 
+  const rowHeadStyle = {
+    cursor: "pointer",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "-10px",
+    zIndex: "1",
+  };
+
   return (
     <div className="py-0">
       <div
@@ -311,21 +327,20 @@ const AdminEmployeeTable = (props) => {
           top: "0",
           zIndex: "3",
           background: darkMode
-            ? "var(--secondaryDashMenuColor)"
-            : "var(--secondaryDashColorDark)",
+            ? "var(--primaryDashMenuColor)"
+            : "var(--primaryDashColorDark)",
           color: darkMode
             ? "var(--primaryDashColorDark)"
-            : "var(--primaryDashMenuColor)",
+            : "var(--secondaryDashMenuColor)",
+          borderTop: "1px solid rgba(214, 210, 210, 0.849)",
         }}
-        className="my-auto py-2 shadow-sm"
+        className="my-auto py-2"
       >
-        <div className="row m-auto row-gap-4 px-0 my-2">
+        <div className="row m-auto row-gap-4 px-0">
           <div className="col-12 col-sm-12 col-md-3 d-flex px-1 px-md-2">
             <h5 className="my-auto text-capitalize d-flex gap-0">
               Employees
-              <span className="my-auto fs-6 mx-2">
-                ({filteredData.length})
-              </span>
+              <span className="my-auto fs-6 mx-2">({filteredData.length})</span>
             </h5>
           </div>
           <div className="col-6 col-md-5 d-flex p-0 px-1 position-relative">
@@ -363,7 +378,9 @@ const AdminEmployeeTable = (props) => {
               <span
                 onMouseEnter={() => setActiveProfile("name")}
                 onMouseLeave={() => setActiveProfile(null)}
-                className={`btn rounded-0 shadow-sm ${isFilterApplied ? 'bg-primary text-white' : 'text-primary'}`}
+                className={`btn rounded-0 shadow-sm ${
+                  isFilterApplied ? "bg-primary text-white" : "text-primary"
+                }`}
               >
                 <FaFilter />
                 <div
@@ -379,35 +396,35 @@ const AdminEmployeeTable = (props) => {
                   className="px-2 shadow flex-column py-2 shadow rounded-1 text-dark border"
                 >
                   <div
-                    onClick={() => setSelectedFilter('')}
+                    onClick={() => setSelectedFilter("")}
                     style={{ cursor: "pointer" }}
                     className="d-flex flex-nowrap justify-content-between"
                   >
                     All <span>{rowData.length}</span>
                   </div>
                   <div
-                    onClick={() => setSelectedFilter('Admin')}
+                    onClick={() => setSelectedFilter("Admin")}
                     style={{ cursor: "pointer" }}
                     className="d-flex flex-nowrap justify-content-between"
                   >
                     Admin <span>{adminCount}</span>
                   </div>
                   <div
-                    onClick={() => setSelectedFilter('HR')}
+                    onClick={() => setSelectedFilter("HR")}
                     style={{ cursor: "pointer" }}
                     className="d-flex flex-nowrap justify-content-between"
                   >
                     HR <span>{hrCount}</span>
                   </div>
                   <div
-                    onClick={() => setSelectedFilter('Manager')}
+                    onClick={() => setSelectedFilter("Manager")}
                     style={{ cursor: "pointer" }}
                     className="d-flex flex-nowrap justify-content-between"
                   >
                     Manager <span>{managerCount}</span>
                   </div>
                   <div
-                    onClick={() => setSelectedFilter('Employee')}
+                    onClick={() => setSelectedFilter("Employee")}
                     style={{ cursor: "pointer" }}
                     className="d-flex flex-nowrap justify-content-between"
                   >
@@ -415,7 +432,7 @@ const AdminEmployeeTable = (props) => {
                   </div>
                   {isFilterApplied && (
                     <div
-                      onClick={() => setSelectedFilter('')}
+                      onClick={() => setSelectedFilter("")}
                       style={{ cursor: "pointer" }}
                       className="d-flex btn btn-primary my-1 text-center py-1 rounded-0 shadow-sm flex-nowrap justify-content-center"
                     >
@@ -448,181 +465,51 @@ const AdminEmployeeTable = (props) => {
       {!loading ? (
         <div>
           <div
-            style={{ minHeight: "68vh", maxHeight: "68vh", overflow: 'auto', position: 'relative' }}
+            style={{
+              minHeight: "75vh",
+              maxHeight: "75vh",
+              overflow: "auto",
+              position: "relative",
+            }}
             className="table-responsive p-2 mb-3"
           >
-            <table className="table" style={{ fontSize: ".9rem", minHeight: "20vh", maxHeight: "20vh", overflow: 'auto' }}>
+            <table
+              className="table"
+              style={{
+                fontSize: ".9rem",
+                minHeight: "20vh",
+                maxHeight: "20vh",
+                overflow: "auto",
+              }}
+            >
               <thead>
-                <tr >
-                  <th
-                    style={{
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      border: "none",
-                      whiteSpace: "pre",
-                      position: 'sticky',
-                      top: '-10px'
-                    }}
-                    scope="col"
-                  >
-                  </th>
-                  <th
-                    style={{
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      border: "none",
-                      whiteSpace: "pre",
-                      position: 'sticky',
-                      top: '-10px',
-                      left: '-10px',
-                      zIndex: '1'
-                    }}
-                    scope="col"
-                  >
+                <tr>
+                  <th style={rowHeadStyle} scope="col"></th>
+                  <th style={rowHeadStyle} scope="col">
                     Name
                   </th>
-                  <th
-                    style={{
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      border: "none",
-                      whiteSpace: "pre",
-                      position: 'sticky',
-                      top: '-10px'
-                    }}
-                    scope="col"
-                  >
+                  <th style={rowHeadStyle} scope="col">
                     ID
                   </th>
-                  <th
-                    style={{
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      border: "none",
-                      whiteSpace: "pre",
-                      position: 'sticky',
-                      top: '-10px'
-                    }}
-                    scope="col"
-                  >
+                  <th style={rowHeadStyle} scope="col">
                     Position
                   </th>
-                  <th
-                    style={{
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      border: "none",
-                      whiteSpace: "pre",
-                      position: 'sticky',
-                      top: '-10px'
-                    }}
-                    scope="col"
-                  >
+                  <th style={rowHeadStyle} scope="col">
                     Account
                   </th>
-                  <th
-                    style={{
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      border: "none",
-                      whiteSpace: "pre",
-                      position: 'sticky',
-                      top: '-10px'
-                    }}
-                    scope="col"
-                  >
+                  <th style={rowHeadStyle} scope="col">
                     Status
                   </th>
-                  <th
-                    style={{
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      border: "none",
-                      whiteSpace: "pre",
-                      position: 'sticky',
-                      top: '-10px'
-                    }}
-                    scope="col"
-                  >
+                  <th style={rowHeadStyle} scope="col">
                     Email
                   </th>
-                  <th
-                    style={{
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      border: "none",
-                      whiteSpace: "pre",
-                      position: 'sticky',
-                      top: '-10px'
-                    }}
-                    scope="col"
-                  >
+                  <th style={rowHeadStyle} scope="col">
                     Contact No
                   </th>
-                  <th
-                    style={{
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      border: "none",
-                      whiteSpace: "pre",
-                      position: 'sticky',
-                      top: '-10px'
-                    }}
-                    scope="col"
-                  >
+                  <th style={rowHeadStyle} scope="col">
                     Login Status
                   </th>
-                  <th
-                    style={{
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      border: "none",
-                      whiteSpace: "pre",
-                      position: 'sticky',
-                      top: '-10px'
-                    }}
-                    scope="col"
-                  >
+                  <th style={rowHeadStyle} scope="col">
                     Actions
                   </th>
                 </tr>
@@ -634,10 +521,17 @@ const AdminEmployeeTable = (props) => {
                       className="border-0"
                       style={{
                         verticalAlign: "middle",
-                        background: items.status === "Inactive" ? "rgba(194, 11, 11, 0.1" : darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                        color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
-                        position: 'sticky',
-                        left: '0'
+                        background:
+                          items.status === "Inactive"
+                            ? "rgba(194, 11, 11, 0.363)"
+                            : darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
+                        position: "sticky",
+                        left: "0",
                       }}
                     >
                       <div
@@ -671,11 +565,18 @@ const AdminEmployeeTable = (props) => {
                       style={{
                         verticalAlign: "middle",
                         textTransform: "capitalize",
-                        background: items.status === "Inactive" ? "rgba(194, 11, 11, 0.1" : darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                        color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                        background:
+                          items.status === "Inactive"
+                            ? "rgba(194, 11, 11, 0.363)"
+                            : darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
                         whiteSpace: "pre",
-                        position: 'sticky',
-                        left: '-10px'
+                        position: "sticky",
+                        left: "-10px",
                       }}
                       className="border-0"
                     >
@@ -685,8 +586,15 @@ const AdminEmployeeTable = (props) => {
                       className="border-0"
                       style={{
                         verticalAlign: "middle",
-                        background: items.status === "Inactive" ? "rgba(194, 11, 11, 0.1" : darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                        color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                        background:
+                          items.status === "Inactive"
+                            ? "rgba(194, 11, 11, 0.363)"
+                            : darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
                         whiteSpace: "pre",
                       }}
                     >
@@ -696,8 +604,15 @@ const AdminEmployeeTable = (props) => {
                       className="border-0"
                       style={{
                         verticalAlign: "middle",
-                        background: items.status === "Inactive" ? "rgba(194, 11, 11, 0.1" : darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                        color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                        background:
+                          items.status === "Inactive"
+                            ? "rgba(194, 11, 11, 0.363)"
+                            : darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
                         whiteSpace: "pre",
                       }}
                     >
@@ -707,8 +622,15 @@ const AdminEmployeeTable = (props) => {
                       className="border-0"
                       style={{
                         verticalAlign: "middle",
-                        background: items.status === "Inactive" ? "rgba(194, 11, 11, 0.1" : darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                        color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                        background:
+                          items.status === "Inactive"
+                            ? "rgba(194, 11, 11, 0.363)"
+                            : darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
                         whiteSpace: "pre",
                       }}
                     >
@@ -717,8 +639,15 @@ const AdminEmployeeTable = (props) => {
                     <td
                       style={{
                         verticalAlign: "middle",
-                        background: items.status === "Inactive" ? "rgba(194, 11, 11, 0.1" : darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                        color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                        background:
+                          items.status === "Inactive"
+                            ? "rgba(194, 11, 11, 0.363)"
+                            : darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
                         whiteSpace: "pre",
                       }}
                       className={
@@ -733,8 +662,15 @@ const AdminEmployeeTable = (props) => {
                       className="border-0"
                       style={{
                         verticalAlign: "middle",
-                        background: items.status === "Inactive" ? "rgba(194, 11, 11, 0.1" : darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                        color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                        background:
+                          items.status === "Inactive"
+                            ? "rgba(194, 11, 11, 0.363)"
+                            : darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
                         whiteSpace: "pre",
                       }}
                     >
@@ -744,8 +680,15 @@ const AdminEmployeeTable = (props) => {
                       className="border-0"
                       style={{
                         verticalAlign: "middle",
-                        background: items.status === "Inactive" ? "rgba(194, 11, 11, 0.1" : darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                        color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                        background:
+                          items.status === "Inactive"
+                            ? "rgba(194, 11, 11, 0.363)"
+                            : darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
                         whiteSpace: "pre",
                       }}
                     >
@@ -755,8 +698,15 @@ const AdminEmployeeTable = (props) => {
                       className="border-0"
                       style={{
                         verticalAlign: "middle",
-                        background: items.status === "Inactive" ? "rgba(194, 11, 11, 0.1" : darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                        color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                        background:
+                          items.status === "Inactive"
+                            ? "rgba(194, 11, 11, 0.363)"
+                            : darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
                         whiteSpace: "pre",
                       }}
                     >
@@ -766,8 +716,15 @@ const AdminEmployeeTable = (props) => {
                       className="border-0"
                       style={{
                         verticalAlign: "middle",
-                        background: items.status === "Inactive" ? "rgba(194, 11, 11, 0.1" : darkMode ? "var(--secondaryDashMenuColor)" : "var(--secondaryDashColorDark)",
-                        color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+                        background:
+                          items.status === "Inactive"
+                            ? "rgba(194, 11, 11, 0.363)"
+                            : darkMode
+                            ? "var(--secondaryDashMenuColor)"
+                            : "var(--secondaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var(--primaryDashMenuColor)",
                         whiteSpace: "pre",
                       }}
                     >
@@ -817,7 +774,6 @@ const AdminEmployeeTable = (props) => {
                 ))}
               </tbody>
             </table>
-
           </div>
           <Pagination
             currentPage={currentPage}

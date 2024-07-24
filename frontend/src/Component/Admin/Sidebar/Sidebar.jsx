@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { FaRegUser } from "react-icons/fa";
 import { GoTasklist } from "react-icons/go";
-import { MdMenuOpen, MdOutlineDashboardCustomize } from "react-icons/md";
+import {
+  MdCurrencyRupee,
+  MdMenuOpen,
+  MdOutlineDashboardCustomize,
+} from "react-icons/md";
 import { AiOutlineFundProjectionScreen } from "react-icons/ai";
 import "./Sidebar.css";
 import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
@@ -12,6 +16,7 @@ import { IoCalendarOutline } from "react-icons/io5";
 import { LuKeyRound, LuPartyPopper } from "react-icons/lu";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { IoLocationOutline } from "react-icons/io5";
+import { RiUser3Line } from "react-icons/ri";
 
 const Sidebar = () => {
   const [activeCategory, setActiveCategory] = useState(null);
@@ -25,13 +30,17 @@ const Sidebar = () => {
       navLinks: [{ to: "/admin/dashboard", label: "Dashboard" }],
     },
     {
-      icon: <FaRegUser />,
+      icon: <RiUser3Line />,
       name: "Employee",
       navLinks: [
         // { to: "/admin/user", label: "Employee List" },
         { to: "/admin/employee", label: "Employee List" },
-        { to: "/admin/salary", label: "Salary" },
       ],
+    },
+    {
+      icon: <MdCurrencyRupee />,
+      name: "Salary",
+      navLinks: [{ to: "/admin/salary", label: "Salary" }],
     },
     {
       icon: <IoMdCheckmarkCircleOutline />,
@@ -132,12 +141,12 @@ const Sidebar = () => {
         style={{ borderBottom: "3px solid green" }}
         className="text-success justify-content-between py-2 d-flex gap-2"
       >
-        <p
-          style={{ display: !extended ? "none" : "block" }}
-          className="my-auto fs-4"
+        <button
+          style={{ display: !extended ? "none" : "block", cursor: "none" }}
+          className=" btn btn-success rounded-5 py-0"
         >
-          Manager
-        </p>
+          Admin
+        </button>
         <span
           onClick={ExtendClick}
           style={{

@@ -7,13 +7,14 @@ import { MdNearbyError } from "react-icons/md";
 import {
   HiOutlineLogin,
   HiOutlineLogout,
-  HiStatusOnline
+  HiStatusOnline,
 } from "react-icons/hi";
 import { FaUserClock } from "react-icons/fa6";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import BASE_URL from "../config/config";
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
 
 const TodaysAttendance = () => {
   const [activeCategory, setActiveCategory] = useState(null);
@@ -21,6 +22,7 @@ const TodaysAttendance = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortField, setSortField] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
+  const { darkMode } = useTheme();
 
   useEffect(() => {
     const fetchAttendanceData = async () => {
@@ -83,7 +85,7 @@ const TodaysAttendance = () => {
       "Wednesday",
       "Thursday",
       "Friday",
-      "Saturday"
+      "Saturday",
     ];
     return days[s];
   };
@@ -152,20 +154,47 @@ const TodaysAttendance = () => {
             user.attendance.totalLogAfterBreak
           ).toUpperCase()
         : "--",
-      Mark: getAttendanceMark(user).toUpperCase()
+      Mark: getAttendanceMark(user).toUpperCase(),
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
 
     // Add the caption at the top of the worksheet
     XLSX.utils.sheet_add_aoa(worksheet, [["Kasper", "123 New Delhi 110044"]], {
-      origin: -1
+      origin: -1,
     });
 
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Attendance");
 
     XLSX.writeFile(workbook, "attendance.xlsx");
+  };
+
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
   };
 
   return (
@@ -208,83 +237,39 @@ const TodaysAttendance = () => {
       <table className="table">
         <thead>
           <tr style={{ position: "sticky", top: "0", zIndex: "1" }}>
-            <th
-              onClick={() => handleSort("FirstName")}
-              style={{
-                background: "var(--primaryDashColorDark)",
-                color: "var(--primaryDashMenuColor)"
-              }}
-            >
+            <th onClick={() => handleSort("FirstName")} style={rowHeadStyle}>
               <RxCaretSort /> Employee {renderSortIcon("FirstName")}
             </th>
-            <th
-              style={{
-                background: "var(--primaryDashColorDark)",
-                color: "var(--primaryDashMenuColor)"
-              }}
-              className="text-center"
-            >
+            <th style={rowHeadStyle}>
               {" "}
               <HiOutlineLogin /> Login Time{" "}
             </th>
-            <th
-              style={{
-                background: "var(--primaryDashColorDark)",
-                color: "var(--primaryDashMenuColor)"
-              }}
-              className="text-center"
-            >
+            <th style={rowHeadStyle}>
               {" "}
               Logout Time <HiOutlineLogout />{" "}
             </th>
-            <th
-              style={{
-                background: "var(--primaryDashColorDark)",
-                color: "var(--primaryDashMenuColor)"
-              }}
-              className="text-center"
-            >
+            <th style={rowHeadStyle}>
               {" "}
               <RxCounterClockwiseClock /> Log Count{" "}
             </th>
-            {/* <th style={{ background: "var(--primaryDashColorDark)", color: "var(--primaryDashMenuColor)" }} className="text-center"> Total Break </th> */}
-            <th
-              style={{
-                background: "var(--primaryDashColorDark)",
-                color: "var(--primaryDashMenuColor)"
-              }}
-              className="text-center"
-            >
+            <th style={rowHeadStyle}> Total Break </th>
+            <th style={rowHeadStyle}>
               {" "}
               <FaUserClock /> Total Login{" "}
             </th>
-            <th
-              style={{
-                background: "var(--primaryDashColorDark)",
-                color: "var(--primaryDashMenuColor)"
-              }}
-              className="text-center"
-            >
+            <th style={rowHeadStyle}>
               {" "}
               Status <HiStatusOnline />
             </th>
-            <th
-              style={{
-                background: "var(--primaryDashColorDark)",
-                color: "var(--primaryDashMenuColor)"
-              }}
-              className="text-center"
-            >
+            <th style={rowHeadStyle}>
               {" "}
               <IoCheckmarkDoneOutline /> Mark{" "}
             </th>
-            {/* <th style={{ background: "var(--primaryDashColorDark)", color: "var(--primaryDashMenuColor)" }} className="text-center"> Break Count</th> */}
-            <th
-              style={{
-                background: "var(--primaryDashColorDark)",
-                color: "var(--primaryDashMenuColor)"
-              }}
-            ></th>
+            <th style={rowHeadStyle} className="text-center">
+              {" "}
+              Break Count
+            </th>
+            <th style={rowHeadStyle}></th>
           </tr>
         </thead>
         <tbody>
@@ -299,7 +284,7 @@ const TodaysAttendance = () => {
                         style={{
                           height: "43px",
                           width: "43px",
-                          overflow: "hidden"
+                          overflow: "hidden",
                         }}
                       >
                         <img
@@ -308,7 +293,7 @@ const TodaysAttendance = () => {
                             width: "100%",
                             objectFit: "cover",
                             overflow: "hidden",
-                            borderRadius: "50%"
+                            borderRadius: "50%",
                           }}
                           src="https://tse3.mm.bing.net/th?id=OIP.-d8GY5axNJZYoXsNOUJ4iwAAAA&pid=Api&P=0&h=180"
                           alt=""
@@ -398,7 +383,7 @@ const TodaysAttendance = () => {
                       <AiOutlineMore />{" "}
                       <span
                         style={{
-                          display: activeCategory === user ? "flex" : "none"
+                          display: activeCategory === user ? "flex" : "none",
                         }}
                       >
                         <Link
@@ -408,7 +393,7 @@ const TodaysAttendance = () => {
                             whiteSpace: "pre",
                             right: "70%",
                             bottom: "-50%",
-                            zIndex: "2"
+                            zIndex: "2",
                           }}
                           className="shadow px-2 py-0  fs-6 bg-white rounded-5"
                         >

@@ -6,7 +6,7 @@ import {
   FaMale,
   FaTasks,
   FaUniversity,
-  FaUserCircle
+  FaUserCircle,
 } from "react-icons/fa";
 import { TbDeviceIpadMinus } from "react-icons/tb";
 import { FaBriefcase, FaFolderOpen, FaUser } from "react-icons/fa6";
@@ -14,7 +14,7 @@ import {
   BsCalendar2,
   BsCalendar2CheckFill,
   BsDeviceHddFill,
-  BsFillCalendarEventFill
+  BsFillCalendarEventFill,
 } from "react-icons/bs";
 import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
@@ -33,7 +33,7 @@ const Sidebar = (props) => {
     {
       icon: <FaUser />,
       name: "Dashboard",
-      navLinks: [{ to: "/employee/dashboard", label: "Dashboard" }]
+      navLinks: [{ to: "/employee/dashboard", label: "Dashboard" }],
     },
     {
       icon: <FaUserCircle />,
@@ -41,9 +41,9 @@ const Sidebar = (props) => {
       navLinks: [
         {
           to: "/employee/" + props.data["_id"] + "/personal-info",
-          label: "Profile"
-        }
-      ]
+          label: "Profile",
+        },
+      ],
     },
 
     {
@@ -52,17 +52,17 @@ const Sidebar = (props) => {
       navLinks: [
         {
           to: "/employee/" + props.data["_id"] + "/family-info",
-          label: "Dependents"
+          label: "Dependents",
         },
         {
           to: "/employee/" + props.data["_id"] + "/education",
-          label: "Education"
+          label: "Education",
         },
         {
           to: "/employee/" + props.data["_id"] + "/work-experience",
-          label: "WorkExp"
-        }
-      ]
+          label: "WorkExp",
+        },
+      ],
     },
     {
       icon: <BsCalendar2CheckFill />,
@@ -70,8 +70,8 @@ const Sidebar = (props) => {
       navLinks: [
         {
           to: "/employee/" + props.data["_id"] + "/attendance",
-          label: "Create Attendance"
-        }
+          label: "Create Attendance",
+        },
         // {
         //   to: "/employee/" + props.data["_id"] + "/attendanceList",
         //   label: "View Attendance"
@@ -80,7 +80,7 @@ const Sidebar = (props) => {
         //   to: "/employee/" + props.data["_id"] + "/selfAtteend",
         //   label: "self Attendance"
         // }
-      ]
+      ],
     },
     {
       icon: <BsFillCalendarEventFill />,
@@ -88,13 +88,13 @@ const Sidebar = (props) => {
       navLinks: [
         {
           to: "/employee/leaveApplication",
-          label: "Apply Leave"
+          label: "Apply Leave",
         },
         {
           to: "/employee/leaveBalance",
-          label: "Leave Balance"
-        }
-      ]
+          label: "Leave Balance",
+        },
+      ],
     },
     {
       icon: <FaTasks />,
@@ -103,8 +103,8 @@ const Sidebar = (props) => {
         { to: "/employee/newTask", label: " New Task" },
         { to: "/employee/activeTask", label: "Active Task" },
         { to: "/employee/taskcomplete", label: "Completed Task" },
-        { to: "/employee/taskreject", label: "Rejected Task" }
-      ]
+        { to: "/employee/taskreject", label: "Rejected Task" },
+      ],
     },
     {
       icon: <FaFolderOpen />,
@@ -112,10 +112,10 @@ const Sidebar = (props) => {
       navLinks: [
         {
           to: "/employee/Document",
-          label: "Document"
-        }
-      ]
-    }
+          label: "Document",
+        },
+      ],
+    },
   ];
   return (
     <div
@@ -128,7 +128,7 @@ const Sidebar = (props) => {
         borderRight: "1px solid rgba(90, 88, 88, 0.1)",
         backgroundColor: darkMode
           ? "var(--primaryDashMenuColor)"
-          : "var(--primaryDashColorDark)"
+          : "var(--primaryDashColorDark)",
       }}
       className="d-none d-sm-flex flex-column gap-2 p-2"
     >
@@ -136,12 +136,12 @@ const Sidebar = (props) => {
         style={{ borderBottom: "3px solid green" }}
         className="text-success justify-content-between py-2 d-flex gap-2"
       >
-        <p
-          style={{ display: !extended ? "none" : "block" }}
-          className="my-auto fs-4"
+        <button
+          style={{ display: !extended ? "none" : "block", cursor: "none" }}
+          className=" btn btn-success rounded-5 py-0"
         >
-          EMP
-        </p>{" "}
+          Emp
+        </button>
         <span
           onClick={ExtendClick}
           style={{
@@ -151,7 +151,7 @@ const Sidebar = (props) => {
             color: darkMode
               ? "var(--primaryDashColorDark)"
               : "var(--primaryDashMenuColor)",
-            transform: `rotate(${!extended ? "180deg" : "0deg"})`
+            transform: `rotate(${!extended ? "180deg" : "0deg"})`,
           }}
           className="my-auto p-0 fs-4"
         >
@@ -174,7 +174,7 @@ const Sidebar = (props) => {
                   : "var(--primaryDashMenuColor)",
                 height: "3rem",
                 outline: "none",
-                border: "none"
+                border: "none",
               }}
               className="p-0 text-start gap-2 justify-between w-100 d-flex justify-content-between"
             >
@@ -189,7 +189,7 @@ const Sidebar = (props) => {
                     alignItems: "center",
                     color: darkMode
                       ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)"
+                      : "var(--primaryDashMenuColor)",
                   }}
                   className="m-auto d-flex rounded-5 justify-content-center fs-5"
                 >
@@ -208,7 +208,7 @@ const Sidebar = (props) => {
                     activeCategory === name ? "135deg" : "0deg"
                   })`,
                   transition: "1s ease",
-                  display: !extended ? "none" : "block"
+                  display: !extended ? "none" : "block",
                 }}
                 className="my-auto fs-4"
               >
@@ -234,7 +234,7 @@ const Sidebar = (props) => {
                       : "var(--primaryDashMenuColor)",
                     height: "3rem",
                     outline: "none",
-                    border: "none"
+                    border: "none",
                   }}
                   className="p-0 text-start gap-2 justify-between w-100 d-flex justify-content-between"
                 >
@@ -249,7 +249,7 @@ const Sidebar = (props) => {
                         alignItems: "center",
                         color: darkMode
                           ? "var(--primaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)"
+                          : "var(--primaryDashMenuColor)",
                       }}
                       className="m-auto d-flex rounded-5 justify-content-center fs-5"
                     >
@@ -275,14 +275,14 @@ const Sidebar = (props) => {
                 backgroundColor: darkMode
                   ? "var(--primaryDashMenuColor)"
                   : "var(--primaryDashColorDark)",
-                width: "fit-content"
+                width: "fit-content",
               }}
               className="flex-column position-absolute top-0 start-100 py-2 px-1 gap-2 mt-2 shadow-sm"
             >
               <p
                 style={{
                   display: extended ? "none" : "block",
-                  color: darkMode ? "green" : "orange"
+                  color: darkMode ? "green" : "orange",
                 }}
                 className="m-0 py-0 pl-1 fw-bold"
               >
@@ -298,7 +298,7 @@ const Sidebar = (props) => {
                     style={{
                       color: darkMode
                         ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)"
+                        : "var(--primaryDashMenuColor)",
                     }}
                     className="text-decoration-none flex-nowrap text-start gap-3 d-flex justify-content-between "
                   >
@@ -322,7 +322,7 @@ const Sidebar = (props) => {
 const dropdownStyle = {
   width: "250px",
   zIndex: "5",
-  borderLeft: "1px solid white"
+  borderLeft: "1px solid white",
 };
 
 export default Sidebar;

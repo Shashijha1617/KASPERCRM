@@ -12,6 +12,7 @@ import { MdNearbyError } from "react-icons/md";
 import { IoTrashBin } from "react-icons/io5";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../config/config";
+import { FaEdit } from "react-icons/fa";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -118,6 +119,32 @@ const AdminSalaryTable = (props) => {
     pageNumbers.push(i);
   }
 
+  const rowHeadStyle = {
+    cursor: "pointer",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "-10px",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
+
   return (
     <div>
       <div
@@ -165,475 +192,7 @@ const AdminSalaryTable = (props) => {
       </div>
 
       <div id="clear-both" />
-      {!loading ? (
-        <div className="row m-auto">
-          <div
-            style={{
-              minHeight: "68vh",
-              maxHeight: "68vh",
-              overflow: "auto",
-              width: "100%",
-            }}
-            className="mb-2"
-          >
-            <table
-              className="table table-striped"
-              style={{ fontSize: ".9rem" }}
-            >
-              <thead>
-                <tr style={{ position: "sticky", top: "0", zIndex: "3" }}>
-                  <th
-                    style={{
-                      cursor: "pointer",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--secondaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      position: "sticky",
-                      top: "-10px",
-                    }}
-                    className="py-2 px-0 text-center fw-normal border-0"
-                  >
-                    Profile
-                  </th>
-                  <th
-                    style={{
-                      cursor: "pointer",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--secondaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      position: "sticky",
-                      top: "-10px",
-                    }}
-                    className="py-2 fw-normal  border-0"
-                  >
-                    Name
-                  </th>
-                  <th
-                    style={{
-                      cursor: "pointer",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--secondaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      position: "sticky",
-                      top: "-10px",
-                    }}
-                    className="py-2 fw-normal border-0"
-                  >
-                    Emp ID
-                  </th>
-                  <th
-                    style={{
-                      cursor: "pointer",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--secondaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      position: "sticky",
-                      top: "-10px",
-                    }}
-                    className="py-2 fw-normal border-0"
-                  >
-                    Designation
-                  </th>
-                  <th
-                    style={{
-                      cursor: "pointer",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--secondaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      position: "sticky",
-                      top: "-10px",
-                    }}
-                    className="py-2 fw-normal border-0"
-                  >
-                    Salary
-                  </th>
-                  <th
-                    style={{
-                      cursor: "pointer",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--secondaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      position: "sticky",
-                      top: "-10px",
-                    }}
-                    className="py-2 fw-normal border-0"
-                  >
-                    Bank Name
-                  </th>
-                  <th
-                    style={{
-                      cursor: "pointer",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--secondaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      position: "sticky",
-                      top: "-10px",
-                    }}
-                    className="py-2 fw-normal border-0"
-                  >
-                    Account No
-                  </th>
-                  <th
-                    style={{
-                      cursor: "pointer",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--secondaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      position: "sticky",
-                      top: "-10px",
-                    }}
-                    className="py-2 fw-normal border-0"
-                  >
-                    Account Holder Name
-                  </th>
-                  <th
-                    style={{
-                      cursor: "pointer",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--secondaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      position: "sticky",
-                      top: "-10px",
-                    }}
-                    className="py-2 fw-normal border-0"
-                  >
-                    IFSC Code
-                  </th>
-                  <th
-                    style={{
-                      cursor: "pointer",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--secondaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      position: "sticky",
-                      top: "-10px",
-                    }}
-                    className="py-2 fw-normal border-0"
-                  >
-                    Tax Deduction
-                  </th>
-                  <th
-                    style={{
-                      background: darkMode
-                        ? "var(--secondaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var(--primaryDashMenuColor)",
-                      position: "sticky",
-                      top: "-10px",
-                    }}
-                    className="py-2 fw-normal text-center border-0"
-                  >
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentItems.length > 0 ? (
-                  currentItems.map((item, index) => (
-                    <tr className="stickey-top" key={index}>
-                      <td
-                        style={{
-                          verticalAlign: "middle",
-                          whiteSpace: "pre",
-                          background: darkMode
-                            ? "var(--secondaryDashMenuColor)"
-                            : "var(--secondaryDashColorDark)",
-                          color: darkMode
-                            ? "var(--secondaryDashColorDark)"
-                            : "var(--primaryDashMenuColor)",
-                        }}
-                        className="text-capitalize px-0 py-1 border-0"
-                      >
-                        <div className="d-flex flex-nowrap gap-2">
-                          <div
-                            className="mx-auto"
-                            style={{ height: "35px", width: "35px" }}
-                          >
-                            <img
-                              style={{
-                                height: "100%",
-                                width: "100%",
-                                borderRadius: "50%",
-                                overflow: "hidden",
-                                objectFit: "cover",
-                              }}
-                              src={
-                                item?.data?.profile?.image_url
-                                  ? item?.data?.profile?.image_url
-                                  : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
-                              }
-                              alt=""
-                            />
-                          </div>
-                        </div>
-                      </td>
-                      <td
-                        style={{
-                          verticalAlign: "middle",
-                          whiteSpace: "pre",
-                          background: darkMode
-                            ? "var(--secondaryDashMenuColor)"
-                            : "var(--secondaryDashColorDark)",
-                          color: darkMode
-                            ? "var(--secondaryDashColorDark)"
-                            : "var(--primaryDashMenuColor)",
-                        }}
-                        className=" border-0"
-                      >
-                        {item.EmployeeName}
-                      </td>
-                      <td
-                        style={{
-                          verticalAlign: "middle",
-                          whiteSpace: "pre",
-                          background: darkMode
-                            ? "var(--secondaryDashMenuColor)"
-                            : "var(--secondaryDashColorDark)",
-                          color: darkMode
-                            ? "var(--secondaryDashColorDark)"
-                            : "var(--primaryDashMenuColor)",
-                        }}
-                        className=" border-0"
-                      >
-                        {item.empID}
-                      </td>
-                      <td
-                        style={{
-                          verticalAlign: "middle",
-                          whiteSpace: "pre",
-                          background: darkMode
-                            ? "var(--secondaryDashMenuColor)"
-                            : "var(--secondaryDashColorDark)",
-                          color: darkMode
-                            ? "var(--secondaryDashColorDark)"
-                            : "var(--primaryDashMenuColor)",
-                        }}
-                        className=" border-0"
-                      >
-                        {item.PositionName}
-                      </td>
-                      <td
-                        style={{
-                          verticalAlign: "middle",
-                          whiteSpace: "pre",
-                          background: darkMode
-                            ? "var(--secondaryDashMenuColor)"
-                            : "var(--secondaryDashColorDark)",
-                          color: darkMode
-                            ? "var(--secondaryDashColorDark)"
-                            : "var(--primaryDashMenuColor)",
-                        }}
-                        className=" border-0"
-                      >
-                        {item.BasicSalary}
-                      </td>
-                      <td
-                        style={{
-                          verticalAlign: "middle",
-                          whiteSpace: "pre",
-                          background: darkMode
-                            ? "var(--secondaryDashMenuColor)"
-                            : "var(--secondaryDashColorDark)",
-                          color: darkMode
-                            ? "var(--secondaryDashColorDark)"
-                            : "var(--primaryDashMenuColor)",
-                        }}
-                        className="text-uppercase  border-0"
-                      >
-                        {item.BankName}
-                      </td>
-                      <td
-                        style={{
-                          verticalAlign: "middle",
-                          whiteSpace: "pre",
-                          background: darkMode
-                            ? "var(--secondaryDashMenuColor)"
-                            : "var(--secondaryDashColorDark)",
-                          color: darkMode
-                            ? "var(--secondaryDashColorDark)"
-                            : "var(--primaryDashMenuColor)",
-                        }}
-                        className="text-uppercase border-0"
-                      >
-                        {item.AccountNo}
-                      </td>
-                      <td
-                        style={{
-                          verticalAlign: "middle",
-                          whiteSpace: "pre",
-                          background: darkMode
-                            ? "var(--secondaryDashMenuColor)"
-                            : "var(--secondaryDashColorDark)",
-                          color: darkMode
-                            ? "var(--secondaryDashColorDark)"
-                            : "var(--primaryDashMenuColor)",
-                        }}
-                        className="text-capitalize border-0"
-                      >
-                        {item.AccountHolderName}
-                      </td>
-                      <td
-                        style={{
-                          verticalAlign: "middle",
-                          whiteSpace: "pre",
-                          background: darkMode
-                            ? "var(--secondaryDashMenuColor)"
-                            : "var(--secondaryDashColorDark)",
-                          color: darkMode
-                            ? "var(--primaryDashColorDark)"
-                            : "var(--primaryDashMenuColor)",
-                        }}
-                        className="text-uppercase border-0"
-                      >
-                        {item.IFSCcode}
-                      </td>
-                      <td
-                        style={{
-                          verticalAlign: "middle",
-                          whiteSpace: "pre",
-                          background: darkMode
-                            ? "var(--secondaryDashMenuColor)"
-                            : "var(--secondaryDashColorDark)",
-                          color: darkMode
-                            ? "var(--primaryDashColorDark)"
-                            : "var(--primaryDashMenuColor)",
-                        }}
-                        className="border-0"
-                      >
-                        {item.TaxDeduction}
-                      </td>
-                      <td
-                        style={{
-                          verticalAlign: "middle",
-                          whiteSpace: "pre",
-                          background: darkMode
-                            ? "var(--secondaryDashMenuColor)"
-                            : "var(--secondaryDashColorDark)",
-                          color: darkMode
-                            ? "var(--primaryDashColorDark)"
-                            : "var(--primaryDashMenuColor)",
-                        }}
-                        className="border-0"
-                      >
-                        <div className="d-flex  gap-3 justify-content-around">
-                          <button
-                            onClick={() => onSalaryDelete(item.data._id)}
-                            className="btn text-danger p-0 d-flex align-items-center border-0"
-                          >
-                            <IoTrashBin />
-                          </button>
-                          <FontAwesomeIcon
-                            className="text-primary"
-                            icon={faEdit}
-                            onClick={() => props.onEditSalary(item.data)}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <div
-                    style={{
-                      height: "30vh",
-                      width: "94%",
-                      position: "absolute",
-                    }}
-                    className="d-flex flex-column justify-content-center align-items-center gap-1"
-                  >
-                    <span className="fw-bolder" style={{ fontSize: "2rem" }}>
-                      <MdNearbyError
-                        className="text-danger"
-                        style={{ fontSize: "2.3rem" }}
-                      />{" "}
-                      OOPS!
-                    </span>
-                    <h6 className="p-0 m-0">Record not found.</h6>
-                  </div>
-                )}
-              </tbody>
-            </table>
-          </div>
-          <div className="container-fluid p-2 px-3 d-flex justify-content-between stickey-bottom">
-            <Button
-              className="d-flex gap-2"
-              onClick={handlePaginationPrev}
-              disabled={currentPage === 1}
-            >
-              <GrFormPrevious className="my-auto" /> Previous
-            </Button>
-            <div className="pagination d-flex flex-nowrap gap-2">
-              {pageNumbers.map((number) => (
-                <Button
-                  key={number}
-                  style={{
-                    backgroundColor:
-                      currentPage === number ? "active" : "white",
-                    border: "none",
-                    color: "gray",
-                  }}
-                  onClick={() => setCurrentPage(number)}
-                  className={currentPage === number ? "active" : ""}
-                >
-                  {number}
-                </Button>
-              ))}
-            </div>
-            <Button
-              onClick={handlePaginationNext}
-              className="d-flex gap-3"
-              disabled={indexOfLastItem >= sortedAndFilteredData.length}
-            >
-              <span className="">Next</span>{" "}
-              <GrFormPrevious
-                className="my-auto"
-                style={{ rotate: "180deg" }}
-              />
-            </Button>
-          </div>
-        </div>
-      ) : (
+      {loading && (
         <div id="loading-bar">
           <RingLoader
             css={override}
@@ -644,6 +203,218 @@ const AdminSalaryTable = (props) => {
           />
         </div>
       )}
+
+      <div className="row m-auto container-fluid">
+        <div
+          style={{
+            minHeight: "70vh",
+            maxHeight: "70vh",
+            overflow: "auto",
+            width: "100%",
+          }}
+          className="mb-2 px-1 border"
+        >
+          {currentItems.length > 0 ? (
+            <table
+              className="table table-striped"
+              style={{ fontSize: ".9rem" }}
+            >
+              <thead>
+                <tr style={{ position: "sticky", top: "0", zIndex: "3" }}>
+                  <th
+                    style={rowHeadStyle}
+                    className="py-2 px-0 text-center fw-normal border-0"
+                  >
+                    Profile
+                  </th>
+                  <th style={rowHeadStyle} className="py-2 fw-normal  border-0">
+                    Name
+                  </th>
+                  <th style={rowHeadStyle} className="py-2 fw-normal border-0">
+                    Emp ID
+                  </th>
+                  <th style={rowHeadStyle} className="py-2 fw-normal border-0">
+                    Designation
+                  </th>
+                  <th style={rowHeadStyle} className="py-2 fw-normal border-0">
+                    Salary
+                  </th>
+                  <th style={rowHeadStyle} className="py-2 fw-normal border-0">
+                    Bank Name
+                  </th>
+                  <th style={rowHeadStyle} className="py-2 fw-normal border-0">
+                    Account No
+                  </th>
+                  <th style={rowHeadStyle} className="py-2 fw-normal border-0">
+                    Account Holder Name
+                  </th>
+                  <th style={rowHeadStyle} className="py-2 fw-normal border-0">
+                    IFSC Code
+                  </th>
+                  <th style={rowHeadStyle} className="py-2 fw-normal border-0">
+                    Tax Deduction
+                  </th>
+                  <th
+                    style={rowHeadStyle}
+                    className="py-2 fw-normal text-center border-0"
+                  >
+                    Edit
+                  </th>
+                  <th
+                    style={rowHeadStyle}
+                    className="py-2 fw-normal text-center border-0"
+                  >
+                    Delete
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentItems.map((item, index) => (
+                  <tr className="stickey-top" key={index}>
+                    <td
+                      style={rowBodyStyle}
+                      className="text-capitalize px-0 py-1 border-0"
+                    >
+                      <div className="d-flex flex-nowrap gap-2">
+                        <div
+                          className="mx-auto"
+                          style={{ height: "35px", width: "35px" }}
+                        >
+                          <img
+                            style={{
+                              height: "100%",
+                              width: "100%",
+                              borderRadius: "50%",
+                              overflow: "hidden",
+                              objectFit: "cover",
+                            }}
+                            src={
+                              item?.data?.profile?.image_url
+                                ? item?.data?.profile?.image_url
+                                : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
+                            }
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                    </td>
+                    <td style={rowBodyStyle} className=" border-0">
+                      {item.EmployeeName}
+                    </td>
+                    <td style={rowBodyStyle} className=" border-0">
+                      {item.empID}
+                    </td>
+                    <td style={rowBodyStyle} className=" border-0">
+                      {item.PositionName}
+                    </td>
+                    <td style={rowBodyStyle} className=" border-0">
+                      {item.BasicSalary}
+                    </td>
+                    <td
+                      style={rowBodyStyle}
+                      className="text-uppercase  border-0"
+                    >
+                      {item.BankName}
+                    </td>
+                    <td
+                      style={rowBodyStyle}
+                      className="text-uppercase border-0"
+                    >
+                      {item.AccountNo}
+                    </td>
+                    <td
+                      style={rowBodyStyle}
+                      className="text-capitalize border-0"
+                    >
+                      {item.AccountHolderName}
+                    </td>
+                    <td
+                      style={rowBodyStyle}
+                      className="text-uppercase border-0"
+                    >
+                      {item.IFSCcode}
+                    </td>
+                    <td style={rowBodyStyle} className="border-0">
+                      {item.TaxDeduction}
+                    </td>
+                    <td style={rowBodyStyle} className="border-0">
+                      <div className="d-flex  gap-3 justify-content-around">
+                        <button
+                          style={{
+                            background: darkMode
+                              ? "var(--secondaryDashMenuColor)"
+                              : "var(--secondaryDashColorDark)",
+                            color: darkMode
+                              ? "var(--secondaryDashColorDark)"
+                              : "var(--primaryDashMenuColor)",
+                          }}
+                          className="btn"
+                          onClick={() => props.onEditSalary(item.data)}
+                        >
+                          <FaEdit /> Edit
+                        </button>
+                      </div>
+                    </td>
+                    <td style={rowBodyStyle} className="border-0">
+                      <div className="d-flex  gap-3 justify-content-around">
+                        <button
+                          style={{
+                            background: darkMode
+                              ? "var(--secondaryDashMenuColor)"
+                              : "var(--secondaryDashColorDark)",
+                            color: darkMode
+                              ? "var(--secondaryDashColorDark)"
+                              : "var(--primaryDashMenuColor)",
+                          }}
+                          className="btn"
+                          onClick={() => onSalaryDelete(item.data._id)}
+                        >
+                          <IoTrashBin /> Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <>No Data Found</>
+          )}
+        </div>
+        <div className="container-fluid p-2 px-3 d-flex justify-content-between stickey-bottom">
+          <Button
+            className="d-flex gap-2"
+            onClick={handlePaginationPrev}
+            disabled={currentPage === 1}
+          >
+            <GrFormPrevious className="my-auto" /> Previous
+          </Button>
+          <div className="pagination d-flex flex-nowrap gap-2">
+            {pageNumbers.map((number) => (
+              <Button
+                key={number}
+                style={{
+                  backgroundColor: currentPage === number ? "active" : "white",
+                  border: "none",
+                  color: "gray",
+                }}
+                onClick={() => setCurrentPage(number)}
+                className={currentPage === number ? "active" : ""}
+              >
+                {number}
+              </Button>
+            ))}
+          </div>
+          <Button
+            onClick={handlePaginationNext}
+            className="d-flex gap-3"
+            disabled={indexOfLastItem >= sortedAndFilteredData.length}
+          >
+            <span className="">Next</span>{" "}
+            <GrFormPrevious className="my-auto" style={{ rotate: "180deg" }} />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

@@ -31,7 +31,7 @@ const EmployeeLogCount = (props) => {
         shade: "dark",
         type: "radial",
         shadeIntensity: 0.5,
-        gradientToColors: ["#09cc40", "#f21606", "#eecd27"],
+        gradientToColors: ["#8af054", "#f21606", "#eecd27"],
         inverseColors: false,
         opacityFrom: 1,
         opacityTo: 1,
@@ -41,7 +41,7 @@ const EmployeeLogCount = (props) => {
     stroke: {
       show: false,
     },
-    colors: ["#09cc40", "#f21606", "#eecd27"],
+    colors: ["#75ff2b", "#fd4c40", "#fddb31"],
     dataLabels: {
       enabled: true,
     },

@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import "./Salary.css";
 import axios from "axios";
@@ -7,6 +5,7 @@ import SalaryTable from "./SalaryTable.jsx";
 import SalaryForm from "./SalaryForm.jsx";
 import SalaryFormEdit from "./SalaryFormEdit.jsx";
 import BASE_URL from "../config/config.js";
+
 const Salary = () => {
   const [table, setTable] = useState(true);
   const [editForm, setEditForm] = useState(false);
@@ -23,21 +22,16 @@ const Salary = () => {
         AccountNo: event.target[3].value,
         AccountHolderName: event.target[5].value,
         IFSCcode: event.target[6].value,
-        TaxDeduction: event.target[7].value
+        TaxDeduction: event.target[7].value,
       };
 
       axios
-        .post(
-          `${BASE_URL}/api/salary/` + event.target[0].value,
-          body,
-          {
-            headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
-          }
-        )
+        .post(`${BASE_URL}/api/salary/` + event.target[0].value, body, {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        })
         .then((res) => {
-          setTable(false);
           setTable(true);
         })
         .catch((err) => {
@@ -51,29 +45,24 @@ const Salary = () => {
   };
 
   const handleAddSalary = () => {
-    console.log("clicked1");
     setTable(false);
   };
 
   const handleEditSalary = (e) => {
-    console.log(e);
-    console.log("clicked6");
     setEditForm(true);
     setEditData(e);
   };
 
   const handleFormClose = () => {
-    console.log("clicked1");
     setTable(true);
   };
 
   const handleEditFormClose = () => {
-    console.log("clicked5");
     setEditForm(false);
+    setTable(true);
   };
 
   const handleSalaryEditUpdate = (info, newInfo) => {
-    console.log("eeeeeeeeeeeeeeeeeeeeddddddddddddddddddddddddd");
     newInfo.preventDefault();
     if (!(newInfo.target[3].value === newInfo.target[4].value)) {
       window.alert("The bank account number you entered does not match ");
@@ -84,21 +73,16 @@ const Salary = () => {
         AccountNo: newInfo.target[3].value,
         AccountHolderName: newInfo.target[5].value,
         IFSCcode: newInfo.target[6].value,
-        TaxDeduction: newInfo.target[7].value
+        TaxDeduction: newInfo.target[7].value,
       };
 
       axios
-        .put(
-          `${BASE_URL}/api/salary/` + info["salary"][0]["_id"],
-          body,
-          {
-            headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
-          }
-        )
+        .put(`${BASE_URL}/api/salary/` + info["salary"][0]["_id"], body, {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        })
         .then((res) => {
-          setTable(false);
           setTable(true);
         })
         .catch((err) => {
@@ -124,7 +108,7 @@ const Salary = () => {
         editForm ? (
           <SalaryFormEdit
             onSalaryEditUpdate={handleSalaryEditUpdate}
-            onFormEditClose={handleEditFormClose}
+            onFormClose={handleEditFormClose}
             editData={editData}
             onGenderChange={handleEditFormGenderChange}
           />

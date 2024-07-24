@@ -96,31 +96,19 @@ const TaskChart = () => {
 
   const taskStatusCounts = {
     Total: tasks.length,
-    Assigned: tasks.filter((tasks) => tasks.status === "Assigned").length,
+    Assigned: tasks.filter((task) => task.status === "Assigned").length,
     ActiveTask: tasks.filter((task) => task.status === "Assigned").length,
-    canceled: tasks.filter((task) => task.status === "Cancelled").length,
+    Canceled: tasks.filter((task) => task.status === "Cancelled").length,
     Completed: tasks.filter((task) => task.status === "Completed").length,
-    overdue: tasks.filter(
+    Overdue: tasks.filter(
       (task) =>
         task.status === "Assigned" && calculateRemainingTime(task.endDate).delay
     ).length,
-
-    onTime: tasks.filter(
+    OnTime: tasks.filter(
       (task) =>
         task.status === "Assigned" &&
         !calculateRemainingTime(task.endDate).delay
     ).length,
-
-    // Rejected: tasks.filter((task) => task.status === "Rejected").length,
-    // Active: tasks.filter((task) => task.status === "Pending").length,
-    // Overdue: tasks.filter(
-    //   (task) =>
-    //     task.status === "Pending" && calculateRemainingTime(task.endDate).delay
-    // ).length,
-    // Ontime: tasks.filter(
-    //   (task) =>
-    //     task.status === "Pending" && !calculateRemainingTime(task.endDate).delay
-    // ).length
   };
 
   const chartData = {
@@ -161,10 +149,9 @@ const TaskChart = () => {
           text: "Number of Employee",
         },
       },
-
       fill: {
         opacity: 1,
-        colors: ["rgb(100, 150, 200)"], // Change bar colors
+        colors: ["rgb(100, 150, 200)"],
       },
       tooltip: {
         y: {
@@ -184,6 +171,7 @@ const TaskChart = () => {
       },
     },
   };
+
   const taskStatusChartData = {
     options: {
       chart: {
@@ -191,7 +179,7 @@ const TaskChart = () => {
         type: "bar",
       },
       fill: {
-        colors: ["var(--primaryDashColorDark)"],
+        colors: darkMode ? ["#4078f194"] : ["#0af0dd"],
       },
       xaxis: {
         categories: Object.keys(taskStatusCounts),

@@ -122,12 +122,12 @@ const Sidebar = () => {
         style={{ borderBottom: "3px solid green" }}
         className="text-success justify-content-between py-2 d-flex gap-2"
       >
-        <p
-          style={{ display: !extended ? "none" : "block" }}
-          className="my-auto fs-4"
+        <button
+          style={{ display: !extended ? "none" : "block", cursor: "none" }}
+          className=" btn btn-success rounded-5 py-0"
         >
           Manager
-        </p>
+        </button>
         <span
           onClick={ExtendClick}
           style={{

@@ -568,6 +568,7 @@ const NavBar = (props, data) => {
                 {/* <p>Profile</p> */}
 
                 <Link
+                  className="text-decoration-none"
                   to={
                     location === "employee"
                       ? `/employee/${id}/personal-info`

@@ -16,6 +16,9 @@ const DepartmentChart = () => {
       labels: [],
       legend: {
         position: "bottom",
+        labels: {
+          colors: darkMode ? "black" : "white",
+        },
       },
       fill: {
         colors: [

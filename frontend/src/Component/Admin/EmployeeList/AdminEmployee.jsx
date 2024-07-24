@@ -62,8 +62,8 @@ const AdminEmployee = () => {
       .post(`${BASE_URL}/api/employee`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((res) => {
         // setTable(false);
@@ -128,8 +128,8 @@ const AdminEmployee = () => {
       .put(`${BASE_URL}/api/employee/${info["_id"]}`, formData, {
         headers: {
           authorization: localStorage.getItem("token") || "",
-          "Content-Type": "multipart/form-data" // Set content type explicitly for FormData
-        }
+          "Content-Type": "multipart/form-data", // Set content type explicitly for FormData
+        },
       })
       .then((res) => {
         setTable(false);
