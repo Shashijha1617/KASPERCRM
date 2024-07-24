@@ -337,7 +337,11 @@ const TodaysAttendance = () => {
                   >
                     {user.attendance ? user.attendance.logoutTime.length : "--"}
                   </td>
-                  {/* <td style={{ verticalAlign: "middle", textAlign: 'center' }}><span >{user.attendance ? user.attendance.totalBreak : "--"}</span></td> */}
+                  <td style={{ verticalAlign: "middle", textAlign: "center" }}>
+                    <span>
+                      {user.attendance ? user.attendance.totalBreak : "--"}
+                    </span>
+                  </td>
                   <td style={{ verticalAlign: "middle", textAlign: "center" }}>
                     {user.attendance
                       ? convertMinutesToHoursAndMinutes(
@@ -370,7 +374,12 @@ const TodaysAttendance = () => {
                       {mark}
                     </span>
                   </td>
-                  {/* <td style={{ verticalAlign: "middle", textAlign: 'center' }} className='text-center'>{user.attendance ? user.attendance.breakTime.length : '--'}</td> */}
+                  <td
+                    style={{ verticalAlign: "middle", textAlign: "center" }}
+                    className="text-center"
+                  >
+                    {user.attendance ? user.attendance.breakTime.length : "--"}
+                  </td>
                   <td
                     style={{ zIndex: "1", verticalAlign: "middle" }}
                     className="text-center"
