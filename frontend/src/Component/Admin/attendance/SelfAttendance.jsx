@@ -2,19 +2,20 @@ import React, { useState, useEffect, memo } from "react";
 import axios from "axios";
 import { TfiReload } from "react-icons/tfi";
 import { FaCircleInfo } from "react-icons/fa6";
-import { MdOutlineRefresh } from "react-icons/md";
 import BASE_URL from "../../../Pages/config/config";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import SetBreakLogs from "../../../Pages/Attendance/SetBreakLogs";
+import { GetDayFormatted } from "../../../Utils/GetDayFormatted";
 
 const SelfAttendance = () => {
-  const [employees, setEmployees] = useState([]);
   const [attendanceData, setAttendanceData] = useState(null);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
-  const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [hoveredDate, setHoveredDate] = useState(null);
   const [isInfoHovering, setIsInfoHovering] = useState(false);
   const empMail = localStorage.getItem("Email");
   const employeeId = localStorage.getItem("_id");
+  const { darkMode } = useTheme();
 
   const handleMouseEnter = (date) => {
     setHoveredDate(date);
@@ -32,43 +33,6 @@ const SelfAttendance = () => {
     setIsInfoHovering(false);
   };
 
-  //   useEffect(() => {
-  //     fetchEmployees();
-  //   }, []);
-
-  //   const fetchEmployees = async () => {
-  //     try {
-  //       const response = await axios.get("${BASE_URL}/api/employee", {
-  //         headers: {
-  //           authorization: localStorage.getItem("token") || ""
-  //         }
-  //       });
-  //       setEmployees(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching employees:", error);
-  //     }
-  //   };
-
-  // const handleFetchAttendance = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${BASE_URL}/api/attendance/${employeeId}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem("token") || ""}`
-  //         }
-  //       }
-  //     );
-  //     let singleUser = response.data.filter((val) => {
-  //       return val.employeeObjID._id === employeeId;
-  //     });
-  //     setAttendanceData(singleUser.length > 0 ? singleUser[0] : null);
-  //   } catch (error) {
-  //     console.error("Error fetching attendance data:", error);
-  //   }
-  // };
-
-  // setIsButtonClicked(true);
   useEffect(() => {
     const handleFetchAttendance = async () => {
       try {
@@ -76,8 +40,8 @@ const SelfAttendance = () => {
           `${BASE_URL}/api/attendance/${employeeId}`,
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token") || ""}`
-            }
+              Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+            },
           }
         );
 
@@ -164,7 +128,7 @@ const SelfAttendance = () => {
     const formattedSeconds = String(seconds % 60).padStart(2, "0");
     const formattedMillisecond = String(millisecond % 60).padStart(2, "0");
 
-    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}:${formattedMillisecond}`;
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
   };
 
   const getAttendanceMark = (date) => {
@@ -172,136 +136,120 @@ const SelfAttendance = () => {
     if (loginTime) {
       const [loginHour, loginMinute] = loginTime.split(":").map(Number);
       if (loginHour > 9 || (loginHour === 9 && loginMinute > 45)) {
-        return "H";
+        return "Half Day";
       } else if (loginHour > 9 || (loginHour === 9 && loginMinute > 30)) {
-        return "L";
+        return "Late";
       }
     }
-    return loginTime ? "P" : "A";
+    return loginTime ? "Present" : "Absent";
+  };
+
+  const twoDigit = (data) => {
+    return data.toString().padStart(2, 0);
+  };
+
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
   };
 
   return (
-    <div className="d-flex flex-column p-5 gap-3">
-      {/* <div className="d-flex gap-3 ">
+    <div className="container-fluid py-3">
+      <div className="d-flex align-items-center justify-content-between my-2">
         <div>
-          <select
-            className="form-select w-100 shadow-sm text-muted"
-            id="employeeId"
-            value={employeeId}
-            onChange={handleEmployeeChange}
+          <h5
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--primaryDashMenuColor)",
+            }}
+            className=" my-auto"
           >
-            <option value="" disabled>
-              --Select an employee--
-            </option>
-
-            {employees
-              .sort((a, b) => a.empID - b.empID)
-              .map((employee) => (
-                <option
-                  className="text-uppercase"
-                  key={employee._id}
-                  value={employee._id}
-                >
-                  🪪 ({employee.empID}) {employee.FirstName}-{employee.LastName}
-                </option>
-              ))}
-          </select>
+            Attendance
+          </h5>
+          <p
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--primaryDashMenuColor)",
+            }}
+            className=" my-auto"
+          >
+            You can view your attendance here.
+          </p>
         </div>
 
-        <button
-          className="btn shadow btn-dark fw-bolder"
-          style={{ width: "fit-content" }}
-          onClick={handleFetchAttendance}
-        >
-          Fetch Attendance
-        </button>
-      </div> */}
-      <div className="d-flex gap-3 justify-content-between">
-        {/* <div>
-          <select
-            className="form-select w-100 shadow-sm text-muted"
-            id="employeeId"
-            value={employeeId}
-            onChange={handleEmployeeChange}
-          >
-            <option value="" disabled>
-              --Select an employee--
-            </option>
-            {employees
-              .sort((a, b) => a.empID - b.empID)
-              .map((employee) => (
-                <option
-                  className="text-uppercase"
-                  key={employee._id}
-                  value={employee._id}
-                >
-                  <p>
-                    🪪 ({employee.empID}) {employee.FirstName}
-                  </p>
-                </option>
-              ))}
-          </select>
-        </div> */}
-        {/* <button
-          disabled={!employeeId}
-          style={{ display: "flex", alignItems: "center", gap: ".5rem" }}
-          className="btn shadow btn-dark fw-bolder"
-          onClick={handleFetchAttendance}
-        >
-          <MdOutlineRefresh
-            className={`fs-4 ${isButtonClicked ? "rotate" : ""}`}
-          />{" "}
-          Get
-        </button> */}
+        {attendanceData && (
+          <div className="d-flex gap-3">
+            <SetBreakLogs />
+            <div>
+              <select
+                className="form-select rounded-0 shadow"
+                id="year"
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+              >
+                {getYears().map((year) => (
+                  <option key={year.year} value={year.year}>
+                    {year.year}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <select
+                className="form-select rounded-0 shadow"
+                id="month"
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+              >
+                {getMonthsForYear(selectedYear).map((month) => (
+                  <option key={month} value={month}>
+                    {getMonthName(month)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
       </div>
 
       {attendanceData && (
-        <div className="d-flex gap-3">
-          <div>
-            <label htmlFor="year">Select a year:</label>
-            <select
-              className="form-select shadow"
-              id="year"
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-            >
-              {getYears().map((year) => (
-                <option key={year.year} value={year.year}>
-                  {year.year}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="month">Select a month:</label>
-            <select
-              className="form-select shadow"
-              id="month"
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-            >
-              {getMonthsForYear(selectedYear).map((month) => (
-                <option key={month} value={month}>
-                  {getMonthName(month)}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      )}
-
-      {attendanceData && (
-        <div style={{ overflow: "auto", height: "80vh" }}>
+        <div style={{ overflow: "auto", height: "76vh" }}>
           <table className="table">
             <thead>
               <tr className="shadow-sm">
-                <th className="bg-dark text-white text-center">Date</th>
-                <th className="bg-dark text-white text-center">Status</th>
-                <th className="bg-dark text-white">Login Time</th>
-                <th className="bg-dark text-white">Logout Time</th>
-                <th className="bg-dark text-white">Break</th>
-                <th className="bg-dark text-white">Total Login</th>
-                <th className="bg-dark text-white">Status</th>
+                <th style={rowHeadStyle}>Date | Day</th>
+                <th style={rowHeadStyle}>Status</th>
+                <th style={rowHeadStyle}>Login Time</th>
+                <th style={rowHeadStyle}>Logout Time</th>
+                <th style={rowHeadStyle}>Logout Count</th>
+                <th style={rowHeadStyle}>Break Count</th>
+                <th style={rowHeadStyle}>Break</th>
+                <th style={rowHeadStyle}>Total Login</th>
+                <th style={rowHeadStyle}>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -319,28 +267,52 @@ const SelfAttendance = () => {
                           onMouseEnter={() => handleMouseEnter(date.date)}
                           onMouseLeave={() => handleMouseLeave()}
                         >
-                          <td className="text-center">
-                            <span className="fw-bold bg-info py-1 px-2  shadow-sm text-white">
-                              {date.date}
-                            </span>
+                          <td style={rowBodyStyle}>
+                            <div className="d-flex align-items-center gap-1">
+                              <span
+                                style={{
+                                  height: "40px",
+                                  width: "40px",
+                                  border: darkMode
+                                    ? "1px solid var(--primaryDashColorDark)"
+                                    : "1px solid var(--primaryDashMenuColor)",
+                                }}
+                                className=" d-flex align-items-center justify-content-center"
+                              >
+                                {twoDigit(date.date)}
+                              </span>
+                              <span
+                                style={{
+                                  height: "40px",
+                                  width: "50px",
+                                  border: darkMode
+                                    ? "1px solid var(--primaryDashColorDark)"
+                                    : "1px solid var(--primaryDashMenuColor)",
+                                }}
+                                className="d-flex align-items-center justify-content-center"
+                              >
+                                {GetDayFormatted(date.day)}
+                              </span>
+                            </div>
                           </td>
-                          <td
-                            style={{ whiteSpace: "pre", textAlign: "center" }}
-                          >
+                          <td style={rowBodyStyle}>
                             {getAttendanceMark(date)}
                           </td>
-                          <td className="text-uppercase">
-                            {date.loginTime[0]}
-                          </td>
-                          <td className="text-uppercase">
+                          <td style={rowBodyStyle}>{date.loginTime[0]}</td>
+                          <td style={rowBodyStyle}>
                             {date.logoutTime[date.logoutTime.length - 1]}
                           </td>
-                          <td className="position-relative bg-white">
+                          <td style={rowBodyStyle}>{date.loginTime.length}</td>
+                          <td style={rowBodyStyle}>{date.breakTime.length}</td>
+                          <td
+                            className="position-relative"
+                            style={rowBodyStyle}
+                          >
                             <div
                               style={{
                                 display: "flex ",
                                 justifyContent: "start",
-                                alignItems: "center"
+                                alignItems: "center",
                               }}
                               className="fs-6 gap-2 "
                               onMouseEnter={handleInfoMouseEnter}
@@ -352,7 +324,7 @@ const SelfAttendance = () => {
                               >
                                 {date.breakTime.length}
                               </span>
-                              <span className="fw-bold text-dark fs-6">
+                              <span className="fs-6">
                                 {millisecondsToTime(date.totalBrake)}
                               </span>{" "}
                               <FaCircleInfo
@@ -365,59 +337,58 @@ const SelfAttendance = () => {
                               style={{ zIndex: "5", right: "0%" }}
                               className="position-absolute"
                             >
-                              {isInfoHovering &&
-                                hoveredDate === date.date && ( // Check if info button is hovered and the date is the hovered date
-                                  <table className="table table-bordered table-striped">
-                                    <thead>
-                                      <tr className="shadow-sm p-0">
-                                        <th className="bg-info  py-0 text-white">
-                                          Break
-                                        </th>
-                                        <th className="bg-info  py-0 text-white">
-                                          Resume
-                                        </th>
-                                        <th
-                                          className="text-end  py-0 bg-info text-white"
+                              {isInfoHovering && hoveredDate === date.date && (
+                                <table className="table table-bordered table-striped">
+                                  <thead>
+                                    <tr className="shadow-sm p-0">
+                                      <th className="bg-info  py-0 text-white">
+                                        Break
+                                      </th>
+                                      <th className="bg-info  py-0 text-white">
+                                        Resume
+                                      </th>
+                                      <th
+                                        className="text-end  py-0 bg-info text-white"
+                                        style={{ whiteSpace: "pre" }}
+                                      >
+                                        Total Break
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {date.breakTime.map((breakTime, index) => (
+                                      <tr className="shadow-sm" key={index}>
+                                        <td
+                                          className="text-uppercase  py-1 text-center"
                                           style={{ whiteSpace: "pre" }}
                                         >
-                                          Total Break
-                                        </th>
+                                          {breakTime}
+                                        </td>
+                                        <td
+                                          className="text-uppercase  py-1 text-center"
+                                          style={{ whiteSpace: "pre" }}
+                                        >
+                                          {date.ResumeTime[index]}
+                                        </td>
+                                        <td
+                                          className="text-end py-1 "
+                                          style={{ whiteSpace: "pre" }}
+                                        >
+                                          {millisecondsToTime(
+                                            date.BreakData[index]
+                                          )}
+                                        </td>
                                       </tr>
-                                    </thead>
-                                    <tbody>
-                                      {date.breakTime.map(
-                                        (breakTime, index) => (
-                                          <tr className="shadow-sm" key={index}>
-                                            <td
-                                              className="text-uppercase  py-1 text-center"
-                                              style={{ whiteSpace: "pre" }}
-                                            >
-                                              {breakTime}
-                                            </td>
-                                            <td
-                                              className="text-uppercase  py-1 text-center"
-                                              style={{ whiteSpace: "pre" }}
-                                            >
-                                              {date.ResumeTime[index]}
-                                            </td>
-                                            <td
-                                              className="text-end py-1 "
-                                              style={{ whiteSpace: "pre" }}
-                                            >
-                                              {millisecondsToTime(
-                                                date.BreakData[index]
-                                              )}
-                                            </td>
-                                          </tr>
-                                        )
-                                      )}
-                                    </tbody>
-                                  </table>
-                                )}
+                                    ))}
+                                  </tbody>
+                                </table>
+                              )}
                             </div>
                           </td>
-                          <td>{millisecondsToTime(date.totalLogAfterBreak)}</td>
-                          <td>{date.status}</td>
+                          <td style={rowBodyStyle}>
+                            {millisecondsToTime(date.totalLogAfterBreak)}
+                          </td>
+                          <td style={rowBodyStyle}>{date.status}</td>
                         </tr>
                       ))
                   )
@@ -436,7 +407,7 @@ const SelfAttendance = () => {
             alignItems: "center",
             wordSpacing: "5px",
             flexDirection: "column",
-            gap: "1rem"
+            gap: "1rem",
           }}
         >
           <div className="fs-2 fw-bolder">

@@ -487,6 +487,7 @@ const getEmployeeTodayAttendance = async (req, res) => {
   }
 };
 
+
 module.exports = {
   createAttendance,
   createHolidays,
@@ -496,5 +497,5 @@ module.exports = {
   findAllHolidays,
   attendanceRegister,
   todaysAttendance,
-  getEmployeeTodayAttendance
+  getEmployeeTodayAttendance,
 };

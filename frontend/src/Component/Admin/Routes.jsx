@@ -37,6 +37,7 @@ import Team from "../../Pages/team/team/Team.jsx";
 
 import AllEmpLeave from "./leave/AllEmpLeave.jsx";
 import LeaveAssign from "./leave/LeaveAssign.jsx";
+import SelfAttendance from "./attendance/SelfAttendance.jsx";
 
 const AdminRoutes = () => {
   return (
@@ -78,6 +79,7 @@ const AdminRoutes = () => {
           exact
           component={TodaysAttendance}
         />
+        <Route path="/admin/myAttendance" exact component={SelfAttendance} />
         {/* END TASK ROUTES */}
         {/* START LEAVE ROUTES */}
         <Route path="/admin/applyLeave" exact component={LeaveApplication} />

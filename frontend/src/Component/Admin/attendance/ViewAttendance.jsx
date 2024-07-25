@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { IoMdInformationCircleOutline } from "react-icons/io";
 import { HiOutlineLogin, HiOutlineLogout } from "react-icons/hi";
-import { RxCounterClockwiseClock } from "react-icons/rx";
 import { FaUserClock } from "react-icons/fa6";
 import SearchDark from "../../../img/Attendance/SearchDark.svg";
 import SearchLight from "../../../img/Attendance/SearchLight.svg";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../../../Pages/config/config";
 import { AiOutlineFieldNumber } from "react-icons/ai";
+import { GetDayFormatted } from "../../../Utils/GetDayFormatted";
 
 const AttendanceDetails = () => {
   const [employeeId, setEmployeeId] = useState("");
@@ -282,27 +281,65 @@ const AttendanceDetails = () => {
       const [loginHour, loginMinute] = loginTime.split(":").map(Number);
       if (loginHour > 9 || (loginHour === 9 && loginMinute > 45)) {
         return (
-          <span className="btn btn-outline-warning py-0 rounded-5">
+          <span
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+              fontSize: "0.8rem",
+            }}
+            className="btn border border-warning py-0 rounded-5"
+          >
             Half Day
           </span>
         );
       } else if (loginHour > 9 || (loginHour === 9 && loginMinute > 30)) {
         return (
-          <span className="btn btn-outline-info py-0 rounded-5">Late</span>
+          <span
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+              fontSize: "0.8rem",
+            }}
+            className="btn border border-info py-0 rounded-5"
+          >
+            Late
+          </span>
         );
       }
     }
     return loginTime ? (
-      <span className="btn btn-outline-success py-0 rounded-5">Present</span>
+      <span
+        style={{
+          color: darkMode
+            ? "var(--secondaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+          fontSize: "0.8rem",
+        }}
+        className="btn border border-success py-0 rounded-5"
+      >
+        Present
+      </span>
     ) : (
-      <span className="btn btn-outline-danger py-0 rounded-5">Absent</span>
+      <span
+        style={{
+          color: darkMode
+            ? "var(--secondaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+          fontSize: "0.8rem",
+        }}
+        className="btn border border-danger py-0 rounded-5"
+      >
+        Absent
+      </span>
     );
   };
 
-  const GetDay = (s) => {
-    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    return days[s];
-  };
+  // const GetDay = (s) => {
+  //   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  //   return days[s];
+  // };
 
   function convertMinutesToHoursAndMinutes(minutes) {
     // Calculate hours
@@ -505,9 +542,10 @@ const AttendanceDetails = () => {
                       ? "var(--primaryDashColorDark)"
                       : "var(--primaryDashMenuColor)",
                     border: "none",
+                    textAlign: "center",
                   }}
                 >
-                  <AiOutlineFieldNumber /> Log Count
+                  <AiOutlineFieldNumber /> Log
                 </th>
                 <th
                   style={{
@@ -520,9 +558,10 @@ const AttendanceDetails = () => {
                       ? "var(--primaryDashColorDark)"
                       : "var(--primaryDashMenuColor)",
                     border: "none",
+                    textAlign: "center",
                   }}
                 >
-                  <AiOutlineFieldNumber /> Break Count
+                  <AiOutlineFieldNumber /> Break
                 </th>
                 <th
                   style={{
@@ -591,7 +630,7 @@ const AttendanceDetails = () => {
                                 {String(date.date).padStart(2, "0")}
                               </span>{" "}
                               <span
-                                className="py-0 btn  d-flex align-items-center justify-content-center rounded-0"
+                                className="py-0 btn   d-flex align-items-center justify-content-center rounded-0"
                                 style={{
                                   height: "30px",
                                   width: "45px",
@@ -606,7 +645,7 @@ const AttendanceDetails = () => {
                                 }}
                               >
                                 {" "}
-                                {GetDay(date.day)}
+                                {GetDayFormatted(date.day)}
                               </span>
                             </td>
                             <td style={rowBodyStyle} className="text-start">
@@ -635,11 +674,10 @@ const AttendanceDetails = () => {
                                 onMouseLeave={handleInfoMouseLeave}
                               >
                                 <span
-                                  className="py-0 btn  d-flex align-items-center justify-content-center"
+                                  className="py-0 btn mx-auto rounded-0  d-flex align-items-center justify-content-center"
                                   style={{
                                     height: "30px",
                                     width: "30px",
-                                    borderRadius: "50%",
                                     border: `1px solid ${
                                       darkMode
                                         ? "var(--primaryDashColorDark)"
@@ -725,11 +763,10 @@ const AttendanceDetails = () => {
                             </td>
                             <td style={rowBodyStyle}>
                               <span
-                                className="py-0 btn  d-flex align-items-center justify-content-center"
+                                className="py-0 btn mx-auto rounded-0  d-flex align-items-center justify-content-center"
                                 style={{
                                   height: "30px",
                                   width: "30px",
-                                  borderRadius: "50%",
                                   border: `1px solid ${
                                     darkMode
                                       ? "var(--primaryDashColorDark)"

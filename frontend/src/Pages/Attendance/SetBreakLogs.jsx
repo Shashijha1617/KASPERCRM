@@ -1,16 +1,13 @@
 import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
-import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
-import InnerDashContainer from "../../InnerDashContainer";
 import Moment from "moment";
-import BASE_URL from "../../../Pages/config/config";
-import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import BASE_URL from "../config/config";
 import toast from "react-hot-toast";
-import AttendanceDetails from "./AttendanceList";
-import { RiLoginCircleFill, RiLogoutCircleFill } from "react-icons/ri";
 import { MdCoffee, MdMouse } from "react-icons/md";
+import { AttendanceContext } from "../../Context/AttendanceContext/AttendanceContext";
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
 
-const SetLog = (props) => {
+const SetBreakLogs = (props) => {
   const [empName, setEmpName] = useState(null);
   const { darkMode } = useTheme();
   const {
@@ -125,42 +122,25 @@ const SetLog = (props) => {
   const handleBreak = () => handleAttendanceAction("breakTime", "break");
 
   return (
-    <div className="container-fluid">
-      <div className="d-flex align-items-center justify-content-between py-2">
-        <div className="d-flex justify-content-between align-items-center p-3 px-2">
-          <h5
-            style={{
-              color: darkMode
-                ? "var(--primaryDashColorDark)"
-                : "var(--primaryDashMenuColor)",
-            }}
-            className="fw-bold my-auto"
-          >
-            Attendance System
-          </h5>
-        </div>
-        <div className="d-flex gap-3 px-2" style={{ height: "fit-content" }}>
-          <div className="d-flex gap-3">
-            <button
-              title="Break"
-              className="btn btn-warning d-flex align-items-center gap-2"
-              onClick={handleBreak}
-            >
-              <MdCoffee /> <span className="d-none d-md-flex">Break</span>
-            </button>
-            <button
-              title="Resume"
-              className="btn btn-primary d-flex align-items-center gap-2"
-              onClick={handleResume}
-            >
-              <MdMouse /> <span className="d-none d-md-flex">Resume</span>
-            </button>
-          </div>
-        </div>
+    <div className="d-flex gap-3" style={{ height: "fit-content" }}>
+      <div className="d-flex gap-3">
+        <button
+          title="Break"
+          className="btn btn-warning d-flex align-items-center gap-2"
+          onClick={handleBreak}
+        >
+          <MdCoffee /> <span className="d-none d-md-flex">Break</span>
+        </button>
+        <button
+          title="Resume"
+          className="btn btn-primary d-flex align-items-center gap-2"
+          onClick={handleResume}
+        >
+          <MdMouse /> <span className="d-none d-md-flex">Resume</span>
+        </button>
       </div>
-      <AttendanceDetails />
     </div>
   );
 };
 
-export default SetLog;
+export default SetBreakLogs;

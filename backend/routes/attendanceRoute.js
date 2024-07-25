@@ -8,7 +8,7 @@ const {
   findAllHolidays,
   todaysAttendance,
   attendanceRegister,
-  getEmployeeTodayAttendance // Add this function to your controller
+  getEmployeeTodayAttendance,
 } = require("../controllers/AttendanceController");
 
 const attendanceRoute = express.Router();

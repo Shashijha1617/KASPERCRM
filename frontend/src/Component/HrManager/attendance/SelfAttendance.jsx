@@ -2,16 +2,13 @@ import React, { useState, useEffect, memo } from "react";
 import axios from "axios";
 import { TfiReload } from "react-icons/tfi";
 import { FaCircleInfo } from "react-icons/fa6";
-import { MdOutlineRefresh } from "react-icons/md";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../../../Pages/config/config";
 
 const SelfAttendance = () => {
-  const [employees, setEmployees] = useState([]);
   const [attendanceData, setAttendanceData] = useState(null);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
-  const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [hoveredDate, setHoveredDate] = useState(null);
   const [isInfoHovering, setIsInfoHovering] = useState(false);
   const empMail = localStorage.getItem("Email");
@@ -98,16 +95,16 @@ const SelfAttendance = () => {
     handleFetchAttendance();
   }, [employeeId, empMail]);
 
-  const getTotalHolidays = () => {
-    if (
-      attendanceData &&
-      attendanceData.user &&
-      attendanceData.user.holidayObjID
-    ) {
-      return attendanceData.user.holidayObjID.holidays.length;
-    }
-    return 0;
-  };
+  // const getTotalHolidays = () => {
+  //   if (
+  //     attendanceData &&
+  //     attendanceData.user &&
+  //     attendanceData.user.holidayObjID
+  //   ) {
+  //     return attendanceData.user.holidayObjID.holidays.length;
+  //   }
+  //   return 0;
+  // };
 
   const getMonthName = (monthNumber) => {
     switch (monthNumber) {
@@ -232,7 +229,7 @@ const SelfAttendance = () => {
             }}
             className=" m-0"
           >
-            You Can Check you Attendance here
+            You can check yous attendance here.
           </p>
         </div>
 

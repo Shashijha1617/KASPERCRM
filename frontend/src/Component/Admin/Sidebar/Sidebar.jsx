@@ -46,7 +46,8 @@ const Sidebar = () => {
       icon: <IoMdCheckmarkCircleOutline />,
       name: "Attendance",
       navLinks: [
-        { to: "/admin/adminAttendance", label: "Create Attendance" },
+        { to: "/admin/myAttendance", label: "My Attendance" },
+        // { to: "/admin/adminAttendance", label: "Create Attendance" },
         { to: "/admin/todaysAttendance", label: "TodaysAttendance" },
         { to: "/admin/viewAttendance", label: "View Attendance" },
         // { to: "/admin/leave", label: "View Leave " }

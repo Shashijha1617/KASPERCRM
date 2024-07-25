@@ -46,24 +46,24 @@ const Sidebar = (props) => {
       ],
     },
 
-    {
-      icon: <FaUniversity />,
-      name: "Info",
-      navLinks: [
-        {
-          to: "/employee/" + props.data["_id"] + "/family-info",
-          label: "Dependents",
-        },
-        {
-          to: "/employee/" + props.data["_id"] + "/education",
-          label: "Education",
-        },
-        {
-          to: "/employee/" + props.data["_id"] + "/work-experience",
-          label: "WorkExp",
-        },
-      ],
-    },
+    // {
+    //   icon: <FaUniversity />,
+    //   name: "Info",
+    //   navLinks: [
+    //     {
+    //       to: "/employee/" + props.data["_id"] + "/family-info",
+    //       label: "Dependents",
+    //     },
+    //     {
+    //       to: "/employee/" + props.data["_id"] + "/education",
+    //       label: "Education",
+    //     },
+    //     {
+    //       to: "/employee/" + props.data["_id"] + "/work-experience",
+    //       label: "WorkExp",
+    //     },
+    //   ],
+    // },
     {
       icon: <BsCalendar2CheckFill />,
       name: "Attendance",

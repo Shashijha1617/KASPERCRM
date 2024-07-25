@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./AdminProjectBidTable.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +7,10 @@ import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Button } from "react-bootstrap";
 import BASE_URL from "../../Pages/config/config";
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import { FaEdit } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa6";
 
 const override = css`
   display: block;
@@ -15,25 +19,27 @@ const override = css`
   border-color: red;
 `;
 
-class AdminProjectBidTable extends Component {
-  state = {
-    projectBidData: [],
-    loading: true,
-    rowData: [],
-    sortColumn: null,
-    sortDirection: "asc",
-    error: null // New state for handling errors
-  };
-  loadProjectBidData = () => {
+const AdminProjectBidTable = (props) => {
+  const [projectBidData, setProjectBidData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [rowData, setRowData] = useState([]);
+  const [sortColumn, setSortColumn] = useState(null);
+  const [sortDirection, setSortDirection] = useState("asc");
+  const [error, setError] = useState(null);
+  const { darkMode } = useTheme();
+
+  const loadProjectBidData = () => {
     axios
       .get(`${BASE_URL}/api/admin/project-bid`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         const projectBidData = response.data;
-        this.setState({ projectBidData, loading: false, error: null });
+        setProjectBidData(projectBidData);
+        setLoading(false);
+        setError(null);
 
         const rowData = projectBidData.map((data) => ({
           data,
@@ -42,217 +48,227 @@ class AdminProjectBidTable extends Component {
           ProjectURL: data["ProjectURL"],
           EstimatedTime: data["EstimatedTime"],
           EstimatedCost: data["EstimatedCost"],
-          Remark: data["Remark"]
+          Remark: data["Remark"],
         }));
 
-        this.setState({ rowData });
+        setRowData(rowData);
       })
       .catch((error) => {
-        console.log(error);
-        this.setState({ loading: false, error: "Error loading data." });
+        console.error("Error loading data:", error);
+        setLoading(false);
+        setError("Error loading data.");
       });
   };
 
-  onProjectBidDelete = (e) => {
-    console.log(e);
-    if (window.confirm("Are you sure to delete this record? ") == true) {
+  const onProjectBidDelete = (id) => {
+    if (window.confirm("Are you sure to delete this record?")) {
       axios
-        .delete(`${BASE_URL}/api/admin/project-bid/` + e, {
+        .delete(`${BASE_URL}/api/admin/project-bid/${id}`, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
-        .then((res) => {
-          this.componentDidMount();
+        .then(() => {
+          loadProjectBidData();
         })
         .catch((err) => {
-          console.log(err);
+          console.error("Error deleting record:", err);
         });
     }
   };
-  componentDidMount() {
-    this.loadProjectBidData();
-  }
-  renderButton(params) {
-    console.log(params);
-    return (
-      <FontAwesomeIcon
-        icon={faTrash}
-        onClick={() => this.onProjectBidDelete(params.data.data["_id"])}
-      />
-    );
-  }
-  renderEditButton(params) {
-    console.log(params);
-    return (
-      <FontAwesomeIcon
-        icon={faEdit}
-        onClick={() => this.props.onEditProjectBid(params.data.data)}
-      />
-    );
-  }
 
-  renderSortIcon = (field) => {
-    const { sortColumn, sortDirection } = this.state;
+  useEffect(() => {
+    loadProjectBidData();
+  }, []);
+
+  const renderSortIcon = (field) => {
     if (sortColumn === field) {
       return sortDirection === "asc" ? "▴" : "▾";
     }
     return null;
   };
 
-  sortData = (columnName) => {
-    const { rowData, sortColumn, sortDirection } = this.state;
-    let newSortDirection = "asc";
+  const sortData = (columnName) => {
+    let newSortDirection = sortDirection === "asc" ? "desc" : "asc";
 
-    if (sortColumn === columnName && sortDirection === "asc") {
-      newSortDirection = "desc";
-    }
+    const sortedData = [...rowData].sort((a, b) => {
+      const valueA = String(a[columnName]).toLowerCase();
+      const valueB = String(b[columnName]).toLowerCase();
 
-    const sortedData = [...rowData];
-
-    sortedData.sort((a, b) => {
-      const valueA = String(a[columnName]).toLowerCase(); // Convert to lowercase string
-      const valueB = String(b[columnName]).toLowerCase(); // Convert to lowercase string
-
-      let comparison = 0;
-
-      if (valueA > valueB) {
-        comparison = 1;
-      } else if (valueA < valueB) {
-        comparison = -1;
-      }
-
-      return sortDirection === "desc" ? comparison * -1 : comparison;
+      return newSortDirection === "asc"
+        ? valueA.localeCompare(valueB)
+        : valueB.localeCompare(valueA);
     });
 
-    this.setState({
-      rowData: sortedData,
-      sortColumn: columnName,
-      sortDirection: newSortDirection
-    });
+    setRowData(sortedData);
+    setSortColumn(columnName);
+    setSortDirection(newSortDirection);
   };
-  render() {
-    return (
-      <div className="p-4" id="table-outer-div-scroll">
-        <div className="d-flex justify-between aline-items-start mb-3">
-          <div className=" my-auto">
-            <h3 className="fw-bold text-muted">Bidding Details</h3>
-            <p className="text-muted">
-              You can create new bid and view all Bidding details of the
-              companies here !
-            </p>
-          </div>
 
-          <Button
-            className="my-auto"
-            variant="primary"
-            id="add-button"
-            onClick={this.props.onAddProjectBid}
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
+
+  return (
+    <div className="container-fluid py-3">
+      <div className="d-flex justify-between align-items-start mb-3">
+        <div className="my-auto">
+          <h5
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+              fontWeight: "600",
+            }}
+            className="m-0"
           >
-            <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-            Add new Details
-          </Button>
+            Bidding Details
+          </h5>
+          <p
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+            }}
+            className="m-0"
+          >
+            You can see all your bids here.
+          </p>
         </div>
-
-        <div id="clear-both" />
-
-        {!this.state.loading ? (
-          <div>
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th
-                    style={{
-                      background: "linear-gradient(#1D267D, #2F58CD)",
-                      color: "white"
-                    }}
-                    className="py-1"
-                    onClick={() => this.sortData("ProjectTitle")}
-                  >
-                    Project Title {this.renderSortIcon("ProjectTitle")}
-                  </th>
-                  <th
-                    style={{
-                      background: "linear-gradient(#1D267D, #2F58CD)",
-                      color: "white"
-                    }}
-                    className="py-1"
-                    onClick={() => this.sortData("PortalName")}
-                  >
-                    Portal {this.renderSortIcon("PortalName")}
-                  </th>
-                  <th
-                    style={{
-                      background: "linear-gradient(#1D267D, #2F58CD)",
-                      color: "white"
-                    }}
-                    className="py-1"
-                    onClick={() => this.sortData("ProjectURL")}
-                  >
-                    Project URL {this.renderSortIcon("ProjectURL")}
-                  </th>
-                  <th
-                    style={{
-                      background: "linear-gradient(#1D267D, #2F58CD)",
-                      color: "white"
-                    }}
-                    className="py-1"
-                    onClick={() => this.sortData("EstimatedTime")}
-                  >
-                    Estimate Time {this.renderSortIcon("EstimatedTime")}
-                  </th>
-                  <th
-                    style={{
-                      background: "linear-gradient(#1D267D, #2F58CD)",
-                      color: "white"
-                    }}
-                    className="py-1"
-                    onClick={() => this.sortData("EstimatedCost")}
-                  >
-                    Estimate Cost {this.renderSortIcon("EstimatedCost")}
-                  </th>
-                  <th
-                    style={{
-                      background: "linear-gradient(#1D267D, #2F58CD)",
-                      color: "white"
-                    }}
-                    className="py-1"
-                    onClick={() => this.sortData("Remark")}
-                  >
-                    Remark {this.renderSortIcon("Remark")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.projectBidData.map((items, index) => (
-                  <tr key={index}>
-                    <td className="text-uppercase">{items.ProjectTitle}</td>
-                    <td>{items.portals[0].PortalName}</td>
-                    <td>
-                      <a href={items.ProjectURL}>{items.ProjectURL}</a>
-                    </td>
-                    <td>{items.EstimatedTime}</td>
-                    <td>{items.EstimatedCost}</td>
-                    <td>{items.Remark}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div id="loading-bar">
-            <RingLoader
-              css={override}
-              sizeUnit={"px"}
-              size={50}
-              color={"#0000ff"}
-              loading={true}
-            />
-          </div>
-        )}
+        <button
+          className="btn btn-primary gap-1 d-flex my-auto align-items-center justify-content-center"
+          onClick={props.onAddProjectBid}
+        >
+          <AiOutlinePlusCircle className="fs-4" />
+          <span className="d-none d-md-flex">Add Bid</span>
+        </button>
       </div>
-    );
-  }
-}
+      <div id="clear-both" />
+
+      {loading && (
+        <div id="loading-bar">
+          <RingLoader
+            css={override}
+            sizeUnit={"px"}
+            size={50}
+            color={"#0000ff"}
+            loading={true}
+          />
+        </div>
+      )}
+      <div
+        style={{
+          maxWidth: "100%",
+          minHeight: "76vh",
+          maxHeight: "76vh",
+          overflow: "auto",
+        }}
+        className="border"
+      >
+        <table className="table">
+          <thead>
+            <tr>
+              <th style={rowHeadStyle} onClick={() => sortData("ProjectTitle")}>
+                S. No {renderSortIcon("ProjectTitle")}
+              </th>
+              <th style={rowHeadStyle} onClick={() => sortData("ProjectTitle")}>
+                Project Title {renderSortIcon("ProjectTitle")}
+              </th>
+              <th style={rowHeadStyle} onClick={() => sortData("PortalName")}>
+                Portal {renderSortIcon("PortalName")}
+              </th>
+              <th style={rowHeadStyle} onClick={() => sortData("ProjectURL")}>
+                Project URL {renderSortIcon("ProjectURL")}
+              </th>
+              <th
+                style={rowHeadStyle}
+                onClick={() => sortData("EstimatedTime")}
+              >
+                Estimated Time {renderSortIcon("EstimatedTime")}
+              </th>
+              <th
+                style={rowHeadStyle}
+                onClick={() => sortData("EstimatedCost")}
+              >
+                Estimated Cost {renderSortIcon("EstimatedCost")}
+              </th>
+              <th style={rowHeadStyle} onClick={() => sortData("Remark")}>
+                Remark {renderSortIcon("Remark")}
+              </th>
+              <th style={rowHeadStyle} onClick={() => sortData("Remark")}>
+                Edit {renderSortIcon("Remark")}
+              </th>
+              <th style={rowHeadStyle} onClick={() => sortData("Remark")}>
+                Delete {renderSortIcon("Remark")}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {projectBidData.map((items, index) => (
+              <tr key={index}>
+                <td style={rowBodyStyle}>{index + 1}</td>
+                <td style={rowBodyStyle}>{items.ProjectTitle}</td>
+                <td style={rowBodyStyle}>{items.portals[0].PortalName}</td>
+                <td style={rowBodyStyle}>
+                  <a
+                    href={items.ProjectURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {items.ProjectURL}
+                  </a>
+                </td>
+                <td style={rowBodyStyle}>{items.EstimatedTime}</td>
+                <td style={rowBodyStyle}>{items.EstimatedCost}</td>
+                <td style={rowBodyStyle}>{items.Remark}</td>
+                <td style={rowBodyStyle}>
+                  <button
+                    className="btn d-flex align-items-center gap-2 "
+                    onClick={() => onProjectBidDelete(items._id)}
+                  >
+                    {" "}
+                    <FaEdit /> <span className="">Edit</span>
+                  </button>
+                </td>
+                <td style={rowBodyStyle}>
+                  <button
+                    className="btn d-flex align-items-center gap-2 "
+                    onClick={() => props.onEditProjectBid(items)}
+                  >
+                    {" "}
+                    <FaTrash /> <span className="">Delete</span>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
 
 export default AdminProjectBidTable;

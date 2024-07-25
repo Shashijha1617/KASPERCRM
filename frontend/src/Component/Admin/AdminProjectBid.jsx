@@ -1,71 +1,20 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./AdminProjectBid.css";
 import axios from "axios";
 import AdminProjectBidTable from "./AdminProjectBidTable.jsx";
 import AdminProjectBidForm from "./AdminProjectBidForm.jsx";
 import AdminProjectBidFormEdit from "./AdminProjectBidFormEdit.jsx";
 import BASE_URL from "../../Pages/config/config.js";
-// import { HashRouter as Router, Route, Link } from "react-router-dom";
 
-// function AdminProjectBidTableF() {
-//   return <AdminProjectBidTable/>;
-// }
-// function AdminProjectBidFormF() {
-//   return  <AdminProjectBidForm onProjectBidSubmit={handleProjectBidSubmit}/>;
-// }
+const AdminProjectBid = () => {
+  const [table, setTable] = useState(true);
+  const [editForm, setEditForm] = useState(false);
+  const [editData, setEditData] = useState({});
 
-// function handleProjectBidSubmit(e) {
-//   e.preventDefault();
-//   console.log(e);
-
-// }
-
-class AdminProjectBid extends Component {
-  state = {
-    table: true,
-    editForm: false,
-    editData: {}
-  };
-
-  render() {
-    // let value=(this.props.pass) ? undefined : "";<i class="fas fa-plus"></i>
-    return (
-      //  <Router>
-      <React.Fragment>
-        {this.state.table ? (
-          this.state.editForm ? (
-            <AdminProjectBidFormEdit
-              onProjectBidEditUpdate={this.handleProjectBidEditUpdate}
-              onFormEditClose={this.handleEditFormClose}
-              editData={this.state.editData}
-            />
-          ) : (
-            <AdminProjectBidTable
-              onAddProjectBid={this.handleAddProjectBid}
-              onEditProjectBid={this.handleEditProjectBid}
-            />
-          )
-        ) : (
-          <AdminProjectBidForm
-            onProjectBidSubmit={this.handleProjectBidSubmit}
-            onFormClose={this.handleFormClose}
-          />
-        )}
-
-        {/* <div>debrup</div> */}
-        {/* <Route path="/admin/ProjectBid/table" exact component={AdminProjectBidTable} /> */}
-        {/* <Route path="/admin/ProjectBid/form" exact component={() => <AdminProjectBidForm onProjectBidSubmit={this.handleProjectBidSubmit} />} /> */}
-
-        {/* <AdminProjectBidTable/> */}
-      </React.Fragment>
-
-      //  </Router>
-    );
-  }
-  handleProjectBidSubmit = (event) => {
+  const handleProjectBidSubmit = (event) => {
     event.preventDefault();
     console.log("id", event.target[0].value, event.target[1].value);
-    this.setState({ table: true });
+    setTable(true);
 
     let body = {
       ProjectTitle: event.target[0].value,
@@ -76,54 +25,48 @@ class AdminProjectBid extends Component {
       EstimatedCost: event.target[5].value,
       ResourceID: event.target[6].value,
       Status: event.target[7].value,
-      Remark: event.target[8].value
+      Remark: event.target[8].value,
     };
-    //  let body= "CompanyID=" + event.target[0].value + "&ProjectBid=" + event.target[1].value;
-    //  let body= "";
+
     axios
       .post(`${BASE_URL}/api/admin/project-bid`, body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((res) => {
-        this.setState({ table: false });
-        this.setState({ table: true });
+        setTable(false);
+        setTable(true);
       })
       .catch((err) => {
         console.log(err);
       });
-    // this.setState({ loading: true });
-    // this.login(event.target[0].value, event.target[1].value);
-    // event.target.reset();
   };
-  handleAddProjectBid = () => {
+
+  const handleAddProjectBid = () => {
     console.log("clicked1");
-    this.setState({ table: false });
+    setTable(false);
   };
-  handleEditProjectBid = (e) => {
+
+  const handleEditProjectBid = (e) => {
     console.log(e);
     console.log("clicked6");
-    this.setState({ editForm: true });
-    this.setState({ editData: e });
+    setEditForm(true);
+    setEditData(e);
   };
-  handleFormClose = () => {
+
+  const handleFormClose = () => {
     console.log("clicked1");
-    this.setState({ table: true });
+    setTable(true);
   };
-  handleEditFormClose = () => {
+
+  const handleEditFormClose = () => {
     console.log("clicked5");
-    this.setState({ editForm: false });
+    setEditForm(false);
   };
-  handleFormClose = () => {
-    console.log("clicked1");
-    this.setState({ table: true });
-  };
-  handleProjectBidEditUpdate = (info, editInfo) => {
-    // this.setState({ table: true });
+
+  const handleProjectBidEditUpdate = (info, editInfo) => {
     let body = {
-      // ...info,CompanyID:formData1,ProjectBid:formData2
-      // _id: info["_id"],
       ProjectTitle: editInfo.target[0].value,
       ProjectURL: editInfo.target[1].value,
       ProjectDesc: editInfo.target[2].value,
@@ -132,26 +75,49 @@ class AdminProjectBid extends Component {
       EstimatedCost: editInfo.target[5].value,
       ResourceID: editInfo.target[6].value,
       Status: editInfo.target[7].value,
-      Remark: editInfo.target[8].value
+      Remark: editInfo.target[8].value,
     };
     console.log("update", body);
     axios
       .put(`${BASE_URL}/api/admin/project-bid/` + info["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((res) => {
-        // this.componentDidMount();
-        this.setState({ table: false });
-        this.setState({ table: true });
+        setTable(false);
+        setTable(true);
       })
       .catch((err) => {
         console.log(err);
       });
 
-    this.setState({ editForm: false });
+    setEditForm(false);
   };
-}
+
+  return (
+    <React.Fragment>
+      {table ? (
+        editForm ? (
+          <AdminProjectBidFormEdit
+            onProjectBidEditUpdate={handleProjectBidEditUpdate}
+            onFormEditClose={handleEditFormClose}
+            editData={editData}
+          />
+        ) : (
+          <AdminProjectBidTable
+            onAddProjectBid={handleAddProjectBid}
+            onEditProjectBid={handleEditProjectBid}
+          />
+        )
+      ) : (
+        <AdminProjectBidForm
+          onProjectBidSubmit={handleProjectBidSubmit}
+          onFormClose={handleFormClose}
+        />
+      )}
+    </React.Fragment>
+  );
+};
 
 export default AdminProjectBid;

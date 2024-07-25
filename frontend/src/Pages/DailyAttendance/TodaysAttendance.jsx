@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { AiOutlineMore } from "react-icons/ai";
 import { RxCaretSort, RxCounterClockwiseClock } from "react-icons/rx";
-import { MdNearbyError } from "react-icons/md";
+import SearchLight from "../../img/Attendance/SearchLight.svg";
 import {
   HiOutlineLogin,
   HiOutlineLogout,
@@ -201,239 +201,285 @@ const TodaysAttendance = () => {
     <div className="container-fluid pb-5">
       <div className="d-flex justify-content-between py-3">
         <div>
-          <h4 className="fw-bolder my-auto text-success mb-2">
+          <h5
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--primaryDashMenuColor)",
+            }}
+            className=" my-auto"
+          >
             Today's Attendance
-          </h4>
+          </h5>
+          <span className="p-0 fs-6 d-flex ">
+            <span
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--primaryDashMenuColor)",
+              }}
+              className="m-0 p-0 fs-6 text-center shadow-sm rounded-5"
+            >
+              {status(dayCurrent)} , <span>{dd}</span> - <span>{mm}</span> -
+              <span>{yyyy}</span>
+            </span>
+          </span>
+        </div>
+        <div>
           <div className="d-flex gap-2">
             <input
               value={searchQuery}
               onChange={handleInputChange}
               type="search"
-              className="form-control rounded-5"
+              className="form-control d-none d-sm-flex rounded-5"
               placeholder="Search by employee name"
-            />{" "}
+            />
             <button
-              style={{ whiteSpace: "pre" }}
-              className="btn p-0 px-3 shadow-sm rounded-5"
+              style={{
+                whiteSpace: "pre",
+                color: darkMode
+                  ? "var(--primaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+              className="btn d-flex btn-success gap-2 align-items-center justify-content-center m-auto shadow-sm py-3 py-sm-2 px-3 px-sm-3   rounded-5"
               onClick={exportToExcel}
             >
               {" "}
-              <SiMicrosoftexcel className="text-success" /> Export XLSX
+              <SiMicrosoftexcel />{" "}
+              <span className="d-none d-md-flex">Export XLSX</span>
             </button>
           </div>
         </div>
-        <span className="p-0 fw-bolder fs-6 text-muted d-flex flex-column ">
-          <span className="m-0 p-0 fs-6 text-center bg-white shadow-sm rounded-5 px-2">
-            {" "}
-            <span className="fw-bold">{dd}</span>-
-            <span className="fw-bold">{mm}</span>-
-            <span className="fw-bold">{yyyy}</span>
-          </span>
-          <span className="text-uppercase m-0 p-0 text-primary fs-4 text-center">
-            {status(dayCurrent)}
-          </span>
-        </span>
       </div>
-      <table className="table">
-        <thead>
-          <tr style={{ position: "sticky", top: "0", zIndex: "1" }}>
-            <th onClick={() => handleSort("FirstName")} style={rowHeadStyle}>
-              <RxCaretSort /> Employee {renderSortIcon("FirstName")}
-            </th>
-            <th style={rowHeadStyle}>
-              {" "}
-              <HiOutlineLogin /> Login Time{" "}
-            </th>
-            <th style={rowHeadStyle}>
-              {" "}
-              Logout Time <HiOutlineLogout />{" "}
-            </th>
-            <th style={rowHeadStyle}>
-              {" "}
-              <RxCounterClockwiseClock /> Log Count{" "}
-            </th>
-            <th style={rowHeadStyle}> Total Break </th>
-            <th style={rowHeadStyle}>
-              {" "}
-              <FaUserClock /> Total Login{" "}
-            </th>
-            <th style={rowHeadStyle}>
-              {" "}
-              Status <HiStatusOnline />
-            </th>
-            <th style={rowHeadStyle}>
-              {" "}
-              <IoCheckmarkDoneOutline /> Mark{" "}
-            </th>
-            <th style={rowHeadStyle} className="text-center">
-              {" "}
-              Break Count
-            </th>
-            <th style={rowHeadStyle}></th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedAndFilteredData.length > 0 ? (
-            sortedAndFilteredData.map((user) => {
-              const mark = getAttendanceMark(user);
-              return (
-                <tr style={{ position: "sticky", top: "0" }} key={user.userId}>
-                  <td className="fw-bold">
-                    <div className="d-flex w-100 align-items-center gap-2">
-                      <div
-                        style={{
-                          height: "43px",
-                          width: "43px",
-                          overflow: "hidden",
-                        }}
-                      >
-                        <img
+      <div className="d-flex d-sm-none">
+        <input
+          value={searchQuery}
+          onChange={handleInputChange}
+          type="search"
+          className="form-control mb-3 rounded-0"
+          placeholder="Search by employee name"
+        />
+      </div>
+      <div className="border" style={{ maxHeight: "78vh", overflow: "auto" }}>
+        {sortedAndFilteredData.length > 0 ? (
+          <table className="table" style={{ fontSize: ".9rem" }}>
+            <thead>
+              <tr style={{ position: "sticky", top: "0", zIndex: "1" }}>
+                <th
+                  onClick={() => handleSort("FirstName")}
+                  style={rowHeadStyle}
+                >
+                  <RxCaretSort /> Employee {renderSortIcon("FirstName")}
+                </th>
+                <th style={rowHeadStyle}>
+                  {" "}
+                  <HiOutlineLogin /> Login Time{" "}
+                </th>
+                <th style={rowHeadStyle}>
+                  {" "}
+                  Logout Time <HiOutlineLogout />{" "}
+                </th>
+
+                <th style={rowHeadStyle}>
+                  {" "}
+                  <RxCounterClockwiseClock /> Log Count{" "}
+                </th>
+                <th style={rowHeadStyle}>
+                  {" "}
+                  Gross Login <HiOutlineLogout />{" "}
+                </th>
+                <th style={rowHeadStyle}> Total Break </th>
+                <th style={rowHeadStyle}>
+                  {" "}
+                  <FaUserClock /> Net Login{" "}
+                </th>
+                <th style={rowHeadStyle}>
+                  {" "}
+                  Status <HiStatusOnline />
+                </th>
+                <th style={rowHeadStyle}>
+                  {" "}
+                  <IoCheckmarkDoneOutline /> Mark{" "}
+                </th>
+                <th style={rowHeadStyle} className="text-center">
+                  {" "}
+                  Break Count
+                </th>
+                <th style={rowHeadStyle}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedAndFilteredData.map((user) => {
+                const mark = getAttendanceMark(user);
+                return (
+                  <tr
+                    style={{ position: "sticky", top: "0" }}
+                    key={user.userId}
+                  >
+                    <td style={rowBodyStyle}>
+                      <div className="d-flex w-100 align-items-center gap-2">
+                        <div
                           style={{
-                            height: "100%",
-                            width: "100%",
-                            objectFit: "cover",
+                            height: "35px",
+                            width: "35px",
                             overflow: "hidden",
-                            borderRadius: "50%",
                           }}
-                          src="https://tse3.mm.bing.net/th?id=OIP.-d8GY5axNJZYoXsNOUJ4iwAAAA&pid=Api&P=0&h=180"
-                          alt=""
-                        />
-                      </div>
-                      <div>
-                        <p
-                          style={{ fontSize: ".75rem" }}
-                          className="p-0 m-0 w-100 text-muted"
                         >
-                          {user.empID}
-                        </p>
-                        <p
-                          style={{ fontSize: ".80rem" }}
-                          className="p-0 m-0 w-100 text-uppercase"
-                        >
-                          {user.FirstName} {user.LastName}
-                        </p>
+                          <img
+                            style={{
+                              height: "100%",
+                              width: "100%",
+                              objectFit: "cover",
+                              overflow: "hidden",
+                              borderRadius: "50%",
+                            }}
+                            src="https://tse3.mm.bing.net/th?id=OIP.-d8GY5axNJZYoXsNOUJ4iwAAAA&pid=Api&P=0&h=180"
+                            alt=""
+                          />
+                        </div>
+                        <div>
+                          <p
+                            style={{ fontSize: ".75rem" }}
+                            className="p-0 m-0 w-100"
+                          >
+                            {user.empID}
+                          </p>
+                          <p
+                            style={{ fontSize: ".80rem" }}
+                            className="p-0 m-0 w-100 text-uppercase"
+                          >
+                            {user.FirstName} {user.LastName}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td
-                    style={{ verticalAlign: "middle" }}
-                    className="text-uppercase text-center"
-                  >
-                    {user.attendance ? user.attendance.loginTime[0] : "--"}
-                  </td>
-                  <td
-                    style={{ verticalAlign: "middle" }}
-                    className="text-uppercase text-center"
-                  >
-                    {user.attendance
-                      ? user.attendance.logoutTime[
-                          user.attendance.logoutTime.length - 1
-                        ]
-                      : "--"}
-                  </td>
-                  <td
-                    style={{ verticalAlign: "middle" }}
-                    className="text-uppercase text-center"
-                  >
-                    {user.attendance ? user.attendance.logoutTime.length : "--"}
-                  </td>
-                  <td style={{ verticalAlign: "middle", textAlign: "center" }}>
-                    <span>
-                      {user.attendance ? user.attendance.totalBreak : "--"}
-                    </span>
-                  </td>
-                  <td style={{ verticalAlign: "middle", textAlign: "center" }}>
-                    {user.attendance
-                      ? convertMinutesToHoursAndMinutes(
-                          user.attendance.totalLogAfterBreak
-                        )
-                      : null}
-                  </td>
-                  <td
-                    className="text-capitalize text-center"
-                    style={{ verticalAlign: "middle" }}
-                  >
-                    {user.attendance ? user.attendance.status : "--"}
-                  </td>
-                  <td
-                    style={{ verticalAlign: "middle" }}
-                    className="text-center"
-                  >
-                    <span
-                      style={{ fontSize: ".8rem" }}
-                      className={`py-1 px-3 rounded-5 shadow-sm fw-bold ${
-                        mark === "Present"
-                          ? "bg-success text-white"
-                          : mark === "Late"
-                          ? "bg-info text-white"
-                          : mark === "Half Day"
-                          ? "bg-warning text-white"
-                          : "bg-danger text-white"
-                      }`}
-                    >
-                      {mark}
-                    </span>
-                  </td>
-                  <td
-                    style={{ verticalAlign: "middle", textAlign: "center" }}
-                    className="text-center"
-                  >
-                    {user.attendance ? user.attendance.breakTime.length : "--"}
-                  </td>
-                  <td
-                    style={{ zIndex: "1", verticalAlign: "middle" }}
-                    className="text-center"
-                  >
-                    <button
-                      onMouseEnter={() => setActiveCategory(user)}
-                      onMouseLeave={() => setActiveCategory(null)}
-                      className=" btn p-0 fw-bold fs-5 position-relative"
-                    >
-                      <AiOutlineMore />{" "}
+                    </td>
+                    <td style={rowBodyStyle}>
+                      {user.attendance ? user.attendance.loginTime[0] : "--"}
+                    </td>
+                    <td style={rowBodyStyle}>
+                      {user.attendance
+                        ? user.attendance.logoutTime[
+                            user.attendance.logoutTime.length - 1
+                          ]
+                        : "--"}
+                    </td>
+                    <td className="text-center" style={rowBodyStyle}>
+                      {user.attendance
+                        ? user.attendance.loginTime.length
+                        : "--"}
+                    </td>
+                    <td style={rowBodyStyle}>
+                      {user.attendance
+                        ? convertMinutesToHoursAndMinutes(
+                            user.attendance.TotalLogin
+                          )
+                        : null}
+                    </td>
+                    <td style={rowBodyStyle}>
+                      {user.attendance
+                        ? convertMinutesToHoursAndMinutes(
+                            user.attendance.totalBrake
+                          )
+                        : null}
+                    </td>
+                    <td style={rowBodyStyle}>
+                      {user.attendance
+                        ? convertMinutesToHoursAndMinutes(
+                            user.attendance.totalLogAfterBreak
+                          )
+                        : null}
+                    </td>
+                    <td style={rowBodyStyle}>
+                      {user.attendance ? user.attendance.status : "--"}
+                    </td>
+                    <td style={rowBodyStyle}>
                       <span
-                        style={{
-                          display: activeCategory === user ? "flex" : "none",
-                        }}
+                        style={{ fontSize: ".8rem" }}
+                        className={`py-0 px-3 rounded-5 fw-bold ${
+                          mark === "Present"
+                            ? "border border-success text-white"
+                            : mark === "Late"
+                            ? "border border-info text-white"
+                            : mark === "Half Day"
+                            ? "border border-warning text-white"
+                            : "border border-danger text-white"
+                        }`}
                       >
-                        <Link
-                          to="/hr/viewAttenDance"
-                          style={{
-                            position: "absolute",
-                            whiteSpace: "pre",
-                            right: "70%",
-                            bottom: "-50%",
-                            zIndex: "2",
-                          }}
-                          className="shadow px-2 py-0  fs-6 bg-white rounded-5"
-                        >
-                          Detailed
-                        </Link>
+                        {mark}
                       </span>
-                    </button>{" "}
-                  </td>
-                </tr>
-              );
-            })
-          ) : (
-            <tr>
-              <td
-                colSpan="10"
-                style={{ height: "30vh", width: "94%", position: "absolute" }}
-                className="d-flex flex-column justify-content-center align-items-center gap-1"
-              >
-                <span className="fw-bolder " style={{ fontSize: "2rem" }}>
-                  <MdNearbyError
-                    className="text-danger"
-                    style={{ fontSize: "2.3rem" }}
-                  />{" "}
-                  OOPS!
-                </span>
-                <h6 className="p-0 m-0">Record not found.</h6>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+                    </td>
+                    <td className="text-center" style={rowBodyStyle}>
+                      {user.attendance
+                        ? user.attendance.breakTime.length
+                        : "--"}
+                    </td>
+                    <td style={rowBodyStyle}>
+                      <button
+                        onMouseEnter={() => setActiveCategory(user)}
+                        onMouseLeave={() => setActiveCategory(null)}
+                        className=" btn p-0 fw-bold fs-5 position-relative"
+                      >
+                        <AiOutlineMore style={rowBodyStyle} />{" "}
+                        <span
+                          style={{
+                            display: activeCategory === user ? "flex" : "none",
+                          }}
+                        >
+                          <Link
+                            to="/hr/viewAttenDance"
+                            style={{
+                              position: "absolute",
+                              whiteSpace: "pre",
+                              right: "70%",
+                              bottom: "-50%",
+                              zIndex: "2",
+                            }}
+                            className="shadow px-2 py-0  fs-6 bg-white rounded-5"
+                          >
+                            Detailed
+                          </Link>
+                        </span>
+                      </button>{" "}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <div
+            style={{
+              height: "80vh",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              wordSpacing: "5px",
+              flexDirection: "column",
+              gap: "2rem",
+            }}
+          >
+            <img
+              style={{
+                height: "auto",
+                width: "20%",
+              }}
+              src={SearchLight}
+              alt="img"
+            />
+            <p
+              className="text-center w-75 mx-auto"
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var( --primaryDashMenuColor)",
+              }}
+            >
+              Sorry records not found or attendance not marked yet.
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

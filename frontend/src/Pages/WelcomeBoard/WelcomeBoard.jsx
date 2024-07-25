@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./WelcomeBoard.css";
 import axios from "axios";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
-import HrAttendance from "../../Component/HrManager/attendance/AttendanceSample";
 import BASE_URL from "../config/config";
+import TakeBreakLogs from "../Attendance/TakeBreakLogs";
 
 const WelcomeBoard = () => {
   const [employeeData, setEmployeeData] = useState(null);
@@ -47,12 +47,12 @@ const WelcomeBoard = () => {
       {employeeData && (
         <div className="d-flex gap-3 flex-column align-items-center ">
           <h4 className="my-0 p-0  gap-1 d-flex flex-column align-items-center ">
-            <span className="m-0">Welcome Back,</span>
+            <span className="m-0">Welcome Back 👋</span>
             <span className="fw-bolder text-capitalize">
               {employeeData.FirstName} {employeeData.LastName}
-            </span>{" "}
+            </span>
           </h4>
-          <HrAttendance />
+          <TakeBreakLogs />
         </div>
       )}
     </div>

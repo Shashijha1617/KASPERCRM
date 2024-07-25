@@ -5,7 +5,12 @@ import { FaCircleInfo, FaHourglassHalf } from "react-icons/fa6";
 import BASE_URL from "../../../Pages/config/config";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import { FcVoicePresentation } from "react-icons/fc";
-import { FaCheckCircle, FaTimesCircle, FaRegClock, FaExclamationCircle } from 'react-icons/fa';
+import {
+  FaCheckCircle,
+  FaTimesCircle,
+  FaRegClock,
+  FaExclamationCircle,
+} from "react-icons/fa";
 
 const AttendanceDetails = (props) => {
   const [employees, setEmployees] = useState([]);
@@ -14,7 +19,7 @@ const AttendanceDetails = (props) => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [hoveredDate, setHoveredDate] = useState(null);
   const [isInfoHovering, setIsInfoHovering] = useState(false);
-  const [viewType, setViewType] = useState('monthly'); // State to manage view type
+  const [viewType, setViewType] = useState("monthly"); // State to manage view type
 
   const employeeId = localStorage.getItem("_id");
   const { darkMode } = useTheme();
@@ -45,8 +50,8 @@ const AttendanceDetails = (props) => {
         `${BASE_URL}/api/employee/` + props.data["_id"],
         {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         }
       );
       setEmployees(response.data);
@@ -61,8 +66,8 @@ const AttendanceDetails = (props) => {
         `${BASE_URL}/api/attendance/${employeeId}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token") || ""}`
-          }
+            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+          },
         }
       );
 
@@ -192,7 +197,7 @@ const AttendanceDetails = (props) => {
         totalWorkingHours,
         totalPresent,
         totalAbsent,
-        totalHalfDays
+        totalHalfDays,
       };
     }
 
@@ -227,7 +232,7 @@ const AttendanceDetails = (props) => {
       totalWorkingHours,
       totalPresent,
       totalAbsent,
-      totalHalfDays
+      totalHalfDays,
     };
   };
 
@@ -239,10 +244,20 @@ const AttendanceDetails = (props) => {
   };
 
   return (
-    <div style={{ height: 'fit-content', background: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)", color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)", }} className="p-2 rounded-3">
+    <div
+      style={{
+        height: "fit-content",
+        background: darkMode
+          ? "var(--primaryDashMenuColor)"
+          : "var(--primaryDashColorDark)",
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--primaryDashMenuColor)",
+      }}
+      className="p-2 rounded-3"
+    >
       {attendanceData && (
         <div className="gap-3 d-none">
-
           <div>
             <select
               className="form-select shadow"
@@ -257,7 +272,7 @@ const AttendanceDetails = (props) => {
               ))}
             </select>
           </div>
-          {viewType === 'monthly' && (
+          {viewType === "monthly" && (
             <div>
               <label htmlFor="month">Select a month:</label>
               <select
@@ -277,7 +292,8 @@ const AttendanceDetails = (props) => {
         </div>
       )}
       <div>
-        <select style={{ width: 'fit-content' }}
+        <select
+          style={{ width: "fit-content" }}
           className="form-select border-0 shadow"
           id="viewType"
           value={viewType}
@@ -288,57 +304,123 @@ const AttendanceDetails = (props) => {
         </select>
       </div>
 
-      {attendanceData && viewType === 'monthly' && monthlyTotals && (
-        <div >
+      {attendanceData && viewType === "monthly" && monthlyTotals && (
+        <div>
           {/* <h5 style={{ color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)" }}>Monthly Logs</h5> */}
           <div className="row px-4 py-2 justify-content-between row-gap-4 text-white">
-            <div style={{ height: '130px', }} className="bg-white bg-warning col-6 row  align-items-center rounded-3">
-              <div className="col-8"><p className="fw-bold"> Total Working</p>
-                <h3>{getTotalWHrs(millisecondsToTime(monthlyTotals.totalWorkingHours))} Hrs</h3></div>
-              <div className="col-4"><FaRegClock className="fs-1" /></div>
+            <div
+              style={{ height: "130px" }}
+              className="bg-white bg-warning col-6 row  align-items-center rounded-3"
+            >
+              <div className="col-8">
+                <p className="fw-bold"> Total Working</p>
+                <h3>
+                  {getTotalWHrs(
+                    millisecondsToTime(monthlyTotals.totalWorkingHours)
+                  )}{" "}
+                  Hrs
+                </h3>
+              </div>
+              <div className="col-4">
+                <FaRegClock className="fs-1" />
+              </div>
             </div>
-            <div style={{ height: '130px', }} className="bg-white bg-success col-6 row  align-items-center rounded-3">
-              <div className="col-8"><p className="fw-bold"> Total Present</p>
-                <h3>{monthlyTotals.totalPresent} Days</h3></div>
-              <div className="col-4"><FaCheckCircle className="fs-1" /></div>
+            <div
+              style={{ height: "130px" }}
+              className="bg-white bg-success col-6 row  align-items-center rounded-3"
+            >
+              <div className="col-8">
+                <p className="fw-bold"> Total Present</p>
+                <h3>{monthlyTotals.totalPresent} Days</h3>
+              </div>
+              <div className="col-4">
+                <FaCheckCircle className="fs-1" />
+              </div>
             </div>
-            <div style={{ height: '130px', }} className="bg-white bg-secondary col-6 row  align-items-center rounded-3">
-              <div className="col-8"><p className="fw-bold"> Total Absent</p>
-                <h3>{monthlyTotals.totalAbsent} Days</h3></div>
-              <div className="col-4"><FaTimesCircle className="fs-1" /></div>
+            <div
+              style={{ height: "130px" }}
+              className="bg-white bg-secondary col-6 row  align-items-center rounded-3"
+            >
+              <div className="col-8">
+                <p className="fw-bold"> Total Absent</p>
+                <h3>{monthlyTotals.totalAbsent} Days</h3>
+              </div>
+              <div className="col-4">
+                <FaTimesCircle className="fs-1" />
+              </div>
             </div>
-            <div style={{ height: '130px', }} className="bg-white bg-danger col-6 row  align-items-center rounded-3">
-              <div className="col-8"><p className="fw-bold"> Total Half Days</p>
-                <h3>{monthlyTotals.totalHalfDays} Days</h3></div>
-              <div className="col-4"><FaHourglassHalf className="fs-1" /></div>
+            <div
+              style={{ height: "130px" }}
+              className="bg-white bg-danger col-6 row  align-items-center rounded-3"
+            >
+              <div className="col-8">
+                <p className="fw-bold"> Total Half Days</p>
+                <h3>{monthlyTotals.totalHalfDays} Days</h3>
+              </div>
+              <div className="col-4">
+                <FaHourglassHalf className="fs-1" />
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {attendanceData && viewType === 'yearly' && yearlyTotals && (
-        <div >
+      {attendanceData && viewType === "yearly" && yearlyTotals && (
+        <div>
           {/* <h5 style={{ color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)" }}>Yearly Logs</h5> */}
           <div className="row px-4 py-2 justify-content-between row-gap-4 text-white">
-            <div style={{ height: '130px', }} className="bg-white bg-warning col-6 row  align-items-center rounded-3">
-              <div className="col-8"><p className="fw-bold"> Total Working</p>
-                <h3>{getTotalWHrs(millisecondsToTime(yearlyTotals.totalWorkingHours))} Hrs</h3></div>
-              <div className="col-4"><FaRegClock className="fs-1" /></div>
+            <div
+              style={{ height: "130px" }}
+              className="bg-white bg-warning col-6 row  align-items-center rounded-3"
+            >
+              <div className="col-8">
+                <p className="fw-bold"> Total Working</p>
+                <h3>
+                  {getTotalWHrs(
+                    millisecondsToTime(yearlyTotals.totalWorkingHours)
+                  )}{" "}
+                  Hrs
+                </h3>
+              </div>
+              <div className="col-4">
+                <FaRegClock className="fs-1" />
+              </div>
             </div>
-            <div style={{ height: '130px', }} className="bg-white bg-success col-6 row  align-items-center rounded-3">
-              <div className="col-8"><p className="fw-bold"> Total Present</p>
-                <h3>{yearlyTotals.totalPresent} Days</h3></div>
-              <div className="col-4"><FaCheckCircle className="fs-1" /></div>
+            <div
+              style={{ height: "130px" }}
+              className="bg-white bg-success col-6 row  align-items-center rounded-3"
+            >
+              <div className="col-8">
+                <p className="fw-bold"> Total Present</p>
+                <h3>{yearlyTotals.totalPresent} Days</h3>
+              </div>
+              <div className="col-4">
+                <FaCheckCircle className="fs-1" />
+              </div>
             </div>
-            <div style={{ height: '130px', }} className="bg-white bg-secondary col-6 row  align-items-center rounded-3">
-              <div className="col-8"><p className="fw-bold"> Total Absent</p>
-                <h3>{yearlyTotals.totalAbsent} Days</h3></div>
-              <div className="col-4"><FaTimesCircle className="fs-1" /></div>
+            <div
+              style={{ height: "130px" }}
+              className="bg-white bg-secondary col-6 row  align-items-center rounded-3"
+            >
+              <div className="col-8">
+                <p className="fw-bold"> Total Absent</p>
+                <h3>{yearlyTotals.totalAbsent} Days</h3>
+              </div>
+              <div className="col-4">
+                <FaTimesCircle className="fs-1" />
+              </div>
             </div>
-            <div style={{ height: '130px', }} className="bg-white bg-danger col-6 row  align-items-center rounded-3">
-              <div className="col-8"><p className="fw-bold"> Total Half Days</p>
-                <h3>{yearlyTotals.totalHalfDays} Days</h3></div>
-              <div className="col-4"><FaHourglassHalf className="fs-1" /></div>
+            <div
+              style={{ height: "130px" }}
+              className="bg-white bg-danger col-6 row  align-items-center rounded-3"
+            >
+              <div className="col-8">
+                <p className="fw-bold"> Total Half Days</p>
+                <h3>{yearlyTotals.totalHalfDays} Days</h3>
+              </div>
+              <div className="col-4">
+                <FaHourglassHalf className="fs-1" />
+              </div>
             </div>
           </div>
         </div>

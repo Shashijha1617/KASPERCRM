@@ -1,21 +1,16 @@
 import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
-import InnerDashContainer from "../../InnerDashContainer";
 import Moment from "moment";
 import BASE_URL from "../../../Pages/config/config";
-import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import toast from "react-hot-toast";
-import { RiLoginCircleFill, RiLogoutCircleFill } from "react-icons/ri";
 import { FaComputerMouse } from "react-icons/fa6";
 import { PiCoffeeFill } from "react-icons/pi";
-import { MdCoffee, MdMouse } from "react-icons/md";
 
 function EmpAttendance(props) {
   const [empName, setEmpName] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [onBreak, setOnBreak] = useState(false);
-  const { darkMode } = useTheme();
   const id = localStorage.getItem("_id");
 
   const {
@@ -26,7 +21,7 @@ function EmpAttendance(props) {
     attencenceID,
     setAttencenceID,
     message,
-    setMessage
+    setMessage,
   } = useContext(AttendanceContext);
 
   useEffect(() => {
@@ -36,8 +31,8 @@ function EmpAttendance(props) {
           `${BASE_URL}/api/employee/` + localStorage.getItem("_id"),
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         );
         console.log(response.data);
@@ -47,8 +42,8 @@ function EmpAttendance(props) {
           `${BASE_URL}/api/attendance/` + localStorage.getItem("_id"),
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         );
         const lastEntry =
@@ -70,8 +65,8 @@ function EmpAttendance(props) {
           `${BASE_URL}/api/personal-info/` + localStorage.getItem("_id"),
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         );
         console.log(response.data.FirstName);
@@ -139,7 +134,7 @@ function EmpAttendance(props) {
         month: new Date().getMonth() + 1,
         date: new Date().getDate(),
         loginTime: [currentTime],
-        status: "login"
+        status: "login",
       });
       setMessage("Login time recorded successfully");
       toast.success("Login time recorded successfully");
@@ -178,7 +173,7 @@ function EmpAttendance(props) {
         month: new Date().getMonth() + 1,
         date: new Date().getDate(),
         logoutTime: [currentTime],
-        status: "logout"
+        status: "logout",
       });
       setMessage("Logout time recorded successfully");
       toast.success("Logout time recorded successfully");
@@ -220,7 +215,7 @@ function EmpAttendance(props) {
         date: new Date().getDate(),
         ResumeTime: [currentTime],
         resumeTimeMS: [currentTimeMs],
-        status: "resume"
+        status: "resume",
       });
 
       setMessage("Resumed time recorded successfully");
@@ -264,7 +259,7 @@ function EmpAttendance(props) {
         date: new Date().getDate(),
         breakTime: [currentTime],
         breakTimeMs: [currentTimeMs],
-        status: "break"
+        status: "break",
       });
       setMessage("Break time recorded successfully");
       toast.success("Break time recorded successfully");
@@ -294,7 +289,7 @@ function EmpAttendance(props) {
             <RiLogoutCircleFill className="my-auto fs-5" /> Logout
           </button>
         )} */}
-        {!onBreak &&  (
+        {!onBreak && (
           <button
             className="btn btn-warning d-flex align-items-center justify-content-center gap-2"
             onClick={handleBreak}
