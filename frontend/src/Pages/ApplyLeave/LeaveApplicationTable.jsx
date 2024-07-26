@@ -132,7 +132,7 @@ const LeaveApplicationEmpTable = (props) => {
   };
 
   return (
-    <div className="container-fluid py-2">
+    <div className="container-fluid py-2 pb-5">
       <LeaveBalance />
       <div className="container-fluid">
         <div className="d-flex justify-content-between py-2">
@@ -183,7 +183,7 @@ const LeaveApplicationEmpTable = (props) => {
         <div id="clear-both" />
         <div
           className="border border-1 border-dark"
-          style={{ overflow: "auto", maxHeight: "80vh" }}
+          style={{ overflow: "auto", maxHeight: "75vh" }}
         >
           {rowData.length > 0 ? (
             <Table className="table">

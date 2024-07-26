@@ -22,8 +22,6 @@ const override = css`
 const LeaveApplicationHRTable = (props) => {
   const location = useLocation();
   const routeChecker = location.pathname.split("/")[1];
-  console.log(routeChecker);
-  const [leaveApplicationHRData, setLeaveApplicationHRData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortColumn, setSortColumn] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -50,8 +48,6 @@ const LeaveApplicationHRTable = (props) => {
       )
       .then((response) => {
         const leaveApplicationHRObj = response.data;
-        console.log(leaveApplicationHRObj);
-        setLeaveApplicationHRData(leaveApplicationHRObj);
         setLoading(false);
 
         const rowDataT = leaveApplicationHRObj.map((data) => {
@@ -70,7 +66,6 @@ const LeaveApplicationHRTable = (props) => {
             // reasonOfRejection: data?.reasonOfRejection,
           };
         });
-        console.log(rowDataT);
         setRowData(rowDataT);
         setFilteredData(rowDataT);
         // props.updateTotalLeaves(leaveApplicationHRObj.length);
@@ -215,6 +210,36 @@ const LeaveApplicationHRTable = (props) => {
     (data) => data.Status === "Approved"
   ).length;
 
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
+
+  console.log(filteredData);
+  console.log("==========================");
+
   return (
     <div className="container-fluid">
       <div className="d-flex flex-column justify-between">
@@ -265,179 +290,31 @@ const LeaveApplicationHRTable = (props) => {
         <div>
           <div
             style={{
-              minHeight: "68vh",
-              maxHeight: "68vh",
+              minHeight: "80vh",
+              maxHeight: "80vh",
               overflow: "auto",
               position: "relative",
             }}
-            className="table-responsive p-2 mb-3"
+            className="table-responsive border"
           >
             <table className="table" style={{ fontSize: ".9rem" }}>
               <thead>
                 <tr>
-                  <th
-                    colSpan={2}
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                    onClick={() => sortData("empID")}
-                  >
+                  <th style={rowHeadStyle} onClick={() => sortData("empID")}>
+                    Profile
+                  </th>
+                  <th style={rowHeadStyle} onClick={() => sortData("empID")}>
                     Employee Name
                   </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Emp ID
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Leave Type
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Start Date
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    End Date
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Created On
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Days
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Remarks
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Status
-                  </th>
-                  <th
-                    style={{
-                      verticalAlign: "middle",
-                      whiteSpace: "pre",
-                      background: darkMode
-                        ? "var(--primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
-                      color: darkMode
-                        ? "var(--primaryDashColorDark)"
-                        : "var( --secondaryDashMenuColor)",
-                      border: "none",
-                    }}
-                  >
-                    Updated By
-                  </th>
-                  {/* <th
-                    style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }}
-                  >
-                    Status Remarks
-                  </th> */}
-                  {/* 
-                  <th
-                    style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var(--primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --secondaryDashMenuColor)", border: 'none' }}
-                  >
-                    Actions
-                  </th> */}
+                  <th style={rowHeadStyle}>Emp ID</th>
+                  <th style={rowHeadStyle}>Leave Type</th>
+                  <th style={rowHeadStyle}>Start Date</th>
+                  <th style={rowHeadStyle}>End Date</th>
+                  <th style={rowHeadStyle}>Created On</th>
+                  <th style={rowHeadStyle}>Days</th>
+                  <th style={rowHeadStyle}>Remarks</th>
+                  <th style={rowHeadStyle}>Status</th>
+                  <th style={rowHeadStyle}>Updated By</th>
                 </tr>
               </thead>
               <tbody>
@@ -446,20 +323,7 @@ const LeaveApplicationHRTable = (props) => {
                     .filter((e) => e.Status == "Approved")
                     .map((data, index) => (
                       <tr className="text-capitalize" key={index}>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none",
-                          }}
-                          className="py-1"
-                        >
+                        <td style={rowBodyStyle}>
                           <div className="d-flex aline-center gap-2">
                             <div style={{ height: "35px", width: "35px" }}>
                               <img
@@ -481,197 +345,24 @@ const LeaveApplicationHRTable = (props) => {
                             <div className="d-flex flex-column"></div>
                           </div>
                         </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none",
-                          }}
-                          className="py-1"
-                        >
+                        <td style={rowBodyStyle}>
                           <span>{data.Name}</span>
                         </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none",
-                          }}
-                          className="py-1"
-                        >
+                        <td style={rowBodyStyle}>
                           <span>{data.empID}</span>
                         </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none",
-                          }}
-                          className="py-1"
-                        >
-                          {data.Leavetype}
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none",
-                          }}
-                          className="py-1"
-                        >
-                          {data.FromDate}
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none",
-                          }}
-                          className="py-1"
-                        >
-                          {data.ToDate}
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none",
-                          }}
-                        >
-                          {data.CreatedOn}
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none",
-                          }}
-                        >
-                          {data.Days}
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none",
-                          }}
-                          className="py-1"
-                        >
-                          {data.Reasonforleave}
-                        </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none",
-                            fontSize: ".8rem",
-                          }}
-                          className="py-1  "
-                        >
-                          <span className="text-white bg-success shadow-sm px-2 py-0 rounded-5">
+                        <td style={rowBodyStyle}>{data.Leavetype}</td>
+                        <td style={rowBodyStyle}>{data.FromDate}</td>
+                        <td style={rowBodyStyle}>{data.ToDate}</td>
+                        <td style={rowBodyStyle}>{data.CreatedOn}</td>
+                        <td style={rowBodyStyle}>{data.Days}</td>
+                        <td style={rowBodyStyle}>{data.Reasonforleave}</td>
+                        <td style={rowBodyStyle}>
+                          <span className="text-white border border-success shadow-sm px-2 py-1 rounded-5">
                             {data.Status}
                           </span>
                         </td>
-                        <td
-                          style={{
-                            verticalAlign: "middle",
-                            whiteSpace: "pre",
-                            background: darkMode
-                              ? "var( --secondaryDashMenuColor)"
-                              : "var(----secondaryDashMenuColor)",
-                            color: darkMode
-                              ? "var(----secondaryDashMenuColor)"
-                              : "var( --primaryDashMenuColor)",
-                            border: "none",
-                          }}
-                          className="py-1"
-                        >
-                          {data.updatedBy}
-                        </td>
-                        {/* <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }} className="py-1">{data.reasonOfRejection}</td> */}
-
-                        {/* <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(----secondaryDashMenuColor)', color: darkMode ? 'var(----secondaryDashMenuColor)' : "var( --primaryDashMenuColor)", border: 'none' }} className="py-1"> */}
-                        {/* <div
-                          className="d-flex gap-3 py-2"
-                          style={{ cursor: "pointer" }}
-                        > */}
-                        {/* <p title="Update" className="m-auto text-primary">
-                            <FontAwesomeIcon
-                              className="m-auto"
-                              icon={faEdit}
-                              onClick={() =>
-                                props.onEditLeaveApplicationHR(data.data)
-                              }
-                            />
-                          </p> */}
-                        {/* <p title="Delete" className="m-auto text-danger">
-                          <FontAwesomeIcon
-                            className="m-auto"
-                            icon={faTrash}
-                            onClick={() =>
-                              onLeaveApplicationHRDelete(
-                                data.data["employee"][0]["_id"],
-                                data.data["_id"]
-                              )
-                            }
-                          />
-                        </p> */}
-                        {/* </div> */}
-                        {/* </td> */}
+                        <td style={rowBodyStyle}>{data.updatedBy}</td>
                       </tr>
                     ))
                 ) : (

@@ -24,13 +24,13 @@ const ManagerDash = () => {
         </div>
       </div>
       <div className="row row-gap-3 my-2">
-        <div className="col-12 col-md-6 col-lg-3">
+        <div className="col-12 col-md-6 col-lg-6">
           <DailyAttendChart />
         </div>
-        <div className="col-12 col-md-6 col-lg-3">
+        <div className="col-12 col-md-6 col-lg-6">
           <DepartmentChart />
         </div>
-        <div className="col-12 col-lg-6 ">
+        <div className="col-12 col-lg-12 ">
           <TaskChart />
         </div>
       </div>

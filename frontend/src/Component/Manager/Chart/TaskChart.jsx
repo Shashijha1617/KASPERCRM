@@ -13,8 +13,8 @@ const TaskChart = () => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         if (Array.isArray(response.data)) {
@@ -47,8 +47,6 @@ const TaskChart = () => {
   useEffect(() => {
     loadEmployeeData();
     loadTaskData();
-
-
   }, []);
   useEffect(() => {
     socket.on("taskNotificationReceived", (data) => {
@@ -57,9 +55,8 @@ const TaskChart = () => {
     return () => {
       socket.off("taskNotificationReceived", (data) => {
         loadTaskData();
-      })
-    }
-
+      });
+    };
   }, [socket]);
   const departmentCounts = {};
   departmentData.forEach((department) => {
@@ -73,91 +70,91 @@ const TaskChart = () => {
     Canceled: tasks.filter((task) => task.status === "Canceled").length,
     Active: tasks.filter((task) => task.status === "Active").length,
     Pending: tasks.filter((task) => task.status === "Pending").length,
-    Overdue: tasks.filter((task) => task.status === "Overdue").length
+    Overdue: tasks.filter((task) => task.status === "Overdue").length,
   };
 
   const chartData = {
     series: [
       {
         name: "Total Employee",
-        data: Object.values(departmentCounts)
-      }
+        data: Object.values(departmentCounts),
+      },
     ],
     options: {
       chart: {
         type: "bar",
-        height: 350
+        height: 350,
       },
       plotOptions: {
         bar: {
           horizontal: false,
           columnWidth: "40%",
-          endingShape: "rounded"
-        }
+          endingShape: "rounded",
+        },
       },
       dataLabels: {
-        enabled: false
+        enabled: false,
       },
       stroke: {
         show: true,
         width: 2,
-        colors: ["transparent"]
+        colors: ["transparent"],
       },
       xaxis: {
         categories: Object.keys(departmentCounts),
         title: {
-          text: "Department Wise Employee"
-        }
+          text: "Department Wise Employee",
+        },
       },
       yaxis: {
         title: {
-          text: "Number of Employee"
-        }
+          text: "Number of Employee",
+        },
       },
 
       fill: {
         opacity: 1,
-        colors: ["var(--primaryDashColorDark)"] // Change bar colors
+        colors: ["var(--basecolor)"],
       },
       tooltip: {
         y: {
           formatter: function (val) {
             return " " + val + "";
-          }
+          },
         },
         markers: {
-          colors: "yellow"
-        }
-      }
-    }
+          colors: "yellow",
+        },
+      },
+    },
   };
   const taskStatusChartData = {
     options: {
       chart: {
         id: "task-status-chart",
-        type: "bar"
+        type: "bar",
       },
       fill: {
-        colors: ["var(--primaryDashColorDark)"]
+        colors: ["var(--basecolor)"],
       },
       xaxis: {
         categories: Object.keys(taskStatusCounts),
         title: {
-          text: "Task Status"
-        }
+          text: "Task Status",
+        },
       },
       yaxis: {
         title: {
-          text: "Number of Tasks"
-        }
-      }
+          text: "Number of Tasks",
+        },
+      },
     },
     series: [
       {
         name: "Task Status",
-        data: Object.values(taskStatusCounts)
-      }
-    ]
+        data: Object.values(taskStatusCounts),
+      },
+    ],
   };
 
   return (
@@ -166,10 +163,9 @@ const TaskChart = () => {
         <h6
           style={{
             width: "fit-content",
-            boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
-            color: "var(--primaryDashColorDark)"
+            color: "var(--primaryDashColorDark)",
           }}
-          className="fw-bolder d-flex px-3 rounded-5 py-1"
+          className="d-flex px-3 rounded-5 py-1"
         >
           Task Progress Report
         </h6>

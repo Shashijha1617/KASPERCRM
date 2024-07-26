@@ -188,7 +188,7 @@ const AdminProjectBidTable = (props) => {
         }}
         className="border"
       >
-        <table className="table">
+        <table className="table table-striped" style={{ fontSize: ".9rem" }}>
           <thead>
             <tr>
               <th style={rowHeadStyle} onClick={() => sortData("ProjectTitle")}>
@@ -246,8 +246,8 @@ const AdminProjectBidTable = (props) => {
                 <td style={rowBodyStyle}>{items.Remark}</td>
                 <td style={rowBodyStyle}>
                   <button
-                    className="btn d-flex align-items-center gap-2 "
-                    onClick={() => onProjectBidDelete(items._id)}
+                    className="btn btn-primary d-flex align-items-center rounded-5  ms-auto  gap-2 justify-content-center"
+                    onClick={() => props.onEditProjectBid(items)}
                   >
                     {" "}
                     <FaEdit /> <span className="">Edit</span>
@@ -255,8 +255,8 @@ const AdminProjectBidTable = (props) => {
                 </td>
                 <td style={rowBodyStyle}>
                   <button
-                    className="btn d-flex align-items-center gap-2 "
-                    onClick={() => props.onEditProjectBid(items)}
+                    className="btn btn-danger d-flex align-items-center rounded-5  ms-auto  gap-2 justify-content-center"
+                    onClick={() => onProjectBidDelete(items._id)}
                   >
                     {" "}
                     <FaTrash /> <span className="">Delete</span>

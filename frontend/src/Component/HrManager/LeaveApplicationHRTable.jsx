@@ -25,9 +25,7 @@ const LeaveApplicationHRTable = (props) => {
   const [leaveApplicationHRData, setLeaveApplicationHRData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rowData, setRowData] = useState([]);
-  const [sortColumn, setSortColumn] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortDirection, setSortDirection] = useState("asc");
   const [filteredData, setFilteredData] = useState([]);
   const { darkMode } = useTheme();
   const location = useLocation();

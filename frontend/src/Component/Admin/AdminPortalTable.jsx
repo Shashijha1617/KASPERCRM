@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./AdminPortalTable.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +7,10 @@ import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Button } from "react-bootstrap";
 import BASE_URL from "../../Pages/config/config";
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
+import SearchLight from "../../img/Attendance/SearchLight.svg";
+import { FaPlus, FaTrash } from "react-icons/fa6";
+import { FaEdit } from "react-icons/fa";
 
 const override = css`
   display: block;
@@ -15,167 +19,230 @@ const override = css`
   border-color: red;
 `;
 
-class AdminPortalTable extends Component {
-  state = {
-    portalData: [],
-    loading: true
-  };
-  portalObj = [];
-  rowDataT = [];
+const AdminPortalTable = ({ onAddPortal, onEditPortal }) => {
+  const { darkMode } = useTheme();
+  const [portalData, setPortalData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  loadPortalData = () => {
+  const loadPortalData = () => {
     axios
       .get(`${BASE_URL}/api/admin/portal`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
-        this.portalObj = response.data;
-        // }
-        console.log("response", response.data);
-        this.setState({ portalData: response.data });
-        this.setState({ loading: false });
-        this.rowDataT = [];
-
-        this.portalObj.map((data) => {
-          let temp = {
-            data,
-            PortalName: data["PortalName"],
-            Status: data["Status"] == 1 ? "enable" : "disable"
-          };
-
-          this.rowDataT.push(temp);
-        });
-        this.setState({ rowData: this.rowDataT });
+        const data = response.data.map((item) => ({
+          ...item,
+          Status: item.Status === 1 ? "enabled" : "disabled",
+        }));
+        setPortalData(data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  onPortalDelete = (e) => {
-    console.log(e);
+  const onPortalDelete = (id) => {
     if (
       window.confirm(
-        "Are you sure to delete this record,It Will Delete All Projects Related to This Portal? "
-      ) == true
+        "Are you sure to delete this record? It will delete all projects related to this portal."
+      )
     ) {
       axios
-        .delete(`${BASE_URL}/api/admin/portal/` + e, {
+        .delete(`${BASE_URL}/api/admin/portal/${id}`, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
-        .then((res) => {
-          this.componentDidMount();
+        .then(() => {
+          loadPortalData();
         })
         .catch((err) => {
           console.log(err);
         });
     }
   };
-  componentDidMount() {
-    this.loadPortalData();
-  }
-  renderButton(params) {
-    console.log(params);
-    return (
-      <FontAwesomeIcon
-        icon={faTrash}
-        onClick={() => this.onPortalDelete(params.data.data["_id"])}
-      />
-    );
-  }
-  renderEditButton(params) {
-    console.log(params);
-    return (
-      <FontAwesomeIcon
-        icon={faEdit}
-        onClick={() => this.props.onEditPortal(params.data.data)}
-      />
-    );
-  }
 
-  Status = (s) => {
-    if (s == 1) {
-      return "enabled";
-    } else {
-      return "disabled";
-    }
+  useEffect(() => {
+    loadPortalData();
+  }, []);
+
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
   };
 
-  render() {
-    return (
-      <div className="p-4">
-        <div className="d-flex justify-between aline-items-start mb-3">
-          <div className=" my-auto">
-            <h3 className="fw-bold text-muted">Portal Details</h3>
-            <p className="text-muted">
-              You can create new bid and view all Bidding details of the
-              companies here !
-            </p>
-          </div>
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
 
-          <Button
-            className="my-auto"
-            variant="primary"
-            id="add-button"
-            onClick={this.props.onAddPortal}
+  return (
+    <div className="container-fluid py-2">
+      <div className="d-flex justify-between align-items-start ">
+        <div className="my-auto">
+          <h5
+            style={{
+              color: darkMode
+                ? "var(--primaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+              fontWeight: "600",
+            }}
           >
-            <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-            Add new Details
-          </Button>
+            Portal Details ( {portalData.length} )
+          </h5>
+          <p
+            style={{
+              color: darkMode
+                ? "var(--primaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+            }}
+          >
+            You can view and create new portal here.
+          </p>
         </div>
-        <div id="clear-both" />
-
-        {!this.state.loading ? (
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th
-                  style={{
-                    cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white"
-                  }}
-                >
-                  Portal
-                </th>
-                <th
-                  style={{
-                    cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white"
-                  }}
-                >
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.portalData.map((items, index) => (
-                <tr key={index}>
-                  <td>{items.PortalName}</td>
-                  <td>{items.Status}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div id="loading-bar">
-            <RingLoader
-              css={override}
-              sizeUnit={"px"}
-              size={50}
-              color={"#0000ff"}
-              loading={true}
-            />
-          </div>
-        )}
+        <button
+          className="btn btn-primary d-flex align-items-center  gap-2 justify-content-center"
+          variant="primary"
+          id="add-button"
+          onClick={onAddPortal}
+        >
+          <FaPlus />
+          <span className="d-none d-md-flex">Add new Details</span>
+        </button>
       </div>
-    );
-  }
-}
+      <div id="clear-both" />
+
+      {!loading ? (
+        <div
+          style={{ minHeight: "76vh", maxHeight: "76vh", overflow: "auto" }}
+          className="border"
+        >
+          {" "}
+          {portalData.length > 0 ? (
+            <table
+              className="table table-striped"
+              style={{ fontSize: ".9rem" }}
+            >
+              <thead>
+                <tr>
+                  <th style={rowHeadStyle}>S. No.</th>
+                  <th style={rowHeadStyle}>Portal</th>
+                  <th style={rowHeadStyle}>Status</th>
+                  <th className="text-end" style={rowHeadStyle}>
+                    Edit
+                  </th>
+                  <th className="text-end" style={rowHeadStyle}>
+                    Delete
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {portalData.map((item, index) => (
+                  <tr key={index}>
+                    <td style={rowBodyStyle}>{index + 1}</td>
+                    <td style={rowBodyStyle}>{item.PortalName}</td>
+                    <td style={rowBodyStyle}>
+                      <span
+                        className={
+                          item.Status === "enabled"
+                            ? "border border-success py-1 px-1 rounded-5 text-capitalize"
+                            : "border border-danger py-1 px-1 rounded-5 text-capitalize"
+                        }
+                      >
+                        {" "}
+                        {item.Status}
+                      </span>
+                    </td>
+                    <td style={rowBodyStyle}>
+                      <button
+                        className="btn btn-primary d-flex align-items-center rounded-5  ms-auto  gap-2 justify-content-center"
+                        onClick={() => onEditPortal(item)}
+                      >
+                        <FaEdit />
+                        <span className="d-none d-md-flex">Edit</span>
+                      </button>
+                    </td>
+                    <td style={rowBodyStyle}>
+                      <button
+                        className="btn btn-primary d-flex align-items-center rounded-5 ms-auto gap-2 justify-content-center"
+                        onClick={() => onPortalDelete(item._id)}
+                      >
+                        <FaTrash />
+                        <span className="d-none d-md-flex">Delete</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div
+              style={{
+                height: "80vh",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                wordSpacing: "5px",
+                flexDirection: "column",
+                gap: "2rem",
+              }}
+            >
+              <img
+                style={{
+                  height: "auto",
+                  width: "20%",
+                }}
+                src={SearchLight}
+                alt="img"
+              />
+              <p
+                className="text-center w-75 mx-auto"
+                style={{
+                  color: darkMode
+                    ? "var(--secondaryDashColorDark)"
+                    : "var( --primaryDashMenuColor)",
+                }}
+              >
+                Portal not found. click on "+ add new details" to create new
+                portal.
+              </p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div id="loading-bar">
+          <RingLoader
+            css={override}
+            sizeUnit={"px"}
+            size={50}
+            color={"#0000ff"}
+            loading={true}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default AdminPortalTable;

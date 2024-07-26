@@ -19,62 +19,51 @@ function TakeBreakLogs(props) {
     setEmployees,
     selectedEmployee,
     setSelectedEmployee,
-    attencenceID,
-    setAttencenceID,
+    attendanceID,
+    setAttendanceID,
     message,
     setMessage,
   } = useContext(AttendanceContext);
 
-  useEffect(() => {
-    const fetchAttendanceData = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/api/todays-attendance`);
-        setAttendanceData(response.data);
-      } catch (error) {
-        console.error("Error fetching today's attendance data:", error);
-      }
-    };
+  const fetchAllData = async () => {
+    try {
+      const attendanceResponse = await axios.get(
+        `${BASE_URL}/api/todays-attendance`
+      );
+      setAttendanceData(attendanceResponse.data);
 
-    fetchAttendanceData();
-  }, []);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(
-          `${BASE_URL}/api/employee/` + localStorage.getItem("_id"),
-          {
-            headers: {
-              authorization: localStorage.getItem("token") || "",
-            },
-          }
-        );
-        setEmployees(response.data);
-
-        const attendanceResponse = await axios.get(
-          `${BASE_URL}/api/attendance/` + localStorage.getItem("_id"),
-          {
-            headers: {
-              authorization: localStorage.getItem("token") || "",
-            },
-          }
-        );
-        const lastEntry =
-          attendanceResponse.data[attendanceResponse.data.length - 1];
-        if (lastEntry) {
-          setLoggedIn(lastEntry.status === "login");
-          setOnBreak(lastEntry.status === "break");
+      const employeeResponse = await axios.get(
+        `${BASE_URL}/api/employee/` + localStorage.getItem("_id"),
+        {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
         }
-      } catch (error) {
-        console.error("Error fetching employees or attendance data:", error);
+      );
+      setEmployees(employeeResponse.data);
+
+      const attendanceUserResponse = await axios.get(
+        `${BASE_URL}/api/attendance/` + localStorage.getItem("_id"),
+        {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        }
+      );
+      const lastEntry =
+        attendanceUserResponse.data[attendanceUserResponse.data.length - 1];
+      if (lastEntry) {
+        setLoggedIn(lastEntry.status === "login");
+        setOnBreak(lastEntry.status === "break");
       }
-    };
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
-    fetchUsers();
+  useEffect(() => {
+    fetchAllData();
   }, [props.data]);
-
-  const user = attendanceData.find((entry) => entry.userId === empIDs);
-  console.log(user);
 
   useEffect(() => {
     const loadPersonalInfoData = async () => {
@@ -88,7 +77,7 @@ function TakeBreakLogs(props) {
           }
         );
         setEmpName(response.data.FirstName);
-        setEmpIDs(response.data.empID);
+        setEmpIDs(response.data._id);
       } catch (error) {
         console.error("Error fetching personal info:", error);
       }
@@ -114,7 +103,7 @@ function TakeBreakLogs(props) {
       return;
     }
 
-    const attencenceID = employee.attendanceObjID;
+    const attendanceID = employee.attendanceObjID;
     const selectedEmployee = employee._id;
     const currentTime = Moment().format("HH:mm:ss");
     const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
@@ -141,7 +130,7 @@ function TakeBreakLogs(props) {
         },
       };
 
-      await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
+      await axios.post(`${BASE_URL}/api/attendance/${attendanceID}`, {
         employeeId: selectedEmployee,
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1,
@@ -160,6 +149,8 @@ function TakeBreakLogs(props) {
         } time recorded successfully`
       );
 
+      await fetchAllData();
+
       if (action === "login") setLoggedIn(true);
       if (action === "logout") setLoggedIn(false);
       if (action === "break") setOnBreak(true);
@@ -170,23 +161,24 @@ function TakeBreakLogs(props) {
     }
   };
 
+  const user = attendanceData.find((entry) => entry.userId === empIDs);
+
   return (
     <div className="App row gap-2">
       <div style={{ alignItems: "center" }} className="d-flex gap-2">
-        {!onBreak && (
-          <button
-            className="btn btn-warning d-flex align-items-center justify-content-center gap-2"
-            onClick={() => handleAction("break")}
-          >
-            <PiCoffeeFill className="my-auto fs-5" /> Take a Break
-          </button>
-        )}
-        {onBreak && (
+        {user && user.attendance.status === "break" ? (
           <button
             className="btn btn-primary d-flex align-items-center justify-content-center gap-2"
             onClick={() => handleAction("resume")}
           >
             <FaComputerMouse className="my-auto fs-5" /> Break Over
+          </button>
+        ) : (
+          <button
+            className="btn btn-warning d-flex align-items-center justify-content-center gap-2"
+            onClick={() => handleAction("break")}
+          >
+            <PiCoffeeFill className="my-auto fs-5" /> Take a Break
           </button>
         )}
       </div>

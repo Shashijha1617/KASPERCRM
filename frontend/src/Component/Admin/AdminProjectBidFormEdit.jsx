@@ -1,55 +1,36 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./AdminProjectBidFormEdit.css";
 import axios from "axios";
-import { Form, Button, Col, Row } from "react-bootstrap";
 import BASE_URL from "../../Pages/config/config";
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
 
-class AdminProjectBidFormEdit extends Component {
-  state = {
-    status: "",
-    portalsInfo: [],
-    ProjectTitleData: this.props.editData["ProjectTitle"],
-    ProjectURLData: this.props.editData["ProjectURL"],
-    ProjectDescriptionData: this.props.editData["ProjectDesc"],
-    EstimatedTimeData: this.props.editData["EstimatedTime"],
+const AdminProjectBidFormEdit = ({
+  editData,
+  onProjectBidEditUpdate,
+  onFormEditClose,
+}) => {
+  const [portalsInfo, setPortalsInfo] = useState([]);
+  const { darkMode } = useTheme();
+  const [projectTitleData, setProjectTitleData] = useState(
+    editData["ProjectTitle"]
+  );
+  const [projectURLData, setProjectURLData] = useState(editData["ProjectURL"]);
+  const [projectDescriptionData, setProjectDescriptionData] = useState(
+    editData["ProjectDesc"]
+  );
+  const [estimatedTimeData, setEstimatedTimeData] = useState(
+    editData["EstimatedTime"]
+  );
+  const [estimatedCostData, setEstimatedCostData] = useState(
+    editData["EstimatedCost"]
+  );
+  const [remarkData, setRemarkData] = useState(editData["Remark"]);
 
-    RemarkData: this.props.editData["Remark"],
-  };
-  onProjectTitleDataChange(e) {
-    this.setState({ ProjectTitleData: e.target.value });
-  }
-  onProjectURLDataChange(e) {
-    this.setState({ ProjectURLData: e.target.value });
-  }
-  onProjectDescriptionDataChange(e) {
-    this.setState({ ProjectDescriptionData: e.target.value });
-  }
-  onPortalsDataChange(e) {
-    this.setState({ PortalsData: e.target.value });
-  }
-  onEstimatedTimeDataChange(e) {
-    this.setState({ EstimatedTimeData: e.target.value });
-  }
-  onEstimatedCostDataChange(e) {
-    this.setState({ EstimatedCostData: e.target.value });
-  }
-  onResourceDataChange(e) {
-    this.setState({ ResourceData: e.target.value });
-  }
-  onStatusDataChange(e) {
-    this.setState({ StatusData: e.target.value });
-  }
-  onRemarkDataChange(e) {
-    this.setState({ RemarkData: e.target.value });
-  }
+  useEffect(() => {
+    loadPortalsInfo();
+  }, []);
 
-  portalsData = [];
-  handleChange = (event) => {
-    this.setState({
-      status: event.target.value,
-    });
-  };
-  loadPortalsInfo = () => {
+  const loadPortalsInfo = () => {
     axios
       .get(`${BASE_URL}/api/admin/portal`, {
         headers: {
@@ -57,226 +38,201 @@ class AdminProjectBidFormEdit extends Component {
         },
       })
       .then((response) => {
-        this.portalsData = response.data;
-
-        this.portalsData = this.portalsData.filter(
+        const activePortals = response.data.filter(
           (data) => data["Status"] == 1
         );
-
-        this.setState({ portalsInfo: response.data });
+        setPortalsInfo(activePortals);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   };
-  componentDidMount() {
-    this.loadPortalsInfo();
-  }
-  render() {
-    return (
-      <React.Fragment>
-        <h2 id="role-form-title">Edit Project Bid Details</h2>
-        <div id="role-form-outer-div">
-          <Form
-            id="form"
-            onSubmit={(e) =>
-              this.props.onProjectBidEditUpdate(this.props.editData, e)
-            }
-          >
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Project Title
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control
-                  type="Text"
-                  placeholder="Project Title"
-                  name="ProjectTitle"
-                  required
-                  value={this.state.ProjectTitleData}
-                  onChange={(value) => this.onProjectTitleDataChange(value)}
-                />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Project URL
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control
-                  type="Text"
-                  placeholder="Project URL"
-                  name="ProjectURL"
-                  required
-                  value={this.state.ProjectURLData}
-                  onChange={(value) => this.onProjectURLDataChange(value)}
-                />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Project Description
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control
-                  as="textarea"
-                  rows="3"
-                  required
-                  value={this.state.ProjectDescriptionData}
-                  onChange={(value) =>
-                    this.onProjectDescriptionDataChange(value)
-                  }
-                />
-              </Col>
-            </Form.Group>
 
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Portals
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control as="select" name="CompanyID" required>
-                  {this.portalsData.map((data, index) => (
-                    <option
-                      value={data["_id"]}
-                      selected={
-                        this.props.editData["portals"][0]["ID"] == data["ID"]
-                      }
-                    >
-                      {data["PortalName"]}
-                    </option>
-                  ))}
-                </Form.Control>
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Estimated Time
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control
-                  type="number"
-                  placeholder="Estimated Time"
-                  name="EstimatedTime"
-                  required
-                  value={this.state.EstimatedTimeData}
-                  onChange={(value) => this.onEstimatedTimeDataChange(value)}
-                />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Estimated Cost
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control
-                  type="number"
-                  placeholder="Estimated Cost"
-                  name="EstimatedCost"
-                  required
-                  value={this.state.EstimatedCostData}
-                  onChange={(value) => this.onEstimatedCostDataChange(value)}
-                />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Resource
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control as="select" required>
-                  <option
-                    value="1"
-                    selected={this.props.editData["ResourceID"] == 1}
-                  >
-                    Resource1
-                  </option>
-                  <option
-                    value="2"
-                    selected={this.props.editData["ResourceID"] == 2}
-                  >
-                    Resource2
-                  </option>
-                  <option
-                    value="3"
-                    selected={this.props.editData["ResourceID"] == 3}
-                  >
-                    Resource3
-                  </option>
-                </Form.Control>
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Status
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control as="select" required>
-                  <option
-                    value="1"
-                    selected={this.props.editData["Status"] == 1}
-                  >
-                    Open
-                  </option>
-                  <option
-                    value="2"
-                    selected={this.props.editData["Status"] == 2}
-                  >
-                    Close
-                  </option>
-                  <option
-                    value="3"
-                    selected={this.props.editData["Status"] == 3}
-                  >
-                    Cancel
-                  </option>
-                  <option
-                    value="4"
-                    selected={this.props.editData["Status"] == 4}
-                  >
-                    Award
-                  </option>
-                </Form.Control>
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Remark
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control
-                  as="textarea"
-                  rows="3"
-                  required
-                  value={this.state.RemarkData}
-                  onChange={(value) => this.onRemarkDataChange(value)}
-                />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} id="form-submit-button">
-              <Col sm={{ span: 10, offset: 2 }}>
-                <Button type="submit">Submit</Button>
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} id="form-cancel-button">
-              <Col sm={{ span: 10, offset: 2 }} id="form-cancel-button-inner">
-                <Button type="reset" onClick={this.props.onFormEditClose}>
-                  cancel
-                </Button>
-              </Col>
-            </Form.Group>
-          </Form>
+  return (
+    <div className="container-fluid py-3">
+      <div className="my-auto">
+        <h5
+          style={{
+            color: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var(--secondaryDashMenuColor)",
+            fontWeight: "600",
+          }}
+          className="m-0"
+        >
+          Edit Project Bid Details
+        </h5>
+        <p
+          style={{
+            color: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var(--secondaryDashMenuColor)",
+          }}
+        >
+          You can edit project bid details here.
+        </p>
+      </div>
+      <form
+        style={{
+          color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+        }}
+        className="my-4 d-flex flex-column gap-3"
+        onSubmit={(e) => onProjectBidEditUpdate(editData, e)}
+      >
+        <div className="row">
+          <div className="col-12 col-md-6">
+            <label>Project Title</label>
+            <div>
+              <input
+                type="text"
+                className="form-control rounded-0"
+                placeholder="Project Title"
+                name="ProjectTitle"
+                required
+                value={projectTitleData}
+                onChange={(e) => setProjectTitleData(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <label>Project URL</label>
+            <div>
+              <input
+                className="form-control rounded-0"
+                type="text"
+                placeholder="Project URL"
+                name="ProjectURL"
+                required
+                value={projectURLData}
+                onChange={(e) => setProjectURLData(e.target.value)}
+              />
+            </div>
+          </div>
         </div>
-        {/* </div>
-        </div> */}
-      </React.Fragment>
-    );
-  }
-}
+        <div>
+          <label>Project Description</label>
+          <div>
+            <textarea
+              className="form-control rounded-0"
+              rows="3"
+              required
+              value={projectDescriptionData}
+              onChange={(e) => setProjectDescriptionData(e.target.value)}
+            />
+          </div>
+        </div>
+        <div>
+          <label>Portals</label>
+          <div>
+            <select className="form-select rounded-0" name="CompanyID" required>
+              {portalsInfo.map((data, index) => (
+                <option
+                  key={index}
+                  value={data["_id"]}
+                  selected={editData["portals"][0]["ID"] === data["ID"]}
+                >
+                  {data["PortalName"]}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12 col-md-6">
+            <label>Estimated Time</label>
+            <div>
+              <input
+                className="form-control rounded-0"
+                type="number"
+                placeholder="Estimated Time"
+                name="EstimatedTime"
+                required
+                value={estimatedTimeData}
+                onChange={(e) => setEstimatedTimeData(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <label>Estimated Cost</label>
+            <div>
+              <input
+                className="form-control rounded-0"
+                type="number"
+                placeholder="Estimated Cost"
+                name="EstimatedCost"
+                required
+                value={estimatedCostData}
+                onChange={(e) => setEstimatedCostData(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12 col-md-6">
+            <label>Resource</label>
+            <div>
+              <select className="form-select rounded-0" required>
+                <option value="1" selected={editData["ResourceID"] == 1}>
+                  Resource1
+                </option>
+                <option value="2" selected={editData["ResourceID"] == 2}>
+                  Resource2
+                </option>
+                <option value="3" selected={editData["ResourceID"] == 3}>
+                  Resource3
+                </option>
+              </select>
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <label>Status</label>
+            <div>
+              <select className="form-select rounded-0" required>
+                <option value="1" selected={editData["Status"] == 1}>
+                  Open
+                </option>
+                <option value="2" selected={editData["Status"] == 2}>
+                  Close
+                </option>
+                <option value="3" selected={editData["Status"] == 3}>
+                  Cancel
+                </option>
+                <option value="4" selected={editData["Status"] == 4}>
+                  Award
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div>
+          <label>Remark</label>
+          <div>
+            <textarea
+              className="form-control rounded-0"
+              rows="3"
+              required
+              value={remarkData}
+              onChange={(e) => setRemarkData(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="d-flex align-items-center gap-3">
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={onFormEditClose}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
 
 export default AdminProjectBidFormEdit;

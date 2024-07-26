@@ -3,6 +3,7 @@ import axios from "axios";
 import Chart from "react-apexcharts";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../config/config";
+
 const DailyAttendChart = () => {
   const [attendanceData, setAttendanceData] = useState([]);
   const { darkMode } = useTheme();
@@ -16,11 +17,16 @@ const DailyAttendChart = () => {
   const [chartOption, setChartOption] = useState({
     options: {
       labels: ["Late", "Present", "Half Day", "Absent"],
-      colors: ["#FFC764", "#00FFAB", "#FF884B", "#F65A83"],
+      colors: [
+        "var(--basecolor)",
+        "var(--basecolor)",
+        "var(--basecolor)",
+        "var(--basecolor)",
+      ],
       legend: {
         show: true,
         labels: {
-          colors: darkMode ? "black" : "white",
+          color: darkMode ? "black" : "white",
         },
       },
       plotOptions: {
@@ -30,6 +36,11 @@ const DailyAttendChart = () => {
               show: true,
               total: {
                 show: true,
+                showAlways: true,
+                label: "Total",
+                formatter: function (w) {
+                  return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                },
               },
             },
           },
@@ -94,12 +105,17 @@ const DailyAttendChart = () => {
     setChartOption({
       options: {
         labels: ["Late", "Present", "Half Day", "Absent"],
-        colors: ["#FFC764", "#00FFAB", "#FF884B", "#f65a67"],
+        colors: [
+          "var(--basecolor)",
+          "var(--basecolor)",
+          "var(--basecolor)",
+          "var(--basecolor)",
+        ],
         legend: {
           position: "bottom",
           show: true,
           labels: {
-            colors: darkMode ? "black" : "white",
+            color: darkMode ? "black" : "white",
           },
         },
         plotOptions: {
@@ -109,7 +125,6 @@ const DailyAttendChart = () => {
                 show: true,
                 total: {
                   show: true,
-                  colors: darkMode ? "black" : "white",
                 },
               },
             },
@@ -137,28 +152,15 @@ const DailyAttendChart = () => {
     }
     return loginTime ? "Present" : "Absent";
   };
+
   const status = (s) => {
-    if (s == 0) {
-      return "Sunday";
-    }
-    if (s == 1) {
-      return "Monday";
-    }
-    if (s == 2) {
-      return "Tuesday";
-    }
-    if (s == 3) {
-      return "Wednedsy";
-    }
-    if (s == 4) {
-      return "Thrusday";
-    }
-    if (s == 5) {
-      return "Friday";
-    }
-    if (s == 6) {
-      return "Saturday";
-    }
+    if (s == 0) return "Sunday";
+    if (s == 1) return "Monday";
+    if (s == 2) return "Tuesday";
+    if (s == 3) return "Wednesday";
+    if (s == 4) return "Thursday";
+    if (s == 5) return "Friday";
+    if (s == 6) return "Saturday";
   };
 
   return (
@@ -200,25 +202,22 @@ const DailyAttendChart = () => {
             <h6
               style={{
                 width: "fit-content",
-                boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
               }}
-              className="fw-bolder d-flex px-3 rounded-5 py-1"
+              className="d-flex px-3 rounded-5 py-1"
             >
               Today's Attendance{" "}
             </h6>
             <span className="m-0 p-0 fs-6 text-center my-auto shadow-sm rounded-5 px-2">
-              <span className="fw-bold">{dd}</span>-
-              <span className="fw-bold">{mm}</span>-
-              <span className="fw-bold">{yyyy}</span>
+              <span>{dd}</span>-<span>{mm}</span>-<span>{yyyy}</span>
             </span>
           </div>
         </div>
         <Chart
           options={chartOption.options}
           series={chartOption.series}
-          type="polarArea"
+          type="pie"
           width="100%"
-          height="300px"
+          height="320px"
         />
       </div>
     </div>

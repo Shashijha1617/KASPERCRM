@@ -31,7 +31,11 @@ const EmployeeLogCount = (props) => {
         shade: "dark",
         type: "radial",
         shadeIntensity: 0.5,
-        gradientToColors: ["#8af054", "#f21606", "#eecd27"],
+        gradientToColors: [
+          "var(--basecolor)",
+          "var(--basecolor)",
+          "var(--basecolor)",
+        ],
         inverseColors: false,
         opacityFrom: 1,
         opacityTo: 1,
@@ -41,7 +45,7 @@ const EmployeeLogCount = (props) => {
     stroke: {
       show: false,
     },
-    colors: ["#75ff2b", "#fd4c40", "#fddb31"],
+    colors: ["var(--basecolor)", "var(--basecolor)", "var(--basecolor)"],
     dataLabels: {
       enabled: true,
     },
@@ -149,9 +153,8 @@ const EmployeeLogCount = (props) => {
       <h6
         style={{
           width: "fit-content",
-          boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
         }}
-        className="fw-bolder d-flex px-3 rounded-5 py-1"
+        className="d-flex px-3 rounded-5 py-1"
       >
         Login Status{" "}
       </h6>

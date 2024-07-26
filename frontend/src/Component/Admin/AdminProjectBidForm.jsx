@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./AdminProjectBidForm.css";
 import axios from "axios";
-import { Form, Button, Col, Row } from "react-bootstrap";
 import BASE_URL from "../../Pages/config/config";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 
@@ -61,136 +60,138 @@ const AdminProjectBidForm = ({ onProjectBidSubmit, onFormClose }) => {
         </p>
       </div>
 
-      <div id="role-form-outer-div">
-        <Form id="form" onSubmit={onProjectBidSubmit}>
-          <Form.Group as={Row}>
-            <Form.Label column sm={2}>
-              Project Title
-            </Form.Label>
-            <Col sm={10} className="form-input">
-              <Form.Control
+      <form
+        style={{
+          color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+        }}
+        className="my-4 d-flex flex-column gap-3"
+        onSubmit={onProjectBidSubmit}
+      >
+        <div className="row">
+          <div className="col-12 col-md-6">
+            <label>Project Title</label>
+            <div>
+              <input
+                className="form-control rounded-0"
                 type="text"
                 placeholder="Project Title"
                 name="ProjectTitle"
                 required
               />
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row}>
-            <Form.Label column sm={2}>
-              Project URL
-            </Form.Label>
-            <Col sm={10} className="form-input">
-              <Form.Control
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <label>Project URL</label>
+            <div>
+              <input
+                className="form-control rounded-0"
                 type="text"
                 placeholder="Project URL"
                 name="ProjectURL"
                 required
               />
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row}>
-            <Form.Label column sm={2}>
-              Project Description
-            </Form.Label>
-            <Col sm={10} className="form-input">
-              <Form.Control as="textarea" rows="3" required />
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row}>
-            <Form.Label column sm={2}>
-              Portals
-            </Form.Label>
-            <Col sm={10} className="form-input">
-              <Form.Control as="select" name="CompanyID" required>
-                {portalsInfo.map((data, index) => (
-                  <option key={data["_id"]} value={data["_id"]}>
-                    {data["PortalName"]}
-                  </option>
-                ))}
-              </Form.Control>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row}>
-            <Form.Label column sm={2}>
-              Estimated Time
-            </Form.Label>
-            <Col sm={10} className="form-input">
-              <Form.Control
+            </div>
+          </div>
+        </div>
+        <div>
+          <label>Project Description</label>
+          <div>
+            <textarea
+              placeholder="Please enter description of the project"
+              className="form-control rounded-0"
+              rows="3"
+              required
+            />
+          </div>
+        </div>
+        <div>
+          <label>Portals</label>
+          <div>
+            <select className="form-select rounded-0" name="CompanyID" required>
+              {portalsInfo.map((data) => (
+                <option key={data["_id"]} value={data["_id"]}>
+                  {data["PortalName"]}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12 col-md-6">
+            <label>Estimated Time</label>
+            <div>
+              <input
+                className="form-control rounded-0"
                 type="number"
                 placeholder="Estimated Time"
                 name="EstimatedTime"
                 required
               />
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row}>
-            <Form.Label column sm={2}>
-              Estimated Cost
-            </Form.Label>
-            <Col sm={10} className="form-input">
-              <Form.Control
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <label>Estimated Cost</label>
+            <div>
+              <input
+                className="form-control rounded-0"
                 type="number"
                 placeholder="Estimated Cost"
                 name="EstimatedCost"
                 required
               />
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row}>
-            <Form.Label column sm={2}>
-              Resource
-            </Form.Label>
-            <Col sm={10} className="form-input">
-              <Form.Control as="select" required>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          {" "}
+          <div className="col-12 col-md-6">
+            <label>Resource</label>
+            <div>
+              <select className="form-select rounded-0" required>
                 <option value="1">Resource1</option>
                 <option value="2">Resource2</option>
                 <option value="3">Resource3</option>
-              </Form.Control>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row}>
-            <Form.Label column sm={2}>
-              Status
-            </Form.Label>
-            <Col sm={10} className="form-input">
-              <Form.Control as="select" required>
+              </select>
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <label>Status</label>
+            <div>
+              <select className="form-select rounded-0" required>
                 <option value="1">Open</option>
                 <option value="2">Close</option>
                 <option value="3">Cancel</option>
                 <option value="4">Award</option>
-              </Form.Control>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row}>
-            <Form.Label column sm={2}>
-              Remark
-            </Form.Label>
-            <Col sm={10} className="form-input">
-              <Form.Control as="textarea" rows="3" required />
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} id="form-submit-button">
-            <Col sm={{ span: 10, offset: 2 }}>
-              <Button type="submit">Submit</Button>
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} id="form-cancel-button">
-            <Col sm={{ span: 10, offset: 2 }} id="form-cancel-button-inner">
-              <Button type="reset" onClick={onFormClose}>
-                Cancel
-              </Button>
-            </Col>
-          </Form.Group>
-        </Form>
-      </div>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div>
+          <label>Remark</label>
+          <div>
+            <textarea
+              placeholder="Please enter remarks, if any"
+              className="form-control rounded-0"
+              rows="3"
+              required
+            />
+          </div>
+        </div>
+        <div className="d-flex align-items-center gap-3">
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={onFormClose}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

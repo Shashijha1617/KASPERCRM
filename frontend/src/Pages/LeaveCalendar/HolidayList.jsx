@@ -43,7 +43,7 @@ function HolidayList({ title, newFolderLink, holidayIcons }) {
 
     // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(holiday =>
+      filtered = filtered.filter((holiday) =>
         holiday.holidayName.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
@@ -53,19 +53,82 @@ function HolidayList({ title, newFolderLink, holidayIcons }) {
   const getHolidayIcons = (holidayType) => {
     switch (holidayType) {
       case "National Holiday":
-        return <span style={{ height: '40px', width: '40px', display: 'flex', margin: 'auto', justifyContent: 'center', alignItems: 'center', fontSize: '30px' }} className="rounded-5 bg-danger text-white"><GiIndianPalace /></span>;
+        return (
+          <span
+            style={{
+              height: "40px",
+              width: "40px",
+              display: "flex",
+              margin: "auto",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "30px",
+            }}
+            className="rounded-5 bg-danger text-white"
+          >
+            <GiIndianPalace />
+          </span>
+        );
       case "Restricted Holiday":
-        return <span style={{ height: '40px', width: '40px', display: 'flex', margin: 'auto', justifyContent: 'center', alignItems: 'center', fontSize: '30px' }} className="rounded-5 bg-primary text-white"><GiPartyPopper /></span>;
+        return (
+          <span
+            style={{
+              height: "40px",
+              width: "40px",
+              display: "flex",
+              margin: "auto",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "30px",
+            }}
+            className="rounded-5 bg-primary text-white"
+          >
+            <GiPartyPopper />
+          </span>
+        );
       case "Gazetted Holiday":
-        return <span style={{ height: '40px', width: '40px', display: 'flex', margin: 'auto', justifyContent: 'center', alignItems: 'center', fontSize: '30px' }} className="rounded-5 bg-warning text-white"><PiBankBold /></span>;
+        return (
+          <span
+            style={{
+              height: "40px",
+              width: "40px",
+              display: "flex",
+              margin: "auto",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "30px",
+            }}
+            className="rounded-5 bg-warning text-white"
+          >
+            <PiBankBold />
+          </span>
+        );
       default:
-        return <span style={{ height: '40px', width: '40px', display: 'flex', margin: 'auto', justifyContent: 'center', alignItems: 'center', fontSize: '30px' }} className="rounded-5 bg-danger text-white"><GiIndianPalace /></span>;
+        return (
+          <span
+            style={{
+              height: "40px",
+              width: "40px",
+              display: "flex",
+              margin: "auto",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "30px",
+            }}
+            className="rounded-5 bg-danger text-white"
+          >
+            <GiIndianPalace />
+          </span>
+        );
     }
   };
 
   return (
-    <div style={{ height: '100%' }} >
-      <div style={{ overflow: 'hidden' }} className="shadow bg-white p-0 rounded-4 h-100 ">
+    <div style={{ height: "100%" }}>
+      <div
+        style={{ overflow: "hidden" }}
+        className="shadow bg-white p-0 rounded-4 h-100 "
+      >
         <h5
           style={{
             backgroundColor: "var(--primaryDashColorDark)",
@@ -73,31 +136,41 @@ function HolidayList({ title, newFolderLink, holidayIcons }) {
           }}
           className="fw-bolder pb-3 px-3 pt-3 d-flex justify-content-between gap-0 text-center align-items-center"
         >
-          {title} <Link to={newFolderLink}><span className="fs-4 d-flex">{holidayIcons}</span></Link>
+          {title}{" "}
+          <Link to={newFolderLink}>
+            <span className="fs-4 d-flex">{holidayIcons}</span>
+          </Link>
         </h5>
 
         <div className="row mx-auto shadow-sm p-0 pb-1">
-          <div className="col-12 p-0"><input
-            type="text"
-            className="form-control rounded-0"
-            placeholder="Search holiday..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <div className="col-12 p-0">
+            <input
+              type="text"
+              className="form-control rounded-0"
+              placeholder="Search holiday..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
         </div>
-        <div style={{ maxHeight: '350px', overflow: 'auto', }}>
-
+        <div style={{ maxHeight: "350px", overflow: "auto" }}>
           {filteredHolidays.map((holiday, index) => (
             <div className="row p-2 mx-auto" key={index}>
-              <span className="col-3 border-0 text-center">{getHolidayIcons(holiday.holidayType)}</span>
-              <span className="col-5 border-0 fw-bold text-muted">{holiday.holidayName}</span>
-              <span style={{ whiteSpace: 'pre' }} className="col-3 border-0 fw-bold text-primary">{`${holiday.holidayDate}-${holiday.holidayMonth}-${holiday.holidayYear}`}</span>
+              <span className="col-3 border-0 text-center">
+                {getHolidayIcons(holiday.holidayType)}
+              </span>
+              <span className="col-5 border-0 fw-bold text-muted">
+                {holiday.holidayName}
+              </span>
+              <span
+                style={{ whiteSpace: "pre" }}
+                className="col-3 border-0 fw-bold text-primary"
+              >{`${holiday.holidayDate}-${holiday.holidayMonth}-${holiday.holidayYear}`}</span>
             </div>
           ))}
         </div>
       </div>
-    </div >
+    </div>
   );
 }
 

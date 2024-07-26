@@ -1,80 +1,131 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./AdminPortalForm.css";
-import { Form, Button, Col, Row } from "react-bootstrap";
-// import Form from 'react-bootstrap/Form'
+import { Form, Button, div, Row } from "react-bootstrap";
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
 
-class AdminPortalForm extends Component {
-  state = {
-    status: ""
+const AdminPortalForm = ({ onPortalSubmit, onStatusChange, onFormClose }) => {
+  const [status, setStatus] = useState("");
+  const { darkMode } = useTheme();
+
+  const handleChange = (event) => {
+    setStatus(event.target.value);
   };
-  handleChange = event => {
-    this.setState({
-      status: event.target.value
-    });
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenudivor)"
+      : "var(--primaryDashdivorDark)",
+    color: darkMode
+      ? "var(--primaryDashdivorDark)"
+      : "var(--secondaryDashMenudivor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
   };
-  render() {
-    return (
-      <div>
-        <h2 id="role-form-title">Add Portal Details</h2>
-        <div id="role-form-outer-div">
-          <Form id="form" onSubmit={this.props.onPortalSubmit}>
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Portal
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control
-                  type="Text"
-                  placeholder="Portal"
-                  name="Portal"
-                  required
-                />
-              </Col>
-            </Form.Group>
 
-            <Form.Group as={Row}>
-              <Form.Label as="legend" column sm={2}>
-                Status
-              </Form.Label>
-              <Col sm={10}>
-                <Form.Check
-                  inline
-                  type="radio"
-                  label="enable"
-                  value="1"
-                  name="status"
-                  onChange={this.props.onStatusChange}
-                  required
-                />
-                <Form.Check
-                  inline
-                  type="radio"
-                  label="disable"
-                  value="0"
-                  name="status"
-                  onChange={this.props.onStatusChange}
-                  required
-                />
-              </Col>
-            </Form.Group>
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenudivor)"
+      : "var(--secondaryDashdivorDark)",
+    color: darkMode
+      ? "var(--secondaryDashdivorDark)"
+      : "var(--primaryDashMenudivor)",
+    border: "none",
+  };
 
-            <Form.Group as={Row} id="form-submit-button">
-              <Col sm={{ span: 10, offset: 2 }}>
-                <Button type="submit">Submit</Button>
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} id="form-cancel-button">
-              <Col sm={{ span: 10, offset: 2 }} id="form-cancel-button-inner">
-                <Button type="reset" onClick={this.props.onFormClose}>
-                  cancel
-                </Button>
-              </Col>
-            </Form.Group>
-          </Form>
-        </div>
+  return (
+    <div className="container-fluid py-3">
+      <div className="my-auto">
+        <h5
+          style={{
+            color: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var(--secondaryDashMenuColor)",
+            fontWeight: "600",
+          }}
+        >
+          Add Portal Details
+        </h5>
+        <p
+          style={{
+            color: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var(--secondaryDashMenuColor)",
+          }}
+        >
+          You can add new portal here.
+        </p>
       </div>
-    );
-  }
-}
+      <form
+        style={{
+          color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+        }}
+        className="my-4 d-flex flex-column gap-3"
+        onSubmit={onPortalSubmit}
+      >
+        <div>
+          <label>Portal</label>
+          <div>
+            <input
+              className="form-control rounded-0"
+              type="text"
+              placeholder="Please enter portal name"
+              name="Portal"
+              required
+            />
+          </div>
+        </div>
+
+        <div>
+          <label>Status</label>
+          <div className="d-flex align-items-center gap-2">
+            <Form.Check
+              className="d-flex align-items-center gap-2 text-capitalize"
+              inline
+              type="radio"
+              label="enable"
+              value="1"
+              name="status"
+              onChange={onStatusChange}
+              required
+            />
+            <Form.Check
+              className="d-flex align-items-center gap-2 text-capitalize"
+              inline
+              type="radio"
+              label="disable"
+              value="0"
+              name="status"
+              onChange={onStatusChange}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="d-flex  align-items-center gap-2">
+          <button
+            className="btn-primary btn d-flex align-items-center justify-content-center gap-2"
+            type="submit"
+          >
+            Submit
+          </button>
+          <button
+            className="btn-danger btn d-flex align-items-center justify-content-center gap-2"
+            type="reset"
+            onClick={onFormClose}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
 
 export default AdminPortalForm;

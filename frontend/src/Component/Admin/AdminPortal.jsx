@@ -1,167 +1,114 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./AdminPortal.css";
 import axios from "axios";
 import AdminPortalTable from "./AdminPortalTable.jsx";
 import AdminPortalForm from "./AdminPortalForm.jsx";
 import AdminPortalFormEdit from "./AdminPortalFormEdit.jsx";
 import BASE_URL from "../../Pages/config/config.js";
-// import { HashRouter as Router, Route, Link } from "react-router-dom";
 
-// function AdminPortalTableF() {
-//   return <AdminPortalTable/>;
-// }
-// function AdminPortalFormF() {
-//   return  <AdminPortalForm onPortalSubmit={handlePortalSubmit}/>;
-// }
+const AdminPortal = () => {
+  const [table, setTable] = useState(true);
+  const [editForm, setEditForm] = useState(false);
+  const [editData, setEditData] = useState({});
+  const [addFormStatus, setAddFormStatus] = useState("");
+  const [editFormStatus, setEditFormStatus] = useState("");
 
-// function handlePortalSubmit(e) {
-//   e.preventDefault();
-//   console.log(e);
-
-// }
-
-class AdminPortal extends Component {
-  state = {
-    table: true,
-    editForm: false,
-    editData: {},
-    addFormStatus: "",
-    editFormStatus: ""
-  };
-
-  render() {
-    // let value=(this.props.pass) ? undefined : "";<i class="fas fa-plus"></i>
-    return (
-      //  <Router>
-      <React.Fragment>
-        {this.state.table ? (
-          this.state.editForm ? (
-            <AdminPortalFormEdit
-              onPortalEditUpdate={this.handlePortalEditUpdate}
-              onFormEditClose={this.handleEditFormClose}
-              editData={this.state.editData}
-              onStatusChange={this.handleEditFormStatusChange}
-            />
-          ) : (
-            <AdminPortalTable
-              onAddPortal={this.handleAddPortal}
-              onEditPortal={this.handleEditPortal}
-            />
-          )
-        ) : (
-          <AdminPortalForm
-            onPortalSubmit={this.handlePortalSubmit}
-            onFormClose={this.handleFormClose}
-            onStatusChange={this.handleAddFormStatusChange}
-          />
-        )}
-
-        {/* <div>debru</div> */}
-        {/* <Route path="/admin/Portal/table" exact component={AdminPortalTable} /> */}
-        {/* <Route path="/admin/Portal/form" exact component={() => <AdminPortalForm onPortalSubmit={this.handlePortalSubmit} />} /> */}
-
-        {/* <AdminPortalTable/> */}
-      </React.Fragment>
-
-      //  </Router>
-    );
-  }
-  handlePortalSubmit = (event) => {
+  const handlePortalSubmit = (event) => {
     event.preventDefault();
-    console.log(
-      "portal",
-      event.target[0].value,
-      event.target[1].value,
-      event.target[2].value
-    );
-    console.log("portal status", this.state.addFormStatus);
-    this.setState({ table: true });
-
-    let body = {
+    const body = {
       PortalName: event.target[0].value,
-      Status: this.state.addFormStatus
+      Status: addFormStatus,
     };
-    //  let body= "CompanyID=" + event.target[0].value + "&Portal=" + event.target[1].value;
-    //  let body= "debru";
+
     axios
       .post(`${BASE_URL}/api/admin/portal`, body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
-      .then((res) => {
-        this.setState({ table: false });
-        this.setState({ table: true });
+      .then(() => {
+        setTable(true);
       })
       .catch((err) => {
         console.log(err);
       });
-    // this.setState({ loading: true });
-    // this.login(event.target[0].value, event.target[1].value);
-    // event.target.reset();
   };
-  handleAddPortal = () => {
-    console.log("clicked1");
-    this.setState({ table: false });
+
+  const handleAddPortal = () => {
+    setTable(false);
   };
-  handleEditPortal = (e) => {
-    console.log(e);
-    console.log("clicked6");
-    this.setState({ editForm: true });
-    this.setState({ editData: e });
-    this.setState({ editFormStatus: e["Status"] });
+
+  const handleEditPortal = (e) => {
+    setEditForm(true);
+    setEditData(e);
+    setEditFormStatus(e.Status);
   };
-  handleFormClose = () => {
-    console.log("clicked1");
-    this.setState({ table: true });
+
+  const handleFormClose = () => {
+    setTable(true);
   };
-  handleEditFormClose = () => {
-    console.log("clicked5");
-    this.setState({ editForm: false });
+
+  const handleEditFormClose = () => {
+    setEditForm(false);
   };
-  handleFormClose = () => {
-    console.log("clicked1");
-    this.setState({ table: true });
+
+  const handleAddFormStatusChange = (e) => {
+    setAddFormStatus(e.currentTarget.value);
   };
-  handleAddFormStatusChange = (e) => {
-    // console.log(e.currentTarget.value);
-    this.setState({
-      addFormStatus: e.currentTarget.value
-    });
+
+  const handleEditFormStatusChange = (e) => {
+    setEditFormStatus(e.currentTarget.value);
   };
-  handleEditFormStatusChange = (e) => {
-    // console.log(e.currentTarget.value);
-    this.setState({
-      editFormStatus: e.currentTarget.value
-    });
-  };
-  handlePortalEditUpdate = (info, formData1) => {
-    // this.setState({ table: true });
-    let body = {
-      // ...info,CompanyID:formData1,Portal:formData2
-      _id: info["_id"],
+
+  const handlePortalEditUpdate = (info, formData1) => {
+    const body = {
+      _id: info._id,
       PortalName: formData1,
-      Status: this.state.editFormStatus,
-      ID: info["ID"]
+      Status: editFormStatus,
+      ID: info.ID,
     };
-    console.log("update", body);
+
     axios
-      .put(`${BASE_URL}/api/admin/portal/` + info["ID"], body, {
+      .put(`${BASE_URL}/api/admin/portal/${info.ID}`, body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
-      .then((res) => {
-        // this.componentDidMount();
-        this.setState({ table: false });
-        this.setState({ table: true });
+      .then(() => {
+        setTable(true);
       })
       .catch((err) => {
         console.log(err);
       });
 
-    this.setState({ editForm: false });
+    setEditForm(false);
   };
-}
+
+  return (
+    <React.Fragment>
+      {table ? (
+        editForm ? (
+          <AdminPortalFormEdit
+            onPortalEditUpdate={handlePortalEditUpdate}
+            onFormEditClose={handleEditFormClose}
+            editData={editData}
+            onStatusChange={handleEditFormStatusChange}
+          />
+        ) : (
+          <AdminPortalTable
+            onAddPortal={handleAddPortal}
+            onEditPortal={handleEditPortal}
+          />
+        )
+      ) : (
+        <AdminPortalForm
+          onPortalSubmit={handlePortalSubmit}
+          onFormClose={handleFormClose}
+          onStatusChange={handleAddFormStatusChange}
+        />
+      )}
+    </React.Fragment>
+  );
+};
 
 export default AdminPortal;

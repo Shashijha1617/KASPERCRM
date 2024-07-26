@@ -4,9 +4,11 @@ import { RiLoginCircleFill, RiLogoutCircleFill } from "react-icons/ri";
 import { BsFillBriefcaseFill } from "react-icons/bs";
 import axios from "axios";
 import BASE_URL from "../../../../Pages/config/config";
+import { useTheme } from "../../../../Context/TheamContext/ThemeContext";
 const MyTodaysLoginData = (props) => {
   const [attendanceData, setAttendanceData] = useState(null);
   const [empName, setEmpName] = useState(null);
+  const { darkMode } = useTheme();
 
   const employeeId = localStorage.getItem("_id");
   console.log(empName);
@@ -63,56 +65,63 @@ const MyTodaysLoginData = (props) => {
     return hours + " Hrs " + remainingMinutes + " Min";
   }
   return (
-    <div className="row justify-content-between row-gap-3 container-fluid my-3 mx-auto">
+    <div
+      style={{
+        color: darkMode
+          ? "var(--primaryDashMenuColor)"
+          : "var(--secondaryDashColorDark)",
+      }}
+      className="row justify-content-between row-gap-3 container-fluid my-3 mx-auto"
+    >
       <div
-        className="col-6 col-lg-3  row bg-primary rounded-2 py-2"
-        style={{ height: "5rem" }}
+        className="col-6 col-lg-3  row rounded-2 py-2"
+        style={{ height: "5rem", background: "var(--basecolor)" }}
       >
         <div className="col-md-8 col-12">
-          <span className="fs-5 text-white">Login </span>
-          <p className="text-white fs-5 m-0">{attendanceData.loginTime}</p>
+          <span>Login </span>
+          <p className="m-0">{attendanceData.loginTime}</p>
         </div>
-        <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center text-white fs-1">
+        <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center  fs-2">
           <RiLoginCircleFill />
         </div>
       </div>
       <div
-        className="col-6 col-lg-3 row bg-secondary rounded-2 py-2"
-        style={{ height: "5rem" }}
+        className="col-6 col-lg-3 row rounded-2 py-2"
+        style={{ height: "5rem", background: "var(--basecolor)" }}
       >
         <div className="col-md-8 col-12">
-          <span className="fs-5 text-white">Total Break</span>
-          <p className="text-white fs-5 m-0">
+          <span>Total Break</span>
+          <p className="m-0">
             {convertMinutesToHoursAndMinutes(attendanceData.totalBrake)}
           </p>
         </div>
-        <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center text-white fs-1">
+        <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center fs-2">
           <MdCoffee />
         </div>
       </div>
       <div
-        className="col-6 col-lg-3 row bg-success rounded-2 py-2"
-        style={{ height: "5rem" }}
+        className="col-6 col-lg-3 row rounded-2 py-2"
+        style={{ height: "5rem", background: "var(--basecolor)" }}
       >
         <div className="col-md-8 col-12">
-          <span className="fs-5 text-white">Total Login</span>
-          <p className="text-white fs-5 m-0">
+          <span>Total Working</span>
+          <p className="m-0">
             {convertMinutesToHoursAndMinutes(attendanceData.totalLoginTime)}
           </p>
         </div>
-        <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center text-white fs-1">
+        <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center  fs-2">
           <BsFillBriefcaseFill />
         </div>
       </div>
       <div
-        className="col-6 col-lg-3 row bg-info rounded-2 py-2"
-        style={{ height: "5rem" }}
+        className="col-6 col-lg-3 row rounded-2 py-2"
+        style={{ height: "5rem", background: "var(--basecolor)" }}
       >
         <div className="col-md-8 col-12">
-          <span className="fs-5 text-white">Logout</span>
-          <p className="text-white fs-5 m-0">{attendanceData.logoutTime}</p>
+          <span>Logout</span>
+          <p className="m-0">{attendanceData.logoutTime}</p>
         </div>
-        <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center text-white fs-1">
+        <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center  fs-2">
           <RiLogoutCircleFill />
         </div>
       </div>

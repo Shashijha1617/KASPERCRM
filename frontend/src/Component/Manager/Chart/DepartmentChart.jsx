@@ -16,18 +16,26 @@ const DepartmentChart = () => {
       labels: [],
       legend: {
         position: "bottom",
-        labels: {
-          colors: darkMode ? "black" : "white",
-        },
+        // labels: {
+        //   colors: darkMode ? "black" : "white",
+        // },
       },
       fill: {
+        // colors: [
+        //   "#008DDA",
+        //   "#4CCD99",
+        //   "#FFC700",
+        //   "#FF407D",
+        //   "#9F70FD",
+        //   "#FE7A36",
+        // ],
         colors: [
-          "#008DDA",
-          "#4CCD99",
-          "#FFC700",
-          "#FF407D",
-          "#9F70FD",
-          "#FE7A36",
+          "var(--basecolor)",
+          "var(--basecolor)",
+          "var(--basecolor)",
+          "var(--basecolor)",
+          "var(--basecolor)",
+          "var(--basecolor)",
         ],
       },
       plotOptions: {
@@ -124,12 +132,11 @@ const DepartmentChart = () => {
           <h6
             style={{
               width: "fit-content",
-              boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
               color: darkMode
                 ? "var(--primaryDashColorDark)"
                 : "var(--primaryDashMenuColor)",
             }}
-            className="fw-bolder d-flex px-3 rounded-5 py-1"
+            className="d-flex px-3 rounded-5 py-1"
           >
             Employee By Department
           </h6>
