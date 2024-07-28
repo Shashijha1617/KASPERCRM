@@ -1,27 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./PersonalInfoTable.css";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
+
 
 import "./profilePage.css";
-import {
-  FaCamera,
-  FaFileAudio,
-  FaFileImage,
-  FaGraduationCap,
-  FaRegFileImage,
-  FaRegFilePdf,
-  FaSuitcase,
-} from "react-icons/fa";
-import { IoMdDownload, IoMdPerson } from "react-icons/io";
+
 import FloralAbstract from "./FloralAbstract.jpg";
 import { GoDotFill } from "react-icons/go";
-import { IoArrowBackCircle, IoEye } from "react-icons/io5";
+import { IoArrowBackCircle } from "react-icons/io5";
 import Education from "../EmpEducation/Education";
 import WorkExperience from "../EmpWorkExp/WorkExperience";
 import Document from "../Document/Document.jsx";
@@ -30,9 +19,6 @@ import BASE_URL from "../../../Pages/config/config.js";
 
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min.js";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext.js";
-import { PiOfficeChairFill } from "react-icons/pi";
-import { BsFilePdfFill } from "react-icons/bs";
-import { MdFamilyRestroom } from "react-icons/md";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -47,8 +33,6 @@ const PersonalInfoTable = (props) => {
   const [loading, setLoading] = useState(true);
   const [rowData, setRowData] = useState([]);
   const [activeSection, setActiveSection] = useState("personalInfo");
-  const [showDownloadbtn, setShowDownloadbtn] = useState(null);
-  const [visibleDocs, setVisibleDocs] = useState([]);
   const { darkMode } = useTheme();
 
   const id =
@@ -114,53 +98,13 @@ const PersonalInfoTable = (props) => {
 
   useEffect(() => {
     loadPersonalInfoData();
-  }, [props.data]);
+  }, [props.data])
 
   const onToggleSection = (section) => {
     setActiveSection(section);
   };
 
-  const onPersonalInfoDelete = (e) => {
-    console.log(e);
-    if (window.confirm("Are you sure to delete this record? ")) {
-      axios
-        .delete(`${BASE_URL}/api/personalInfo/${e}`, {
-          headers: {
-            authorization: localStorage.getItem("token") || "",
-          },
-        })
-        .then(() => {
-          loadPersonalInfoData();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
 
-  const renderEditButton = (params) => {
-    if (props.back) {
-      return <React.Fragment />;
-    }
-    return (
-      <FontAwesomeIcon
-        icon={faEdit}
-        onClick={() => props.onEditPersonalInfo(params.data.data)}
-      />
-    );
-  };
-  const getBackgroundColor = (accountType) => {
-    switch (accountType) {
-      case "Admin":
-        return "#8EAC50";
-      case "HR":
-        return "#0079FF";
-      case "Employee":
-        return "purple";
-      default:
-        return "#FF9B50";
-    }
-  };
 
   // task data
   const [tasks, setTasks] = useState([]);
@@ -188,27 +132,6 @@ const PersonalInfoTable = (props) => {
     loadPersonalInfoData();
   }, []);
 
-  const calculateRemainingTime = (endDate) => {
-    const now = new Date();
-    const endDateTime = new Date(endDate);
-    let remainingTime = endDateTime - now;
-
-    if (remainingTime < 0) {
-      // If remaining time is negative, consider it as delay
-      remainingTime = Math.abs(remainingTime);
-      return { delay: true, days: 0, hours: 0, minutes: 0 };
-    } else {
-      // Calculate remaining days, hours, minutes, and seconds
-      const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-      const hours = Math.floor(
-        (remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      const minutes = Math.floor(
-        (remainingTime % (1000 * 60 * 60)) / (1000 * 60)
-      );
-      return { delay: false, days, hours, minutes };
-    }
-  };
 
   const fetchData = async () => {
     try {
@@ -256,48 +179,7 @@ const PersonalInfoTable = (props) => {
     )
   ).length;
 
-  const assignedTasksCount = tasks.filter((task) =>
-    task.employees.some(
-      (taskemp) =>
-        taskemp.empemail === email && taskemp.emptaskStatus === "Task Assigned"
-    )
-  ).length;
 
-  const acceptedTasksNotCompletedOnTimeCount = tasks.filter((task) =>
-    task.employees.some(
-      (taskemp) =>
-        taskemp.empemail === email &&
-        taskemp.emptaskStatus === "Accepted" &&
-        calculateRemainingTime(task.endDate).delay
-    )
-  ).length;
-
-  const completedTasksOnTimeCount = tasks.filter((task) =>
-    task.employees.some(
-      (taskemp) =>
-        taskemp.empemail === email &&
-        taskemp.emptaskStatus === "Completed" &&
-        !calculateRemainingTime(task.endDate).delay
-    )
-  ).length;
-
-  const lateCompletedAcceptedTasksCount = tasks.filter((task) =>
-    task.employees.some(
-      (taskemp) =>
-        taskemp.empemail === email &&
-        taskemp.emptaskStatus === "Accepted" &&
-        calculateRemainingTime(task.endDate).delay
-    )
-  ).length;
-
-  const lateCompletedTasksCount = tasks.filter((task) =>
-    task.employees.some(
-      (taskemp) =>
-        taskemp.empemail === email &&
-        taskemp.emptaskStatus === "Completed" &&
-        calculateRemainingTime(task.endDate).delay
-    )
-  ).length;
 
   const rowBodyStyle = {
     background: darkMode
@@ -316,9 +198,9 @@ const PersonalInfoTable = (props) => {
       <div id="clear-both" />
       {!loading ? (
         <div className="d-flex flex-column">
-          <Link to="/hr/employee">
+          <Link className="m-2 mt-3" style={{width:'fit-content' , padding:'0'}} to="/hr/employee">
             <button
-              className="btn fw-bold d-flex gap-3 "
+              className="btn  m-0 d-flex gap-3 "
               style={{
                 background: "white",
                 color: "black",
@@ -332,13 +214,14 @@ const PersonalInfoTable = (props) => {
           <div style={{ position: "relative" }} className="row">
             <div
               style={{
-                height: "35rem",
+                minHeight: "85vh",
+                maxHeight: "85vh",
               }}
               className="col-12 row mx-auto justify-content-center gap-3 w-100"
             >
               <div
                 style={{
-                  minHeight: "30rem",
+                 height:'35rem',
                   background: `url(${FloralAbstract})`,
                   backgroundPosition: "center",
                   backgroundSize: "cover",
@@ -411,18 +294,18 @@ const PersonalInfoTable = (props) => {
                         </div>
                         <p
                           style={{ position: "absolute", top: "0", left: "0" }}
-                          className="btn btn-success px-2 py-0 m-2 rounded-5 fw-bold shadow"
+                          className="btn btn-success px-2 py-0 m-2 rounded-5  shadow"
                         >
                           {items.empID}
                         </p>
-                        {/* <p className="m-auto fw-bold fs-6">{items.empID}</p> */}
+                        {/* <p className="m-auto  fs-6">{items.empID}</p> */}
                         <h3
                           style={{
                             color: darkMode
                               ? "var(--secondaryDashColorDark)"
                               : "var(--primaryDashMenuColor)",
                           }}
-                          className="text-capitalize my-0 fw-bold  text-center"
+                          className="text-capitalize my-0   text-center"
                         >
                           {items.FirstName} {personalInfoData.LastName}
                         </h3>
@@ -432,7 +315,7 @@ const PersonalInfoTable = (props) => {
                               ? "var(--secondaryDashColorDark)"
                               : "var(--primaryDashMenuColor)",
                           }}
-                          className="text-capitalize my-0 fw-bold text-center"
+                          className="text-capitalize my-0  text-center"
                         >
                           {items.RoleName}
                         </p>
@@ -440,7 +323,7 @@ const PersonalInfoTable = (props) => {
                       <div className="d-flex flex-column justify-content-between gap-2">
                         <div
                           style={rowBodyStyle}
-                          className="p-2 fw-bold mx-3 d-flex px-3 justify-content-between shadow rounded-5"
+                          className="p-2  mx-3 d-flex px-3 justify-content-between shadow rounded-5"
                         >
                           <span
                             style={{ alignItems: "center" }}
@@ -449,13 +332,13 @@ const PersonalInfoTable = (props) => {
                             <GoDotFill className="text-primary fs-4" />
                             Total Assigned Task
                           </span>{" "}
-                          <span className="fw-bold  text-primary my-auto">
+                          <span className="text-primary my-auto">
                             {pendingTasksCount}
                           </span>
                         </div>
                         <div
                           style={rowBodyStyle}
-                          className="p-2 fw-bold mx-3 d-flex px-3 justify-content-between shadow rounded-5"
+                          className="p-2  mx-3 d-flex px-3 justify-content-between shadow rounded-5"
                         >
                           <span
                             style={{ alignItems: "center" }}
@@ -464,13 +347,13 @@ const PersonalInfoTable = (props) => {
                             <GoDotFill className="text-warning fs-4" />
                             Total Active Task
                           </span>{" "}
-                          <span className="fw-bold text-warning my-auto">
+                          <span className=" text-warning my-auto">
                             {acceptedTasksCount}
                           </span>
                         </div>
                         <div
                           style={rowBodyStyle}
-                          className="p-2 px-3 fw-bold mx-3 d-flex   justify-content-between shadow rounded-5"
+                          className="p-2 px-3  mx-3 d-flex   justify-content-between shadow rounded-5"
                         >
                           <span
                             style={{ alignItems: "center" }}
@@ -480,13 +363,13 @@ const PersonalInfoTable = (props) => {
                             <GoDotFill className="text-danger fs-4" />
                             Total Rejected Task
                           </span>{" "}
-                          <span className="fw-bold my-auto text-danger">
+                          <span className=" my-auto text-danger">
                             {rejectedTasksCount}
                           </span>
                         </div>
                         <div
                           style={rowBodyStyle}
-                          className="p-2 px-3 fw-bold  mx-3 d-flex justify-content-between shadow rounded-5"
+                          className="p-2 px-3   mx-3 d-flex justify-content-between shadow rounded-5"
                         >
                           <span
                             style={{ alignItems: "center" }}
@@ -495,7 +378,7 @@ const PersonalInfoTable = (props) => {
                             <GoDotFill className="text-success fs-4" />
                             Total Completed Task
                           </span>{" "}
-                          <span className="fw-bold my-auto text-success">
+                          <span className=" my-auto text-success">
                             {completedTasksCount}
                           </span>
                         </div>
@@ -513,7 +396,7 @@ const PersonalInfoTable = (props) => {
                           left: "0",
                           cursor: "pointer",
                         }}
-                        className="btn px-3 w-100 fw-bold btn-primary "
+                        className="btn px-3 w-100  btn-primary "
                       >
                         Update Details
                       </span>
@@ -527,7 +410,7 @@ const PersonalInfoTable = (props) => {
               >
                 <div
                   id="personalinfo"
-                  style={{ height: "33rem", overflow: "hidden" }}
+                  style={{ height: "100%", overflow: "hidden" }}
                 >
                   <div
                     style={{
@@ -540,7 +423,7 @@ const PersonalInfoTable = (props) => {
                       maxWidth: "100%",
                       overflow: "auto",
                     }}
-                    className="shift-pages w-100 shadow-sm d-flex justify-content-around px-0 mb-3"
+                    className="shift-pages w-100 shadow-sm d-flex justify-content-start gap-2 px-0 mb-3"
                   >
                     <span
                       onClick={() => onToggleSection("personalInfo")}
@@ -548,14 +431,14 @@ const PersonalInfoTable = (props) => {
                         whiteSpace: "pre",
                         borderTop:
                           activeSection === "personalInfo"
-                            ? "8px solid blue"
+                            ? "3px solid blue"
                             : "none",
                         borderRadius: "0",
                         color: darkMode
                           ? "var(--secondaryDashColorDark)"
                           : "var(--primaryDashMenuColor)",
                       }}
-                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 fw-bold"
+                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 "
                     >
                       Personal
                     </span>
@@ -565,14 +448,14 @@ const PersonalInfoTable = (props) => {
                         whiteSpace: "pre",
                         borderTop:
                           activeSection === "companyInfo"
-                            ? "8px solid blue"
+                            ? "3px solid blue"
                             : "none",
                         borderRadius: "0",
                         color: darkMode
                           ? "var(--secondaryDashColorDark)"
                           : "var(--primaryDashMenuColor)",
                       }}
-                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 fw-bold"
+                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 "
                     >
                       Company
                     </span>
@@ -582,14 +465,14 @@ const PersonalInfoTable = (props) => {
                         whiteSpace: "pre",
                         borderTop:
                           activeSection === "Educationalinfo"
-                            ? "8px solid blue"
+                            ? "3px solid blue"
                             : "none",
                         borderRadius: "0",
                         color: darkMode
                           ? "var(--secondaryDashColorDark)"
                           : "var(--primaryDashMenuColor)",
                       }}
-                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 fw-bold"
+                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 "
                     >
                       Education
                     </span>
@@ -600,14 +483,14 @@ const PersonalInfoTable = (props) => {
                         whiteSpace: "pre",
                         borderTop:
                           activeSection === "Document"
-                            ? "8px solid blue"
+                            ? "3px solid blue"
                             : "none",
                         borderRadius: "0",
                         color: darkMode
                           ? "var(--secondaryDashColorDark)"
                           : "var(--primaryDashMenuColor)",
                       }}
-                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 fw-bold"
+                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 "
                     >
                       Documents
                     </span>
@@ -618,14 +501,14 @@ const PersonalInfoTable = (props) => {
                         whiteSpace: "pre",
                         borderTop:
                           activeSection === "WorkExperience"
-                            ? "8px solid blue"
+                            ? "3px solid blue"
                             : "none",
                         borderRadius: "0",
                         color: darkMode
                           ? "var(--secondaryDashColorDark)"
                           : "var(--primaryDashMenuColor)",
                       }}
-                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 fw-bold"
+                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 "
                     >
                       Experience
                     </span>
@@ -635,14 +518,14 @@ const PersonalInfoTable = (props) => {
                         whiteSpace: "pre",
                         borderTop:
                           activeSection === "otherInfo"
-                            ? "8px solid blue"
+                            ? "3px solid blue"
                             : "none",
                         borderRadius: "0",
                         color: darkMode
                           ? "var(--secondaryDashColorDark)"
                           : "var(--primaryDashMenuColor)",
                       }}
-                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 fw-bold"
+                      className="btn d-flex align-items-center px-1 justify-content-center gap-2 "
                     >
                       Family
                     </span>
@@ -654,7 +537,7 @@ const PersonalInfoTable = (props) => {
                         id="companyinfo"
                         style={{
                           overflow: "hidden auto",
-                          height: "29rem",
+                          height: "100%",
                           width: "100%",
                           scrollbarWidth: "thin",
                         }}
@@ -663,7 +546,7 @@ const PersonalInfoTable = (props) => {
                           return (
                             <div className="row w-100 container-fluid mx-auto justify-content-start py-3 row-gap-2">
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold">
+                                <label htmlFor="" className=" ">
                                   First Name
                                 </label>
                                 <input
@@ -673,7 +556,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold">
+                                <label htmlFor="" className=" ">
                                   Last Name
                                 </label>
                                 <input
@@ -683,7 +566,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Phone Number
                                 </label>
                                 <input
@@ -693,7 +576,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Emergency Contact
                                 </label>
                                 <input
@@ -703,7 +586,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Presonal Email
                                 </label>
                                 <input
@@ -713,7 +596,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Gender
                                 </label>
                                 <input
@@ -723,7 +606,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Date of Birth
                                 </label>
                                 <input
@@ -733,7 +616,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Blood Group
                                 </label>
                                 <input
@@ -743,7 +626,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   PAN Number
                                 </label>
                                 <input
@@ -753,7 +636,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Present Address
                                 </label>
 
@@ -764,7 +647,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Permanent Address
                                 </label>
 
@@ -793,7 +676,7 @@ const PersonalInfoTable = (props) => {
                           return (
                             <div className="row container-fluid mx-auto justify-content-start py-3 row-gap-3">
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Employee ID
                                 </label>
                                 <input
@@ -803,7 +686,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Work Email
                                 </label>
                                 <input
@@ -813,7 +696,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Role
                                 </label>
                                 <input
@@ -823,7 +706,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Position
                                 </label>
                                 <input
@@ -833,7 +716,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Department
                                 </label>
                                 <input
@@ -843,7 +726,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Date of Joining
                                 </label>
                                 <input
@@ -853,7 +736,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Account Access
                                 </label>
                                 <input
@@ -863,7 +746,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Reporting Manager
                                 </label>
                                 <input
@@ -873,7 +756,7 @@ const PersonalInfoTable = (props) => {
                                 />
                               </div>
                               <div className="col-12 col-sm-6 d-flex flex-column">
-                                <label htmlFor="" className=" fw-bold ">
+                                <label htmlFor="" className="  ">
                                   Reporting HR
                                 </label>
                                 <input

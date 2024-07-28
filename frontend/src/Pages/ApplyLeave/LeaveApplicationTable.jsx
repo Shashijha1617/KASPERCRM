@@ -10,6 +10,7 @@ import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import LeaveDark from "../../img/Leave/LeaveDark.svg";
 import LeaveLight from "../../img/Leave/LeaveLight.svg";
 import LeaveBalance from "../../Component/HrManager/LeaveStatus/LeaveBalance";
+import TittleHeader from "../TittleHeader/TittleHeader";
 
 const override = css`
   display: block;
@@ -64,32 +65,32 @@ const LeaveApplicationEmpTable = (props) => {
       });
   };
 
-  const onLeaveApplicationEmpDelete = (e1, e2) => {
-    console.log(e1, e2);
-    if (window.confirm("Are you sure to delete this record? ")) {
-      axios
-        .delete(`${BASE_URL}/api/leave-application-emp/${e1}/${e2}`, {
-          headers: {
-            authorization: localStorage.getItem("token") || "",
-          },
-        })
-        .then((res) => {
-          loadLeaveApplicationEmpData();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
+  // const onLeaveApplicationEmpDelete = (e1, e2) => {
+  //   console.log(e1, e2);
+  //   if (window.confirm("Are you sure to delete this record? ")) {
+  //     axios
+  //       .delete(`${BASE_URL}/api/leave-application-emp/${e1}/${e2}`, {
+  //         headers: {
+  //           authorization: localStorage.getItem("token") || "",
+  //         },
+  //       })
+  //       .then((res) => {
+  //         loadLeaveApplicationEmpData();
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // };
 
   const status = (s) => {
-    if (s == 1) {
+    if (s === 1) {
       return "Pending";
     }
-    if (s == 2) {
+    if (s === 2) {
       return "Approved";
     }
-    if (s == 3) {
+    if (s === 3) {
       return "Rejected";
     }
     return "Unknown Status";
@@ -136,6 +137,7 @@ const LeaveApplicationEmpTable = (props) => {
       <LeaveBalance />
       <div className="container-fluid">
         <div className="d-flex justify-content-between py-2">
+        <TittleHeader title={"Your Leave Application"} numbers={rowData.length} message={"You can view your applied leaves here."}/>
           <div className="my-auto">
             <h5
               style={{
@@ -146,7 +148,7 @@ const LeaveApplicationEmpTable = (props) => {
               }}
               className=" m-0"
             >
-              Your Leave Application ( {rowData.length} )
+               {/* ( {} ) */}
             </h5>
             <p
               style={{
@@ -156,7 +158,7 @@ const LeaveApplicationEmpTable = (props) => {
               }}
               className=" m-0"
             >
-              You can see your applied leaves here
+              
             </p>
           </div>
           <Button
@@ -195,7 +197,7 @@ const LeaveApplicationEmpTable = (props) => {
                   <th style={rowHeadStyle}>Remarks</th>
                   <th style={rowHeadStyle}>Status</th>
                   <th style={rowHeadStyle}>Update By</th>
-                  <th style={rowHeadStyle}>Reason for Rejection</th>
+                  <th className="text-end" style={rowHeadStyle}>Reason for Rejection</th>
                 </tr>
               </thead>
               <tbody>
@@ -211,14 +213,14 @@ const LeaveApplicationEmpTable = (props) => {
                         {data.updatedBy ? (
                           data.updatedBy
                         ) : (
-                          <span style={{ opacity: "50%" }}>Not Updated</span>
+                          <span className="border border-danger rounded-5 px-2" style={{ opacity: "50%" , fontSize:'.9rem'}}>Not Updated</span>
                         )}
                       </td>
-                      <td style={rowBodyStyle}>
+                      <td className="text-end" style={rowBodyStyle}>
                         {data.reasonOfRejection ? (
                           data.reasonOfRejection
                         ) : (
-                          <span style={{ opacity: "50%" }}>Not Updated</span>
+                          <span className="border border-danger rounded-5 px-2" style={{ opacity: "50%" , fontSize:'.9rem'}}>Not Updated</span>
                         )}
                       </td>
                     </tr>

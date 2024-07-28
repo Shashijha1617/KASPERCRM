@@ -15,7 +15,6 @@ const EmployeeLogCount = (props) => {
       type: "donut",
     },
     labels: ["Logged In", "Logged Out", "Inactive"],
-
     plotOptions: {
       pie: {
         startAngle: -90,
@@ -23,6 +22,13 @@ const EmployeeLogCount = (props) => {
         donut: {
           size: "50%",
         },
+      },
+    },
+    title: {
+      text: "Loggedin Status Chart",
+      style: {
+        color: darkMode ?  "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+        fontWeight: "normal",
       },
     },
     fill: {
@@ -48,13 +54,19 @@ const EmployeeLogCount = (props) => {
     colors: ["var(--basecolor)", "var(--basecolor)", "var(--basecolor)"],
     dataLabels: {
       enabled: true,
+      style: {
+        colors: ["white"],
+        fontWeight: "normal",
+      },
     },
     legend: {
-      show: true,
-      labels: {
-        colors: darkMode ? "black" : "white",
-      },
       position: "top",
+      labels: {
+        colors: darkMode ? ["var(--primaryDashColorDark)", "var(--primaryDashColorDark)", "var(--primaryDashColorDark)"] : ["var(--primaryDashMenuColor)", "var(--primaryDashMenuColor)", "var(--primaryDashMenuColor)"],
+      },
+      markers: {
+        fillColors: ["var(--basecolor)"],
+      },
     },
   });
 
@@ -62,7 +74,7 @@ const EmployeeLogCount = (props) => {
 
   const loadEmployeeData = () => {
     axios
-      .get(`http://localhost:4000/api/employee`, {
+      .get(`${BASE_URL}/api/employee`, {
         headers: {
           authorization: localStorage.getItem("token") || "",
         },
@@ -136,6 +148,30 @@ const EmployeeLogCount = (props) => {
     setChartSeries([loggedInCount, loggedOutCount, inactiveCount]);
   }, [rowData]);
 
+  useEffect(() => {
+    setChartOptions((prevOptions) => ({
+      ...prevOptions,
+      title: {
+        ...prevOptions.title,
+        style: {
+          ...prevOptions.title.style,
+          color: darkMode ?  "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+        },
+      },
+      legend: {
+        ...prevOptions.legend,
+        labels: {
+          ...prevOptions.legend.labels,
+          colors: darkMode ? ["var(--primaryDashColorDark)", "var(--primaryDashColorDark)", "var(--primaryDashColorDark)"] : ["var(--primaryDashMenuColor)", "var(--primaryDashMenuColor)", "var(--primaryDashMenuColor)"],
+        },
+        markers: {
+          ...prevOptions.legend.markers,
+          fillColors: ["var(--basecolor)"],
+        },
+      },
+    }));
+  }, [darkMode]);
+
   return (
     <div
       style={{
@@ -149,15 +185,6 @@ const EmployeeLogCount = (props) => {
       }}
       className="ChartCard shadow p-2 "
     >
-      <div></div>
-      <h6
-        style={{
-          width: "fit-content",
-        }}
-        className="d-flex px-3 rounded-5 py-1"
-      >
-        Login Status{" "}
-      </h6>
       <Chart
         width="100%"
         height="335px"

@@ -13,6 +13,7 @@ import LeaveLight from "../../img/Leave/LeaveLight.svg";
 import LeaveDark from "../../img/Leave/LeaveDark.svg";
 import BASE_URL from "../../Pages/config/config";
 import { useLocation } from "react-router-dom/cjs/react-router-dom";
+import TittleHeader from "../../Pages/TittleHeader/TittleHeader";
 
 const override = css`
   display: block;
@@ -203,28 +204,7 @@ const LeaveApplicationHRTable = (props) => {
     <div className="container-fluid">
       <div className="d-flex flex-column justify-between m-0 mt-3">
         <div className="d-flex justify-content-between aline-items-center">
-          <div className="my-auto">
-            <h5
-              style={{
-                color: darkMode
-                  ? "var(--secondaryDashColorDark)"
-                  : "var(--secondaryDashMenuColor)",
-              }}
-              className="m-0 p-0 "
-            >
-              Leaves Request ( {approvedLeaves} )
-            </h5>
-            <p
-              style={{
-                color: darkMode
-                  ? "var(--secondaryDashColorDark)"
-                  : "var(--secondaryDashMenuColor)",
-              }}
-              className="m-0 p-0 "
-            >
-              You can see all new leave requests here{" "}
-            </p>
-          </div>
+        <TittleHeader title={"Leaves Request"} numbers={filteredData.length}  message={"You can view all new leave requests here."}/>
           <div className="d-flex gap-2 justify-content-between py-3">
             <button
               className="btn btn-danger rounded-0 py-0 shadow-sm d-flex justify-center  aline-center gap-2"
@@ -259,11 +239,11 @@ const LeaveApplicationHRTable = (props) => {
       <div>
         <div
           style={{
-            maxHeight: "76vh",
+            maxHeight: "83vh",
             overflow: "auto",
             position: "relative",
           }}
-          className="table-responsive border border-1 border-black"
+          className="table-responsive border"
         >
           {filteredData.length > 0 ? (
             <table className="table" style={{ fontSize: ".9rem" }}>

@@ -55,7 +55,7 @@ const DocumentTable = (props) => {
                 ? "var(--primaryDashColorDark)"
                 : "var(--primaryDashMenuColor)",
             }}
-            className="fw-bold my-auto"
+            className="my-auto"
           >
             Uploaded Documents ( {documents.length} )
           </h6>
@@ -66,7 +66,7 @@ const DocumentTable = (props) => {
               onClick={props.onAddDocument}
             >
               <FaPlus />
-              <span className="d-none d-md-flex">Add Documents</span>
+              <span className="d-none d-md-flex">Upload Documents</span>
             </button>
           </div>
         </div>
@@ -75,7 +75,7 @@ const DocumentTable = (props) => {
           className="mt-2"
           style={{
             overflow: "hidden auto",
-            height: "27rem",
+            height: "100%",
             scrollbarWidth: "thin",
           }}
         >
@@ -174,7 +174,7 @@ const DocumentTable = (props) => {
                           ? "var(--secondaryDashColorDark)"
                           : "var( --primaryDashMenuColor)",
                       }}
-                      className="fw-bold m-0"
+                      className="m-0"
                     >
                       {data.title}
                     </p>{" "}
@@ -184,36 +184,36 @@ const DocumentTable = (props) => {
             </div>
           ) : (
             <div
-              style={{
-                height: "100%",
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                wordSpacing: "5px",
-                flexDirection: "column",
-                gap: "2rem",
-              }}
-            >
-              <img
-                style={{
-                  height: "auto",
-                  width: "30%",
-                }}
-                src={SearchLight}
-                alt="img"
-              />
-              <p
-                className="text-center w-75 mx-auto"
-                style={{
-                  color: darkMode
-                    ? "var(--secondaryDashColorDark)"
-                    : "var( --primaryDashMenuColor)",
-                }}
-              >
-                Document not available Please upload.
-              </p>
-            </div>
+          style={{
+            height: "65vh",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            wordSpacing: "5px",
+            flexDirection: "column",
+            gap: "2rem",
+          }}
+        >
+          <img
+            style={{
+              height: "auto",
+              width: "30%",
+            }}
+            src={SearchLight}
+            alt="img"
+          />
+          <p
+            className="text-center w-75 mx-auto"
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var( --primaryDashMenuColor)",
+            }}
+          >
+            Details not available please upload documents 
+          </p>
+        </div>
           )}
         </div>
       </div>

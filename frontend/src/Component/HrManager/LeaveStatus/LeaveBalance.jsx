@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import BASE_URL from "../../../Pages/config/config";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 const LeaveBalance = () => {
   const [leaveBalance, setLeaveBalance] = useState([]);
   const email = localStorage.getItem("Email");
@@ -36,29 +37,7 @@ const LeaveBalance = () => {
   return (
     <div className="container-fluid py-2">
       <div className="d-flex justify-content-between aline-items-center">
-        <div className="my-auto">
-          <h5
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)",
-              fontWeight: "600",
-            }}
-            className="m-0 p-0 "
-          >
-            Leaves Balance
-          </h5>
-          <p
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)",
-            }}
-            className="m-0 p-0 "
-          >
-            You can see all new leave balances here.
-          </p>
-        </div>
+      <TittleHeader title={"Leaves Balance"}  message={"You can see all new leave balances here."}/>
       </div>
 
       <div className="d-flex flex-wrap justify-content-between gap-2 my-2">
@@ -80,11 +59,11 @@ const LeaveBalance = () => {
                 className="card-body rounded-2"
               >
                 <div className="d-flex justify-content-between">
-                  <p className="fw-bold ">
+                  <p className="">
                     {leaveType.charAt(0).toUpperCase() + leaveType.slice(1)}
                   </p>
                 </div>
-                <h6 className="card-text text-center fs-4 fw-bold">
+                <h6 style={{fontWeight:'400'}} className="card-text text-center mb-4">
                   {totalBalance - balance} Out of / {totalBalance}
                 </h6>
                 <div>
@@ -92,9 +71,9 @@ const LeaveBalance = () => {
                     {calculatePercentage(totalBalance - balance, totalBalance)}%
                     of 100%
                   </p>
-                  <div style={{ height: "6px" }} className="progress">
+                  <div style={{ height: "6px" ,}} className="progress">
                     <div
-                      className="progress-bar"
+                      className="progress-bar bg-primary"
                       role="progressbar"
                       style={{
                         width: `${calculatePercentage(

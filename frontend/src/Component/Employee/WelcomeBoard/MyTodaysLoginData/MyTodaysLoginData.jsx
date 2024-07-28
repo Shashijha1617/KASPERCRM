@@ -67,9 +67,7 @@ const MyTodaysLoginData = (props) => {
   return (
     <div
       style={{
-        color: darkMode
-          ? "var(--primaryDashMenuColor)"
-          : "var(--secondaryDashColorDark)",
+        color: "var(--primaryDashMenuColor)",
       }}
       className="row justify-content-between row-gap-3 container-fluid my-3 mx-auto"
     >
@@ -77,25 +75,25 @@ const MyTodaysLoginData = (props) => {
         className="col-6 col-lg-3  row rounded-2 py-2"
         style={{ height: "5rem", background: "var(--basecolor)" }}
       >
-        <div className="col-md-8 col-12">
+       <div className="col-8 my-auto">
           <span>Login </span>
           <p className="m-0">{attendanceData.loginTime}</p>
         </div>
-        <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center  fs-2">
+        <div className="col-4 d-flex  align-items-center justify-content-center m-auto fs-2">
           <RiLoginCircleFill />
         </div>
       </div>
       <div
-        className="col-6 col-lg-3 row rounded-2 py-2"
+        className="col-6 d-gllex col-lg-3 row rounded-2 py-2"
         style={{ height: "5rem", background: "var(--basecolor)" }}
       >
-        <div className="col-md-8 col-12">
+         <div className="col-8 my-auto">
           <span>Total Break</span>
           <p className="m-0">
             {convertMinutesToHoursAndMinutes(attendanceData.totalBrake)}
           </p>
         </div>
-        <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center fs-2">
+        <div className="col-4 d-flex  align-items-center justify-content-center m-auto fs-2">
           <MdCoffee />
         </div>
       </div>
@@ -103,13 +101,13 @@ const MyTodaysLoginData = (props) => {
         className="col-6 col-lg-3 row rounded-2 py-2"
         style={{ height: "5rem", background: "var(--basecolor)" }}
       >
-        <div className="col-md-8 col-12">
+         <div className="col-8 my-auto">
           <span>Total Working</span>
           <p className="m-0">
             {convertMinutesToHoursAndMinutes(attendanceData.totalLoginTime)}
           </p>
         </div>
-        <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center  fs-2">
+        <div className="col-4 d-flex  align-items-center justify-content-center m-auto fs-2">
           <BsFillBriefcaseFill />
         </div>
       </div>
@@ -117,11 +115,11 @@ const MyTodaysLoginData = (props) => {
         className="col-6 col-lg-3 row rounded-2 py-2"
         style={{ height: "5rem", background: "var(--basecolor)" }}
       >
-        <div className="col-md-8 col-12">
+          <div className="col-8 my-auto">
           <span>Logout</span>
           <p className="m-0">{attendanceData.logoutTime}</p>
         </div>
-        <div className="col-md-4 col-12 d-none d-md-flex align-items-center justify-content-center  fs-2">
+        <div className="col-4 d-flex  align-items-center justify-content-center m-auto fs-2">
           <RiLogoutCircleFill />
         </div>
       </div>

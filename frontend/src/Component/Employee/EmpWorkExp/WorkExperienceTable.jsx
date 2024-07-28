@@ -146,7 +146,7 @@ const WorkExperienceTable = (props) => {
                 ? "var(--primaryDashColorDark)"
                 : "var(--primaryDashMenuColor)",
             }}
-            className="fw-bold my-auto"
+            className="my-auto"
           >
             Work Experience ( {rowData.length} )
           </h6>

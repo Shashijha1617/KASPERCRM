@@ -9,9 +9,6 @@ const UpcomingBirthdays = () => {
   const [employeeData, setEmployeeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rowData, setRowData] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
-  const [isIdFilterActive, setIsIdFilterActive] = useState(false);
-  const [isIdSortAscending, setIsIdSortAscending] = useState(true);
   const [upcomingBirthdays, setUpcomingBirthdays] = useState([]);
   const { darkMode } = useTheme();
 
@@ -97,16 +94,16 @@ const UpcomingBirthdays = () => {
   }, [rowData]);
 
   return (
-    <div className="div">
+    <div className="border">
       <div style={{backgroundColor: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)"}} className="shadow position-relative">
-        <h5
+        <span
           style={{ position: "sticky", top: '0', backgroundColor: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)", color: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)" }}
           
-          className="fw-bolder pb-3 px-3 pt-3 d-flex justify-content-between gap-0 text-center"
+          className="p-2 p-1 px-3 d-flex justify-content-between gap-0 text-center"
         >
-          <GiPartyPopper /> Upcoming Birthdays{" "}
+          Upcoming Birthdays
           <span>({upcomingBirthdays.length})</span>
-        </h5>
+        </span>
         <div>
           {upcomingBirthdays.length > 0 ? (
             <div className="d-flex flex-column gap-3 py-3 px-3">
@@ -145,7 +142,7 @@ const UpcomingBirthdays = () => {
                           </span>
                           <span
                             style={{ fontSize: "13px", fontWeight: "bold" }}
-                            className="text-uppercase fw-bold"
+                            className="text-uppercase"
                           >{`${employee.FirstName} ${employee.LastName}`}</span>
                         </div>
                       </div>
@@ -174,8 +171,10 @@ const UpcomingBirthdays = () => {
                 alt="Happy Birthday"
               />
               <p
-                style={{ opacity: "60%", fontSize: "13px" }}
-                className="text-center w-75 mx-auto  fw-bold text-muted "
+                style={{ opacity: "60%", fontSize: "13px" , color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--primaryDashMenuColor)",}}
+                className="text-center w-75 mx-auto "
               >
                 No upcoming birthdays in the next 7 days.
               </p>

@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { AiOutlineMore, AiOutlineNumber } from "react-icons/ai";
-import { RxCaretSort, RxCounterClockwiseClock } from "react-icons/rx";
-import { MdFreeBreakfast, MdNearbyError } from "react-icons/md";
+import {AiOutlineNumber } from "react-icons/ai";
 import noRecordFound from "../../../img/Attendance/noRecordFound.svg";
 import {
   HiOutlineLogin,
@@ -16,10 +13,12 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../../../Pages/config/config";
-import { TbListDetails } from "react-icons/tb";
+import { RxCaretSort } from "react-icons/rx";
+import { MdFreeBreakfast } from "react-icons/md";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 
 const TodaysAttendance = () => {
-  const [activeCategory, setActiveCategory] = useState(null);
+  // const [activeCategory, setActiveCategory] = useState(null);
   const [attendanceData, setAttendanceData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortField, setSortField] = useState(null);
@@ -51,7 +50,7 @@ const TodaysAttendance = () => {
     // Check if user and attendance are defined
     if (!user || !user.attendance) {
       return (
-        <span className="btn btn-outline-danger py-0 rounded-5">Absent</span>
+        <span className="border border-danger py-0 p-2 rounded-5">Absent</span>
       );
     }
 
@@ -60,7 +59,7 @@ const TodaysAttendance = () => {
     // Check if loginTime exists and is a string
     if (typeof loginTime !== "string") {
       return (
-        <span className="btn btn-outline-danger py-0 rounded-5">Absent</span>
+        <span lassName="border border-danger py-0 p-2 rounded-5">Absent</span>
       );
     }
 
@@ -70,14 +69,14 @@ const TodaysAttendance = () => {
     // Check if loginHour and loginMinute are valid numbers
     if (isNaN(loginHour) || isNaN(loginMinute)) {
       return (
-        <span className="btn btn-outline-danger py-0 rounded-5">Absent</span>
+        <span className="border border-danger py-0 p-2 rounded-5">Absent</span>
       );
     }
 
     // Check login time against criteria
     if (loginHour > 9 || (loginHour === 9 && loginMinute > 45)) {
       return (
-        <span className="btn btn-outline-warning py-0 rounded-5">Half Day</span>
+        <span className="border border-warning py-0 p-2 rounded-5">Half Day</span>
       );
     } else if (loginHour > 9 || (loginHour === 9 && loginMinute > 30)) {
       return <span className="btn btn-outline-info py-0 rounded-5">Late</span>;
@@ -85,9 +84,9 @@ const TodaysAttendance = () => {
 
     // If loginTime exists, consider the user present, otherwise absent
     return loginTime ? (
-      <span className="btn btn-outline-success py-0 rounded-5">Present</span>
+      <span className="border border-success py-0 p-2 rounded-5">Present</span>
     ) : (
-      <span className="btn btn-outline-danger py-0 rounded-5">Absent</span>
+      <span className="border border-danger py-0 p-2 rounded-5">Absent</span>
     );
   };
 
@@ -184,6 +183,45 @@ const TodaysAttendance = () => {
     XLSX.writeFile(workbook, "attendance.xlsx");
   };
 
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
+
+  function convertMinutesToHMS(totalSeconds) {
+    // Calculate hours
+    var hours = Math.floor(totalSeconds / 3600 * 60);
+    // Calculate remaining minutes
+    var remainingMinutes = Math.floor((totalSeconds % 3600) / 60);
+    // Calculate remaining seconds
+    var remainingSeconds = totalSeconds % 60;
+  
+    return hours + " Hrs " + remainingMinutes + " Min " + remainingSeconds + " Sec";
+  }
+
+
   return (
     <div className="container-fluid">
       <div
@@ -194,6 +232,7 @@ const TodaysAttendance = () => {
         }}
         className="d-flex  justify-content-between py-3"
       >
+         <TittleHeader title={"Today's Attendance"} message={"You can view today's employee attendance here."}/>
         <div>
           <h5
             style={{
@@ -204,7 +243,7 @@ const TodaysAttendance = () => {
             }}
             className=" m-0"
           >
-            Today's Attendance
+            
           </h5>
           <p
             style={{
@@ -214,7 +253,7 @@ const TodaysAttendance = () => {
             }}
             className=" m-0"
           >
-            You can see today's attendance of employee here
+            
           </p>
         </div>
         <div className="d-flex gap-2 my-auto">
@@ -234,7 +273,10 @@ const TodaysAttendance = () => {
             <SiMicrosoftexcel className="my-auto" />{" "}
             <span className="d-none d-md-flex">Export XLSX</span>
           </button>{" "}
-          <span className="btn  btn-secondary   rounded-0  fs-6 text-muted d-flex align-items-center gap-2 ">
+          <span style={{color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var(--secondaryDashMenuColor)",
+                 border:darkMode ? "1px solid var(--secondaryDashColorDark)"  : "1px solid var(--secondaryDashMenuColor"  }} className="btn     rounded-0  fs-6 d-flex align-items-center gap-2 ">
             <span className="text-uppercase m-0 p-0  text-center">
               {status(dayCurrent)}
             </span>
@@ -247,9 +289,9 @@ const TodaysAttendance = () => {
       </div>
       <div
         className={`${
-          sortedAndFilteredData.length > 0 ? "border border-1 border-black" : ""
+          sortedAndFilteredData.length > 0 ? "border" : ""
         }  `}
-        style={{ maxHeight: "78vh", overflow: "auto" }}
+        style={{ maxHeight: "82vh", overflow: "auto" }}
       >
         {sortedAndFilteredData.length > 0 ? (
           <table
@@ -261,207 +303,93 @@ const TodaysAttendance = () => {
                 <th
                   colSpan={2}
                   onClick={() => handleSort("FirstName")}
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
+                  style={rowHeadStyle}
                 >
                   <RxCaretSort /> Employee Name {renderSortIcon("FirstName")}
                 </th>
 
                 <th
                   onClick={() => handleSort("FirstName")}
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
+                  style={rowHeadStyle}
                 >
                   <RxCaretSort /> Emp ID {renderSortIcon("FirstName")}
                 </th>
-
                 <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
+                  style={rowHeadStyle}
+                >
+                  {" "}
+                  <IoCheckmarkDoneOutline /> Mark{" "}
+                </th>
+                <th
+                  style={rowHeadStyle}
                 >
                   {" "}
                   <HiOutlineLogin /> Login Time{" "}
                 </th>
 
                 <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
+                  style={rowHeadStyle}
                 >
                   {" "}
                   Logout Time <HiOutlineLogout />{" "}
                 </th>
 
                 <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
+                  style={rowHeadStyle}
                 >
                   {" "}
-                  <AiOutlineNumber /> Log Count{" "}
+                  <AiOutlineNumber /> Log{" "}
+                </th>
+                <th
+                  style={rowHeadStyle}
+                >
+                  {" "}
+                  <AiOutlineNumber /> Gross Login
                 </th>
 
                 <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
+                  style={rowHeadStyle}
                 >
                   {" "}
-                  <AiOutlineNumber /> Break Count
+                  <AiOutlineNumber /> Break
                 </th>
                 <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
+                  style={rowHeadStyle}
                 >
                   <MdFreeBreakfast />
                   Total Break{" "}
                 </th>
 
                 <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
+                  style={rowHeadStyle}
                 >
-                  <FaUserClock /> Total Login
+                  <FaUserClock /> Net Login
                 </th>
 
                 <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
+                  style={rowHeadStyle}
                 >
                   <HiStatusOnline /> Status
                 </th>
 
-                <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
-                >
-                  {" "}
-                  <IoCheckmarkDoneOutline /> Mark{" "}
-                </th>
 
-                <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                  }}
-                >
-                  <TbListDetails />
-                  Details
-                </th>
-              </tr>
+
+                              </tr>
             </thead>
             <tbody>
               {sortedAndFilteredData.map((user) => {
                 const mark = getAttendanceMark(user);
-                const rowBodyStyle = {
-                  position: "sticky",
-                  top: "0",
-                  verticalAlign: "middle",
-                  background: darkMode
-                    ? "var(--secondaryDashMenuColor)"
-                    : "var(--secondaryDashColorDark)",
-                  color: darkMode
-                    ? "var(--secondaryDashColorDark)"
-                    : "var(--primaryDashMenuColor)",
-                };
-
                 return (
                   <tr key={user.userId}>
                     <td
                       className="border-0"
-                      style={{
-                        ...rowBodyStyle,
-                        border: "none",
-                        verticalAlign: "middle",
-                      }}
+                      style={rowBodyStyle}
                     >
                       <div
                         className="profile-image bg-white mx-auto border-0"
                         style={{
-                          height: "35px",
-                          width: "35px",
+                          height: "30px",
+                          width: "30px",
                           overflow: "hidden",
                           borderRadius: "50%",
                         }}
@@ -490,6 +418,9 @@ const TodaysAttendance = () => {
                     <td style={rowBodyStyle}>
                       <span>{user.empID}</span>
                     </td>
+                    <td className="text-start" style={rowBodyStyle}>
+                      {mark}
+                    </td>
                     <td style={rowBodyStyle}>
                       {user.attendance ? user.attendance.loginTime[0] : "--"}
                     </td>
@@ -508,23 +439,25 @@ const TodaysAttendance = () => {
                         ? user.attendance.logoutTime.length
                         : "--"}
                     </td>
+                    <td style={rowBodyStyle}>
+                              {convertMinutesToHMS(
+                                user.attendance.TotalLogin
+                              )}
+                            </td>
                     <td className="text-center" style={rowBodyStyle}>
                       {user.attendance
                         ? user.attendance.breakTime.length
                         : "--"}
                     </td>
                     <td style={rowBodyStyle}>
-                      <span>
-                        {user.attendance
-                          ? convertMinutesToHoursAndMinutes(
-                              user.attendance.totalBrake
-                            )
-                          : "--"}
-                      </span>
-                    </td>
+                              {convertMinutesToHMS(
+                                user.attendance.totalBrake
+                              )}
+                            </td>
+                   
                     <td style={rowBodyStyle}>
                       {user.attendance
-                        ? convertMinutesToHoursAndMinutes(
+                        ? convertMinutesToHMS(
                             user.attendance.totalLogAfterBreak
                           )
                         : null}
@@ -535,30 +468,8 @@ const TodaysAttendance = () => {
                     >
                       {user.attendance ? user.attendance.status : "--"}
                     </td>
-                    <td className="text-start" style={rowBodyStyle}>
-                      {mark}
-                    </td>
-                    <td className="text-center" style={rowBodyStyle}>
-                      <Link to="/hr/viewAttenDance">
-                        <button
-                          style={{
-                            background: darkMode
-                              ? "var(--primaryDashMenuColor)"
-                              : "var(--secondaryDashColorDark)",
-                            color: darkMode
-                              ? "var(--secondaryDashColorDark)"
-                              : "var(--primaryDashMenuColor)",
-                            border: "none",
-                          }}
-                          onMouseEnter={() => setActiveCategory(user)}
-                          onMouseLeave={() => setActiveCategory(null)}
-                          className="btn p-0 fw-bold fs-5 position-relative"
-                        >
-                          <AiOutlineMore />
-                        </button>
-                      </Link>
-                    </td>
-                  </tr>
+
+                                      </tr>
                 );
               })}
             </tbody>

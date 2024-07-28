@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { IoMdInformationCircleOutline } from "react-icons/io";
 import { HiOutlineLogin, HiOutlineLogout } from "react-icons/hi";
-import { RxCounterClockwiseClock } from "react-icons/rx";
 import { FaUserClock } from "react-icons/fa6";
 import SearchDark from "../../../img/Attendance/SearchDark.svg";
 import SearchLight from "../../../img/Attendance/SearchLight.svg";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../../../Pages/config/config";
 import { AiOutlineFieldNumber } from "react-icons/ai";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
+import { getMonthName } from "../../../Utils/GetDayFormatted";
+import { MdOutlineTimelapse, MdOutlineWbSunny } from "react-icons/md";
+import { TbStatusChange } from "react-icons/tb";
+import { GoHash } from "react-icons/go";
+import { IoIosTimer, IoMdTimer } from "react-icons/io";
 
 const AttendanceDetails = () => {
   const [employeeId, setEmployeeId] = useState("");
@@ -79,173 +83,6 @@ const AttendanceDetails = () => {
     }
   };
 
-  const getTotalHolidays = () => {
-    if (
-      attendanceData &&
-      attendanceData.user &&
-      attendanceData.user.holidayObjID
-    ) {
-      return attendanceData.user.holidayObjID.holidays.length;
-    }
-    return 0;
-  };
-
-  const getMonthName = (monthNumber) => {
-    switch (monthNumber) {
-      case 1:
-        return "January";
-      case 2:
-        return "February";
-      case 3:
-        return "March";
-      case 4:
-        return "April";
-      case 5:
-        return "May";
-      case 6:
-        return "June";
-      case 7:
-        return "July";
-      case 8:
-        return "August";
-      case 9:
-        return "September";
-      case 10:
-        return "October";
-      case 11:
-        return "November";
-      case 12:
-        return "December";
-      default:
-        return "";
-    }
-  };
-
-  const getLogStatus = (status) => {
-    switch (status) {
-      case "login":
-        return (
-          <span
-            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
-            style={{ color: "green", width: "fit-content" }}
-          >
-            <div
-              style={{
-                height: "12px",
-                width: "12px",
-                borderRadius: "50%",
-                backgroundColor: "green",
-              }}
-            ></div>
-            Login
-          </span>
-        );
-      case "logout":
-        return (
-          <span
-            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
-            style={{ color: "red", width: "fit-content" }}
-          >
-            <div
-              style={{
-                height: "12px",
-                width: "12px",
-                borderRadius: "50%",
-                backgroundColor: "red",
-              }}
-            ></div>
-            Logout
-          </span>
-        );
-      case "Break":
-        return (
-          <span
-            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
-            style={{ color: "orange", width: "fit-content" }}
-          >
-            <div
-              style={{
-                height: "12px",
-                width: "12px",
-                borderRadius: "50%",
-                backgroundColor: "orange",
-              }}
-            ></div>
-            Break
-          </span>
-        );
-      case "Login":
-        return (
-          <span
-            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
-            style={{ color: "green", width: "fit-content" }}
-          >
-            <div
-              style={{
-                height: "12px",
-                width: "12px",
-                borderRadius: "50%",
-                backgroundColor: "green",
-              }}
-            ></div>
-            Login
-          </span>
-        );
-      case "Logout":
-        return (
-          <span
-            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
-            style={{ color: "red", width: "fit-content" }}
-          >
-            <div
-              style={{
-                height: "12px",
-                width: "12px",
-                borderRadius: "50%",
-                backgroundColor: "red",
-              }}
-            ></div>
-            Logout
-          </span>
-        );
-      case "resume":
-        return (
-          <span
-            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
-            style={{ color: "green", width: "fit-content" }}
-          >
-            <div
-              style={{
-                height: "12px",
-                width: "12px",
-                borderRadius: "50%",
-                backgroundColor: "green",
-              }}
-            ></div>
-            Resume
-          </span>
-        );
-      case "WO":
-        return (
-          <span
-            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
-            style={{ color: "red", width: "fit-content" }}
-          >
-            <div
-              style={{
-                height: "12px",
-                width: "12px",
-                borderRadius: "50%",
-                backgroundColor: "red",
-              }}
-            ></div>
-            Logout
-          </span>
-        );
-      default:
-        return "";
-    }
-  };
 
   const getMonthsForYear = (year) => {
     if (year === new Date().getFullYear()) {
@@ -260,20 +97,6 @@ const AttendanceDetails = () => {
       return attendanceData.years.filter((year) => year.year <= currentYear);
     }
     return [];
-  };
-
-  const millisecondsToTime = (milliseconds) => {
-    const millisecond = Math.floor(milliseconds);
-    const seconds = Math.floor(milliseconds / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-
-    const formattedHours = String(hours).padStart(2, "0");
-    const formattedMinutes = String(minutes % 60).padStart(2, "0");
-    const formattedSeconds = String(seconds % 60).padStart(2, "0");
-    const formattedMillisecond = String(millisecond % 60).padStart(2, "0");
-
-    return `${formattedMinutes}hrs: ${formattedSeconds}min: ${formattedMillisecond}sec`;
   };
 
   const getAttendanceMark = (date) => {
@@ -304,43 +127,50 @@ const AttendanceDetails = () => {
     return days[s];
   };
 
-  function convertMinutesToHoursAndMinutes(minutes) {
+  function convertMinutesToHMS(totalSeconds) {
     // Calculate hours
-    var hours = Math.floor(minutes / 60);
+    var hours = Math.floor(totalSeconds / 3600 * 60);
     // Calculate remaining minutes
-    var remainingMinutes = minutes % 60;
-
-    return hours + " Hrs " + remainingMinutes + " Min";
+    var remainingMinutes = Math.floor((totalSeconds % 3600) / 60);
+    // Calculate remaining seconds
+    var remainingSeconds = totalSeconds % 60;
+  
+    return hours + " Hrs " + remainingMinutes + " Min " + remainingSeconds + " Sec";
   }
+
+
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
 
   return (
     <div className="container-fluid d-flex flex-column gap-3">
       <div className="d-flex flex-column flex-lg-row gap-3 justify-content-between my-2">
-        <div>
-          <h5
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)",
-              fontWeight: "600",
-            }}
-            className=" m-0"
-          >
-            Employee Wise Attendance
-          </h5>
-          <p
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)",
-            }}
-            className="p-0 m-0"
-          >
-            You can view employee wise attendance here!
-          </p>
-        </div>
-
-        <div className="d-flex gap-3 justify-content-start justify-content-md-end my-auto">
+      <TittleHeader title={"Employee Wise Attendance"} message={"You can view attendance by employee here."}/>
+                <div className="d-flex gap-3 justify-content-start justify-content-md-end my-auto">
           <div className="w-50">
             <select
               className="form-select rounded-0  shadow-sm text-muted"
@@ -422,7 +252,7 @@ const AttendanceDetails = () => {
       {attendanceData && (
         <div
           className="border border-1 border-dark "
-          style={{ overflow: "auto", maxHeight: "65vh" }}
+          style={{ overflow: "auto", maxHeight: "73vh" }}
         >
           <table
             className="table"
@@ -434,111 +264,51 @@ const AttendanceDetails = () => {
                 className="shadow-sm"
               >
                 <th
-                  style={{
-                    verticalAlign: "middle",
-                    whiteSpace: "pre",
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                  }}
+                  style={rowHeadStyle}
                 >
-                  Date | Day
+                  <MdOutlineWbSunny /> Date | Day
                 </th>
                 <th
-                  style={{
-                    verticalAlign: "middle",
-                    whiteSpace: "pre",
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                  }}
+                  style={rowHeadStyle}
                 >
-                  Status
+                  <TbStatusChange /> Status
                 </th>
                 <th
-                  style={{
-                    verticalAlign: "middle",
-                    whiteSpace: "pre",
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                  }}
+                  style={rowHeadStyle}
                 >
                   <HiOutlineLogin />
                   Login Time
                 </th>
                 <th
-                  style={{
-                    verticalAlign: "middle",
-                    whiteSpace: "pre",
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                  }}
+                  style={rowHeadStyle}
                 >
-                  Logout Time <HiOutlineLogout />
+                  <HiOutlineLogout /> Logout Time 
                 </th>
                 <th
-                  style={{
-                    verticalAlign: "middle",
-                    whiteSpace: "pre",
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                  }}
+                  style={rowHeadStyle}
                 >
-                  <AiOutlineFieldNumber /> Log Count
+                  <GoHash /> logs
                 </th>
                 <th
-                  style={{
-                    verticalAlign: "middle",
-                    whiteSpace: "pre",
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                  }}
+                  style={rowHeadStyle}
                 >
-                  <AiOutlineFieldNumber /> Break Count
+                  <IoIosTimer /> Gross Login
                 </th>
                 <th
-                  style={{
-                    verticalAlign: "middle",
-                    whiteSpace: "pre",
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                  }}
+                  style={rowHeadStyle}
                 >
-                  <FaUserClock />
-                  Total Login
+                  <GoHash /> Breaks
+                </th>
+                <th
+                  style={rowHeadStyle}
+                >
+                  <IoMdTimer />Total Break
+                </th>
+                <th
+                  style={rowHeadStyle}
+                >
+                  <MdOutlineTimelapse />
+                  Net Login
                 </th>
               </tr>
             </thead>
@@ -550,18 +320,7 @@ const AttendanceDetails = () => {
                     month.dates
                       .sort((a, b) => a.date - b.date)
                       .map((date) => {
-                        const rowBodyStyle = {
-                          verticalAlign: "middle",
-                          whiteSpace: "pre",
-                          background: darkMode
-                            ? "var( --secondaryDashMenuColor)"
-                            : "var(--secondaryDashColorDark)",
-                          color: darkMode
-                            ? "var(--secondaryDashColorDark)"
-                            : "var( --primaryDashMenuColor)",
-                          border: "none",
-                        };
-                        return (
+                                          return (
                           <tr
                             className="shadow-sm"
                             key={date.date}
@@ -635,20 +394,10 @@ const AttendanceDetails = () => {
                                 onMouseLeave={handleInfoMouseLeave}
                               >
                                 <span
-                                  className="py-0 btn  d-flex align-items-center justify-content-center"
-                                  style={{
-                                    height: "30px",
-                                    width: "30px",
-                                    borderRadius: "50%",
-                                    border: `1px solid ${
-                                      darkMode
+                                  className="py-0 "
+                                  style={{color: darkMode
                                         ? "var(--primaryDashColorDark)"
-                                        : "var( --primaryDashMenuColor)"
-                                    }`,
-                                    color: darkMode
-                                      ? "var(--primaryDashColorDark)"
-                                      : "var( --primaryDashMenuColor)",
-                                  }}
+                                        : "var( --primaryDashMenuColor)",}}
                                 >
                                   {" "}
                                   {date.loginTime.length}
@@ -711,7 +460,7 @@ const AttendanceDetails = () => {
                                               <td>{loginTime}</td>
                                               <td>{date.logoutTime[index]}</td>
                                               <td>
-                                                {convertMinutesToHoursAndMinutes(
+                                                {convertMinutesToHMS(
                                                   date.LogData[index]
                                                 )}
                                               </td>
@@ -724,28 +473,28 @@ const AttendanceDetails = () => {
                               </div>
                             </td>
                             <td style={rowBodyStyle}>
+                              {convertMinutesToHMS(
+                                date.TotalLogin
+                              )}
+                            </td>
+                            <td style={rowBodyStyle}>
                               <span
-                                className="py-0 btn  d-flex align-items-center justify-content-center"
-                                style={{
-                                  height: "30px",
-                                  width: "30px",
-                                  borderRadius: "50%",
-                                  border: `1px solid ${
-                                    darkMode
-                                      ? "var(--primaryDashColorDark)"
-                                      : "var( --primaryDashMenuColor)"
-                                  }`,
-                                  color: darkMode
-                                    ? "var(--primaryDashColorDark)"
-                                    : "var( --primaryDashMenuColor)",
-                                }}
+                                className="py-0 "
+                                style={{color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",}}
                               >
                                 {" "}
                                 {date.breakTime.length}
                               </span>
                             </td>
+                            <td  style={rowBodyStyle}>
+                              {convertMinutesToHMS(
+                                date.totalBrake
+                              )}
+                            </td>
                             <td style={rowBodyStyle}>
-                              {convertMinutesToHoursAndMinutes(
+                              {convertMinutesToHMS(
                                 date.totalLogAfterBreak
                               )}
                             </td>

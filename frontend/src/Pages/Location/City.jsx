@@ -74,9 +74,6 @@ const City = () => {
         },
       })
       .then((res) => {
-        console.log(
-          "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu"
-        );
         setEditForm(false);
         setTable(true);
       })

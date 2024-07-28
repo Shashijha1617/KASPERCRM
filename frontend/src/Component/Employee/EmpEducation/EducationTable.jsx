@@ -139,7 +139,7 @@ const EducationTable = (props) => {
               ? "var(--primaryDashColorDark)"
               : "var(--primaryDashMenuColor)",
           }}
-          className="fw-bold my-auto"
+          className="my-auto"
         >
           Educational Details ( {rowData.length} )
           {props.back

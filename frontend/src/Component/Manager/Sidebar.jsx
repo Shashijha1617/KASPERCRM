@@ -1,16 +1,11 @@
 import React, { useState } from "react";
-import { BsBuildings, BsBuildingsFill } from "react-icons/bs";
-import { FaAddressBook, FaRegUserCircle } from "react-icons/fa";
-import { FaCalendarCheck } from "react-icons/fa6";
+import { BsBuildings } from "react-icons/bs";
+import { FaRegUserCircle } from "react-icons/fa";
 import {
   MdMenuOpen,
   MdOutlineDashboardCustomize,
   MdOutlineLocationOn,
-  MdTaskAlt,
 } from "react-icons/md";
-import { TbDeviceIpadMinus } from "react-icons/tb";
-import { MdHolidayVillage } from "react-icons/md";
-import { FcLeave } from "react-icons/fc";
 import { NavLink } from "react-router-dom/cjs/react-router-dom";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
@@ -34,7 +29,6 @@ const Sidebar = () => {
       icon: <IoMdCheckmarkCircleOutline />,
       name: "Attendance",
       navLinks: [
-        { to: "/manager/attenDance", label: "Create Attendance" },
         { to: "/manager/myAttendance", label: "My Attencance" },
         { to: "/manager/todaysAttendance", label: "TodaysAttendance" },
         { to: "/manager/viewAttenDance", label: "View Attendance" },
@@ -44,7 +38,6 @@ const Sidebar = () => {
       icon: <IoCalendarOutline />,
       name: "Leave",
       navLinks: [
-        { to: "/manager/leaveBalance", label: "Leave Balance" },
         { to: "/manager/createLeave", label: "Apply Leave" },
         { to: "/manager/leaveApplication", label: "View ALL Leave " },
       ],
@@ -119,12 +112,12 @@ const Sidebar = () => {
       className="d-none d-sm-flex flex-column gap-2"
     >
       <h3
-        style={{ borderBottom: "3px solid green" }}
-        className="text-success justify-content-between py-2 d-flex gap-2"
+        style={{ borderBottom: "3px solid var(--basecolor)" , }}
+        className=" justify-content-between py-2 d-flex gap-2"
       >
         <button
           style={{ display: !extended ? "none" : "block", cursor: "none" }}
-          className=" btn btn-success rounded-5 py-0"
+          className=" btn btn-primary rounded-5 py-0"
         >
           Manager
         </button>
@@ -139,7 +132,7 @@ const Sidebar = () => {
               : "var(--primaryDashMenuColor)",
             transform: `rotate(${!extended ? "180deg" : "0deg"})`,
           }}
-          className="my-auto p-0 fs-4"
+          className="my-auto p-0 fs-4 m-auto"
         >
           <MdMenuOpen />
         </span>
@@ -311,11 +304,6 @@ const Sidebar = () => {
   );
 };
 
-const buttonStyle = {
-  outline: "none",
-  border: "none",
-  height: "3rem",
-};
 
 const dropdownStyle = {
   width: "250px",

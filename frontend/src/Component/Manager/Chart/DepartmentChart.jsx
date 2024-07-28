@@ -7,28 +7,57 @@ import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 
 const DepartmentChart = () => {
   const [departmentData, setDepartmentData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const { darkMode } = useTheme();
 
   const [chartOption, setChartOption] = useState({
     options: {
       labels: [],
+      colors: [
+        "var(--basecolor)",
+        "var(--basecolor)",
+        "var(--basecolor)",
+        "var(--basecolor)",
+        "var(--basecolor)",
+        "var(--basecolor)",
+      ],
+      title: {
+        text: "Departments Chart",
+        style: {
+          color: darkMode ?  "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+          fontWeight: "normal",
+        },
+      },
       legend: {
         position: "bottom",
-        // labels: {
-        //   colors: darkMode ? "black" : "white",
-        // },
+        labels: {
+          colors: darkMode ? [
+            "var(--primaryDashMenuColor)",
+            "var(--primaryDashMenuColor)",
+            "var(--primaryDashMenuColor)",
+            "var(--primaryDashMenuColor)",
+            "var(--primaryDashMenuColor)",
+            "var(--primaryDashMenuColor)",
+          ] : [
+            "var(--primaryDashColorDark)",
+            "var(--primaryDashColorDark)",
+            "var(--primaryDashColorDark)",
+            "var(--primaryDashColorDark)",
+            "var(--primaryDashColorDark)",
+            "var(--primaryDashColorDark)",
+          ],
+        },
+        markers: {
+          fillColors: [
+            "var(--basecolor)",
+            "var(--basecolor)",
+            "var(--basecolor)",
+            "var(--basecolor)",
+            "var(--basecolor)",
+            "var(--basecolor)",
+          ],
+        },
       },
       fill: {
-        // colors: [
-        //   "#008DDA",
-        //   "#4CCD99",
-        //   "#FFC700",
-        //   "#FF407D",
-        //   "#9F70FD",
-        //   "#FE7A36",
-        // ],
         colors: [
           "var(--basecolor)",
           "var(--basecolor)",
@@ -45,9 +74,17 @@ const DepartmentChart = () => {
               show: true,
               total: {
                 show: true,
+                color: "white",
               },
             },
           },
+        },
+      },
+      tooltip: {
+        theme: "dark",
+        style: {
+          backgroundColor: "var(--basecolor)",
+          color: "white",
         },
       },
     },
@@ -92,19 +129,8 @@ const DepartmentChart = () => {
 
     setChartOption({
       options: {
+        ...chartOption.options,
         labels: labels,
-        plotOptions: {
-          pie: {
-            donut: {
-              labels: {
-                show: true,
-                total: {
-                  show: true,
-                },
-              },
-            },
-          },
-        },
       },
       series: series,
     });
@@ -114,42 +140,73 @@ const DepartmentChart = () => {
     updateChartOptions();
   }, [departmentData]);
 
+  useEffect(() => {
+    setChartOption((prevOptions) => ({
+      ...prevOptions,
+      options: {
+        ...prevOptions.options,
+        title: {
+          text: "Departments Chart",
+          style: {
+            color: darkMode ?  "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+            fontWeight: "normal",
+          },
+        },
+        legend: {
+          ...prevOptions.options.legend,
+          labels: {
+            colors: darkMode ? [
+              "var(--primaryDashColorDark)",
+              "var(--primaryDashColorDark)",
+              "var(--primaryDashColorDark)",
+              "var(--primaryDashColorDark)",
+              "var(--primaryDashColorDark)",
+              "var(--primaryDashColorDark)",
+            ] : [
+              "var(--primaryDashMenuColor)",
+              "var(--primaryDashMenuColor)",
+              "var(--primaryDashMenuColor)",
+              "var(--primaryDashMenuColor)",
+              "var(--primaryDashMenuColor)",
+              "var(--primaryDashMenuColor)",
+            ],
+          },
+          markers: {
+            fillColors: [
+              "var(--basecolor)",
+              "var(--basecolor)",
+              "var(--basecolor)",
+              "var(--basecolor)",
+              "var(--basecolor)",
+              "var(--basecolor)",
+            ],
+          },
+        },
+      },
+    }));
+  }, [darkMode]);
+
   return (
-    <>
-      <div
-        style={{
-          height: "fit-content",
-          background: darkMode
-            ? "var(--primaryDashMenuColor)"
-            : "var(--primaryDashColorDark)",
-          color: darkMode
-            ? "var(--primaryDashColorDark)"
-            : "var(--primaryDashMenuColor)",
-        }}
-        className="ChartCard p-2 pt-3 shadow"
-      >
-        <div className="ChartHeader">
-          <h6
-            style={{
-              width: "fit-content",
-              color: darkMode
-                ? "var(--primaryDashColorDark)"
-                : "var(--primaryDashMenuColor)",
-            }}
-            className="d-flex px-3 rounded-5 py-1"
-          >
-            Employee By Department
-          </h6>
-        </div>
-        <Chart
-          options={chartOption.options}
-          series={chartOption.series}
-          type="donut"
-          width="100%"
-          height="325px"
-        />
-      </div>
-    </>
+    <div
+      style={{
+        height: "fit-content",
+        background: darkMode
+          ? "var(--primaryDashMenuColor)"
+          : "var(--primaryDashColorDark)",
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--primaryDashMenuColor)",
+      }}
+      className="ChartCard p-2 shadow"
+    >
+      <Chart
+        options={chartOption.options}
+        series={chartOption.series}
+        type="pie"
+        width="100%"
+        height="352px"
+      />
+    </div>
   );
 };
 

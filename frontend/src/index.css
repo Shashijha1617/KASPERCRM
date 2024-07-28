@@ -1,25 +1,86 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
 
 html {
   font-size: 14px;
 }
+
 body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem; /* 14px */
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  max-height: 100dvh;
-  min-height: 100dvh;
-  font-family: "Poppins", sans-serif !important;
 }
+
+h1 {
+  font-size: 2rem; /* 28px */
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1.75rem; /* 24.5px */
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.5rem; /* 21px */
+  font-weight: 500;
+}
+
+h4 {
+  font-size: 1.25rem; /* 17.5px */
+  font-weight: 500;
+}
+
+h5 {
+  font-size: 1.125rem; /* 15.75px */
+  font-weight: 400;
+}
+
+h6 {
+  font-size: 1rem; /* 14px */
+  font-weight: 400;
+}
+
+nav, button {
+  font-size: 1rem;
+  font-family: 'Open Sans', sans-serif;
+}
+
+label, input {
+  font-size: 1rem;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Responsive Typography */
+@media (max-width: 1200px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 992px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 576px) {
+  html {
+    font-size: 10px;
+  }
+}
+
 
 /* Button Styles  */
 
 
-.btn-primary {
+/* .btn-primary {
   background: linear-gradient(145deg, #050C9C, #3572EF) !important;
   border-radius: 0 !important;
   border: none !important;
@@ -54,11 +115,11 @@ body {
   border-radius: 0 !important;
   border: none !important;
   color: white !important;
-}
+} */
 
 /* Background Style */
 
-.bg-primary {
+/* .bg-primary {
   background: linear-gradient(145deg, #050C9C, #3572EF) !important;
 }
 
@@ -80,7 +141,74 @@ body {
 
 .bg-info {
   background: linear-gradient(145deg, #850F8D, #C738BD) !important;
+} */
+
+/* Button Styles */
+
+.btn-primary {
+  background-color: #1a2a8b !important;
+  border-radius: 0 !important;
+  border: none !important;
 }
+
+.btn-secondary {
+  background-color: #ff6000 !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.btn-danger {
+  background-color: #bb2525 !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.btn-success {
+  background-color: #059212 !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.btn-warning {
+  background-color: #ff9a00 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  color: white !important;
+}
+
+.btn-info {
+  background-color: #850f8d !important;
+  border-radius: 0 !important;
+  border: none !important;
+  color: white !important;
+}
+
+/* Background Styles */
+
+.bg-primary {
+  background-color: #1a2a8b !important;
+}
+
+.bg-secondary {
+  background-color: #ff6000 !important;
+}
+
+.bg-danger {
+  background-color: #bb2525 !important;
+}
+
+.bg-success {
+  background-color: #059212 !important;
+}
+
+.bg-warning {
+  background-color: #ff9a00 !important;
+}
+
+.bg-info {
+  background-color: #850f8d !important;
+}
+
 
 
 
@@ -98,7 +226,7 @@ body {
   --primaryDashMenuColor: #FFFFFF;
   --secondaryDashMenuColor: #F2F2F2;
   
-  --basecolor: #3fbcffd2;
+  --basecolor: #478CCF;
 
 }
 
@@ -109,10 +237,10 @@ body {
   --bgColor: #fff
 }
 
-.bg-primary {
+/* .bg-primary {
   background-color: #175CD3 !important;
   color: black !important;
-}
+} */
 
 
 *::-webkit-scrollbar-track {
@@ -218,4 +346,14 @@ code {
 .react-calendar__tile--active {
   background: #dc00ac;
   color: white;
+}
+
+/* Table  */
+
+table {
+  font-size: 1rem !important;
+}
+
+table tr th {
+  font-weight:400 !important;
 }

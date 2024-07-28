@@ -3,7 +3,7 @@ import { HashRouter as Router, Route, Redirect } from "react-router-dom";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import history from "./history.js";
-
+import "./App.css"
 import Login from "./Pages/Login/Login.jsx";
 import DashboardAdmin from "./Component/Admin/DashboardAdmin.jsx";
 import DashboardHR from "./Component/HrManager/DashboardHR.jsx";

@@ -7,10 +7,12 @@ import EmployeeLogCount from "../../HrManager/Dashboard/CountData/EmplooyeeLogCo
 import AdminEmployeeTable from "../../HrManager/Dashboard/CountData/EmployeeCount";
 import DailyAttendChart from "../../../Pages/Chart/DailyAttendChart";
 import MyTodaysLoginData from "../../Employee/WelcomeBoard/MyTodaysLoginData/MyTodaysLoginData";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 
 const ManagerDash = () => {
   return (
     <div className="container-fluid ">
+      <TittleHeader title={"Dashboard"} message={"View a comprehensive analysis of your data here."}/>
       <MyTodaysLoginData />
       <div className="row justif-content-between align-items-center">
         <div className="col-6 col-md-6 col-lg-4">
@@ -30,7 +32,7 @@ const ManagerDash = () => {
         <div className="col-12 col-md-6 col-lg-6">
           <DepartmentChart />
         </div>
-        <div className="col-12 col-lg-12 ">
+        <div className="col-12 col-lg-12 abcdefg ">
           <TaskChart />
         </div>
       </div>

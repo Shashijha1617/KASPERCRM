@@ -48,17 +48,16 @@ const NoticeBoard = () => {
       "_blank",
       "noreferrer"
     );
-    // window.open(path, "_blank")
   }
   return (
     <div className="container box-shadow: 0 4px 10px 0 rgb(137 137 137 / 25%); p-0 h-100">
       <div style={{backgroundColor: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)"}} className="rounded-0 shadow-sm border  position-relative">
-        <h5 style={{ position: "sticky", top: '0', backgroundColor: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)", color: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)" }} className="fw-bolder pb-3 px-3 pt-3 d-flex justify-content-between gap-0 text-center">
+        <h6 style={{ position: "sticky", top: '0', backgroundColor: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)", color: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)" }} className="p-2 px-3 d-flex justify-content-between gap-0 text-center">
           Notice Board{" "}
           <span>
             ({notice.length})
           </span>
-        </h5>
+        </h6>
         <div
           className=" py-2"
           style={{ maxWidth: "100%", overflowX: "auto" }}
@@ -84,7 +83,9 @@ const NoticeBoard = () => {
             </table>
           ) : (
             <div className="d-flex flex-column justify-content-center aline-items-center gap-3" style={{ height: '100%', width: '100%' }}><img style={{ height: '70%', width: '60%' }} className="mx-auto" src={NoticeBadge} alt="Happy Birthday" />
-              <p style={{ opacity: '60%', fontSize: '13px' }} className="text-center w-75 mx-auto  fw-bold text-muted ">Notice Not Assigned</p></div>
+              <p style={{ opacity: '60%', fontSize: '13px' , color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",}} className="text-center w-75 mx-auto ">Notice not available</p></div>
           )}
         </div>
       </div>

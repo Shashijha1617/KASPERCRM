@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { GiIndianPalace, GiPartyPopper } from "react-icons/gi"; // Importing necessary icons
-import { PiBankBold } from "react-icons/pi";
-import { MdCreateNewFolder } from "react-icons/md";
+import holidayImage from '../../img/holidayImage.svg'
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import BASE_URL from "../config/config";
+import { TwoDigitDates } from "../../Utils/GetDayFormatted";
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
 function HolidayList({ title, newFolderLink, holidayIcons }) {
   const [holidaysData, setHolidaysData] = useState([]);
   const [filteredHolidays, setFilteredHolidays] = useState([]);
-  const [isListVisible, setListVisibility] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const toggleListVisibility = () => {
-    setListVisibility(!isListVisible);
-  };
+
+  const {darkMode} = useTheme()
+
 
   useEffect(() => {
     const fetchHolidays = async () => {
@@ -49,101 +48,29 @@ function HolidayList({ title, newFolderLink, holidayIcons }) {
     }
     setFilteredHolidays(filtered);
   };
+  
+  
 
-  const getHolidayIcons = (holidayType) => {
-    switch (holidayType) {
-      case "National Holiday":
-        return (
-          <span
-            style={{
-              height: "40px",
-              width: "40px",
-              display: "flex",
-              margin: "auto",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "30px",
-            }}
-            className="rounded-5 bg-danger text-white"
-          >
-            <GiIndianPalace />
-          </span>
-        );
-      case "Restricted Holiday":
-        return (
-          <span
-            style={{
-              height: "40px",
-              width: "40px",
-              display: "flex",
-              margin: "auto",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "30px",
-            }}
-            className="rounded-5 bg-primary text-white"
-          >
-            <GiPartyPopper />
-          </span>
-        );
-      case "Gazetted Holiday":
-        return (
-          <span
-            style={{
-              height: "40px",
-              width: "40px",
-              display: "flex",
-              margin: "auto",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "30px",
-            }}
-            className="rounded-5 bg-warning text-white"
-          >
-            <PiBankBold />
-          </span>
-        );
-      default:
-        return (
-          <span
-            style={{
-              height: "40px",
-              width: "40px",
-              display: "flex",
-              margin: "auto",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "30px",
-            }}
-            className="rounded-5 bg-danger text-white"
-          >
-            <GiIndianPalace />
-          </span>
-        );
-    }
-  };
 
   return (
-    <div style={{ height: "100%" }}>
+    <div style={{ height: "100%" }} className="border">
       <div
-        style={{ overflow: "hidden" }}
-        className="shadow bg-white p-0 rounded-4 h-100 "
+        style={{backgroundColor: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)"}} className="rounded-0 shadow position-relative"
       >
-        <h5
-          style={{
-            backgroundColor: "var(--primaryDashColorDark)",
-            color: "var(--primaryDashMenuColor)",
-          }}
-          className="fw-bolder pb-3 px-3 pt-3 d-flex justify-content-between gap-0 text-center align-items-center"
+        <h6
+          style={{ position: "sticky", top: '0', backgroundColor: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)", color: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)" }}
+          className="p-2 px-3 d-flex justify-content-between gap-0 text-center align-items-center"
         >
           {title}{" "}
           <Link to={newFolderLink}>
-            <span className="fs-4 d-flex">{holidayIcons}</span>
+            <span style={{color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",}} className="fs-4 d-flex">{holidayIcons}</span>
           </Link>
-        </h5>
+        </h6>
 
         <div className="row mx-auto shadow-sm p-0 pb-1">
-          <div className="col-12 p-0">
+          <div className="col-11 mx-auto p-0">
             <input
               type="text"
               className="form-control rounded-0"
@@ -154,20 +81,18 @@ function HolidayList({ title, newFolderLink, holidayIcons }) {
           </div>
         </div>
         <div style={{ maxHeight: "350px", overflow: "auto" }}>
-          {filteredHolidays.map((holiday, index) => (
-            <div className="row p-2 mx-auto" key={index}>
-              <span className="col-3 border-0 text-center">
-                {getHolidayIcons(holiday.holidayType)}
-              </span>
-              <span className="col-5 border-0 fw-bold text-muted">
+          {filteredHolidays > 0 ? (filteredHolidays.map((holiday, index) => (
+            <div className="d-flex align-items-center justify-content-between p-2 py-1 mx-auto" key={index}>
+              <span className="border-0 text-muted">
                 {holiday.holidayName}
               </span>
               <span
-                style={{ whiteSpace: "pre" }}
-                className="col-3 border-0 fw-bold text-primary"
-              >{`${holiday.holidayDate}-${holiday.holidayMonth}-${holiday.holidayYear}`}</span>
+              >{`${TwoDigitDates(holiday.holidayDate)}-${TwoDigitDates(holiday.holidayMonth)}-${holiday.holidayYear}`}</span>
             </div>
-          ))}
+          ))) : (<div className="d-flex flex-column justify-content-center aline-items-center gap-3 my-3" style={{ height: '100%', width: '100%' }}><img style={{ height: '70%', width: '60%' }} className="mx-auto" src={holidayImage} alt="Happy Birthday" />
+              <p style={{ opacity: '60%', fontSize: '13px', color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)", }} className="text-center w-75 mx-auto ">Holidays not available</p></div>)  }
         </div>
       </div>
     </div>

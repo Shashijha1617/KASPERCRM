@@ -4,6 +4,7 @@ import { TfiReload } from "react-icons/tfi";
 import { FaCircleInfo } from "react-icons/fa6";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../../../Pages/config/config";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 
 const SelfAttendance = () => {
   const [attendanceData, setAttendanceData] = useState(null);
@@ -171,13 +172,30 @@ const SelfAttendance = () => {
     if (loginTime) {
       const [loginHour, loginMinute] = loginTime.split(":").map(Number);
       if (loginHour > 9 || (loginHour === 9 && loginMinute > 45)) {
-        return "Half Day";
+        return (
+          <span className="border border-warning px-2 rounded-5">Half Day</span>
+        );
       } else if (loginHour > 9 || (loginHour === 9 && loginMinute > 30)) {
-        return "Late";
+        return <span className="border border-info px-2 rounded-5">Late</span>;
       }
     }
-    return loginTime ? "Present" : "Absent";
+    return loginTime ? (
+      <span className="border border-success px-2 rounded-5">Present</span>
+    ) : (
+      <span className="border border-danger px-2 rounded-5">Absent</span>
+    );
   };
+
+  function convertMinutesToHMS(totalSeconds) {
+    // Calculate hours
+    var hours = Math.floor(totalSeconds / 3600 * 60);
+    // Calculate remaining minutes
+    var remainingMinutes = Math.floor((totalSeconds % 3600) / 60);
+    // Calculate remaining seconds
+    var remainingSeconds = totalSeconds % 60;
+  
+    return hours + " Hrs " + remainingMinutes + " Min " + remainingSeconds + " Sec";
+  }
 
   const twoDigitDate = (date) => {
     return String(date).padStart(2, "0");
@@ -205,33 +223,41 @@ const SelfAttendance = () => {
     }
   };
 
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
+
   return (
     <div className="d-flex flex-column px-2 gap-3">
       <div className="d-flex gap-3 justify-content-between"></div>
       <div className="d-flex align-items-center  justify-content-between">
-        <div>
-          <h5
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)",
-              fontWeight: "600",
-            }}
-            className="m-0 p-0"
-          >
-            Attendance List
-          </h5>
-          <p
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)",
-            }}
-            className=" m-0"
-          >
-            You can check yous attendance here.
-          </p>
-        </div>
+        <TittleHeader
+          title={"Attendance List"}
+          message={"You can check yous attendance here."}
+        />
 
         {attendanceData && (
           <div className="d-flex gap-3">
@@ -290,13 +316,9 @@ const SelfAttendance = () => {
       </div>
 
       {attendanceData && (
-        <div
-          className="border border-1 border-black"
-          style={{ overflow: "auto", maxHeight: "77vh" }}
-        >
+        <div className="border" style={{ overflow: "auto", maxHeight: "82vh" }}>
           <table
             style={{
-              fontSize: ".9rem",
               fontWeight: "normal",
               position: "relative",
             }}
@@ -304,104 +326,16 @@ const SelfAttendance = () => {
           >
             <thead>
               <tr style={{ position: "sticky", zIndex: "10", top: "-2px" }}>
-                <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
-                >
-                  Date
-                </th>
-                <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
-                >
-                  Status
-                </th>
-                <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
-                >
-                  Login Time
-                </th>
-                <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
-                >
-                  Logout Time
-                </th>
-                <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
-                >
-                  Break
-                </th>
-                <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
-                >
-                  Total Login
-                </th>
-                <th
-                  style={{
-                    background: darkMode
-                      ? "var(--primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    color: darkMode
-                      ? "var(--primaryDashColorDark)"
-                      : "var(--primaryDashMenuColor)",
-                    border: "none",
-                    whiteSpace: "pre",
-                  }}
-                >
-                  Status
-                </th>
+                <th style={rowHeadStyle}>Date</th>
+                <th style={rowHeadStyle}>Status</th>
+                <th style={rowHeadStyle}>Login Time</th>
+                <th style={rowHeadStyle}>Logout Time</th>
+                <th style={rowHeadStyle}>Logs</th>
+                <th style={rowHeadStyle}>Gross Login</th>
+                <th style={rowHeadStyle}>Breaks</th>
+                <th style={rowHeadStyle}>Total Break</th>
+                <th style={rowHeadStyle}>Net Login</th>
+                <th style={rowHeadStyle}>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -412,18 +346,6 @@ const SelfAttendance = () => {
                     month.dates
                       .sort((a, b) => a.date - b.date)
                       .map((date) => {
-                        const rowBodyStyle = {
-                          position: "sticky",
-                          top: "0",
-                          verticalAlign: "middle",
-                          background: darkMode
-                            ? "var(--secondaryDashMenuColor)"
-                            : "var(--secondaryDashColorDark)",
-                          color: darkMode
-                            ? "var(--secondaryDashColorDark)"
-                            : "var(--primaryDashMenuColor)",
-                        };
-
                         return (
                           <tr
                             className="shadow-sm"
@@ -445,7 +367,7 @@ const SelfAttendance = () => {
                                     fontSize: ".8rem",
                                     fontWeight: "normal",
                                   }}
-                                  className="btn"
+                                  className="btn rounded-0"
                                 >
                                   {twoDigitDate(date.date)}
                                 </span>
@@ -460,7 +382,7 @@ const SelfAttendance = () => {
                                     fontSize: ".9rem",
                                     fontWeight: "normal",
                                   }}
-                                  className="btn"
+                                  className="btn  rounded-0"
                                 >
                                   {daySwitch(date.day)}
                                 </span>
@@ -479,6 +401,12 @@ const SelfAttendance = () => {
                                 <>--</>
                               )}
                             </td>
+                            <td style={rowBodyStyle} className="text-uppercase">
+                              {date.loginTime.length}
+                            </td>
+                            <td style={rowBodyStyle}>
+                              {convertMinutesToHMS(date.TotalLogin)}
+                            </td>
                             <td
                               style={rowBodyStyle}
                               className="position-relative"
@@ -493,94 +421,74 @@ const SelfAttendance = () => {
                                 onMouseEnter={handleInfoMouseEnter}
                                 onMouseLeave={handleInfoMouseLeave}
                               >
-                                <span
-                                  style={{ scale: "0.7", fontSize: ".9rem" }}
-                                  className="bg-warning py-0  text-white  px-2 rounded-5 my-auto"
-                                >
-                                  {date.breakTime.length}
-                                </span>
-                                <span
-                                  style={{
-                                    color: darkMode
-                                      ? "var(--primaryDashColorDark)"
-                                      : "var(--primaryDashMenuColor)",
-                                    fontSize: ".9rem",
-                                  }}
-                                >
-                                  {millisecondsToTime(date.totalBrake)}
-                                </span>{" "}
-                                <FaCircleInfo
-                                  style={{ fontSize: ".9rem" }}
-                                  className="text-info "
-                                />
+                                {date.breakTime.length}
                               </div>
 
-                              {!isInfoHovering &&
-                                hoveredDate === date.date && ( // Check if info button is hovered and the date is the hovered date
-                                  <div
-                                    style={{
-                                      zIndex: "5",
-                                      top: "0",
-                                      right: "0%",
-                                      minHeight: "2px",
-                                      overflow: "auto",
-                                    }}
-                                    className="position-absolute bg-white"
-                                  >
-                                    <table className="table table-bordered table-striped">
-                                      <thead>
-                                        <tr className="shadow-sm p-0">
-                                          <th className="bg-info  py-0 text-white">
-                                            Break
-                                          </th>
-                                          <th className="bg-info  py-0 text-white">
-                                            Resume
-                                          </th>
-                                          <th
-                                            className="text-end  py-0 bg-info text-white"
-                                            style={{ whiteSpace: "pre" }}
-                                          >
-                                            Total Break
-                                          </th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        {date.breakTime.map(
-                                          (breakTime, index) => (
-                                            <tr
-                                              className="shadow-sm"
-                                              key={index}
+                              {/* {!isInfoHovering && hoveredDate === date.date && (
+                                <div
+                                  style={{
+                                    zIndex: "5",
+                                    top: "0",
+                                    right: "-50%",
+                                    minHeight: "2px",
+                                    overflow: "auto",
+                                  }}
+                                  className="position-absolute bg-white"
+                                >
+                                  <table className="table table-bordered table-striped">
+                                    <thead>
+                                      <tr className="shadow-sm p-0">
+                                        <th className="bg-info  py-0 text-white">
+                                          Break
+                                        </th>
+                                        <th className="bg-info  py-0 text-white">
+                                          Resume
+                                        </th>
+                                        <th
+                                          className="text-end  py-0 bg-info text-white"
+                                          style={{ whiteSpace: "pre" }}
+                                        >
+                                          Total Break
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {date.breakTime.map(
+                                        (breakTime, index) => (
+                                          <tr className="shadow-sm" key={index}>
+                                            <td
+                                              className="text-uppercase  py-1 text-center"
+                                              style={{ whiteSpace: "pre" }}
                                             >
-                                              <td
-                                                className="text-uppercase  py-1 text-center"
-                                                style={{ whiteSpace: "pre" }}
-                                              >
-                                                {breakTime}
-                                              </td>
-                                              <td
-                                                className="text-uppercase  py-1 text-center"
-                                                style={{ whiteSpace: "pre" }}
-                                              >
-                                                {date.ResumeTime[index]}
-                                              </td>
-                                              <td
-                                                className="text-end py-1 "
-                                                style={{ whiteSpace: "pre" }}
-                                              >
-                                                {millisecondsToTime(
-                                                  date.BreakData[index]
-                                                )}
-                                              </td>
-                                            </tr>
-                                          )
-                                        )}
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                )}
+                                              {breakTime}
+                                            </td>
+                                            <td
+                                              className="text-uppercase  py-1 text-center"
+                                              style={{ whiteSpace: "pre" }}
+                                            >
+                                              {date.ResumeTime[index]}
+                                            </td>
+                                            <td
+                                              className="text-end py-1 "
+                                              style={{ whiteSpace: "pre" }}
+                                            >
+                                              {millisecondsToTime(
+                                                date.BreakData[index]
+                                              )}
+                                            </td>
+                                          </tr>
+                                        )
+                                      )}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              )} */}
                             </td>
                             <td style={rowBodyStyle}>
-                              {millisecondsToTime(date.totalLogAfterBreak)}
+                              {convertMinutesToHMS(date.totalBrake)}
+                            </td>
+                            <td style={rowBodyStyle}>
+                              {convertMinutesToHMS(date.totalLogAfterBreak)}
                             </td>
                             <td style={rowBodyStyle}>{date.status}</td>
                           </tr>

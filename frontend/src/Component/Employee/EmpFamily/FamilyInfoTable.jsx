@@ -137,7 +137,7 @@ const FamilyInfoTable = (props) => {
               ? "var(--primaryDashColorDark)"
               : "var(--primaryDashMenuColor)",
           }}
-          className="fw-bold my-auto"
+          className="my-auto"
         >
           Family Details ( {rowData.length} )
         </h6>

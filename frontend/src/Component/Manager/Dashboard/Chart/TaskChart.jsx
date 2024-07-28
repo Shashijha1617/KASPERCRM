@@ -115,61 +115,61 @@ const TaskChart = () => {
     ).length,
   };
 
-  const chartData = {
-    series: [
-      {
-        name: "Total Employee",
-        data: Object.values(departmentCounts),
-      },
-    ],
-    options: {
-      chart: {
-        type: "bar",
-        height: 350,
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: "40%",
-          endingShape: "rounded",
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ["transparent"],
-      },
-      xaxis: {
-        categories: Object.keys(departmentCounts),
-        title: {
-          text: "Department Wise Employee",
-        },
-      },
-      yaxis: {
-        title: {
-          text: "Number of Employee",
-        },
-      },
+  // const chartData = {
+  //   series: [
+  //     {
+  //       name: "Total Employee",
+  //       data: Object.values(departmentCounts),
+  //     },
+  //   ],
+  //   options: {
+  //     chart: {
+  //       type: "bar",
+  //       height: 350,
+  //     },
+  //     plotOptions: {
+  //       bar: {
+  //         horizontal: false,
+  //         columnWidth: "40%",
+  //         endingShape: "rounded",
+  //       },
+  //     },
+  //     dataLabels: {
+  //       enabled: false,
+  //     },
+  //     stroke: {
+  //       show: true,
+  //       width: 2,
+  //       colors: ["transparent"],
+  //     },
+  //     xaxis: {
+  //       categories: Object.keys(departmentCounts),
+  //       title: {
+  //         text: "Department Wise Employee",
+  //       },
+  //     },
+  //     yaxis: {
+  //       title: {
+  //         text: "Number of Employee",
+  //       },
+  //     },
 
-      fill: {
-        opacity: 1,
-        colors: ["var(--basecolor)"],
-      },
-      tooltip: {
-        y: {
-          formatter: function (val) {
-            return " " + val + "";
-          },
-        },
-        markers: {
-          colors: "yellow",
-        },
-      },
-    },
-  };
+  //     fill: {
+  //       opacity: 1,
+  //       colors: ["var(--basecolor)"],
+  //     },
+  //     tooltip: {
+  //       y: {
+  //         formatter: function (val) {
+  //           return " " + val + "";
+  //         },
+  //       },
+  //       markers: {
+  //         colors: "yellow",
+  //       },
+  //     },
+  //   },
+  // };
   const taskStatusChartData = {
     options: {
       chart: {
@@ -180,13 +180,63 @@ const TaskChart = () => {
         categories: Object.keys(taskStatusCounts),
         title: {
           text: "Task Status",
+          style: {
+            color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+            fontWeight: "normal",
+          },
+        },
+        labels: {
+          style: {
+            colors: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+          },
         },
       },
       yaxis: {
         title: {
           text: "Number of Tasks",
+          style: {
+            color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+            fontWeight: "normal",
+          },
+        },
+        labels: {
+          style: {
+            colors: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
+          },
         },
       },
+      title: {
+        text: "Task Status Chart",
+        style: {
+          color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--secondaryDashMenuColor)",
+          fontWeight: "normal",
+        },
+      },
+      plotOptions: {
+        bar: {
+          colors: {
+            ranges: [{
+              from: 0,
+              to: 100,
+              color: 'var(--basecolor)'
+            }],
+            backgroundBarColors: [],
+          },
+        },
+      },
+      colors: darkMode
+      ? ["var(--primaryDashColorDark)"]
+      : ["var(--secondaryDashMenuColor)"],
     },
     series: [
       {
@@ -195,6 +245,8 @@ const TaskChart = () => {
       },
     ],
   };
+  
+  
 
   return (
     <div
@@ -209,15 +261,6 @@ const TaskChart = () => {
       className="ChartCard shadow py-2 px-3 pt-3"
     >
       <div className="ChartHeader">
-        <h6
-          style={{
-            width: "fit-content",
-            color: "var(--primaryDashColorDark)",
-          }}
-          className="d-flex px-3 rounded-5 py-1"
-        >
-          Task Progress Report
-        </h6>
       </div>
       <div className="chartBody">
         <Chart

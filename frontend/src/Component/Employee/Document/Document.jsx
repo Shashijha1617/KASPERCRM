@@ -13,7 +13,6 @@ const Document = (props) => {
   const [title, setTitle] = useState("");
   const [number, setNumber] = useState("");
   const [files, setFiles] = useState([]);
-  const [documents, setDocuments] = useState([]);
 
   const handleDocumentSubmit = async (e) => {
     e.preventDefault();

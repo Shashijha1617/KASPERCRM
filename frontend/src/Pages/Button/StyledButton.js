@@ -13,7 +13,7 @@ const StyledButton = Styled.button`
     cursor: pointer;
     `
 export const DarkButton = Styled(StyledButton)`
-background: linear-gradient(165deg, purple , var(--primaryDashColorDark));
+background: var(--primaryDashColorDark);
 color:var(--light-color);
 `
 export const RedButton = Styled(StyledButton)`
