@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {AiOutlineNumber } from "react-icons/ai";
+import { AiOutlineNumber } from "react-icons/ai";
 import noRecordFound from "../../../img/Attendance/noRecordFound.svg";
 import {
   HiOutlineLogin,
@@ -59,7 +59,7 @@ const TodaysAttendance = () => {
     // Check if loginTime exists and is a string
     if (typeof loginTime !== "string") {
       return (
-        <span lassName="border border-danger py-0 p-2 rounded-5">Absent</span>
+        <span className="border border-danger py-0 p-2 rounded-5">Absent</span>
       );
     }
 
@@ -76,10 +76,14 @@ const TodaysAttendance = () => {
     // Check login time against criteria
     if (loginHour > 9 || (loginHour === 9 && loginMinute > 45)) {
       return (
-        <span className="border border-warning py-0 p-2 rounded-5">Half Day</span>
+        <span className="border border-warning py-0 p-2 rounded-5">
+          Half Day
+        </span>
       );
     } else if (loginHour > 9 || (loginHour === 9 && loginMinute > 30)) {
-      return <span className="btn btn-outline-info py-0 rounded-5">Late</span>;
+      return (
+        <span className="border border-info py-0 px-2 rounded-5">Late</span>
+      );
     }
 
     // If loginTime exists, consider the user present, otherwise absent
@@ -212,15 +216,16 @@ const TodaysAttendance = () => {
 
   function convertMinutesToHMS(totalSeconds) {
     // Calculate hours
-    var hours = Math.floor(totalSeconds / 3600 * 60);
+    var hours = Math.floor((totalSeconds / 3600) * 60);
     // Calculate remaining minutes
     var remainingMinutes = Math.floor((totalSeconds % 3600) / 60);
     // Calculate remaining seconds
     var remainingSeconds = totalSeconds % 60;
-  
-    return hours + " Hrs " + remainingMinutes + " Min " + remainingSeconds + " Sec";
-  }
 
+    return (
+      hours + " Hrs " + remainingMinutes + " Min " + remainingSeconds + " Sec"
+    );
+  }
 
   return (
     <div className="container-fluid">
@@ -232,7 +237,10 @@ const TodaysAttendance = () => {
         }}
         className="d-flex  justify-content-between py-3"
       >
-         <TittleHeader title={"Today's Attendance"} message={"You can view today's employee attendance here."}/>
+        <TittleHeader
+          title={"Today's Attendance"}
+          message={"You can view today's employee attendance here."}
+        />
         <div>
           <h5
             style={{
@@ -242,9 +250,7 @@ const TodaysAttendance = () => {
               fontWeight: "600",
             }}
             className=" m-0"
-          >
-            
-          </h5>
+          ></h5>
           <p
             style={{
               color: darkMode
@@ -252,9 +258,7 @@ const TodaysAttendance = () => {
                 : "var(--secondaryDashMenuColor)",
             }}
             className=" m-0"
-          >
-            
-          </p>
+          ></p>
         </div>
         <div className="d-flex gap-2 my-auto">
           <input
@@ -273,10 +277,17 @@ const TodaysAttendance = () => {
             <SiMicrosoftexcel className="my-auto" />{" "}
             <span className="d-none d-md-flex">Export XLSX</span>
           </button>{" "}
-          <span style={{color: darkMode
+          <span
+            style={{
+              color: darkMode
                 ? "var(--secondaryDashColorDark)"
                 : "var(--secondaryDashMenuColor)",
-                 border:darkMode ? "1px solid var(--secondaryDashColorDark)"  : "1px solid var(--secondaryDashMenuColor"  }} className="btn     rounded-0  fs-6 d-flex align-items-center gap-2 ">
+              border: darkMode
+                ? "1px solid var(--secondaryDashColorDark)"
+                : "1px solid var(--secondaryDashMenuColor",
+            }}
+            className="btn     rounded-0  fs-6 d-flex align-items-center gap-2 "
+          >
             <span className="text-uppercase m-0 p-0  text-center">
               {status(dayCurrent)}
             </span>
@@ -288,10 +299,8 @@ const TodaysAttendance = () => {
         </div>
       </div>
       <div
-        className={`${
-          sortedAndFilteredData.length > 0 ? "border" : ""
-        }  `}
-        style={{ maxHeight: "82vh", overflow: "auto" }}
+        className={`${sortedAndFilteredData.length > 0 ? "border" : ""}  `}
+        style={{ maxHeight: "80vh", overflow: "auto" }}
       >
         {sortedAndFilteredData.length > 0 ? (
           <table
@@ -314,77 +323,53 @@ const TodaysAttendance = () => {
                 >
                   <RxCaretSort /> Emp ID {renderSortIcon("FirstName")}
                 </th>
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   {" "}
                   <IoCheckmarkDoneOutline /> Mark{" "}
                 </th>
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   {" "}
                   <HiOutlineLogin /> Login Time{" "}
                 </th>
 
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   {" "}
                   Logout Time <HiOutlineLogout />{" "}
                 </th>
 
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   {" "}
                   <AiOutlineNumber /> Log{" "}
                 </th>
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   {" "}
                   <AiOutlineNumber /> Gross Login
                 </th>
 
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   {" "}
                   <AiOutlineNumber /> Break
                 </th>
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   <MdFreeBreakfast />
                   Total Break{" "}
                 </th>
 
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   <FaUserClock /> Net Login
                 </th>
 
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   <HiStatusOnline /> Status
                 </th>
-
-
-
-                              </tr>
+              </tr>
             </thead>
             <tbody>
               {sortedAndFilteredData.map((user) => {
                 const mark = getAttendanceMark(user);
                 return (
                   <tr key={user.userId}>
-                    <td
-                      className="border-0"
-                      style={rowBodyStyle}
-                    >
+                    <td className="border-0" style={rowBodyStyle}>
                       <div
                         className="profile-image bg-white mx-auto border-0"
                         style={{
@@ -440,21 +425,17 @@ const TodaysAttendance = () => {
                         : "--"}
                     </td>
                     <td style={rowBodyStyle}>
-                              {convertMinutesToHMS(
-                                user.attendance.TotalLogin
-                              )}
-                            </td>
+                      {convertMinutesToHMS(user.attendance.TotalLogin)}
+                    </td>
                     <td className="text-center" style={rowBodyStyle}>
                       {user.attendance
                         ? user.attendance.breakTime.length
                         : "--"}
                     </td>
                     <td style={rowBodyStyle}>
-                              {convertMinutesToHMS(
-                                user.attendance.totalBrake
-                              )}
-                            </td>
-                   
+                      {convertMinutesToHMS(user.attendance.totalBrake)}
+                    </td>
+
                     <td style={rowBodyStyle}>
                       {user.attendance
                         ? convertMinutesToHMS(
@@ -468,8 +449,7 @@ const TodaysAttendance = () => {
                     >
                       {user.attendance ? user.attendance.status : "--"}
                     </td>
-
-                                      </tr>
+                  </tr>
                 );
               })}
             </tbody>

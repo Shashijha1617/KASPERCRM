@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { HiOutlineLogin, HiOutlineLogout } from "react-icons/hi";
-import { FaUserClock } from "react-icons/fa6";
 import SearchDark from "../../../img/Attendance/SearchDark.svg";
 import SearchLight from "../../../img/Attendance/SearchLight.svg";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../../../Pages/config/config";
-import { AiOutlineFieldNumber } from "react-icons/ai";
 import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 import { getMonthName } from "../../../Utils/GetDayFormatted";
 import { MdOutlineTimelapse, MdOutlineWbSunny } from "react-icons/md";
@@ -83,7 +81,6 @@ const AttendanceDetails = () => {
     }
   };
 
-
   const getMonthsForYear = (year) => {
     if (year === new Date().getFullYear()) {
       return Array.from({ length: new Date().getMonth() + 1 }, (_, i) => i + 1);
@@ -105,20 +102,20 @@ const AttendanceDetails = () => {
       const [loginHour, loginMinute] = loginTime.split(":").map(Number);
       if (loginHour > 9 || (loginHour === 9 && loginMinute > 45)) {
         return (
-          <span className="btn btn-outline-warning py-0 rounded-5">
+          <span className="border border-warning py-0 px-2 rounded-5">
             Half Day
           </span>
         );
       } else if (loginHour > 9 || (loginHour === 9 && loginMinute > 30)) {
         return (
-          <span className="btn btn-outline-info py-0 rounded-5">Late</span>
+          <span className="border border-info py-0 px-2 rounded-5">Late</span>
         );
       }
     }
     return loginTime ? (
-      <span className="btn btn-outline-success py-0 rounded-5">Present</span>
+      <span className="border border-success py-0 px-2 rounded-5">Present</span>
     ) : (
-      <span className="btn btn-outline-danger py-0 rounded-5">Absent</span>
+      <span className="border border-danger py-0 px-2 rounded-5">Absent</span>
     );
   };
 
@@ -129,15 +126,16 @@ const AttendanceDetails = () => {
 
   function convertMinutesToHMS(totalSeconds) {
     // Calculate hours
-    var hours = Math.floor(totalSeconds / 3600 * 60);
+    var hours = Math.floor((totalSeconds / 3600) * 60);
     // Calculate remaining minutes
     var remainingMinutes = Math.floor((totalSeconds % 3600) / 60);
     // Calculate remaining seconds
     var remainingSeconds = totalSeconds % 60;
-  
-    return hours + " Hrs " + remainingMinutes + " Min " + remainingSeconds + " Sec";
-  }
 
+    return (
+      hours + " Hrs " + remainingMinutes + " Min " + remainingSeconds + " Sec"
+    );
+  }
 
   const rowHeadStyle = {
     verticalAlign: "middle",
@@ -169,8 +167,11 @@ const AttendanceDetails = () => {
   return (
     <div className="container-fluid d-flex flex-column gap-3">
       <div className="d-flex flex-column flex-lg-row gap-3 justify-content-between my-2">
-      <TittleHeader title={"Employee Wise Attendance"} message={"You can view attendance by employee here."}/>
-                <div className="d-flex gap-3 justify-content-start justify-content-md-end my-auto">
+        <TittleHeader
+          title={"Employee Wise Attendance"}
+          message={"You can view attendance by employee here."}
+        />
+        <div className="d-flex gap-3 justify-content-start justify-content-md-end my-auto">
           <div className="w-50">
             <select
               className="form-select rounded-0  shadow-sm text-muted"
@@ -251,8 +252,8 @@ const AttendanceDetails = () => {
 
       {attendanceData && (
         <div
-          className="border border-1 border-dark "
-          style={{ overflow: "auto", maxHeight: "73vh" }}
+          className="border border-1"
+          style={{ overflow: "auto", maxHeight: "70vh" }}
         >
           <table
             className="table"
@@ -263,50 +264,33 @@ const AttendanceDetails = () => {
                 style={{ position: "sticky", top: "0", zIndex: "3" }}
                 className="shadow-sm"
               >
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   <MdOutlineWbSunny /> Date | Day
                 </th>
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   <TbStatusChange /> Status
                 </th>
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   <HiOutlineLogin />
                   Login Time
                 </th>
-                <th
-                  style={rowHeadStyle}
-                >
-                  <HiOutlineLogout /> Logout Time 
+                <th style={rowHeadStyle}>
+                  <HiOutlineLogout /> Logout Time
                 </th>
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   <GoHash /> logs
                 </th>
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   <IoIosTimer /> Gross Login
                 </th>
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   <GoHash /> Breaks
                 </th>
-                <th
-                  style={rowHeadStyle}
-                >
-                  <IoMdTimer />Total Break
+                <th style={rowHeadStyle}>
+                  <IoMdTimer />
+                  Total Break
                 </th>
-                <th
-                  style={rowHeadStyle}
-                >
+                <th style={rowHeadStyle}>
                   <MdOutlineTimelapse />
                   Net Login
                 </th>
@@ -320,7 +304,7 @@ const AttendanceDetails = () => {
                     month.dates
                       .sort((a, b) => a.date - b.date)
                       .map((date) => {
-                                          return (
+                        return (
                           <tr
                             className="shadow-sm"
                             key={date.date}
@@ -337,11 +321,11 @@ const AttendanceDetails = () => {
                                 style={{
                                   height: "30px",
                                   width: "30px",
-                                  border: `1px solid ${
-                                    darkMode
-                                      ? "var(--primaryDashColorDark)"
-                                      : "var( --primaryDashMenuColor)"
-                                  }`,
+                                  // border: `1px solid ${
+                                  //   darkMode
+                                  //     ? "var(--primaryDashColorDark)"
+                                  //     : "var( --primaryDashMenuColor)"
+                                  // }`,
                                   color: darkMode
                                     ? "var(--primaryDashColorDark)"
                                     : "var( --primaryDashMenuColor)",
@@ -354,11 +338,11 @@ const AttendanceDetails = () => {
                                 style={{
                                   height: "30px",
                                   width: "45px",
-                                  border: `1px solid ${
-                                    darkMode
-                                      ? "var(--primaryDashColorDark)"
-                                      : "var( --primaryDashMenuColor)"
-                                  }`,
+                                  // border: `1px solid ${
+                                  //   darkMode
+                                  //     ? "var(--primaryDashColorDark)"
+                                  //     : "var( --primaryDashMenuColor)"
+                                  // }`,
                                   color: darkMode
                                     ? "var(--primaryDashColorDark)"
                                     : "var( --primaryDashMenuColor)",
@@ -395,9 +379,11 @@ const AttendanceDetails = () => {
                               >
                                 <span
                                   className="py-0 "
-                                  style={{color: darkMode
-                                        ? "var(--primaryDashColorDark)"
-                                        : "var( --primaryDashMenuColor)",}}
+                                  style={{
+                                    color: darkMode
+                                      ? "var(--primaryDashColorDark)"
+                                      : "var( --primaryDashMenuColor)",
+                                  }}
                                 >
                                   {" "}
                                   {date.loginTime.length}
@@ -473,30 +459,26 @@ const AttendanceDetails = () => {
                               </div>
                             </td>
                             <td style={rowBodyStyle}>
-                              {convertMinutesToHMS(
-                                date.TotalLogin
-                              )}
+                              {convertMinutesToHMS(date.TotalLogin)}
                             </td>
                             <td style={rowBodyStyle}>
                               <span
                                 className="py-0 "
-                                style={{color: darkMode
-                                  ? "var(--primaryDashColorDark)"
-                                  : "var( --primaryDashMenuColor)",}}
+                                style={{
+                                  color: darkMode
+                                    ? "var(--primaryDashColorDark)"
+                                    : "var( --primaryDashMenuColor)",
+                                }}
                               >
                                 {" "}
                                 {date.breakTime.length}
                               </span>
                             </td>
-                            <td  style={rowBodyStyle}>
-                              {convertMinutesToHMS(
-                                date.totalBrake
-                              )}
+                            <td style={rowBodyStyle}>
+                              {convertMinutesToHMS(date.totalBrake)}
                             </td>
                             <td style={rowBodyStyle}>
-                              {convertMinutesToHMS(
-                                date.totalLogAfterBreak
-                              )}
+                              {convertMinutesToHMS(date.totalLogAfterBreak)}
                             </td>
                           </tr>
                         );

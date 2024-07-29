@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import holidayImage from '../../img/holidayImage.svg'
+import holidayImage from "../../img/holidayImage.svg";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import BASE_URL from "../config/config";
 import { TwoDigitDates } from "../../Utils/GetDayFormatted";
@@ -10,8 +10,7 @@ function HolidayList({ title, newFolderLink, holidayIcons }) {
   const [filteredHolidays, setFilteredHolidays] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const {darkMode} = useTheme()
-
+  const { darkMode } = useTheme();
 
   useEffect(() => {
     const fetchHolidays = async () => {
@@ -48,51 +47,99 @@ function HolidayList({ title, newFolderLink, holidayIcons }) {
     }
     setFilteredHolidays(filtered);
   };
-  
-  
-
 
   return (
     <div style={{ height: "100%" }} className="border">
       <div
-        style={{backgroundColor: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)"}} className="rounded-0 shadow position-relative"
+        style={{
+          backgroundColor: darkMode
+            ? "var(--primaryDashMenuColor)"
+            : "var(--primaryDashColorDark)",
+        }}
+        className="rounded-0 shadow position-relative"
       >
         <h6
-          style={{ position: "sticky", top: '0', backgroundColor: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)", color: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)" }}
+          style={{
+            position: "sticky",
+            top: "0",
+            backgroundColor: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var(--primaryDashMenuColor)",
+            color: darkMode
+              ? "var(--primaryDashMenuColor)"
+              : "var(--primaryDashColorDark)",
+          }}
           className="p-2 px-3 d-flex justify-content-between gap-0 text-center align-items-center"
         >
           {title}{" "}
           <Link to={newFolderLink}>
-            <span style={{color: darkMode
-      ? "var(--secondaryDashColorDark)"
-      : "var(--primaryDashMenuColor)",}} className="fs-4 d-flex">{holidayIcons}</span>
+            <span
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var(--primaryDashMenuColor)",
+              }}
+              className="fs-4 d-flex"
+            >
+              {holidayIcons}
+            </span>
           </Link>
         </h6>
 
-        <div className="row mx-auto shadow-sm p-0 pb-1">
-          <div className="col-11 mx-auto p-0">
-            <input
-              type="text"
-              className="form-control rounded-0"
-              placeholder="Search holiday..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-        </div>
-        <div style={{ maxHeight: "350px", overflow: "auto" }}>
-          {filteredHolidays > 0 ? (filteredHolidays.map((holiday, index) => (
-            <div className="d-flex align-items-center justify-content-between p-2 py-1 mx-auto" key={index}>
-              <span className="border-0 text-muted">
-                {holiday.holidayName}
-              </span>
-              <span
-              >{`${TwoDigitDates(holiday.holidayDate)}-${TwoDigitDates(holiday.holidayMonth)}-${holiday.holidayYear}`}</span>
+        {filteredHolidays.length < 1 && (
+          <div className="row mx-auto shadow-sm p-0 pb-1">
+            <div className="col-11 mx-auto p-0">
+              <input
+                type="text"
+                className="form-control rounded-0"
+                placeholder="Search holiday..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
-          ))) : (<div className="d-flex flex-column justify-content-center aline-items-center gap-3 my-3" style={{ height: '100%', width: '100%' }}><img style={{ height: '70%', width: '60%' }} className="mx-auto" src={holidayImage} alt="Happy Birthday" />
-              <p style={{ opacity: '60%', fontSize: '13px', color: darkMode
-      ? "var(--secondaryDashColorDark)"
-      : "var(--primaryDashMenuColor)", }} className="text-center w-75 mx-auto ">Holidays not available</p></div>)  }
+          </div>
+        )}
+
+        <div style={{ maxHeight: "350px", overflow: "auto" }}>
+          {filteredHolidays > 0 ? (
+            filteredHolidays.map((holiday, index) => (
+              <div
+                className="d-flex align-items-center justify-content-between p-2 py-1 mx-auto"
+                key={index}
+              >
+                <span className="border-0 text-muted">
+                  {holiday.holidayName}
+                </span>
+                <span>{`${TwoDigitDates(holiday.holidayDate)}-${TwoDigitDates(
+                  holiday.holidayMonth
+                )}-${holiday.holidayYear}`}</span>
+              </div>
+            ))
+          ) : (
+            <div
+              className="d-flex flex-column justify-content-center aline-items-center gap-3 my-3"
+              style={{ height: "100%", width: "100%" }}
+            >
+              <img
+                style={{ height: "70%", width: "60%" }}
+                className="mx-auto"
+                src={holidayImage}
+                alt="Happy Birthday"
+              />
+              <p
+                style={{
+                  opacity: "60%",
+                  fontSize: "13px",
+                  color: darkMode
+                    ? "var(--secondaryDashColorDark)"
+                    : "var(--primaryDashMenuColor)",
+                }}
+                className="text-center w-75 mx-auto "
+              >
+                Holidays not available
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

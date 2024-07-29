@@ -165,33 +165,23 @@ const CountryTable = (props) => {
               <tr key={index}>
                 <td style={rowBodyStyle}>{item.CountryName}</td>
                 <td style={rowBodyStyle}>
-                  <button
+                  <span
                     onClick={() => props.onEditCountry(item)}
-                    style={{
-                      cursor: "pointer",
-                      color: darkMode
-                        ? "var(--secondaryDashColorDark)"
-                        : "var( --primaryDashMenuColor)",
-                    }}
-                    className="btn ms-auto  d-flex gap-3 align-items-center"
+                    style={{ cursor: "pointer", width: "fit-content" }}
+                    className="border border-primary px-2 py-1 text-primary  ms-auto d-flex gap-3 align-items-center"
                   >
                     <FaRegEdit /> <span className="d-none d-md-flex">Edit</span>
-                  </button>
+                  </span>
                 </td>
                 <td style={rowBodyStyle}>
-                  <button
+                  <span
                     onClick={() => onCountryDelete(item._id)}
-                    style={{
-                      cursor: "pointer",
-                      color: darkMode
-                        ? "var(--secondaryDashColorDark)"
-                        : "var( --primaryDashMenuColor)",
-                    }}
-                    className="btn  ms-auto d-flex gap-3 align-items-center"
+                    style={{ cursor: "pointer", width: "fit-content" }}
+                    className="border border-danger px-2 py-1 text-danger  ms-auto d-flex gap-3 align-items-center"
                   >
                     <FontAwesomeIcon icon={faTrash} />{" "}
                     <span className="d-none d-md-flex">Delete</span>
-                  </button>
+                  </span>
                 </td>
               </tr>
             ))}

@@ -4,6 +4,7 @@ import { GiPartyPopper } from "react-icons/gi";
 import HappyBirthday from "./HappyBirthday.svg";
 import BASE_URL from "../config/config";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
+import { getFormattedDate } from "../../Utils/GetDayFormatted";
 
 const UpcomingBirthdays = () => {
   const [employeeData, setEmployeeData] = useState([]);
@@ -16,8 +17,8 @@ const UpcomingBirthdays = () => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         // Ensure that response.data is an array
@@ -55,7 +56,7 @@ const UpcomingBirthdays = () => {
               PositionName: data["position"][0]
                 ? data["position"][0]["PositionName"]
                 : "",
-              DateOfJoining: data["DateOfJoining"].slice(0, 10)
+              DateOfJoining: data["DateOfJoining"].slice(0, 10),
             };
 
             // Use set function to update state
@@ -95,10 +96,25 @@ const UpcomingBirthdays = () => {
 
   return (
     <div className="border">
-      <div style={{backgroundColor: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)"}} className="shadow position-relative">
+      <div
+        style={{
+          backgroundColor: darkMode
+            ? "var(--primaryDashMenuColor)"
+            : "var(--primaryDashColorDark)",
+        }}
+        className="shadow position-relative"
+      >
         <span
-          style={{ position: "sticky", top: '0', backgroundColor: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)", color: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)" }}
-          
+          style={{
+            position: "sticky",
+            top: "0",
+            backgroundColor: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var(--primaryDashMenuColor)",
+            color: darkMode
+              ? "var(--primaryDashMenuColor)"
+              : "var(--primaryDashColorDark)",
+          }}
           className="p-2 p-1 px-3 d-flex justify-content-between gap-0 text-center"
         >
           Upcoming Birthdays
@@ -108,11 +124,7 @@ const UpcomingBirthdays = () => {
           {upcomingBirthdays.length > 0 ? (
             <div className="d-flex flex-column gap-3 py-3 px-3">
               {upcomingBirthdays.map((employee) => (
-                <div
-                  style={{ borderBottom: "1px solid #E3F4F4" }}
-                  className=""
-                  key={employee.empID}
-                >
+                <div className="" key={employee.empID}>
                   <div className="row" style={{ verticalAlign: "middle" }}>
                     <div className="d-flex justify-content-between ">
                       <div className="d-flex gap-2">
@@ -124,7 +136,7 @@ const UpcomingBirthdays = () => {
                               border: "3px solid gray",
                               borderRadius: "50%",
                               overflow: "hidden",
-                              objectFit: "cover"
+                              objectFit: "cover",
                             }}
                             src={
                               employee?.data?.profile?.image_url
@@ -134,25 +146,29 @@ const UpcomingBirthdays = () => {
                             alt=""
                           />
                         </div>
-                        <div className="d-flex flex-column my-auto">
-                          <span
-                            style={{ fontSize: "12px", fontWeight: "bold" }}
-                          >
-                            {employee.empID}
-                          </span>
-                          <span
-                            style={{ fontSize: "13px", fontWeight: "bold" }}
-                            className="text-uppercase"
-                          >{`${employee.FirstName} ${employee.LastName}`}</span>
+                        <div
+                          style={{
+                            color: darkMode
+                              ? "var(--primaryDashColorDark)"
+                              : "var(--primaryDashMenuColor)",
+                          }}
+                          className="d-flex flex-column my-auto"
+                        >
+                          <span>{employee.empID}</span>
+                          <span className="text-capitalize">{`${employee.FirstName} ${employee.LastName}`}</span>
                         </div>
                       </div>
 
                       <div
-                        style={{ fontSize: "13px" }}
-                        className="my-auto fw-bolder text-muted"
+                        style={{
+                          color: darkMode
+                            ? "var(--primaryDashColorDark)"
+                            : "var(--primaryDashMenuColor)",
+                        }}
+                        className="my-auto"
                       >
                         Date <br />
-                        {employee.DOB}
+                        {getFormattedDate(employee.DOB)}
                       </div>
                     </div>
                   </div>
@@ -171,9 +187,13 @@ const UpcomingBirthdays = () => {
                 alt="Happy Birthday"
               />
               <p
-                style={{ opacity: "60%", fontSize: "13px" , color: darkMode
-                  ? "var(--secondaryDashColorDark)"
-                  : "var(--primaryDashMenuColor)",}}
+                style={{
+                  opacity: "60%",
+                  fontSize: "13px",
+                  color: darkMode
+                    ? "var(--secondaryDashColorDark)"
+                    : "var(--primaryDashMenuColor)",
+                }}
                 className="text-center w-75 mx-auto "
               >
                 No upcoming birthdays in the next 7 days.

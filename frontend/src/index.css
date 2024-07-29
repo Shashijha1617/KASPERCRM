@@ -226,8 +226,19 @@ label, input {
   --primaryDashMenuColor: #FFFFFF;
   --secondaryDashMenuColor: #F2F2F2;
   
-  --basecolor: #478CCF;
-
+  /* --basecolor: #9ba9ff;
+  --basecolor1: #a5adff;
+  --basecolor2: #afb1ff;
+  --basecolor3: #b9b5ff;
+  --basecolor4: #c4baff;
+  --basecolor5: #cebeff; */
+  --basecolor: #00b2ca;
+  --basecolor1: #04a6c2;
+  --basecolor2: #0899ba;
+  --basecolor3: #0f80aa;
+  --basecolor4: #1e81be;
+  --basecolor5: #1a5b92;
+  --basecolorTransparent: #3f94df57;
 }
 
 .LightModeTheam {

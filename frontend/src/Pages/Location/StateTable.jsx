@@ -169,34 +169,24 @@ const StateTable = (props) => {
                     {items.StateName}
                   </td>
                   <td style={rowBodyStyle} className="text-uppercase">
-                    <button
+                    <span
                       onClick={() => props.onEditState(items)}
-                      style={{
-                        cursor: "pointer",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
-                      }}
-                      className="btn ms-auto d-flex gap-3 align-items-center"
+                      style={{ cursor: "pointer", width: "fit-content" }}
+                      className="border border-primary px-2 py-1 text-primary  ms-auto d-flex gap-3 align-items-center"
                     >
                       <FaRegEdit />
                       <span className="d-none d-md-flex">Edit</span>
-                    </button>
+                    </span>
                   </td>
                   <td style={rowBodyStyle} className="text-uppercase">
-                    <button
+                    <span
                       onClick={() => onStateDelete(items._id)}
-                      style={{
-                        cursor: "pointer",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--primaryDashMenuColor)",
-                      }}
-                      className="btn ms-auto d-flex gap-3 align-items-center"
+                      style={{ cursor: "pointer", width: "fit-content" }}
+                      className="border border-danger px-2 py-1 text-danger  ms-auto d-flex gap-3 align-items-center"
                     >
                       <AiOutlineDelete />
                       <span className="d-none d-md-flex">Delete</span>
-                    </button>
+                    </span>
                   </td>
                 </tr>
               ))}

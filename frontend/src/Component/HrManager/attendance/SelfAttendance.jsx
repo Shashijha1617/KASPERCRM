@@ -5,6 +5,12 @@ import { FaCircleInfo } from "react-icons/fa6";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../../../Pages/config/config";
 import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
+import { MdOutlineWbSunny } from "react-icons/md";
+import { TbStatusChange } from "react-icons/tb";
+import { GoHash } from "react-icons/go";
+import { HiOutlineLogin, HiOutlineLogout } from "react-icons/hi";
+import { IoIosTimer, IoMdTimer } from "react-icons/io";
+import { GrStatusInfo } from "react-icons/gr";
 
 const SelfAttendance = () => {
   const [attendanceData, setAttendanceData] = useState(null);
@@ -188,13 +194,15 @@ const SelfAttendance = () => {
 
   function convertMinutesToHMS(totalSeconds) {
     // Calculate hours
-    var hours = Math.floor(totalSeconds / 3600 * 60);
+    var hours = Math.floor((totalSeconds / 3600) * 60);
     // Calculate remaining minutes
     var remainingMinutes = Math.floor((totalSeconds % 3600) / 60);
     // Calculate remaining seconds
     var remainingSeconds = totalSeconds % 60;
-  
-    return hours + " Hrs " + remainingMinutes + " Min " + remainingSeconds + " Sec";
+
+    return (
+      hours + " Hrs " + remainingMinutes + " Min " + remainingSeconds + " Sec"
+    );
   }
 
   const twoDigitDate = (date) => {
@@ -316,7 +324,7 @@ const SelfAttendance = () => {
       </div>
 
       {attendanceData && (
-        <div className="border" style={{ overflow: "auto", maxHeight: "82vh" }}>
+        <div className="border" style={{ overflow: "auto", maxHeight: "80vh" }}>
           <table
             style={{
               fontWeight: "normal",
@@ -326,16 +334,38 @@ const SelfAttendance = () => {
           >
             <thead>
               <tr style={{ position: "sticky", zIndex: "10", top: "-2px" }}>
-                <th style={rowHeadStyle}>Date</th>
-                <th style={rowHeadStyle}>Status</th>
-                <th style={rowHeadStyle}>Login Time</th>
-                <th style={rowHeadStyle}>Logout Time</th>
-                <th style={rowHeadStyle}>Logs</th>
-                <th style={rowHeadStyle}>Gross Login</th>
-                <th style={rowHeadStyle}>Breaks</th>
-                <th style={rowHeadStyle}>Total Break</th>
-                <th style={rowHeadStyle}>Net Login</th>
-                <th style={rowHeadStyle}>Status</th>
+                <th style={rowHeadStyle}>
+                  <MdOutlineWbSunny /> Date | Day
+                </th>
+                <th style={rowHeadStyle}>
+                  <TbStatusChange /> Mark
+                </th>
+                <th style={rowHeadStyle}>
+                  <HiOutlineLogin /> Login Time
+                </th>
+                <th style={rowHeadStyle}>
+                  <HiOutlineLogout /> Logout Time
+                </th>
+                <th style={rowHeadStyle}>
+                  {" "}
+                  <GoHash /> Logs
+                </th>
+                <th style={rowHeadStyle}>
+                  <IoIosTimer /> Gross Login
+                </th>
+                <th style={rowHeadStyle}>
+                  <GoHash /> Breaks
+                </th>
+                <th style={rowHeadStyle}>
+                  {" "}
+                  <IoMdTimer /> Total Break
+                </th>
+                <th style={rowHeadStyle}>
+                  <HiOutlineLogin /> Net Login
+                </th>
+                <th style={rowHeadStyle}>
+                  <GrStatusInfo /> Status
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -350,7 +380,7 @@ const SelfAttendance = () => {
                           <tr
                             className="shadow-sm"
                             key={date.date}
-                            id={`attendance-row-${date.date}`} // Assign unique ID to each row
+                            id={`attendance-row-${date.date}`}
                             onMouseEnter={() => handleMouseEnter(date.date)}
                             onMouseLeave={() => handleMouseLeave()}
                           >
@@ -358,13 +388,13 @@ const SelfAttendance = () => {
                               <div className="d-flex gap-2 align-items-center">
                                 <span
                                   style={{
-                                    border: darkMode
-                                      ? "1px solid var(--primaryDashColorDark)"
-                                      : "1px solid var(--primaryDashMenuColor)",
+                                    // border: darkMode
+                                    //   ? "1px solid var(--primaryDashColorDark)"
+                                    //   : "1px solid var(--primaryDashMenuColor)",
                                     color: darkMode
                                       ? "var(--primaryDashColorDark)"
                                       : "var(--primaryDashMenuColor)",
-                                    fontSize: ".8rem",
+                                    // fontSize: ".rem",
                                     fontWeight: "normal",
                                   }}
                                   className="btn rounded-0"
@@ -373,13 +403,13 @@ const SelfAttendance = () => {
                                 </span>
                                 <span
                                   style={{
-                                    border: darkMode
-                                      ? "1px solid var(--primaryDashColorDark)"
-                                      : "1px solid var(--primaryDashMenuColor)",
+                                    // border: darkMode
+                                    //   ? "1px solid var(--primaryDashColorDark)"
+                                    //   : "1px solid var(--primaryDashMenuColor)",
                                     color: darkMode
                                       ? "var(--primaryDashColorDark)"
                                       : "var(--primaryDashMenuColor)",
-                                    fontSize: ".9rem",
+                                    // fontSize: ".9rem",
                                     fontWeight: "normal",
                                   }}
                                   className="btn  rounded-0"

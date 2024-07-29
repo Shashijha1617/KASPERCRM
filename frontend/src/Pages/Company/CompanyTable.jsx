@@ -162,34 +162,24 @@ const AdminCompanyTable = (props) => {
                   <td style={rowBodyStyle}>{item.GSTNo}</td>
                   <td style={rowBodyStyle}>{item.CINNo}</td>
                   <td style={rowBodyStyle}>
-                    <button
-                      style={{
-                        cursor: "pointer",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var( --primaryDashMenuColor)",
-                      }}
-                      className="btn  d-flex gap-3 align-items-center"
+                    <span
+                      style={{ cursor: "pointer", width: "fit-content" }}
+                      className="border border-primary px-2 py-1 text-primary  ms-auto d-flex gap-3 align-items-center"
                       onClick={() => props.onEditCompany(item)}
                     >
                       <FontAwesomeIcon icon={faEdit} />{" "}
                       <span className="d-none d-md-flex">Edit</span>
-                    </button>
+                    </span>
                   </td>
                   <td style={rowBodyStyle}>
-                    <button
-                      style={{
-                        cursor: "pointer",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var( --primaryDashMenuColor)",
-                      }}
-                      className="btn  d-flex gap-3 align-items-center"
+                    <span
+                      style={{ cursor: "pointer", width: "fit-content" }}
+                      className="border border-danger px-2 py-1 text-danger  ms-auto d-flex gap-3 align-items-center"
                       onClick={() => onCompanyDelete(item._id)}
                     >
                       <FontAwesomeIcon icon={faTrash} />{" "}
                       <span className="d-none d-md-flex">Delete</span>
-                    </button>
+                    </span>
                   </td>
                 </tr>
               ))}

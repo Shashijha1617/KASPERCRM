@@ -1,113 +1,114 @@
-import React, { Component } from "react";
-// import "./DepartmentFormEdit.css";
-// import { Form,Button } from "react-bootstrap";
-import { Form, Button, Col, Row } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import "./DepartmentForm.css";
 import axios from "axios";
 import BASE_URL from "../config/config";
-class DepartmentForm extends Component {
-  state = {
-    DepartmentData: this.props.editData["DepartmentName"],
-    companyInfo: []
-  };
-  onChange(e) {
-    this.setState({ DepartmentData: e.target.value });
-  }
-  companyData = [];
-  loadCompanyInfo = () => {
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
+
+const DepartmentForm = ({
+  editData,
+  onDepartmentEditUpdate,
+  onFormEditClose,
+}) => {
+  const [departmentData, setDepartmentData] = useState(
+    editData["DepartmentName"]
+  );
+  const [companyData, setCompanyData] = useState([]);
+  const { darkMode } = useTheme();
+
+  useEffect(() => {
+    loadCompanyInfo();
+  }, []);
+
+  const loadCompanyInfo = () => {
     axios
       .get(`${BASE_URL}/api/company`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
-      .then(response => {
-        // if(response.data.length==0){this.roleObj=["temp"];}
-        // else{
-
-        // }
-        this.companyData = response.data;
-
-        // this.portalsData=this.portalsData.filter((data)=>data["Status"]==1);
-
-        this.setState({ companyInfo: response.data });
+      .then((response) => {
+        setCompanyData(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
-  componentWillMount() {
-    this.loadCompanyInfo();
-  }
 
-  render() {
-    // let value=(this.props.pass) ? undefined : "";<i class="fas fa-plus"></i>
-    return (
+  const handleChange = (e) => {
+    setDepartmentData(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onDepartmentEditUpdate(editData, e);
+  };
+
+  return (
+    <div
+      style={{
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--secondaryDashMenuColor)",
+      }}
+      className="container-fluid py-3"
+    >
+      <h5>Edit Department Details</h5>
+
       <div>
-        <h2 id="role-form-title">Edit Department Details</h2>
-
-        <div id="role-form-outer-div">
-          <Form
-            id="form"
-            onSubmit={e =>
-              this.props.onDepartmentEditUpdate(this.props.editData, e)
-            }
-          >
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Company
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control as="select" name="country" required>
-                  <option value="" disabled selected>
-                    Select your option
+        <form className="d-flex flex-column gap-3 mt-3" onSubmit={handleSubmit}>
+          <div>
+            <label>Company</label>
+            <div>
+              <select
+                className="form-select rounded-0"
+                as="select"
+                name="company"
+                required
+                defaultValue={editData["company"][0]["_id"]}
+              >
+                <option value="" disabled>
+                  Select your option
+                </option>
+                {companyData.map((data) => (
+                  <option key={data["_id"]} value={data["_id"]}>
+                    {data["CompanyName"]}
                   </option>
-                  {this.companyData.map((data, index) => (
-                    <option
-                      value={data["_id"]}
-                      selected={
-                        this.props.editData["company"][0]["_id"] == data["_id"]
-                      }
-                    >
-                      {data["CompanyName"]}
-                    </option>
-                  ))}
-                </Form.Control>
-              </Col>
-            </Form.Group>
+                ))}
+              </select>
+            </div>
+          </div>
 
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Department
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control
-                  type="Text"
-                  placeholder="Department"
-                  name="DepartmentName"
-                  required
-                  value={this.state.DepartmentData}
-                  onChange={value => this.onChange(value)}
-                />
-              </Col>
-            </Form.Group>
+          <div>
+            <label>Department</label>
+            <div>
+              <input
+                className="form-control rounded-0"
+                type="text"
+                placeholder="Department"
+                name="DepartmentName"
+                required
+                value={departmentData}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
 
-            <Form.Group as={Row} id="form-submit-button">
-              <Col sm={{ span: 10, offset: 2 }}>
-                <Button type="submit">Update</Button>
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} id="form-cancel-button">
-              <Col sm={{ span: 10, offset: 2 }} id="form-cancel-button-inner">
-                <Button type="reset" onClick={this.props.onFormEditClose}>
-                  cancel
-                </Button>
-              </Col>
-            </Form.Group>
-          </Form>
-        </div>
+          <div className="d-flex gap-2">
+            <button className="btn btn-primary " type="submit">
+              Update
+            </button>
+            <button
+              className="btn btn-danger "
+              type="reset"
+              onClick={onFormEditClose}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default DepartmentForm;

@@ -19,14 +19,16 @@ const DailyAttendChart = () => {
       labels: ["Late", "Present", "Half Day", "Absent"],
       colors: [
         "var(--basecolor)",
-        "var(--basecolor)",
-        "var(--basecolor)",
-        "var(--basecolor)",
+        "var(--basecolor1)",
+        "var(--basecolor2)",
+        "var(--basecolor3)",
       ],
       title: {
         text: "Today's Attendance Chart",
         style: {
-          color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+          color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--primaryDashMenuColor)",
           fontWeight: "normal",
         },
       },
@@ -34,27 +36,22 @@ const DailyAttendChart = () => {
         show: true,
         position: "bottom",
         labels: {
-          colors: darkMode ? [
-            "var(--primaryDashColorDark)",
-            "var(--primaryDashColorDark)",
-            "var(--primaryDashColorDark)",
-            "var(--primaryDashColorDark)",
-          ] : [
-            "var(--primaryDashMenuColor)",
-            "var(--primaryDashMenuColor)",
-            "var(--primaryDashMenuColor)",
-            "var(--primaryDashMenuColor)",
-          ],
+          colors: darkMode
+            ? [
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+              ]
+            : [
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+              ],
         },
         markers: {
-          fillColors: [
-            "var(--basecolor)",
-            "var(--basecolor)",
-            "var(--basecolor)",
-            "var(--basecolor)",
-            "var(--basecolor)",
-            "var(--basecolor)",
-          ],
+          fillColors: ["#9ba9ff", "#a5adff", "#afb1ff", "#b9b5ff"],
         },
       },
       plotOptions: {
@@ -66,7 +63,7 @@ const DailyAttendChart = () => {
                 show: true,
                 showAlways: true,
                 label: "Total",
-                color: darkMode ? "white" : "black",
+                color: "gray",
                 formatter: function (w) {
                   return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
                 },
@@ -128,23 +125,27 @@ const DailyAttendChart = () => {
           ...prevOptions.options.title,
           style: {
             ...prevOptions.options.title.style,
-            color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+            color: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var(--primaryDashMenuColor)",
           },
         },
         legend: {
           ...prevOptions.options.legend,
           labels: {
-            colors: darkMode ? [
-              "var(--primaryDashColorDark)",
-              "var(--primaryDashColorDark)",
-              "var(--primaryDashColorDark)",
-              "var(--primaryDashColorDark)",
-            ] : [
-              "var(--primaryDashMenuColor)",
-              "var(--primaryDashMenuColor)",
-              "var(--primaryDashMenuColor)",
-              "var(--primaryDashMenuColor)",
-            ],
+            colors: darkMode
+              ? [
+                  "var(--primaryDashColorDark)",
+                  "var(--primaryDashColorDark)",
+                  "var(--primaryDashColorDark)",
+                  "var(--primaryDashColorDark)",
+                ]
+              : [
+                  "var(--primaryDashMenuColor)",
+                  "var(--primaryDashMenuColor)",
+                  "var(--primaryDashMenuColor)",
+                  "var(--primaryDashMenuColor)",
+                ],
           },
           markers: {
             fillColors: [

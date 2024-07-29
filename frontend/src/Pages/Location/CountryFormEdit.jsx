@@ -1,66 +1,64 @@
-import React, { Component } from "react";
-// import "./CountryForm.css";
-import { HashRouter as Router, Route, Link } from "react-router-dom";
-// import { Form,Button } from "react-bootstrap";
-import { Form, Button, Col, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { Form, Button, Row } from "react-bootstrap";
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
 
-class CountryForm extends Component {
-  state = {
-    CountryData: this.props.editData["CountryName"]
+const CountryForm = ({ editData, onCountryEditUpdate, onFormEditClose }) => {
+  const [countryData, setCountryData] = useState(editData["CountryName"]);
+  const { darkMode } = useTheme();
+
+  const handleChange = (e) => {
+    setCountryData(e.target.value);
   };
-  onChange(e) {
-    this.setState({ CountryData: e.target.value });
-  }
 
-  render() {
-    return (
-      <div>
-        <h2 id="role-form-title">Edit Country Details</h2>
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onCountryEditUpdate(editData, e);
+  };
 
-        <div id="role-form-outer-div">
-          <Form
-            id="form"
-            onSubmit={e =>
-              this.props.onCountryEditUpdate(
-                this.props.editData,
-                e
-                //   e.target[1].value
-              )
-            }
-          >
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Country
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control
-                  type="Text"
-                  placeholder="Country"
-                  name="CountryName"
-                  required
-                  value={this.state.CountryData}
-                  onChange={value => this.onChange(value)}
-                />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} id="form-submit-button">
-              <Col sm={{ span: 10, offset: 2 }}>
-                <Button type="submit">Update</Button>
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} id="form-cancel-button">
-              <Col sm={{ span: 10, offset: 2 }} id="form-cancel-button-inner">
-                <Button type="reset" onClick={this.props.onFormEditClose}>
-                  cancel
-                </Button>
-              </Col>
-            </Form.Group>
-          </Form>
+  return (
+    <div
+      style={{
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--secondaryDashMenuColor)",
+      }}
+      className="container-fluid py-3"
+    >
+      <h5>Edit Country Details</h5>
+      <form
+        className="d-flex flex-column gap-3 mt-3"
+        id="form"
+        onSubmit={handleSubmit}
+      >
+        <div>
+          <lebel>Country</lebel>
+          <div>
+            <input
+              className="form-control mt-1 rounded-0"
+              type="text"
+              placeholder="Country"
+              name="CountryName"
+              required
+              value={countryData}
+              onChange={handleChange}
+            />
+          </div>
         </div>
-      </div>
-    );
-  }
-}
+        <div className="d-flex gap-3">
+          <button className="btn btn-primary" type="submit">
+            Update
+          </button>
+          <button
+            className="btn btn-danger"
+            type="reset"
+            onClick={onFormEditClose}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
 
 export default CountryForm;

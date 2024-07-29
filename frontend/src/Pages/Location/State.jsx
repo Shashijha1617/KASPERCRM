@@ -1,78 +1,23 @@
-import React, { Component } from "react";
-import "./State.css";
+import React, { useState } from "react";
 import axios from "axios";
 import StateTable from "./StateTable.jsx";
 import StateForm from "./StateForm.jsx";
 import StateFormEdit from "./StateFormEdit.jsx";
 import BASE_URL from "../config/config.js";
-// import { HashRouter as Router, Route, Link } from "react-router-dom";
+import "./State.css";
 
-// function StateTableF() {
-//   return <StateTable/>;
-// }
-// function StateFormF() {
-//   return  <StateForm onStateSubmit={handleStateSubmit}/>;
-// }
+const State = () => {
+  const [isTableVisible, setIsTableVisible] = useState(true);
+  const [isEditFormVisible, setIsEditFormVisible] = useState(false);
+  const [editData, setEditData] = useState({});
 
-// function handleStateSubmit(e) {
-//   e.preventDefault();
-//   console.log(e);
-
-// }
-
-class State extends Component {
-  state = {
-    table: true,
-    editForm: false,
-    editData: {},
-  };
-
-  render() {
-    // let value=(this.props.pass) ? undefined : "";<i class="fas fa-plus"></i>
-    return (
-      //  <Router>
-      <React.Fragment>
-        {this.state.table ? (
-          this.state.editForm ? (
-            <StateFormEdit
-              onStateEditUpdate={this.handleStateEditUpdate}
-              onFormEditClose={this.handleEditFormClose}
-              editData={this.state.editData}
-            />
-          ) : (
-            <StateTable
-              onAddState={this.handleAddState}
-              onEditState={this.handleEditState}
-            />
-          )
-        ) : (
-          <StateForm
-            onStateSubmit={this.handleStateSubmit}
-            onFormClose={this.handleFormClose}
-          />
-        )}
-
-        {/* <div>debru</div> */}
-        {/* <Route path="/admin/state/table" exact component={StateTable} /> */}
-        {/* <Route path="/admin/state/form" exact component={() => <StateForm onStateSubmit={this.handleStateSubmit} />} /> */}
-
-        {/* <StateTable/> */}
-      </React.Fragment>
-
-      //  </Router>
-    );
-  }
-  handleStateSubmit = (event) => {
+  const handleStateSubmit = (event) => {
     event.preventDefault();
-    console.log("id", event.target[0].value, event.target[1].value);
-    this.setState({ table: true });
-
-    let body = {
+    const body = {
       CountryID: event.target[0].value,
       StateName: event.target[1].value,
     };
-    //  let body= "CompanyID=" + event.target[0].value + "&State=" + event.target[1].value;
-    //  let body= "debru";
+
     axios
       .post(`${BASE_URL}/api/state`, body, {
         headers: {
@@ -80,63 +25,75 @@ class State extends Component {
         },
       })
       .then((res) => {
-        this.setState({ table: false });
-        this.setState({ table: true });
+        setIsTableVisible(true);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
-    // this.setState({ loading: true });
-    // this.login(event.target[0].value, event.target[1].value);
-    // event.target.reset();
   };
-  handleAddState = () => {
-    console.log("clicked1");
-    this.setState({ table: false });
+
+  const handleAddState = () => {
+    setIsTableVisible(false);
   };
-  handleEditState = (e) => {
-    console.log(e);
-    console.log("clicked6");
-    this.setState({ editForm: true });
-    this.setState({ editData: e });
+
+  const handleEditState = (data) => {
+    setIsEditFormVisible(true);
+    setEditData(data);
   };
-  handleFormClose = () => {
-    console.log("clicked1");
-    this.setState({ table: true });
+
+  const handleFormClose = () => {
+    setIsTableVisible(true);
   };
-  handleEditFormClose = () => {
-    console.log("clicked5");
-    this.setState({ editForm: false });
+
+  const handleEditFormClose = () => {
+    setIsEditFormVisible(false);
   };
-  handleFormClose = () => {
-    console.log("clicked1");
-    this.setState({ table: true });
-  };
-  handleStateEditUpdate = (info, newInfo) => {
+
+  const handleStateEditUpdate = (info, newInfo) => {
     newInfo.preventDefault();
-    // this.setState({ table: true });
-    let body = {
+    const body = {
       CountryID: newInfo.target[0].value,
       StateName: newInfo.target[1].value,
     };
-    console.log("update", body);
+
     axios
-      .put(`${BASE_URL}/api/state/` + info["_id"], body, {
+      .put(`${BASE_URL}/api/state/${info["_id"]}`, body, {
         headers: {
           authorization: localStorage.getItem("token") || "",
         },
       })
       .then((res) => {
-        // this.componentDidMount();
-        this.setState({ table: false });
-        this.setState({ table: true });
+        setIsTableVisible(true);
+        setIsEditFormVisible(false);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
-
-    this.setState({ editForm: false });
   };
-}
+
+  return (
+    <React.Fragment>
+      {isTableVisible ? (
+        isEditFormVisible ? (
+          <StateFormEdit
+            onStateEditUpdate={handleStateEditUpdate}
+            onFormEditClose={handleEditFormClose}
+            editData={editData}
+          />
+        ) : (
+          <StateTable
+            onAddState={handleAddState}
+            onEditState={handleEditState}
+          />
+        )
+      ) : (
+        <StateForm
+          onStateSubmit={handleStateSubmit}
+          onFormClose={handleFormClose}
+        />
+      )}
+    </React.Fragment>
+  );
+};
 
 export default State;

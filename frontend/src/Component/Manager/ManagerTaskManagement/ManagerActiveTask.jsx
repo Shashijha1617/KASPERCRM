@@ -3,6 +3,8 @@ import axios from "axios";
 import { FaCheck } from "react-icons/fa6";
 import { IoCheckmarkDone, IoCheckmarkDoneSharp } from "react-icons/io5";
 import {
+  MdArrowDropDown,
+  MdArrowDropUp,
   MdDeleteForever,
   MdOutlineAssignmentInd,
   MdOutlineCancel,
@@ -50,7 +52,9 @@ const ManagerActiveTask = () => {
   const { darkMode } = useTheme();
   const [flash, setFlash] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [viewDetsils, setViewDetails] = useState(false)
+  const [viewDetsils, setViewDetails] = useState(false);
+  const [timeinfo, setTimeinfo] = useState(false);
+  const [expandedTaskId, setExpandedTaskId] = useState(null);
 
   const loadEmployeeData = () => {
     axios
@@ -152,7 +156,6 @@ const ManagerActiveTask = () => {
     setSelectedTaskId(taskId);
     setModalShow(true);
   };
-
 
   console.log(tasks);
 
@@ -378,44 +381,34 @@ const ManagerActiveTask = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const images = [
+    "https://i.pinimg.com/originals/07/33/ba/0733ba760b29378474dea0fdbcb97107.png",
+    "https://th.bing.com/th/id/OIP.JOHFjMBnZGE-SOXzMSxdRwAAAA?w=402&h=467&rs=1&pid=ImgDetMain",
+    "https://www.uscareerinstitute.edu/images/accounting-AAS-outcomes.jpg",
+    "https://localist-images.azureedge.net/photos/43897493381666/square_300/51e7610f317e68641dedf4c24787c5056937a657.jpg",
+    "https://drscdn.500px.org/photo/81956917/q%3D80_m%3D1000/v2?sig=fa09099be5e5d95d537e9656700fc1f56e29f00fd5dcccc8241aca59e4a60632",
+    "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
+  ];
 
-const images = [
-  "https://i.pinimg.com/originals/07/33/ba/0733ba760b29378474dea0fdbcb97107.png",
-  "https://th.bing.com/th/id/OIP.JOHFjMBnZGE-SOXzMSxdRwAAAA?w=402&h=467&rs=1&pid=ImgDetMain",
-  "https://www.uscareerinstitute.edu/images/accounting-AAS-outcomes.jpg",
-  "https://localist-images.azureedge.net/photos/43897493381666/square_300/51e7610f317e68641dedf4c24787c5056937a657.jpg",
-  'https://drscdn.500px.org/photo/81956917/q%3D80_m%3D1000/v2?sig=fa09099be5e5d95d537e9656700fc1f56e29f00fd5dcccc8241aca59e4a60632',
-  "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
-  "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
-  "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
-  "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
-  "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
-  "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
-  "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
-  "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
-  "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
-  "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
-  "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
-  "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+    padding: ".5rem",
+  };
 
-]
-
-const rowHeadStyle = {
-  verticalAlign: "middle",
-  whiteSpace: "pre",
-  background: darkMode
-    ? "var(--primaryDashMenuColor)"
-    : "var(--primaryDashColorDark)",
-  color: darkMode
-    ? "var(--primaryDashColorDark)"
-    : "var(--secondaryDashMenuColor)",
-  border: "none",
-  position: "sticky",
-  top: "0rem",
-  zIndex: "100",
-  padding:'.5rem'
-};
-
+  const toggleTaskDetails = (taskId) => {
+    setExpandedTaskId((prevId) => (prevId === taskId ? null : taskId));
+  };
 
   return (
     <div
@@ -454,7 +447,8 @@ const rowHeadStyle = {
               (task) => task.status === "Pending" && task.managerEmail === email
             )
             .map((task, index) => (
-              <div key={task.id}
+              <div
+                key={task.id}
                 style={{
                   color: darkMode
                     ? "var(--primaryDashColorDark)"
@@ -472,7 +466,9 @@ const rowHeadStyle = {
                 >
                   <div className="d-flex align-items-center justify-content-between">
                     <h5 className="text-capitalize">{task.Taskname}</h5>
-                    <button className="btn btn-info text-capitalize" >{task.status}</button>
+                    <button className="btn btn-info text-capitalize">
+                      {task.status}
+                    </button>
                   </div>
                   <hr />
                   <div className="d-flex align-items-center justify-content-between gap-2">
@@ -502,121 +498,9 @@ const rowHeadStyle = {
                   <hr />
                   <div className="my-3 d-flex flex-column gap-1">
                     Task Description
-                    <span className="text-capitalize"> 
-                      {task.description}
-                    </span>
+                    <span className="text-capitalize">{task.description}</span>
                   </div>
-                  <div className="row justify-between">
-                        <div
-                          className="col-1 d-flex"
-                          style={{
-                            width: "6rem",
-                            height: "6rem",
-                            borderRadius: "50%",
-                          }}
-                        >
-                          <CircularProgressbar
-                            className="fw-bold"
-                            value={calculateProgress(task)}
-                            text={`${calculateProgress(task).toFixed(0)}%`}
-                            styles={buildStyles({
-                              pathColor: "#28a745",
-                              textColor: "#28a745",
-                            })}
-                          />
-                        </div>
-                      </div>
-                      <div className="d-flex gap-2 RemainingTimeHandel justify-content-between ">
-                    {calculateRemainingTime(task.endDate).delay ? (
-                      <div>
-                        <div className="text-center d-none">
-                          <div className="form-control fw-bold p-0">
-                            {calculateRemainingTime(task.endDate).days}
-                          </div>
-                          <div>Day</div>
-                        </div>
-                        <h5
-                          className={`btn btn-danger p-1 my-auto px-3 fw-bold ${
-                            flash ? "flash" : ""
-                          }`}
-                        >
-                          Late
-                        </h5>
-                      </div>
-                    ) : (
-                      <div className="text-center">
-                        <div
-                          className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
-                          style={{
-                            boxShadow: "0 0 5px 2px gray inset",
-                            height: "30px",
-                            minWidth: "30px",
-                          }}
-                        >
-                          {calculateRemainingTime(task.endDate).days}{" "}
-                        </div>{" "}
-                        <div>Day</div>
-                      </div>
-                    )}
-                    {calculateRemainingTime(task.endDate).delay ? (
-                      <div className="text-center d-none">
-                        <div
-                          className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
-                          style={{
-                            boxShadow: "0 0 5px 2px gray inset",
-                            height: "30px",
-                            minWidth: "30px",
-                          }}
-                        >
-                          {calculateRemainingTime(task.endDate).hours}{" "}
-                        </div>{" "}
-                        <div>Min</div>
-                      </div>
-                    ) : (
-                      <div className="text-center">
-                        <div
-                          className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
-                          style={{
-                            boxShadow: "0 0 5px 2px gray inset",
-                            height: "30px",
-                            minWidth: "30px",
-                          }}
-                        >
-                          {calculateRemainingTime(task.endDate).hours}{" "}
-                        </div>{" "}
-                        <div>Hrs</div>
-                      </div>
-                    )}
-                    {calculateRemainingTime(task.endDate).delay ? (
-                      <div className="text-center d-none">
-                        <div
-                          className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
-                          style={{
-                            boxShadow: "0 0 5px 2px gray inset",
-                            height: "30px",
-                            minWidth: "30px",
-                          }}
-                        >
-                          {calculateRemainingTime(task.endDate).minutes}{" "}
-                        </div>{" "}
-                        <div>Min</div>
-                      </div>
-                    ) : (
-                      <div className="text-center">
-                        <div
-                          className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
-                          style={{
-                            boxShadow: "0 0 5px 2px gray inset",
-                            height: "30px",
-                            minWidth: "30px",
-                          }}
-                        >
-                          {calculateRemainingTime(task.endDate).minutes}{" "}
-                        </div>{" "}
-                        <div>Min</div>
-                      </div>
-                    )}
-                  </div>
+                  <hr />
                   <div>
                     <div className="d-flex align-items-start justify-content-between">
                       <span className="d-flex flex-column">
@@ -627,183 +511,346 @@ const rowHeadStyle = {
                             <PiInfoLight />{" "}
                           </span>
                         </span>{" "}
-                        <span style={{ width: "fit-content" }}>{task.duration} days</span>
+                        <span style={{ width: "fit-content" }}>
+                          {task.duration} days
+                        </span>
                       </span>
                       <span className="d-flex flex-column">
                         Start Date{" "}
-                        <span style={{ width: "fit-content" }}>{getFormattedDate(task.startDate)}</span>
+                        <span style={{ width: "fit-content" }}>
+                          {getFormattedDate(task.startDate)}
+                        </span>
                       </span>
                       <span className="d-flex flex-column">
                         {" "}
                         End Date{" "}
-                        <span style={{ width: "fit-content" }}>{getFormattedDate(task.endDate)}</span>
+                        <span style={{ width: "fit-content" }}>
+                          {getFormattedDate(task.endDate)}
+                        </span>
                       </span>
                     </div>
                   </div>
-                  <div style={{maxWidth:'100%'}}>
-                    <AvatarGroup images={images}/> <span style={{
-                  color: darkMode
-                    ? "var(--primaryDashColorDark)"
-                    : "var(--secondaryDashMenuColor)", cursor:'pointer'
-                }} onClick={()=> setViewDetails(true)} className="p-0">View Details <RiArrowDropDownLine className="fs-3" /></span>
-                  </div>
-                  <div style={{maxWidth:'100%', overflow:'auto' , display: viewDetsils === true ? "block" : "none"}}>
-                  <table striped bordered hover>
-                        <thead>
-                          <tr>
-                            <th style={rowHeadStyle}>S. No </th>
-                            <th style={rowHeadStyle}> Name</th>
-                            <th style={rowHeadStyle}> Email</th>
-                            <th style={rowHeadStyle}> Designation</th>
-                            <th style={rowHeadStyle}> Task Status</th>
-                            <th style={rowHeadStyle}> Remarks</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {task.employees.map((taskemp, i) => (
-                            <tr key={i}>
-                              <td
-                                style={{
-                                  verticalAlign: "middle",
-                                  whiteSpace: "pre",
-                                  backgroundColor:
-                                  taskemp.emptaskStatus === "Completed"
-                                    ? "rgba(25, 201, 84, 0.436)"
-                                    : taskemp.emptaskStatus === "Rejected"
-                                    ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit",
-                                  color: darkMode
-                                    ? "var(--secondaryDashColorDark)"
-                                    : "var(--primaryDashMenuColor)",
-                                  border: "none",padding:'.5rem'
-                                }}
-                              >
-                                {i + 1}
-                              </td>
-                              <td
-                                style={{
-                                  verticalAlign: "middle",
-                                  whiteSpace: "pre",
-                                  backgroundColor:
-                                  taskemp.emptaskStatus === "Completed"
-                                    ? "rgba(25, 201, 84, 0.436)"
-                                    : taskemp.emptaskStatus === "Rejected"
-                                    ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit",
-                                  color: darkMode
-                                    ? "var(--secondaryDashColorDark)"
-                                    : "var(--primaryDashMenuColor)",
-                                  border: "none",padding:'.5rem'
-                                }}
-                              >
-                                {taskemp.empname}
-                              </td>
-                              <td
-                                style={{
-                                  verticalAlign: "middle",
-                                  whiteSpace: "pre",
-                                  backgroundColor:
-                                  taskemp.emptaskStatus === "Completed"
-                                    ? "rgba(25, 201, 84, 0.436)"
-                                    : taskemp.emptaskStatus === "Rejected"
-                                    ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit",
-                                  color: darkMode
-                                    ? "var(--secondaryDashColorDark)"
-                                    : "var(--primaryDashMenuColor)",
-                                  border: "none",
-                                  padding:'.5rem'
-                                }}
-                              >
-                                {taskemp.empemail}
-                              </td>
-                              <td
-                                style={{
-                                  verticalAlign: "middle",
-                                  whiteSpace: "pre",
-                                  backgroundColor:
-                                  taskemp.emptaskStatus === "Completed"
-                                    ? "rgba(25, 201, 84, 0.436)"
-                                    : taskemp.emptaskStatus === "Rejected"
-                                    ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit",
-                                  color: darkMode
-                                    ? "var(--secondaryDashColorDark)"
-                                    : "var(--primaryDashMenuColor)",
-                                  border: "none",padding:'.5rem'
-                                }}
-                              >
-                                {taskemp.empdesignation}
-                              </td>
-                              <td
-                                style={{
-                                  verticalAlign: "middle",
-                                  whiteSpace: "pre",
-                                  backgroundColor:
-                                  taskemp.emptaskStatus === "Completed"
-                                    ? "rgba(25, 201, 84, 0.436)"
-                                    : taskemp.emptaskStatus === "Rejected"
-                                    ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit",
-                                  color: darkMode
-                                    ? "var(--secondaryDashColorDark)"
-                                    : "var(--primaryDashMenuColor)",
-                                  border: "none",padding:'.5rem'
-                                }}
-                              >
-                                {taskemp.emptaskStatus}
-                              </td>
-                              <td
-                                style={{
-                                  verticalAlign: "middle",
-                                  whiteSpace: "pre",
-                                  backgroundColor:
-                                  taskemp.emptaskStatus === "Completed"
-                                    ? "rgba(25, 201, 84, 0.436)"
-                                    : taskemp.emptaskStatus === "Rejected"
-                                    ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit",
-                                  color: darkMode
-                                    ? "var(--secondaryDashColorDark)"
-                                    : "var(--primaryDashMenuColor)",
-                                  border: "none",padding:'.5rem'
-                                }}
-                              >
-                                {taskemp.empTaskComment}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                  </div>
-                  <div className="d-flex flex-column my-2">
-                    Remarks
-                    <span>{task.comment}</span>
-                  </div>
-                  <hr />
-                  <div className="d-flex flex-column gap-2 my-2">
-                    Action
-                    <div className="d-flex gap-3  just">
-                      <button onClick={() =>
-                          forwordTaskToEmployee(
-                            task._id,
-                            task.department,
-                            task.Taskname
-                          )
-                        } className="btn btn-primary  py-1">
-                      <MdOutlineAssignmentInd /> Forword Task
-                      </button>
-                      <button  onClick={() => showPdf(task._id)} className="btn btn-secondary py-1">
-                        <RiAttachmentLine /> Attachment
-                      </button>
-                      <button  onClick={() =>
-                          completeTask(task._id, task.adminMail, task.Taskname)
-                        }
-                        disabled={calculateProgress(task) !== 100} className="btn btn-success py-1">
-                        <IoCheckmarkDone /> Complete
-                      </button>
+                  <div style={{ maxWidth: "100%" }}>
+                    <div className="d-flex align-items-center justify-content-between my-3">
+                      <AvatarGroup images={images} />
+                      <div
+                        className="d-flex"
+                        style={{
+                          width: "4rem",
+                          height: "4rem",
+                          borderRadius: "50%",
+                        }}
+                      >
+                        <CircularProgressbar
+                          className="fw-bold"
+                          value={calculateProgress(task)}
+                          text={`${calculateProgress(task).toFixed(0)}%`}
+                          styles={buildStyles({
+                            pathColor: "#28a745",
+                            textColor: "#28a745",
+                          })}
+                        />
+                      </div>
                     </div>
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onMouseEnter={() => setTimeinfo("name")}
+                      onMouseLeave={() => setTimeinfo(false)}
+                      onClick={() => toggleTaskDetails(task._id)}
+                    >
+                      {expandedTaskId === task._id ? (
+                        <span>
+                          View Less <MdArrowDropUp className="fs-4" />
+                        </span>
+                      ) : (
+                        <span>
+                          {" "}
+                          View Details <MdArrowDropDown className="fs-4" />
+                        </span>
+                      )}
+                    </span>
                   </div>
+                  {expandedTaskId === task._id && (
+                    <>
+                      {" "}
+                      <div
+                        style={{
+                          maxWidth: "100%",
+                          overflow: "auto",
+                          display: viewDetsils === true ? "block" : "none",
+                        }}
+                      >
+                        <table striped bordered hover>
+                          <thead>
+                            <tr>
+                              <th style={rowHeadStyle}>S. No </th>
+                              <th style={rowHeadStyle}> Name</th>
+                              <th style={rowHeadStyle}> Email</th>
+                              <th style={rowHeadStyle}> Designation</th>
+                              <th style={rowHeadStyle}> Task Status</th>
+                              <th style={rowHeadStyle}> Remarks</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {task.employees.map((taskemp, i) => (
+                              <tr key={i}>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    backgroundColor:
+                                      taskemp.emptaskStatus === "Completed"
+                                        ? "rgba(25, 201, 84, 0.436)"
+                                        : taskemp.emptaskStatus === "Rejected"
+                                        ? "rgba(214, 92, 44, 0.636)"
+                                        : "inherit",
+                                    color: darkMode
+                                      ? "var(--secondaryDashColorDark)"
+                                      : "var(--primaryDashMenuColor)",
+                                    border: "none",
+                                    padding: ".5rem",
+                                  }}
+                                >
+                                  {i + 1}
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    backgroundColor:
+                                      taskemp.emptaskStatus === "Completed"
+                                        ? "rgba(25, 201, 84, 0.436)"
+                                        : taskemp.emptaskStatus === "Rejected"
+                                        ? "rgba(214, 92, 44, 0.636)"
+                                        : "inherit",
+                                    color: darkMode
+                                      ? "var(--secondaryDashColorDark)"
+                                      : "var(--primaryDashMenuColor)",
+                                    border: "none",
+                                    padding: ".5rem",
+                                  }}
+                                >
+                                  {taskemp.empname}
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    backgroundColor:
+                                      taskemp.emptaskStatus === "Completed"
+                                        ? "rgba(25, 201, 84, 0.436)"
+                                        : taskemp.emptaskStatus === "Rejected"
+                                        ? "rgba(214, 92, 44, 0.636)"
+                                        : "inherit",
+                                    color: darkMode
+                                      ? "var(--secondaryDashColorDark)"
+                                      : "var(--primaryDashMenuColor)",
+                                    border: "none",
+                                    padding: ".5rem",
+                                  }}
+                                >
+                                  {taskemp.empemail}
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    backgroundColor:
+                                      taskemp.emptaskStatus === "Completed"
+                                        ? "rgba(25, 201, 84, 0.436)"
+                                        : taskemp.emptaskStatus === "Rejected"
+                                        ? "rgba(214, 92, 44, 0.636)"
+                                        : "inherit",
+                                    color: darkMode
+                                      ? "var(--secondaryDashColorDark)"
+                                      : "var(--primaryDashMenuColor)",
+                                    border: "none",
+                                    padding: ".5rem",
+                                  }}
+                                >
+                                  {taskemp.empdesignation}
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    backgroundColor:
+                                      taskemp.emptaskStatus === "Completed"
+                                        ? "rgba(25, 201, 84, 0.436)"
+                                        : taskemp.emptaskStatus === "Rejected"
+                                        ? "rgba(214, 92, 44, 0.636)"
+                                        : "inherit",
+                                    color: darkMode
+                                      ? "var(--secondaryDashColorDark)"
+                                      : "var(--primaryDashMenuColor)",
+                                    border: "none",
+                                    padding: ".5rem",
+                                  }}
+                                >
+                                  {taskemp.emptaskStatus}
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    backgroundColor:
+                                      taskemp.emptaskStatus === "Completed"
+                                        ? "rgba(25, 201, 84, 0.436)"
+                                        : taskemp.emptaskStatus === "Rejected"
+                                        ? "rgba(214, 92, 44, 0.636)"
+                                        : "inherit",
+                                    color: darkMode
+                                      ? "var(--secondaryDashColorDark)"
+                                      : "var(--primaryDashMenuColor)",
+                                    border: "none",
+                                    padding: ".5rem",
+                                  }}
+                                >
+                                  {taskemp.empTaskComment}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="d-flex flex-column my-2">
+                        Remarks
+                        <span>{task.comment}</span>
+                      </div>
+                      <div className="d-flex flex-column gap-1 mt-2 ">
+                        <span className="mb-2">Remaining Time</span>
+                        <div className="d-flex gap-2 RemainingTimeHandel justify-content-between ">
+                          {calculateRemainingTime(task.endDate).delay ? (
+                            <div>
+                              <div className="text-center d-none ">
+                                <div className="form-control fw-bold p-0">
+                                  {calculateRemainingTime(task.endDate).days}
+                                </div>
+                                <div>Day</div>
+                              </div>
+                              <span
+                                className={`border px-2 py-1 border-danger ${
+                                  flash ? "flash" : ""
+                                }`}
+                              >
+                                Please finish the task as soon as you can, as
+                                it's running late.
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="text-center">
+                              <div
+                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                style={{
+                                  boxShadow: "0 0 5px 2px gray inset",
+                                  height: "30px",
+                                  minWidth: "30px",
+                                }}
+                              >
+                                {calculateRemainingTime(task.endDate).days}{" "}
+                              </div>{" "}
+                              <div>Day</div>
+                            </div>
+                          )}
+                          {calculateRemainingTime(task.endDate).delay ? (
+                            <div className="text-center d-none">
+                              <div
+                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                style={{
+                                  boxShadow: "0 0 5px 2px gray inset",
+                                  height: "30px",
+                                  minWidth: "30px",
+                                }}
+                              >
+                                {calculateRemainingTime(task.endDate).hours}{" "}
+                              </div>{" "}
+                              <div>Min</div>
+                            </div>
+                          ) : (
+                            <div className="text-center">
+                              <div
+                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                style={{
+                                  boxShadow: "0 0 5px 2px gray inset",
+                                  height: "30px",
+                                  minWidth: "30px",
+                                }}
+                              >
+                                {calculateRemainingTime(task.endDate).hours}{" "}
+                              </div>{" "}
+                              <div>Hrs</div>
+                            </div>
+                          )}
+                          {calculateRemainingTime(task.endDate).delay ? (
+                            <div className="text-center d-none">
+                              <div
+                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                style={{
+                                  boxShadow: "0 0 5px 2px gray inset",
+                                  height: "30px",
+                                  minWidth: "30px",
+                                }}
+                              >
+                                {calculateRemainingTime(task.endDate).minutes}{" "}
+                              </div>{" "}
+                              <div>Min</div>
+                            </div>
+                          ) : (
+                            <div className="text-center">
+                              <div
+                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                style={{
+                                  boxShadow: "0 0 5px 2px gray inset",
+                                  height: "30px",
+                                  minWidth: "30px",
+                                }}
+                              >
+                                {calculateRemainingTime(task.endDate).minutes}{" "}
+                              </div>{" "}
+                              <div>Min</div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <hr />
+                      <div className="d-flex flex-column gap-2 my-2">
+                        Action
+                        <div className="d-flex gap-3  just">
+                          <button
+                            onClick={() =>
+                              forwordTaskToEmployee(
+                                task._id,
+                                task.department,
+                                task.Taskname
+                              )
+                            }
+                            className="btn btn-primary  py-1"
+                          >
+                            <MdOutlineAssignmentInd /> Forword Task
+                          </button>
+                          <button
+                            onClick={() => showPdf(task._id)}
+                            className="btn btn-secondary py-1"
+                          >
+                            <RiAttachmentLine /> Attachment
+                          </button>
+                          <button
+                            onClick={() =>
+                              completeTask(
+                                task._id,
+                                task.adminMail,
+                                task.Taskname
+                              )
+                            }
+                            disabled={calculateProgress(task) !== 100}
+                            className="btn btn-success py-1"
+                          >
+                            <IoCheckmarkDone /> Complete
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             ))
@@ -820,7 +867,6 @@ const rowHeadStyle = {
             <p>Sorry, there are no tasks assigned yet.</p>
           </div>
         )}
-
       </div>
 
       {loading && (

@@ -12,7 +12,10 @@ import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 const ManagerDash = () => {
   return (
     <div className="container-fluid ">
-      <TittleHeader title={"Dashboard"} message={"View a comprehensive analysis of your data here."}/>
+      <TittleHeader
+        title={"Dashboard"}
+        message={"View a comprehensive analysis of your data here."}
+      />
       <MyTodaysLoginData />
       <div className="row justif-content-between align-items-center">
         <div className="col-6 col-md-6 col-lg-4">

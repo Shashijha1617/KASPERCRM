@@ -1,85 +1,98 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./RoleForm.css";
-import { Form, Button, Col, Row } from "react-bootstrap";
+import { Form, Button, Row } from "react-bootstrap";
 import axios from "axios";
 import BASE_URL from "../config/config";
-class RoleForm extends Component {
-  state = {
-    companyInfo: []
-  };
-  companyData = [];
-  loadCompanyInfo = () => {
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
+
+const RoleForm = (props) => {
+  const [companyInfo, setCompanyInfo] = useState([]);
+  const { darkMode } = useTheme();
+
+  const loadCompanyInfo = () => {
     axios
       .get(`${BASE_URL}/api/company`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
-      .then(response => {
-        this.companyData = response.data;
-
-        this.setState({ companyInfo: response.data });
+      .then((response) => {
+        setCompanyInfo(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
-  componentWillMount() {
-    this.loadCompanyInfo();
-  }
-  render() {
-    return (
+
+  useEffect(() => {
+    loadCompanyInfo();
+  }, []);
+
+  return (
+    <div
+      style={{
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--secondaryDashMenuColor)",
+      }}
+      className="container-fluid py-3"
+    >
+      <h5>Add Role Details</h5>
       <div>
-        <h2 id="role-form-title">Add Role Details</h2>
-        <div id="role-form-outer-div">
-          <Form id="form" onSubmit={this.props.onRoleSubmit}>
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Company
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control as="select" name="country" required>
-                  <option value="" disabled selected>
-                    Select your option
+        <form
+          className="d-flex flex-column gap-3 mt-3"
+          onSubmit={props.onRoleSubmit}
+        >
+          <div>
+            <label>Company</label>
+            <div>
+              <select
+                className="rounded-0 form-select"
+                as="select"
+                name="country"
+                required
+              >
+                <option value="" disabled selected>
+                  Select your option
+                </option>
+                {companyInfo.map((data, index) => (
+                  <option key={index} value={data["_id"]}>
+                    {data["CompanyName"]}
                   </option>
-                  {this.companyData.map((data, index) => (
-                    <option value={data["_id"]}>{data["CompanyName"]}</option>
-                  ))}
-                </Form.Control>
-              </Col>
-            </Form.Group>
+                ))}
+              </select>
+            </div>
+          </div>
 
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Role
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control
-                  type="Text"
-                  placeholder="Role"
-                  name="Role"
-                  required
-                />
-              </Col>
-            </Form.Group>
+          <div>
+            <label>Role</label>
+            <div>
+              <input
+                className="rounded-0 form-control"
+                type="Text"
+                placeholder="Role"
+                name="Role"
+                required
+              />
+            </div>
+          </div>
 
-            <Form.Group as={Row} id="form-submit-button">
-              <Col sm={{ span: 10, offset: 2 }}>
-                <Button type="submit">Submit</Button>
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} id="form-cancel-button">
-              <Col sm={{ span: 10, offset: 2 }} id="form-cancel-button-inner">
-                <Button type="reset" onClick={this.props.onFormClose}>
-                  cancel
-                </Button>
-              </Col>
-            </Form.Group>
-          </Form>
-        </div>
+          <div className="d-flex gap-3">
+            <button className="btn btn-primary" type="submit">
+              Submit
+            </button>
+            <button
+              className="btn btn-danger"
+              type="reset"
+              onClick={props.onFormClose}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default RoleForm;

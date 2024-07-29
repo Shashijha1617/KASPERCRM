@@ -8,7 +8,8 @@ import { css } from "@emotion/core";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import Position from "../../img/Position/Position.svg";
 import BASE_URL from "../config/config";
-import { AiOutlinePlusCircle } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
+import { MdOutlineEdit } from "react-icons/md";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -159,10 +160,10 @@ const RoleTable = (props) => {
                 <th style={rowHeadStyle}>Company</th>
                 <th style={rowHeadStyle}>Role</th>
                 <th style={rowHeadStyle} className="text-end">
-                  Edit
+                  <MdOutlineEdit /> Edit
                 </th>
                 <th style={rowHeadStyle} className="text-end">
-                  Delete
+                  <AiOutlineDelete /> Delete
                 </th>
               </tr>
             </thead>
@@ -176,38 +177,26 @@ const RoleTable = (props) => {
                     {data["RoleName"]}
                   </td>
                   <td style={rowBodyStyle} className="text-capitalize">
-                    <button
+                    <span
                       onClick={() => props.onEditRole(data)}
-                      style={{
-                        cursor: "pointer",
-                        fontSize: ".9rem",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--secondaryDashMenuColor)",
-                      }}
                       title="Update"
-                      className="btn d-flex ms-auto gap-3 align-items-center"
+                      style={{ cursor: "pointer", width: "fit-content" }}
+                      className="border border-primary px-2 py-1 text-primary  ms-auto d-flex gap-3 align-items-center"
                     >
                       <FontAwesomeIcon icon={faEdit} />
                       <span className="d-none d-md-flex">Edit</span>
-                    </button>
+                    </span>
                   </td>
                   <td style={rowBodyStyle} className="text-capitalize">
-                    <button
+                    <span
                       onClick={() => onRoleDelete(data["_id"])}
-                      style={{
-                        cursor: "pointer",
-                        fontSize: ".9rem",
-                        color: darkMode
-                          ? "var(--secondaryDashColorDark)"
-                          : "var(--secondaryDashMenuColor)",
-                      }}
                       title="Delete"
-                      className="btn d-flex ms-auto gap-3 align-items-center"
+                      style={{ cursor: "pointer", width: "fit-content" }}
+                      className="border border-danger px-2 py-1 text-danger  ms-auto d-flex gap-3 align-items-center"
                     >
                       <FontAwesomeIcon icon={faTrash} />
                       <span className="d-none d-md-flex">Delete</span>
-                    </button>
+                    </span>
                   </td>
                 </tr>
               ))}

@@ -115,61 +115,6 @@ const TaskChart = () => {
     ).length,
   };
 
-  // const chartData = {
-  //   series: [
-  //     {
-  //       name: "Total Employee",
-  //       data: Object.values(departmentCounts),
-  //     },
-  //   ],
-  //   options: {
-  //     chart: {
-  //       type: "bar",
-  //       height: 350,
-  //     },
-  //     plotOptions: {
-  //       bar: {
-  //         horizontal: false,
-  //         columnWidth: "40%",
-  //         endingShape: "rounded",
-  //       },
-  //     },
-  //     dataLabels: {
-  //       enabled: false,
-  //     },
-  //     stroke: {
-  //       show: true,
-  //       width: 2,
-  //       colors: ["transparent"],
-  //     },
-  //     xaxis: {
-  //       categories: Object.keys(departmentCounts),
-  //       title: {
-  //         text: "Department Wise Employee",
-  //       },
-  //     },
-  //     yaxis: {
-  //       title: {
-  //         text: "Number of Employee",
-  //       },
-  //     },
-
-  //     fill: {
-  //       opacity: 1,
-  //       colors: ["var(--basecolor)"],
-  //     },
-  //     tooltip: {
-  //       y: {
-  //         formatter: function (val) {
-  //           return " " + val + "";
-  //         },
-  //       },
-  //       markers: {
-  //         colors: "yellow",
-  //       },
-  //     },
-  //   },
-  // };
   const taskStatusChartData = {
     options: {
       chart: {
@@ -182,16 +127,16 @@ const TaskChart = () => {
           text: "Task Status",
           style: {
             color: darkMode
-            ? "var(--primaryDashColorDark)"
-            : "var(--secondaryDashMenuColor)",
+              ? "var(--primaryDashColorDark)"
+              : "var(--secondaryDashMenuColor)",
             fontWeight: "normal",
           },
         },
         labels: {
           style: {
             colors: darkMode
-            ? "var(--primaryDashColorDark)"
-            : "var(--secondaryDashMenuColor)",
+              ? "var(--primaryDashColorDark)"
+              : "var(--secondaryDashMenuColor)",
           },
         },
       },
@@ -200,16 +145,16 @@ const TaskChart = () => {
           text: "Number of Tasks",
           style: {
             color: darkMode
-            ? "var(--primaryDashColorDark)"
-            : "var(--secondaryDashMenuColor)",
+              ? "var(--primaryDashColorDark)"
+              : "var(--secondaryDashMenuColor)",
             fontWeight: "normal",
           },
         },
         labels: {
           style: {
             colors: darkMode
-            ? "var(--primaryDashColorDark)"
-            : "var(--secondaryDashMenuColor)",
+              ? "var(--primaryDashColorDark)"
+              : "var(--secondaryDashMenuColor)",
           },
         },
       },
@@ -217,26 +162,31 @@ const TaskChart = () => {
         text: "Task Status Chart",
         style: {
           color: darkMode
-          ? "var(--primaryDashColorDark)"
-          : "var(--secondaryDashMenuColor)",
+            ? "var(--primaryDashColorDark)"
+            : "var(--secondaryDashMenuColor)",
           fontWeight: "normal",
         },
       },
       plotOptions: {
         bar: {
+          horizontal: true,
+          columnWidth: "50%",
+          borderRadius: 5,
           colors: {
-            ranges: [{
-              from: 0,
-              to: 100,
-              color: 'var(--basecolor)'
-            }],
-            backgroundBarColors: [],
+            ranges: [
+              {
+                from: 0,
+                to: 100,
+                color: "var(--basecolor)",
+              },
+            ],
+            backgroundBarColors: ["var(--basecolorTransparent)"],
           },
         },
       },
       colors: darkMode
-      ? ["var(--primaryDashColorDark)"]
-      : ["var(--secondaryDashMenuColor)"],
+        ? ["var(--primaryDashColorDark)"]
+        : ["var(--secondaryDashMenuColor)"],
     },
     series: [
       {
@@ -245,8 +195,6 @@ const TaskChart = () => {
       },
     ],
   };
-  
-  
 
   return (
     <div
@@ -258,16 +206,15 @@ const TaskChart = () => {
           ? "var(--primaryDashColorDark)"
           : "var(--primaryDashMenuColor)",
       }}
-      className="ChartCard shadow py-2 px-3 pt-3"
+      className="ChartCard rounded-0 shadow py-2 px-3 pt-3"
     >
-      <div className="ChartHeader">
-      </div>
+      <div className="ChartHeader"></div>
       <div className="chartBody">
         <Chart
           options={taskStatusChartData.options}
           series={taskStatusChartData.series}
           type="bar"
-          height="299px"
+          height="320px"
         />
       </div>
     </div>

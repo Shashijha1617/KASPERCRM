@@ -69,13 +69,13 @@ const MyTodaysLoginData = (props) => {
       style={{
         color: "var(--primaryDashMenuColor)",
       }}
-      className="row justify-content-between row-gap-3 container-fluid my-3 mx-auto"
+      className="row justify-content-between rounded-0 row-gap-3 container-fluid my-2 mx-auto"
     >
       <div
-        className="col-6 col-lg-3  row rounded-2 py-2"
+        className="col-6 col-lg-3  row rounded-0 py-2"
         style={{ height: "5rem", background: "var(--basecolor)" }}
       >
-       <div className="col-8 my-auto">
+        <div className="col-8 my-auto">
           <span>Login </span>
           <p className="m-0">{attendanceData.loginTime}</p>
         </div>
@@ -84,10 +84,10 @@ const MyTodaysLoginData = (props) => {
         </div>
       </div>
       <div
-        className="col-6 d-gllex col-lg-3 row rounded-2 py-2"
-        style={{ height: "5rem", background: "var(--basecolor)" }}
+        className="col-6 d-gllex col-lg-3 row rounded-0 py-2"
+        style={{ height: "5rem", background: "var(--basecolor2)" }}
       >
-         <div className="col-8 my-auto">
+        <div className="col-8 my-auto">
           <span>Total Break</span>
           <p className="m-0">
             {convertMinutesToHoursAndMinutes(attendanceData.totalBrake)}
@@ -98,10 +98,10 @@ const MyTodaysLoginData = (props) => {
         </div>
       </div>
       <div
-        className="col-6 col-lg-3 row rounded-2 py-2"
-        style={{ height: "5rem", background: "var(--basecolor)" }}
+        className="col-6 col-lg-3 row rounded-0 py-2"
+        style={{ height: "5rem", background: "var(--basecolor3)" }}
       >
-         <div className="col-8 my-auto">
+        <div className="col-8 my-auto">
           <span>Total Working</span>
           <p className="m-0">
             {convertMinutesToHoursAndMinutes(attendanceData.totalLoginTime)}
@@ -112,12 +112,16 @@ const MyTodaysLoginData = (props) => {
         </div>
       </div>
       <div
-        className="col-6 col-lg-3 row rounded-2 py-2"
-        style={{ height: "5rem", background: "var(--basecolor)" }}
+        className="col-6 col-lg-3 row rounded-0 py-2"
+        style={{ height: "5rem", background: "var(--basecolor4)" }}
       >
-          <div className="col-8 my-auto">
+        <div className="col-8 my-auto">
           <span>Logout</span>
-          <p className="m-0">{attendanceData.logoutTime}</p>
+          <p className="m-0">
+            {attendanceData.logoutTime
+              ? attendanceData.logoutTime
+              : "Not Logged out"}
+          </p>
         </div>
         <div className="col-4 d-flex  align-items-center justify-content-center m-auto fs-2">
           <RiLogoutCircleFill />

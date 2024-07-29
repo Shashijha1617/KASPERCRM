@@ -13,7 +13,6 @@ const CompanyForm = (props) => {
   const [filteredCityData, setFilteredCityData] = useState([]);
   const { darkMode } = useTheme();
 
-
   useEffect(() => {
     loadCountryInfo();
     loadStateInfo();
@@ -24,8 +23,8 @@ const CompanyForm = (props) => {
     axios
       .get(`${BASE_URL}/api/country`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setCountryData(response.data);
@@ -39,8 +38,8 @@ const CompanyForm = (props) => {
     axios
       .get(`${BASE_URL}/api/state`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setStateData(response.data);
@@ -54,8 +53,8 @@ const CompanyForm = (props) => {
     axios
       .get(`${BASE_URL}/api/city`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setCityData(response.data);
@@ -83,73 +82,99 @@ const CompanyForm = (props) => {
   };
 
   const renderFormInput = (label, name, type) => (
-    <Form.Group as={Row}>
-      <Form.Label column sm={2}>
-        {label}
-      </Form.Label>
-      <Col sm={10}>
-        <Form.Control type={type} placeholder={label} name={name} required />
-      </Col>
-    </Form.Group>
+    <div className="col-12 col-md-6">
+      <label>{label}</label>
+      <div>
+        <input
+          className="form-control rounded-0"
+          type={type}
+          placeholder={label}
+          name={name}
+          required
+        />
+      </div>
+    </div>
   );
 
   const renderFormTextarea = (label, name) => (
-    <Form.Group as={Row}>
-      <Form.Label column sm={2}>
-        {label}
-      </Form.Label>
-      <Col sm={10}>
-        <Form.Control as="textarea" rows="3" placeholder={label} name={name} required />
-      </Col>
-    </Form.Group>
+    <div className="col-12 col-md-6 ">
+      <label>{label}</label>
+      <div>
+        <input
+          className="form-control rounded-0"
+          as="textarea"
+          rows="3"
+          placeholder={label}
+          name={name}
+          required
+        />
+      </div>
+    </div>
   );
 
   const renderFormSelect = (label, name, data, onChange) => (
-    <Form.Group as={Row}>
-      <Form.Label column sm={2}>
-        {label}
-      </Form.Label>
-      <Col sm={10}>
-        <Form.Control as="select" name={name} onChange={onChange} required>
-          <option value="" disabled selected>Select your option</option>
+    <div className="col-12 col-md-6 ">
+      <label>{label}</label>
+      <div>
+        <select
+          className="form-select rounded-0"
+          name={name}
+          onChange={onChange}
+          required
+        >
+          <option value="" disabled selected>
+            Select your option
+          </option>
           {data.map((item, index) => (
             <option key={index} value={item["_id"]}>
               {item[name + "Name"]}
             </option>
           ))}
-        </Form.Control>
-      </Col>
-    </Form.Group>
+        </select>
+      </div>
+    </div>
   );
 
   return (
-    <div style={{
-      color: darkMode ? "var(--secondaryDashColorDark)" : "var(--secondaryDashMenuColor)",
-    }}>
-      <div className="
-      container-fluid p-3 py-4">
+    <div
+      style={{
+        color: darkMode
+          ? "var(--secondaryDashColorDark)"
+          : "var(--secondaryDashMenuColor)",
+      }}
+    >
+      <div
+        className="
+      container-fluid p-3 py-4"
+      >
         <h5 className="my-3">Add Company Details</h5>
-        <Form className="d-flex flex-column gap-3" onSubmit={props.onCompanySubmit}>
-          {renderFormInput("Company Name", "CompanyName", "text")}
+        <Form className="row row-gap-3" onSubmit={props.onCompanySubmit}>
+          {renderFormInput("Company Name", "Company Name", "text")}
           {renderFormTextarea("Address", "address")}
           {renderFormSelect("Country", "country", countryData, onCountryChange)}
           {renderFormSelect("State", "state", filteredStateData, onStateChange)}
           {renderFormSelect("City", "city", filteredCityData)}
-          {renderFormInput("PostalCode", "PostalCode", "number")}
+          {renderFormInput("Postal Code", "Postal Code", "number")}
           {renderFormInput("Website", "Website", "text")}
           {renderFormInput("Email", "Email", "email")}
-          {renderFormInput("Contact Person", "ContactPerson", "text")}
-          {renderFormInput("Contact No", "ContactNo", "text")}
-          {renderFormInput("FaxNo", "FaxNo", "text")}
-          {renderFormInput("PanCard No", "PanNo", "text")}
-          {renderFormInput("GSTNo", "GSTNo", "text")}
-          {renderFormInput("CINNo", "CINNo", "text")}
-          <Form.Group as={Row}>
-            <Col sm={{ span: 10, offset: 2 }}>
-              <Button type="submit" className="form-submit-button">Submit</Button>
-              <Button type="reset" className="form-cancel-button" onClick={props.onFormClose}>Cancel</Button>
-            </Col>
-          </Form.Group>
+          {renderFormInput("Contact Person", "Contact Person", "text")}
+          {renderFormInput("Contact No", "Contact No", "text")}
+          {renderFormInput("Fax No", "Fax No", "text")}
+          {renderFormInput("Pan Card No", "Pan No", "text")}
+          {renderFormInput("GST No", "GST No", "text")}
+          {renderFormInput("CIN No", "CIN No", "text")}
+          <div className="d-flex gap-2">
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+            <button
+              type="reset"
+              className="btn btn-danger"
+              onClick={props.onFormClose}
+            >
+              Cancel
+            </button>
+          </div>
         </Form>
       </div>
     </div>

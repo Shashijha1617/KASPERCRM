@@ -27,7 +27,9 @@ const EmployeeLogCount = (props) => {
     title: {
       text: "Loggedin Status Chart",
       style: {
-        color: darkMode ?  "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--primaryDashMenuColor)",
         fontWeight: "normal",
       },
     },
@@ -39,8 +41,8 @@ const EmployeeLogCount = (props) => {
         shadeIntensity: 0.5,
         gradientToColors: [
           "var(--basecolor)",
-          "var(--basecolor)",
-          "var(--basecolor)",
+          "var(--basecolor1)",
+          "var(--basecolor2)",
         ],
         inverseColors: false,
         opacityFrom: 1,
@@ -51,7 +53,7 @@ const EmployeeLogCount = (props) => {
     stroke: {
       show: false,
     },
-    colors: ["var(--basecolor)", "var(--basecolor)", "var(--basecolor)"],
+    colors: ["var(--basecolor)", "var(--basecolor1)", "var(--basecolor2)"],
     dataLabels: {
       enabled: true,
       style: {
@@ -62,7 +64,17 @@ const EmployeeLogCount = (props) => {
     legend: {
       position: "top",
       labels: {
-        colors: darkMode ? ["var(--primaryDashColorDark)", "var(--primaryDashColorDark)", "var(--primaryDashColorDark)"] : ["var(--primaryDashMenuColor)", "var(--primaryDashMenuColor)", "var(--primaryDashMenuColor)"],
+        colors: darkMode
+          ? [
+              "var(--primaryDashColorDark)",
+              "var(--primaryDashColorDark)",
+              "var(--primaryDashColorDark)",
+            ]
+          : [
+              "var(--primaryDashMenuColor)",
+              "var(--primaryDashMenuColor)",
+              "var(--primaryDashMenuColor)",
+            ],
       },
       markers: {
         fillColors: ["var(--basecolor)"],
@@ -155,18 +167,34 @@ const EmployeeLogCount = (props) => {
         ...prevOptions.title,
         style: {
           ...prevOptions.title.style,
-          color: darkMode ?  "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+          color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--primaryDashMenuColor)",
         },
       },
       legend: {
         ...prevOptions.legend,
         labels: {
           ...prevOptions.legend.labels,
-          colors: darkMode ? ["var(--primaryDashColorDark)", "var(--primaryDashColorDark)", "var(--primaryDashColorDark)"] : ["var(--primaryDashMenuColor)", "var(--primaryDashMenuColor)", "var(--primaryDashMenuColor)"],
+          colors: darkMode
+            ? [
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+              ]
+            : [
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+              ],
         },
         markers: {
           ...prevOptions.legend.markers,
-          fillColors: ["var(--basecolor)"],
+          fillColors: [
+            "var(--basecolor)",
+            "var(--basecolor2)",
+            "var(--basecolor3)",
+          ],
         },
       },
     }));
@@ -183,7 +211,7 @@ const EmployeeLogCount = (props) => {
           ? "var(--primaryDashColorDark)"
           : "var(--primaryDashMenuColor)",
       }}
-      className="ChartCard shadow p-2 "
+      className="ChartCard rounded-0 shadow p-2 "
     >
       <Chart
         width="100%"

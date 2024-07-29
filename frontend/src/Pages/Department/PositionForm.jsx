@@ -1,91 +1,97 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./PositionForm.css";
-// import { Form,Button } from "react-bootstrap";
-import { Form, Button, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import BASE_URL from "../config/config";
-class PositionForm extends Component {
-  state = {
-    companyInfo: [],
-  };
-  companyData = [];
-  loadCompanyInfo = () => {
-    axios
-      .get(`${BASE_URL}/api/company`, {
-        headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
-      })
-      .then((response) => {
-        this.companyData = response.data;
-        this.setState({ companyInfo: response.data });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  componentWillMount() {
-    this.loadCompanyInfo();
-  }
-  render() {
-    return (
-      <div>
-        <h2 className="p-3 fw-bold text-muted text-center mt-3">
-          Add Position 🪑
-        </h2>
+import { useTheme } from "../../Context/TheamContext/ThemeContext";
 
-        <div id="role-form-outer-div">
-          <Form id="form" onSubmit={this.props.onPositionSubmit}>
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                <h5>Company :</h5>
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control as="select" name="country" required>
-                  <option value="" disabled selected>
-                    Select your option
-                  </option>
-                  {this.companyData.map((data, index) => (
-                    <option value={data["_id"]}>{data["CompanyName"]}</option>
-                  ))}
-                </Form.Control>
-              </Col>
-            </Form.Group>
-            <br />
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                <h5>Position :</h5>
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control
-                  type="Text"
-                  placeholder="Position"
-                  name="Position"
-                  required
-                />
-              </Col>
-            </Form.Group>
-            <div className="row mt- ">
-              <div className="col-2"></div>
+const PositionForm = (props) => {
+  const [companyInfo, setCompanyInfo] = useState([]);
+  const [companyData, setCompanyData] = useState([]);
+  const { darkMode } = useTheme();
 
-              <div className="col-10 d-flex justify-between ">
-                <button className="btn btn-primary" type="submit">
-                  Submit
-                </button>
-                <button
-                  className="btn btn-secondary"
-                  type="reset"
-                  onClick={this.props.onFormClose}
-                >
-                  cancel
-                </button>
-              </div>
-            </div>
-          </Form>
+  useEffect(() => {
+    const loadCompanyInfo = () => {
+      axios
+        .get(`${BASE_URL}/api/company`, {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        })
+        .then((response) => {
+          setCompanyData(response.data);
+          setCompanyInfo(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
+    loadCompanyInfo();
+  }, []);
+
+  return (
+    <div
+      style={{
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--secondaryDashMenuColor)",
+      }}
+      className="container-fluid py-3"
+    >
+      <h5>Add Position</h5>
+
+      <form
+        className="d-flex flex-column gap-3 mt-3"
+        onSubmit={props.onPositionSubmit}
+      >
+        <div>
+          <label>Company</label>
+          <div>
+            <select
+              className="form-select rounded-0"
+              as="select"
+              name="company"
+              required
+            >
+              <option value="" disabled selected>
+                Select your option
+              </option>
+              {companyData.map((data) => (
+                <option key={data["_id"]} value={data["_id"]}>
+                  {data["CompanyName"]}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-      </div>
-    );
-  }
-}
+        <br />
+        <div>
+          <label>Position</label>
+          <div>
+            <input
+              className="form-control rounded-0"
+              type="Text"
+              placeholder="Position"
+              name="Position"
+              required
+            />
+          </div>
+        </div>
+        <div className="d-flex gap-3">
+          <button className="btn btn-primary" type="submit">
+            Submit
+          </button>
+          <button
+            className="btn btn-danger"
+            type="reset"
+            onClick={props.onFormClose}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
 
 export default PositionForm;

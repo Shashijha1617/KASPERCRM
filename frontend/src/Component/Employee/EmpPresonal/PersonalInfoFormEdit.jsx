@@ -99,15 +99,15 @@ const PersonalInfoFormEdit = (props) => {
             >
               <h5
                 style={{ position: "sticky", top: "0", zIndex: "2" }}
-                className="fw-bold d-flex align-items-center gap-2 py-3 w-100"
+                className="label d-flex align-items-center gap-2 py-3 w-100"
               >
-                <LuFileEdit /> Edit Employee info
+                Edit Employee info
               </h5>
               <Form.Group
                 className="col-12 col-sm-6 col-md-4 d-flex flex-column gap-1"
                 as={Row}
               >
-                <Form.Label className="fw-bold " column>
+                <Form.Label className="label " column>
                   First Name
                 </Form.Label>
                 <Col className="form-input">
@@ -125,7 +125,7 @@ const PersonalInfoFormEdit = (props) => {
                 className="col-12 col-sm-6 col-md-4 d-flex flex-column gap-1"
                 as={Row}
               >
-                <Form.Label className="fw-bold " column>
+                <Form.Label className="label " column>
                   Last Name
                 </Form.Label>
                 <Col className="form-input">
@@ -145,7 +145,7 @@ const PersonalInfoFormEdit = (props) => {
                 as={Row}
               >
                 <Col className="d-flex  flex-column gap-3 m-0 p-0">
-                  <label className="fw-bold p-2 m-0 " column>
+                  <label className="label p-2 m-0 " column>
                     Gender
                   </label>
 
@@ -189,7 +189,7 @@ const PersonalInfoFormEdit = (props) => {
                 className="col-12 col-sm-6 col-md-4 d-flex flex-column gap-1"
                 as={Row}
               >
-                <Form.Label className="fw-bold " column>
+                <Form.Label className="label " column>
                   Contact No
                 </Form.Label>
                 <Col className="form-input">
@@ -207,7 +207,7 @@ const PersonalInfoFormEdit = (props) => {
                 className="col-12 col-sm-6 col-md-4 d-flex flex-column gap-1"
                 as={Row}
               >
-                <Form.Label className="fw-bold " column>
+                <Form.Label className="label " column>
                   Emergency Contact
                 </Form.Label>
                 <Col className="form-input">
@@ -226,7 +226,7 @@ const PersonalInfoFormEdit = (props) => {
                 className="col-12 col-sm-6 col-md-4 d-flex flex-column gap-1"
                 as={Row}
               >
-                <Form.Label className="fw-bold " column>
+                <Form.Label className="label " column>
                   Presonal Email
                 </Form.Label>
                 <Col className="form-input">
@@ -245,7 +245,7 @@ const PersonalInfoFormEdit = (props) => {
                 className="col-12 col-sm-6 col-md-4 d-flex flex-column gap-1"
                 as={Row}
               >
-                <Form.Label className="fw-bold " column>
+                <Form.Label className="label " column>
                   PAN Card No
                 </Form.Label>
                 <Col className="form-input">
@@ -264,7 +264,7 @@ const PersonalInfoFormEdit = (props) => {
                 className="col-12 col-sm-6 col-md-4 d-flex flex-column gap-1"
                 as={Row}
               >
-                <Form.Label className="fw-bold " column>
+                <Form.Label className="label " column>
                   DOB
                 </Form.Label>
                 <Col className="form-input">
@@ -283,7 +283,7 @@ const PersonalInfoFormEdit = (props) => {
                 className="col-12 col-sm-6 col-md-4 d-flex flex-column gap-1"
                 as={Row}
               >
-                <Form.Label className="fw-bold " column>
+                <Form.Label className="label " column>
                   Blood Group
                 </Form.Label>
 
@@ -348,7 +348,7 @@ const PersonalInfoFormEdit = (props) => {
                 className="col-12 col-sm-6 col-md-4 d-flex flex-column gap-1"
                 as={Row}
               >
-                <Form.Label className="fw-bold " column>
+                <Form.Label className="label " column>
                   Hobbies
                 </Form.Label>
                 <Col className="form-input">
@@ -366,7 +366,7 @@ const PersonalInfoFormEdit = (props) => {
                 className="col-12 col-sm-6 col-md-8 d-flex flex-column gap-1"
                 as={Row}
               >
-                <Form.Label className="fw-bold " column>
+                <Form.Label className="label " column>
                   Profile Image{" "}
                   <span style={{ fontSize: ".7rem", fontWeight: "normal" }}>
                     ( file size must between 200 KB to 2 MB )
@@ -385,7 +385,7 @@ const PersonalInfoFormEdit = (props) => {
                 className="col-12 col-sm-6 col-md-6 d-flex flex-column gap-1"
                 as={Row}
               >
-                <Form.Label className="fw-bold " column>
+                <Form.Label className="label " column>
                   Present Address
                 </Form.Label>
                 <Col className="form-input">
@@ -404,7 +404,7 @@ const PersonalInfoFormEdit = (props) => {
                 className="col-12 col-sm-6 col-md-6 d-flex flex-column gap-1"
                 as={Row}
               >
-                <Form.Label className="fw-bold " column>
+                <Form.Label className="label " column>
                   Permanet Address
                 </Form.Label>
                 <Col className="form-input">

@@ -1,142 +1,101 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./Country.css";
 import axios from "axios";
 import CountryTable from "./CountryTable.jsx";
 import CountryForm from "./CountryForm.jsx";
 import CountryFormEdit from "./CountryFormEdit.jsx";
 import BASE_URL from "../config/config.js";
-// import { HashRouter as Router, Route, Link } from "react-router-dom";
 
-// function CountryTableF() {
-//   return <CountryTable/>;
-// }
-// function CountryFormF() {
-//   return  <CountryForm onCountrySubmit={handleCountrySubmit}/>;
-// }
+const Country = () => {
+  const [isTableVisible, setIsTableVisible] = useState(true);
+  const [isEditFormVisible, setIsEditFormVisible] = useState(false);
+  const [editData, setEditData] = useState({});
 
-// function handleCountrySubmit(e) {
-//   e.preventDefault();
-//   console.log(e);
-
-// }
-
-class Country extends Component {
-  state = {
-    table: true,
-    editForm: false,
-    editData: {},
-  };
-
-  render() {
-    // let value=(this.props.pass) ? undefined : "";<i class="fas fa-plus"></i>
-    return (
-      //  <Router>
-      <React.Fragment>
-        {this.state.table ? (
-          this.state.editForm ? (
-            <CountryFormEdit
-              onCountryEditUpdate={this.handleCountryEditUpdate}
-              onFormEditClose={this.handleEditFormClose}
-              editData={this.state.editData}
-            />
-          ) : (
-            <CountryTable
-              onAddCountry={this.handleAddCountry}
-              onEditCountry={this.handleEditCountry}
-            />
-          )
-        ) : (
-          <CountryForm
-            onCountrySubmit={this.handleCountrySubmit}
-            onFormClose={this.handleFormClose}
-          />
-        )}
-
-        {/* <div>debru</div> */}
-        {/* <Route path="/admin/country/table" exact component={CountryTable} /> */}
-        {/* <Route path="/admin/country/form" exact component={() => <CountryForm onCountrySubmit={this.handleCountrySubmit} />} /> */}
-
-        {/* <CountryTable/> */}
-      </React.Fragment>
-
-      //  </Router>
-    );
-  }
-  handleCountrySubmit = (event) => {
+  const handleCountrySubmit = (event) => {
     event.preventDefault();
-    console.log("name", event.target[0].value);
-    this.setState({ table: true });
+    const countryName = event.target[0].value;
 
-    let body = {
-      CountryName: event.target[0].value,
-    };
-    //  let body= "CompanyID=" + event.target[0].value + "&Country=" + event.target[1].value;
-    //  let body= "debru";
     axios
-      .post(`${BASE_URL}/api/country`, body, {
-        headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
-      })
-      .then((res) => {
-        this.setState({ table: false });
-        this.setState({ table: true });
+      .post(
+        `${BASE_URL}/api/country`,
+        { CountryName: countryName },
+        {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        }
+      )
+      .then(() => {
+        setIsTableVisible(true);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
-    // this.setState({ loading: true });
-    // this.login(event.target[0].value, event.target[1].value);
-    // event.target.reset();
   };
-  handleAddCountry = () => {
-    console.log("clicked1");
-    this.setState({ table: false });
+
+  const handleAddCountry = () => {
+    setIsTableVisible(false);
   };
-  handleEditCountry = (e) => {
-    console.log(e);
-    console.log("clicked6");
-    this.setState({ editForm: true });
-    this.setState({ editData: e });
+
+  const handleEditCountry = (data) => {
+    setEditData(data);
+    setIsEditFormVisible(true);
   };
-  handleFormClose = () => {
-    console.log("clicked1");
-    this.setState({ table: true });
+
+  const handleFormClose = () => {
+    setIsTableVisible(true);
   };
-  handleEditFormClose = () => {
-    console.log("clicked5");
-    this.setState({ editForm: false });
+
+  const handleEditFormClose = () => {
+    setIsEditFormVisible(false);
   };
-  handleFormClose = () => {
-    console.log("clicked1");
-    this.setState({ table: true });
-  };
-  handleCountryEditUpdate = (info, newInfo) => {
-    // this.setState({ table: true });
-    let body = {
-      // ...info,CompanyID:formData1,Country:formData2
-      //   CompanyID: formData1,
-      CountryName: newInfo.target[0].value,
-      //   CountryID: info["CountryID"]
-    };
-    console.log("update", body);
+
+  const handleCountryEditUpdate = (info, event) => {
+    event.preventDefault();
+    const updatedCountryName = event.target[0].value;
+
     axios
-      .put(`${BASE_URL}/api/country/` + info["_id"], body, {
-        headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
-      })
-      .then((res) => {
-        // this.componentDidMount();
-        this.setState({ table: false });
-        this.setState({ table: true });
+      .put(
+        `${BASE_URL}/api/country/${info["_id"]}`,
+        { CountryName: updatedCountryName },
+        {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        }
+      )
+      .then(() => {
+        setIsTableVisible(true);
+        setIsEditFormVisible(false);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
-
-    this.setState({ editForm: false });
   };
-}
+
+  return (
+    <>
+      {isTableVisible ? (
+        isEditFormVisible ? (
+          <CountryFormEdit
+            onCountryEditUpdate={handleCountryEditUpdate}
+            onFormEditClose={handleEditFormClose}
+            editData={editData}
+          />
+        ) : (
+          <CountryTable
+            onAddCountry={handleAddCountry}
+            onEditCountry={handleEditCountry}
+          />
+        )
+      ) : (
+        <CountryForm
+          onCountrySubmit={handleCountrySubmit}
+          onFormClose={handleFormClose}
+        />
+      )}
+    </>
+  );
+};
 
 export default Country;

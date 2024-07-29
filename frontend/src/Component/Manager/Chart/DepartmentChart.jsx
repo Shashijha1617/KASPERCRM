@@ -14,77 +14,74 @@ const DepartmentChart = () => {
       labels: [],
       colors: [
         "var(--basecolor)",
-        "var(--basecolor)",
-        "var(--basecolor)",
-        "var(--basecolor)",
-        "var(--basecolor)",
-        "var(--basecolor)",
+        "var(--basecolor1)",
+        "var(--basecolor2)",
+        "var(--basecolor3)",
+        "var(--basecolor4)",
+        "var(--basecolor5)",
       ],
       title: {
         text: "Departments Chart",
         style: {
-          color: darkMode ?  "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+          color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--primaryDashMenuColor)",
           fontWeight: "normal",
         },
       },
       legend: {
         position: "bottom",
         labels: {
-          colors: darkMode ? [
-            "var(--primaryDashMenuColor)",
-            "var(--primaryDashMenuColor)",
-            "var(--primaryDashMenuColor)",
-            "var(--primaryDashMenuColor)",
-            "var(--primaryDashMenuColor)",
-            "var(--primaryDashMenuColor)",
-          ] : [
-            "var(--primaryDashColorDark)",
-            "var(--primaryDashColorDark)",
-            "var(--primaryDashColorDark)",
-            "var(--primaryDashColorDark)",
-            "var(--primaryDashColorDark)",
-            "var(--primaryDashColorDark)",
-          ],
+          colors: darkMode
+            ? [
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+              ]
+            : [
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+              ],
         },
         markers: {
           fillColors: [
             "var(--basecolor)",
-            "var(--basecolor)",
-            "var(--basecolor)",
-            "var(--basecolor)",
-            "var(--basecolor)",
-            "var(--basecolor)",
+            "var(--basecolor1)",
+            "var(--basecolor2)",
+            "var(--basecolor3)",
+            "var(--basecolor4)",
+            "var(--basecolor5)",
           ],
         },
       },
       fill: {
         colors: [
           "var(--basecolor)",
-          "var(--basecolor)",
-          "var(--basecolor)",
-          "var(--basecolor)",
-          "var(--basecolor)",
-          "var(--basecolor)",
+          "var(--basecolor1)",
+          "var(--basecolor2)",
+          "var(--basecolor3)",
+          "var(--basecolor4)",
+          "var(--basecolor5)",
         ],
       },
       plotOptions: {
         pie: {
           donut: {
             labels: {
-              show: true,
+              show: false,
               total: {
-                show: true,
+                show: false,
                 color: "white",
               },
             },
           },
-        },
-      },
-      tooltip: {
-        theme: "dark",
-        style: {
-          backgroundColor: "var(--basecolor)",
-          color: "white",
         },
       },
     },
@@ -148,28 +145,32 @@ const DepartmentChart = () => {
         title: {
           text: "Departments Chart",
           style: {
-            color: darkMode ?  "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)",
+            color: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var(--primaryDashMenuColor)",
             fontWeight: "normal",
           },
         },
         legend: {
           ...prevOptions.options.legend,
           labels: {
-            colors: darkMode ? [
-              "var(--primaryDashColorDark)",
-              "var(--primaryDashColorDark)",
-              "var(--primaryDashColorDark)",
-              "var(--primaryDashColorDark)",
-              "var(--primaryDashColorDark)",
-              "var(--primaryDashColorDark)",
-            ] : [
-              "var(--primaryDashMenuColor)",
-              "var(--primaryDashMenuColor)",
-              "var(--primaryDashMenuColor)",
-              "var(--primaryDashMenuColor)",
-              "var(--primaryDashMenuColor)",
-              "var(--primaryDashMenuColor)",
-            ],
+            colors: darkMode
+              ? [
+                  "var(--primaryDashColorDark)",
+                  "var(--primaryDashColorDark)",
+                  "var(--primaryDashColorDark)",
+                  "var(--primaryDashColorDark)",
+                  "var(--primaryDashColorDark)",
+                  "var(--primaryDashColorDark)",
+                ]
+              : [
+                  "var(--primaryDashMenuColor)",
+                  "var(--primaryDashMenuColor)",
+                  "var(--primaryDashMenuColor)",
+                  "var(--primaryDashMenuColor)",
+                  "var(--primaryDashMenuColor)",
+                  "var(--primaryDashMenuColor)",
+                ],
           },
           markers: {
             fillColors: [

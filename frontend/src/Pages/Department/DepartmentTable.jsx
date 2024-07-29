@@ -6,7 +6,10 @@ import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import Position from "../../img/Position/Position.svg";
 import BASE_URL from "../config/config";
-import { AiOutlinePlusCircle } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
+import { HiOutlineOfficeBuilding } from "react-icons/hi";
+import { PiOfficeChair } from "react-icons/pi";
+import { MdOutlineEdit } from "react-icons/md";
 const DepartmentTable = ({ onAddDepartment, onEditDepartment }) => {
   const [departmentData, setDepartmentData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -128,13 +131,20 @@ const DepartmentTable = ({ onAddDepartment, onEditDepartment }) => {
           <table className="table">
             <thead>
               <tr>
-                <th style={rowHeadStyle}>Company</th>
-                <th style={rowHeadStyle}>Department</th>
-                <th style={rowHeadStyle} className="text-end">
-                  Edit
+                <th style={rowHeadStyle}>
+                  <HiOutlineOfficeBuilding /> S. No.
+                </th>
+                <th style={rowHeadStyle}>
+                  <HiOutlineOfficeBuilding /> Company
+                </th>
+                <th style={rowHeadStyle}>
+                  <PiOfficeChair /> Department
                 </th>
                 <th style={rowHeadStyle} className="text-end">
-                  Delete
+                  <MdOutlineEdit /> Edit
+                </th>
+                <th style={rowHeadStyle} className="text-end">
+                  <AiOutlineDelete /> Delete
                 </th>
               </tr>
             </thead>
@@ -142,32 +152,35 @@ const DepartmentTable = ({ onAddDepartment, onEditDepartment }) => {
               {departmentData.map((items, index) => (
                 <tr key={index}>
                   <td style={rowBodyStyle} className="text-capitalize">
+                    {(index + 1).toString().padStart(2, 0)}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
                     {items.company[0].CompanyName}
                   </td>
                   <td style={rowBodyStyle} className="text-capitalize">
                     {items.DepartmentName}
                   </td>
                   <td style={rowBodyStyle} className="text-capitalize">
-                    <button
+                    <span
                       onClick={() => onEditDepartment(items)}
-                      style={{ cursor: "pointer" }}
                       title="Update"
-                      className="btn d-flex ms-auto gap-3 align-items-center"
+                      style={{ cursor: "pointer", width: "fit-content" }}
+                      className="border border-primary px-2 py-1 text-primary  ms-auto d-flex gap-3 align-items-center"
                     >
                       <FontAwesomeIcon icon={faEdit} />
                       <span className="d-none d-md-flex">Edit</span>
-                    </button>
+                    </span>
                   </td>
                   <td style={rowBodyStyle} className="text-capitalize">
-                    <button
+                    <span
                       onClick={() => onDepartmentDelete(items._id)}
-                      style={{ cursor: "pointer" }}
                       title="Delete"
-                      className="btn d-flex ms-auto gap-3 align-items-center"
+                      style={{ cursor: "pointer", width: "fit-content" }}
+                      className="border border-danger px-2 py-1 text-danger  ms-auto d-flex gap-3 align-items-center"
                     >
                       <FontAwesomeIcon icon={faTrash} />
                       <span className="d-none d-md-flex">Delete</span>
-                    </button>
+                    </span>
                   </td>
                 </tr>
               ))}
