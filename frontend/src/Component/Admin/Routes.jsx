@@ -19,8 +19,8 @@ import AdminCompleteTask from "./TaskManagement/AdminCompleteTask.jsx";
 import RejectedTask from "./TaskManagement/RejectedTask.jsx";
 import AdminAssignedTask from "./TaskManagement/AdminAssignedTask.jsx";
 import AdminAttendance from "./attendance/Attendance.jsx";
-import AdminViewAttendance from "./attendance/ViewAttendance.jsx";
-import TodaysAttendance from "../../Pages/DailyAttendance/TodaysAttendance.jsx";
+import AdminViewAttendance from "../HrManager/attendance/ViewAttendance.jsx";
+import TodaysAttendance from "../HrManager/attendance/TodaysAttendance.jsx";
 
 import LeaveCalendar from "../../Pages/LeaveCalendar/LeaveCalendar.jsx";
 import Country from "../../Pages/Location/Country.jsx";
@@ -37,7 +37,8 @@ import Team from "../../Pages/team/team/Team.jsx";
 
 import AllEmpLeave from "./leave/AllEmpLeave.jsx";
 import LeaveAssign from "./leave/LeaveAssign.jsx";
-import SelfAttendance from "./attendance/SelfAttendance.jsx";
+import SelfAttendance from "../HrManager/attendance/SelfAttendance.jsx";
+import AdminActive from "./TaskManagement/AdminActive.jsx";
 
 const AdminRoutes = () => {
   return (
@@ -64,6 +65,7 @@ const AdminRoutes = () => {
         <Route path="/admin/company" exact component={Company} />
         <Route path="/admin/taskcomplete" exact component={AdminCompleteTask} />
         <Route path="/admin/taskreject" exact component={RejectedTask} />
+        <Route path="/admin/taskActive" exact component={AdminActive} />
         <Route
           path="/admin/adminAttendance"
           exact

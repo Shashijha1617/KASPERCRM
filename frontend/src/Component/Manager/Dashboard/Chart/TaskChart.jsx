@@ -124,7 +124,7 @@ const TaskChart = () => {
       xaxis: {
         categories: Object.keys(taskStatusCounts),
         title: {
-          text: "Task Status",
+          text: "Number of Tasks",
           style: {
             color: darkMode
               ? "var(--primaryDashColorDark)"
@@ -142,7 +142,7 @@ const TaskChart = () => {
       },
       yaxis: {
         title: {
-          text: "Number of Tasks",
+          text: "Task Status",
           style: {
             color: darkMode
               ? "var(--primaryDashColorDark)"

@@ -51,15 +51,7 @@ class Role extends Component {
             onFormClose={this.handleFormClose}
           />
         )}
-
-        {/* <div>debru</div> */}
-        {/* <Route path="/admin/role/table" exact component={RoleTable} /> */}
-        {/* <Route path="/admin/role/form" exact component={() => <RoleForm onRoleSubmit={this.handleRoleSubmit} />} /> */}
-
-        {/* <RoleTable/> */}
       </React.Fragment>
-
-      //  </Router>
     );
   }
   handleRoleSubmit = (event) => {
@@ -71,8 +63,6 @@ class Role extends Component {
       CompanyID: event.target[0].value,
       RoleName: event.target[1].value,
     };
-    //  let body= "CompanyID=" + event.target[0].value + "&Role=" + event.target[1].value;
-    //  let body= "debru";
     axios
       .post(`${BASE_URL}/api/role`, body, {
         headers: {
@@ -86,9 +76,6 @@ class Role extends Component {
       .catch((err) => {
         console.log(err);
       });
-    // this.setState({ loading: true });
-    // this.login(event.target[0].value, event.target[1].value);
-    // event.target.reset();
   };
   handleAddRole = () => {
     console.log("clicked1");
@@ -113,10 +100,7 @@ class Role extends Component {
     this.setState({ table: true });
   };
   handleRoleEditUpdate = (info, formData1, formData2) => {
-    // this.setState({ table: true });
     let body = {
-      // ...info,CompanyID:formData1,Role:formData2
-
       CompanyID: formData1,
       RoleName: formData2,
     };
@@ -128,7 +112,6 @@ class Role extends Component {
         },
       })
       .then((res) => {
-        // this.componentDidMount();
         this.setState({ table: false });
         this.setState({ table: true });
       })

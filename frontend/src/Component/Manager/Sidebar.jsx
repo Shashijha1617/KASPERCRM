@@ -112,7 +112,7 @@ const Sidebar = () => {
       className="d-none d-sm-flex flex-column gap-2"
     >
       <h3
-        style={{ borderBottom: "3px solid var(--basecolor)" , }}
+        style={{ borderBottom: "3px solid var(--basecolor)" }}
         className=" justify-content-between py-2 d-flex gap-2"
       >
         <button
@@ -303,7 +303,6 @@ const Sidebar = () => {
     </div>
   );
 };
-
 
 const dropdownStyle = {
   width: "250px",

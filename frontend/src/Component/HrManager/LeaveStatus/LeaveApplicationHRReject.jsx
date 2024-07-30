@@ -13,6 +13,7 @@ import { MdNearbyError } from "react-icons/md";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../../../Pages/config/config";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 
 const override = css`
   display: block;
@@ -215,18 +216,11 @@ const LeaveApplicationHRTable = (props) => {
     <div className="container-fluid">
       <div className="d-flex flex-column justify-between">
         <div className="d-flex justify-content-between aline-items-center">
-          <h6
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)",
-            }}
-            className="fw-bold my-auto"
-          >
-            {" "}
-            Rejected Leaves{" "}
-            <span className="text-warning"> ({approvedLeaves}) </span>
-          </h6>
+          <TittleHeader
+            numbers={approvedLeaves}
+            title={"Rejected Leaves"}
+            message={"You can view all rejected leaves here"}
+          />
           <div className="d-flex gap-2 justify-content-between py-3">
             <button
               className="btn btn-danger rounded-0 shadow-sm d-flex justify-center  aline-center gap-2"
@@ -260,13 +254,13 @@ const LeaveApplicationHRTable = (props) => {
       {!loading ? (
         <div>
           <div
-            className="mt-3"
             style={{
+              maxHeight: "80vh",
+              minHeight: "80vh",
               overflow: "auto",
-              height: "85vh",
-              width: "100%",
-              scrollbarWidth: "thin",
+              position: "relative",
             }}
+            className="table-responsive border"
           >
             <table className="table">
               <thead>
@@ -459,8 +453,14 @@ const LeaveApplicationHRTable = (props) => {
                           }}
                           className="py-1"
                         >
-                          <div className="d-flex aline-center gap-2">
-                            <div style={{ height: "35px", width: "35px" }}>
+                          <div
+                            style={{ maxWidth: "fit-content" }}
+                            className="d-flex align-items-center gap-2"
+                          >
+                            <div
+                              className=""
+                              style={{ height: "35px", width: "35px" }}
+                            >
                               <img
                                 style={{
                                   height: "100%",
@@ -477,7 +477,7 @@ const LeaveApplicationHRTable = (props) => {
                                 alt=""
                               />
                             </div>
-                            <div className="d-flex flex-column"></div>
+                            <span>{data.Name}</span>
                           </div>
                         </td>
                         <td
@@ -493,9 +493,7 @@ const LeaveApplicationHRTable = (props) => {
                             border: "none",
                           }}
                           className="py-1"
-                        >
-                          <span>{data.Name}</span>
-                        </td>
+                        ></td>
                         <td
                           style={{
                             verticalAlign: "middle",
@@ -603,10 +601,9 @@ const LeaveApplicationHRTable = (props) => {
                               ? "var(----secondaryDashMenuColor)"
                               : "var( --primaryDashMenuColor)",
                             border: "none",
-                            fontSize: ".8rem",
                           }}
                         >
-                          <span className="text-white bg-danger px-2 py-0 shadow-sm rounded-5">
+                          <span className="border border-danger  px-2 py-1 rounded-5">
                             {data.Status}
                           </span>
                         </td>

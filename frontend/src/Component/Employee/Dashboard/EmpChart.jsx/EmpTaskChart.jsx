@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Chart from "react-apexcharts";
 import "./chart.css";
 import BASE_URL from "../../../../Pages/config/config";
 import { useTheme } from "../../../../Context/TheamContext/ThemeContext";
+import { AttendanceContext } from "../../../../Context/AttendanceContext/AttendanceContext";
 
 const EmpTaskChart = (props) => {
   const [tasks, setTasks] = useState([]);
@@ -11,7 +12,8 @@ const EmpTaskChart = (props) => {
   const [error, setError] = useState(null);
   const [email, setEmail] = useState(null);
   const id = localStorage.getItem("_id");
-  const { darkMode } = useTheme()
+  const { darkMode } = useTheme();
+  const { socket } = useContext(AttendanceContext);
 
   useEffect(() => {
     const loadPersonalInfoData = async () => {
@@ -20,8 +22,8 @@ const EmpTaskChart = (props) => {
           `${BASE_URL}/api/personal-info/${id}`,
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         );
         setEmail(response.data.Email);
@@ -53,7 +55,7 @@ const EmpTaskChart = (props) => {
     }
   };
 
-  const fetchData = async () => {
+  const loadTaskData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/tasks`);
       setTasks(response.data);
@@ -62,17 +64,24 @@ const EmpTaskChart = (props) => {
       setError("Error fetching tasks. Please try again later.");
     } finally {
       setLoading(false);
-      setTimeout(fetchData, 60000);
     }
   };
 
   useEffect(() => {
-    fetchData();
-
-    return () => clearTimeout();
+    loadTaskData();
   }, []);
 
-  // Count of different task statuses for the current employee
+  useEffect(() => {
+    socket.on("taskNotificationReceived", (data) => {
+      loadTaskData();
+    });
+    return () => {
+      socket.off("taskNotificationReceived", (data) => {
+        loadTaskData();
+      });
+    };
+  }, [socket]);
+
   const acceptedTasksCount = tasks.filter((task) =>
     task.employees.some(
       (taskemp) =>
@@ -142,23 +151,14 @@ const EmpTaskChart = (props) => {
     )
   ).length;
 
-  const barChartData = {
+  const taskStatusChartData = {
     options: {
       chart: {
-        id: "bar"
+        id: "task-status-chart",
+        type: "bar",
       },
       fill: {
-        type: 'gradient',
-        gradient: {
-          shade: 'dark',
-          type: "vertical",
-          shadeIntensity: 0.5,
-          gradientToColors: [darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)"],
-          inverseColors: true,
-          opacityFrom: 100,
-          opacityTo: 0.95,
-          stops: [0, 100]
-        }
+        colors: ["var(--basecolor)"],
       },
       xaxis: {
         categories: [
@@ -169,35 +169,35 @@ const EmpTaskChart = (props) => {
           "Reject",
           "Overdue",
           "Ontime C",
-          "Late C"
+          "Late C",
         ],
         labels: {
           style: {
-            colors: darkMode ? 'black' : "white",
+            colors: darkMode ? "black" : "white",
             fontSize: "8px",
-          }
-        }
+          },
+        },
       },
       yaxis: {
         labels: {
           style: {
-            colors: darkMode ? 'black' : "white",
-            fontSize: "14px"
-          }
-        }
+            colors: darkMode ? "black" : "white",
+            fontSize: "14px",
+          },
+        },
       },
       dataLabels: {
-        enabled: false
+        enabled: false,
       },
       plotOptions: {
         bar: {
-          columnWidth: "50%"
-        }
-      }
+          columnWidth: "50%",
+        },
+      },
     },
     series: [
       {
-        name: "Total Task",
+        name: "Task Status",
         data: [
           pendingTasksCount,
           assignedTasksCount,
@@ -206,34 +206,20 @@ const EmpTaskChart = (props) => {
           rejectedTasksCount,
           acceptedTasksNotCompletedOnTimeCount,
           completedTasksOnTimeCount,
-          lateCompletedAcceptedTasksCount
-        ]
-      }
-    ]
+          lateCompletedAcceptedTasksCount,
+        ],
+      },
+    ],
   };
 
   return (
-    <div style={{ height: 'fit-content', background: darkMode ? "var(--primaryDashMenuColor)" : "var(--primaryDashColorDark)", color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)", }} className="ChartCard shadow p-2 pb-0">
-      <div className="ChartHeader">
-        <h6
-          style={{
-            width: "fit-content",
-            boxShadow: `0 0 10px 1px ${darkMode ? "rgba(0,0,0,.2)" : 'rgba(201, 196, 196, 0.2)'} inset`,
-            color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)"
-          }}
-          className="fw-bolder d-flex px-3 rounded-5 py-2"
-        >
-          Task Progress Report
-        </h6>
-      </div>
-      <div className="chartBody">
-        <Chart
-          options={barChartData.options}
-          series={barChartData.series}
-          type="bar"
-          height="340px"
-        />
-      </div>
+    <div style={{ height: "fit-content" }} className="ChartCard p-2 pb-0 ">
+      <Chart
+        options={taskStatusChartData.options}
+        series={taskStatusChartData.series}
+        type="bar"
+        height="310px"
+      />
     </div>
   );
 };

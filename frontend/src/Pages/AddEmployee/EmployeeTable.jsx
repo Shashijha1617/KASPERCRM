@@ -17,9 +17,11 @@ import { FcNumericalSorting12, FcNumericalSorting21 } from "react-icons/fc";
 import BASE_URL from "../config/config";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import Pagination from "../../Utils/Pagination";
+import OverLayToolTip from "../../Utils/OverLayToolTip";
+import { RiUserAddLine } from "react-icons/ri";
+import TittleHeader from "../TittleHeader/TittleHeader";
 
 const override = css`
   display: block;
@@ -338,10 +340,10 @@ const AdminEmployeeTable = (props) => {
       >
         <div className="row m-auto row-gap-4 px-0">
           <div className="col-12 col-sm-12 col-md-3 d-flex px-1 px-md-2">
-            <h5 className="my-auto text-capitalize d-flex gap-0">
-              Employees
-              <span className="my-auto fs-6 mx-2">({filteredData.length})</span>
-            </h5>
+            <TittleHeader
+              title={"Employees List"}
+              numbers={filteredData.length}
+            />
           </div>
           <div className="col-6 col-md-5 d-flex p-0 px-1 position-relative">
             <input
@@ -484,34 +486,17 @@ const AdminEmployeeTable = (props) => {
             >
               <thead>
                 <tr>
-                  <th style={rowHeadStyle} scope="col"></th>
-                  <th style={rowHeadStyle} scope="col">
-                    Name
+                  <th colSpan={2} style={rowHeadStyle}>
+                    Employee Name
                   </th>
-                  <th style={rowHeadStyle} scope="col">
-                    ID
-                  </th>
-                  <th style={rowHeadStyle} scope="col">
-                    Position
-                  </th>
-                  <th style={rowHeadStyle} scope="col">
-                    Account
-                  </th>
-                  <th style={rowHeadStyle} scope="col">
-                    Status
-                  </th>
-                  <th style={rowHeadStyle} scope="col">
-                    Email
-                  </th>
-                  <th style={rowHeadStyle} scope="col">
-                    Contact No
-                  </th>
-                  <th style={rowHeadStyle} scope="col">
-                    Login Status
-                  </th>
-                  <th style={rowHeadStyle} scope="col">
-                    Actions
-                  </th>
+                  <th style={rowHeadStyle}>ID</th>
+                  <th style={rowHeadStyle}>Position</th>
+                  <th style={rowHeadStyle}>Account</th>
+                  <th style={rowHeadStyle}>Status</th>
+                  <th style={rowHeadStyle}>Email</th>
+                  <th style={rowHeadStyle}>Contact No</th>
+                  <th style={rowHeadStyle}>Login Status</th>
+                  <th style={rowHeadStyle}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -728,47 +713,18 @@ const AdminEmployeeTable = (props) => {
                         whiteSpace: "pre",
                       }}
                     >
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={
-                          <Tooltip
-                            style={{ overflow: "hidden" }}
-                            className="border border-2 p-0 rounded-5 "
-                            id="button-tooltip"
-                          >
-                            Info Profile
-                          </Tooltip>
-                        }
-                      >
-                        <button
-                          aria-label="Info"
-                          style={{ color: darkMode ? "black" : "white" }}
-                          onClick={() => props.onEmpInfo(items.data)}
-                          className="btn btn-sm"
-                        >
-                          <FaLocationArrow />
-                        </button>
-                      </OverlayTrigger>
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={
-                          <Tooltip
-                            style={{ overflow: "hidden" }}
-                            className="border border-2 p-0 rounded-5 "
-                            id="button-tooltip"
-                          >
-                            Edit Profile
-                          </Tooltip>
-                        }
-                      >
-                        <button
-                          style={{ color: darkMode ? "black" : "white" }}
-                          onClick={() => props.onEditEmployee(items.data)}
-                          className="btn btn-sm"
-                        >
-                          <TbUserEdit />
-                        </button>
-                      </OverlayTrigger>
+                      <OverLayToolTip
+                        style={{ color: darkMode ? "black" : "white" }}
+                        icon={<FaLocationArrow />}
+                        onClick={() => props.onEmpInfo(items.data)}
+                        tooltip={"Info Profile"}
+                      />
+                      <OverLayToolTip
+                        style={{ color: darkMode ? "black" : "white" }}
+                        icon={<RiUserAddLine className="fs-5" />}
+                        onClick={() => props.onEditEmployee(items.data)}
+                        tooltip={"Edit Profile"}
+                      />
                     </td>
                   </tr>
                 ))}

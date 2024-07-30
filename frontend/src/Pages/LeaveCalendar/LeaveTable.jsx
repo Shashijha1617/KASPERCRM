@@ -103,35 +103,7 @@ const LeaveTable = ({
         </div>
       </div>
       <div className="border border-1 " style={{ maxHeight: "62vh" }}>
-        {filteredHolidays.length < 1 ? (
-          <div
-            style={{
-              verticalAlign: "middle",
-              whiteSpace: "pre",
-              color: darkMode
-                ? "var(--secondaryDashMenuColor)"
-                : "var(--primaryDashMenuColor)",
-              border: "none",
-            }}
-            className="d-flex gap-2 py-5 flex-column justify-content-center align-items-center"
-          >
-            <img
-              style={{ height: "100%", width: "50%" }}
-              src={holidayImage}
-              alt=""
-            />
-            <p
-              style={{
-                color: darkMode
-                  ? "var(--primaryDashColorDark)"
-                  : "var(--primaryDashMenuColor)",
-              }}
-              className="p-0 m-0"
-            >
-              No holiday available this month of {GetFullMonth(filterMonth)}
-            </p>
-          </div>
-        ) : (
+        {filteredHolidays.length > 0 ? (
           <table className="table" style={{ fontSize: ".9rem" }}>
             <thead>
               <tr>
@@ -238,6 +210,34 @@ const LeaveTable = ({
               ))}
             </tbody>
           </table>
+        ) : (
+          <div
+            style={{
+              verticalAlign: "middle",
+              whiteSpace: "pre",
+              color: darkMode
+                ? "var(--secondaryDashMenuColor)"
+                : "var(--primaryDashMenuColor)",
+              border: "none",
+            }}
+            className="d-flex gap-2 py-5 flex-column justify-content-center align-items-center"
+          >
+            <img
+              style={{ height: "100%", width: "50%" }}
+              src={holidayImage}
+              alt=""
+            />
+            <p
+              style={{
+                color: darkMode
+                  ? "var(--primaryDashColorDark)"
+                  : "var(--primaryDashMenuColor)",
+              }}
+              className="p-0 m-0"
+            >
+              No holiday available this month of {GetFullMonth(filterMonth)}
+            </p>
+          </div>
         )}
       </div>
     </div>

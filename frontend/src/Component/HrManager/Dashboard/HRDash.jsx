@@ -2,7 +2,7 @@ import React from "react";
 import "./HRDash.css";
 import TaskChart from "../../../Pages/Chart/TaskChart";
 import DepartmentChart from "../../../Pages/Chart/DepartmentChart";
-import EmployeeCount from "./CountData/EmployeeCount";
+import EmployeeCount from "../../../Pages/Chart/EmployeeCountTable";
 import DailyAttendChart from "../../../Pages/Chart/DailyAttendChart";
 import EmplooyeeLogCount from "./CountData/EmplooyeeLogCount";
 import WelcomeBoard from "../../../Pages/WelcomeBoard/WelcomeBoard";

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import axios from "axios";
 import {
   MdArrowDropDown,
@@ -14,12 +15,12 @@ import { BsFiletypeDoc } from "react-icons/bs";
 import BASE_URL from "../../../Pages/config/config";
 import toast from "react-hot-toast";
 import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
-import { RiAttachmentLine } from "react-icons/ri";
-import { IoMdDoneAll } from "react-icons/io";
+
 import { getFormattedDate } from "../../../Utils/GetDayFormatted";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import AvatarGroup from "../../../Pages/AvatarGroup/AvatarGroup";
 
-const AdminAssignedTask = () => {
+const AdminActive = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,6 +31,7 @@ const AdminAssignedTask = () => {
   const [expandedTaskId, setExpandedTaskId] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const { darkMode } = useTheme();
+  const [flash, setFlash] = useState(false);
 
   const [updatedTask, setUpdatedTask] = useState({
     id: "",
@@ -39,7 +41,7 @@ const AdminAssignedTask = () => {
     endDate: "",
     managerEmail: "",
     duration: 0,
-    comment: "",
+    comment: 0,
   });
   const [totalAssignedTasks, setTotalAssignedTasks] = useState(0);
 
@@ -95,7 +97,7 @@ const AdminAssignedTask = () => {
 
       // Update the totalAssignedTasks state with the count of assigned tasks
       const assignedTasksCount = response.data.filter(
-        (task) => task.status === "Assigned"
+        (task) => task.status === "Pending"
       ).length;
       setTotalAssignedTasks(assignedTasksCount);
     } catch (error) {
@@ -198,14 +200,48 @@ const AdminAssignedTask = () => {
     }
   };
 
+  const calculateProgress = (task) => {
+    const totalEmployees =
+      task.employees.length -
+      task.employees.filter((emp) => emp.emptaskStatus === "Rejected").length;
+    const completedTasks = task.employees.filter(
+      (emp) => emp.emptaskStatus === "Completed"
+    ).length;
+    return (completedTasks / totalEmployees) * 100;
+  };
+
   const toggleTaskDetails = (taskId) => {
     setExpandedTaskId((prevId) => (prevId === taskId ? null : taskId));
   };
 
+  const images = [
+    "https://i.pinimg.com/originals/07/33/ba/0733ba760b29378474dea0fdbcb97107.png",
+    "https://th.bing.com/th/id/OIP.JOHFjMBnZGE-SOXzMSxdRwAAAA?w=402&h=467&rs=1&pid=ImgDetMain",
+    "https://www.uscareerinstitute.edu/images/accounting-AAS-outcomes.jpg",
+    "https://localist-images.azureedge.net/photos/43897493381666/square_300/51e7610f317e68641dedf4c24787c5056937a657.jpg",
+    "https://drscdn.500px.org/photo/81956917/q%3D80_m%3D1000/v2?sig=fa09099be5e5d95d537e9656700fc1f56e29f00fd5dcccc8241aca59e4a60632",
+    "https://www.tejgaoncollege.edu.bd/wp-content/uploads/2022/04/Tanjida-Akter.jpg",
+  ];
+
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+    padding: ".5rem",
+  };
   return (
     <div className="container-fluid py-2">
       <TittleHeader
-        title={"Assigned"}
+        title={"Active Task"}
         numbers={totalAssignedTasks}
         message={"You can view all assigned task status here."}
       />
@@ -225,7 +261,7 @@ const AdminAssignedTask = () => {
       )}
       <div className="row mx-auto">
         {tasks
-          .filter((task) => task.status === "Assigned")
+          .filter((task) => task.status === "Pending")
           .reverse()
           .map((task, index) => (
             <div
@@ -300,7 +336,28 @@ const AdminAssignedTask = () => {
                       </span>
                     </span>
                   </div>
-                  <div className="mt-4">
+                  <div style={{ maxWidth: "100%" }}>
+                    <div className="d-flex align-items-center justify-content-between my-3">
+                      <AvatarGroup images={images} />
+                      <div
+                        className="d-flex"
+                        style={{
+                          width: "4rem",
+                          height: "4rem",
+                          borderRadius: "50%",
+                        }}
+                      >
+                        <CircularProgressbar
+                          className="fw-bold"
+                          value={calculateProgress(task)}
+                          text={`${calculateProgress(task).toFixed(0)}%`}
+                          styles={buildStyles({
+                            pathColor: "#28a745",
+                            textColor: "#28a745",
+                          })}
+                        />
+                      </div>
+                    </div>
                     <span
                       style={{ cursor: "pointer" }}
                       onMouseEnter={() => setTimeinfo("name")}
@@ -319,6 +376,254 @@ const AdminAssignedTask = () => {
                       )}
                     </span>
                   </div>
+                  {expandedTaskId === task._id && (
+                    <>
+                      {" "}
+                      <div
+                        style={{
+                          maxWidth: "100%",
+                          overflow: "auto",
+                        }}
+                      >
+                        <table striped bordered hover>
+                          <thead>
+                            <tr>
+                              <th style={rowHeadStyle}>S. No </th>
+                              <th style={rowHeadStyle}> Name</th>
+                              <th style={rowHeadStyle}> Email</th>
+                              <th style={rowHeadStyle}> Designation</th>
+                              <th style={rowHeadStyle}> Task Status</th>
+                              <th style={rowHeadStyle}> Remarks</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {task.employees.map((taskemp, i) => (
+                              <tr key={i}>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    backgroundColor:
+                                      taskemp.emptaskStatus === "Completed"
+                                        ? "rgba(25, 201, 84, 0.436)"
+                                        : taskemp.emptaskStatus === "Rejected"
+                                        ? "rgba(214, 92, 44, 0.636)"
+                                        : "inherit",
+                                    color: darkMode
+                                      ? "var(--secondaryDashColorDark)"
+                                      : "var(--primaryDashMenuColor)",
+                                    border: "none",
+                                    padding: ".5rem",
+                                  }}
+                                >
+                                  {i + 1}
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    backgroundColor:
+                                      taskemp.emptaskStatus === "Completed"
+                                        ? "rgba(25, 201, 84, 0.436)"
+                                        : taskemp.emptaskStatus === "Rejected"
+                                        ? "rgba(214, 92, 44, 0.636)"
+                                        : "inherit",
+                                    color: darkMode
+                                      ? "var(--secondaryDashColorDark)"
+                                      : "var(--primaryDashMenuColor)",
+                                    border: "none",
+                                    padding: ".5rem",
+                                  }}
+                                >
+                                  {taskemp.empname}
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    backgroundColor:
+                                      taskemp.emptaskStatus === "Completed"
+                                        ? "rgba(25, 201, 84, 0.436)"
+                                        : taskemp.emptaskStatus === "Rejected"
+                                        ? "rgba(214, 92, 44, 0.636)"
+                                        : "inherit",
+                                    color: darkMode
+                                      ? "var(--secondaryDashColorDark)"
+                                      : "var(--primaryDashMenuColor)",
+                                    border: "none",
+                                    padding: ".5rem",
+                                  }}
+                                >
+                                  {taskemp.empemail}
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    backgroundColor:
+                                      taskemp.emptaskStatus === "Completed"
+                                        ? "rgba(25, 201, 84, 0.436)"
+                                        : taskemp.emptaskStatus === "Rejected"
+                                        ? "rgba(214, 92, 44, 0.636)"
+                                        : "inherit",
+                                    color: darkMode
+                                      ? "var(--secondaryDashColorDark)"
+                                      : "var(--primaryDashMenuColor)",
+                                    border: "none",
+                                    padding: ".5rem",
+                                  }}
+                                >
+                                  {taskemp.empdesignation}
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    backgroundColor:
+                                      taskemp.emptaskStatus === "Completed"
+                                        ? "rgba(25, 201, 84, 0.436)"
+                                        : taskemp.emptaskStatus === "Rejected"
+                                        ? "rgba(214, 92, 44, 0.636)"
+                                        : "inherit",
+                                    color: darkMode
+                                      ? "var(--secondaryDashColorDark)"
+                                      : "var(--primaryDashMenuColor)",
+                                    border: "none",
+                                    padding: ".5rem",
+                                  }}
+                                >
+                                  {taskemp.emptaskStatus}
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    backgroundColor:
+                                      taskemp.emptaskStatus === "Completed"
+                                        ? "rgba(25, 201, 84, 0.436)"
+                                        : taskemp.emptaskStatus === "Rejected"
+                                        ? "rgba(214, 92, 44, 0.636)"
+                                        : "inherit",
+                                    color: darkMode
+                                      ? "var(--secondaryDashColorDark)"
+                                      : "var(--primaryDashMenuColor)",
+                                    border: "none",
+                                    padding: ".5rem",
+                                  }}
+                                >
+                                  {taskemp.empTaskComment}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="d-flex flex-column my-2">
+                        Remarks
+                        <span>{task.comment}</span>
+                      </div>
+                      <div className="d-flex flex-column gap-1 mt-2 ">
+                        <span className="mb-2">Remaining Time</span>
+                        <div className="d-flex gap-2 RemainingTimeHandel justify-content-between ">
+                          {calculateRemainingTime(task.endDate).delay ? (
+                            <div>
+                              <div className="text-center d-none ">
+                                <div className="form-control fw-bold p-0">
+                                  {calculateRemainingTime(task.endDate).days}
+                                </div>
+                                <div>Day</div>
+                              </div>
+                              <span
+                                className={`border px-2 py-1 border-danger ${
+                                  flash ? "flash" : ""
+                                }`}
+                              >
+                                Please finish the task as soon as you can, as
+                                it's running late.
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="text-center">
+                              <div
+                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                style={{
+                                  boxShadow: "0 0 5px 2px gray inset",
+                                  height: "30px",
+                                  minWidth: "30px",
+                                }}
+                              >
+                                {calculateRemainingTime(task.endDate).days}{" "}
+                              </div>{" "}
+                              <div>Day</div>
+                            </div>
+                          )}
+                          {calculateRemainingTime(task.endDate).delay ? (
+                            <div className="text-center d-none">
+                              <div
+                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                style={{
+                                  boxShadow: "0 0 5px 2px gray inset",
+                                  height: "30px",
+                                  minWidth: "30px",
+                                }}
+                              >
+                                {calculateRemainingTime(task.endDate).hours}{" "}
+                              </div>{" "}
+                              <div>Min</div>
+                            </div>
+                          ) : (
+                            <div className="text-center">
+                              <div
+                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                style={{
+                                  boxShadow: "0 0 5px 2px gray inset",
+                                  height: "30px",
+                                  minWidth: "30px",
+                                }}
+                              >
+                                {calculateRemainingTime(task.endDate).hours}{" "}
+                              </div>{" "}
+                              <div>Hrs</div>
+                            </div>
+                          )}
+                          {calculateRemainingTime(task.endDate).delay ? (
+                            <div className="text-center d-none">
+                              <div
+                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                style={{
+                                  boxShadow: "0 0 5px 2px gray inset",
+                                  height: "30px",
+                                  minWidth: "30px",
+                                }}
+                              >
+                                {calculateRemainingTime(task.endDate).minutes}{" "}
+                              </div>{" "}
+                              <div>Min</div>
+                            </div>
+                          ) : (
+                            <div className="text-center">
+                              <div
+                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                style={{
+                                  boxShadow: "0 0 5px 2px gray inset",
+                                  height: "30px",
+                                  minWidth: "30px",
+                                }}
+                              >
+                                {calculateRemainingTime(task.endDate).minutes}{" "}
+                              </div>{" "}
+                              <div>Min</div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <hr />
+                      <div className="d-flex flex-column gap-2 my-2">
+                        Action
+                        <div className="d-flex gap-3  just"></div>
+                      </div>
+                    </>
+                  )}
                   {expandedTaskId === task._id && (
                     <div>
                       <div className="d-flex flex-column my-2">
@@ -421,16 +726,9 @@ const AdminAssignedTask = () => {
                           style={{ height: "fit-content" }}
                           className="d-flex pt-3 gap-2"
                         >
-                          <button
-                            className="btn btn-danger d-flex justify-center aline-center gap-2"
-                            onClick={() => cancelTask(task._id)}
-                          >
-                            <MdCancel />
-                            Cancel Task
-                          </button>
                           {allImage && allImage.length > 0 && (
                             <button
-                              className="btn btn-primary d-flex justify-center aline-center gap-2"
+                              className="btn btn-info d-flex justify-center aline-center gap-2"
                               onClick={() => showPdf(task._id)}
                             >
                               <BsFiletypeDoc />
@@ -460,15 +758,14 @@ const AdminAssignedTask = () => {
         onHide={handleCloseUpdateModal}
       >
         <Modal.Header closeButton>
-          <Modal.Title className="fw-bold text-uppercase">
-            Update Task
-          </Modal.Title>
+          <h6>Update Task</h6>
         </Modal.Header>
         <Modal.Body>
           <Form className="d-flex flex-column gap-3">
             <Form.Group controlId="formTaskName">
               <Form.Label>Task Name</Form.Label>
-              <Form.Control
+              <input
+                className="form-control rounded-0"
                 type="text"
                 value={updatedTask.Taskname}
                 onChange={(e) =>
@@ -479,7 +776,8 @@ const AdminAssignedTask = () => {
 
             <Form.Group controlId="formDescription">
               <Form.Label>Description</Form.Label>
-              <Form.Control
+              <textarea
+                className="form-control rounded-0"
                 as="textarea"
                 value={updatedTask.description}
                 onChange={(e) =>
@@ -493,7 +791,8 @@ const AdminAssignedTask = () => {
             <div className="row">
               <Form.Group className="col-12 col-md-6" controlId="startDate">
                 <Form.Label>Start Date </Form.Label>
-                <Form.Control
+                <input
+                  className="form-control rounded-0"
                   type="date"
                   value={updatedTask.startDate}
                   onChange={(e) =>
@@ -506,7 +805,8 @@ const AdminAssignedTask = () => {
               </Form.Group>
               <Form.Group className="col-12 col-md-6" controlId="endDate">
                 <Form.Label>End Date</Form.Label>
-                <Form.Control
+                <input
+                  className="form-control rounded-0"
                   type="date"
                   value={updatedTask.endDate}
                   onChange={(e) =>
@@ -519,7 +819,8 @@ const AdminAssignedTask = () => {
               </Form.Group>
               <Form.Group className="col-12" controlId="comment">
                 <Form.Label>Remarks</Form.Label>
-                <Form.Control
+                <input
+                  className="form-control rounded-0"
                   type="text"
                   value={updatedTask.comment}
                   onChange={(e) =>
@@ -542,4 +843,4 @@ const AdminAssignedTask = () => {
   );
 };
 
-export default AdminAssignedTask;
+export default AdminActive;

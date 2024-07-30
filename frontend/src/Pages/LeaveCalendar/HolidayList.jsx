@@ -49,7 +49,15 @@ function HolidayList({ title, newFolderLink, holidayIcons }) {
   };
 
   return (
-    <div style={{ height: "100%" }} className="border">
+    <div
+      style={{
+        height: "100%",
+        color: darkMode
+          ? "var(--secondaryDashColorDark)"
+          : "var(--secondaryDashMenuColor)",
+      }}
+      className="border"
+    >
       <div
         style={{
           backgroundColor: darkMode
@@ -86,7 +94,7 @@ function HolidayList({ title, newFolderLink, holidayIcons }) {
           </Link>
         </h6>
 
-        {filteredHolidays.length < 1 && (
+        {filteredHolidays.length > 0 && (
           <div className="row mx-auto shadow-sm p-0 pb-1">
             <div className="col-11 mx-auto p-0">
               <input
@@ -101,15 +109,13 @@ function HolidayList({ title, newFolderLink, holidayIcons }) {
         )}
 
         <div style={{ maxHeight: "350px", overflow: "auto" }}>
-          {filteredHolidays > 0 ? (
+          {filteredHolidays.length > 0 ? (
             filteredHolidays.map((holiday, index) => (
               <div
-                className="d-flex align-items-center justify-content-between p-2 py-1 mx-auto"
+                className="d-flex align-items-center justify-content-between px-3 py-2 mx-auto"
                 key={index}
               >
-                <span className="border-0 text-muted">
-                  {holiday.holidayName}
-                </span>
+                <span className="border-0">{holiday.holidayName}</span>
                 <span>{`${TwoDigitDates(holiday.holidayDate)}-${TwoDigitDates(
                   holiday.holidayMonth
                 )}-${holiday.holidayYear}`}</span>

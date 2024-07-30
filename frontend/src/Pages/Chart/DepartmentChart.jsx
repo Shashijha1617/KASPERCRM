@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
 import "./chart.css";
 import axios from "axios";
+import BASE_URL from "../../Pages/config/config";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
-import BASE_URL from "../config/config";
 
 const DepartmentChart = () => {
   const [departmentData, setDepartmentData] = useState([]);
@@ -12,29 +12,73 @@ const DepartmentChart = () => {
   const [chartOption, setChartOption] = useState({
     options: {
       labels: [],
+      colors: [
+        "var(--basecolor)",
+        "var(--basecolor1)",
+        "var(--basecolor2)",
+        "var(--basecolor3)",
+        "var(--basecolor4)",
+        "var(--basecolor5)",
+      ],
+      title: {
+        text: "Departments Chart",
+        style: {
+          color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--primaryDashMenuColor)",
+          fontWeight: "normal",
+        },
+      },
       legend: {
         position: "bottom",
         labels: {
-          colors: darkMode ? ["#FFFFFF"] : ["#000000"],
+          colors: darkMode
+            ? [
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+                "var(--primaryDashMenuColor)",
+              ]
+            : [
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+                "var(--primaryDashColorDark)",
+              ],
+        },
+        markers: {
+          fillColors: [
+            "var(--basecolor)",
+            "var(--basecolor1)",
+            "var(--basecolor2)",
+            "var(--basecolor3)",
+            "var(--basecolor4)",
+            "var(--basecolor5)",
+          ],
         },
       },
       fill: {
         colors: [
-          "#008DDA",
-          "#4CCD99",
-          "#dc4e07",
-          "#FF407D",
-          "#9F70FD",
-          "#FE7A36",
+          "var(--basecolor)",
+          "var(--basecolor1)",
+          "var(--basecolor2)",
+          "var(--basecolor3)",
+          "var(--basecolor4)",
+          "var(--basecolor5)",
         ],
       },
       plotOptions: {
         pie: {
           donut: {
             labels: {
-              show: true,
+              show: false,
               total: {
-                show: true,
+                show: false,
+                color: "white",
               },
             },
           },
@@ -80,41 +124,68 @@ const DepartmentChart = () => {
     const labels = Object.keys(departmentCounts);
     const series = labels.map((label) => departmentCounts[label]);
 
-    setChartOption((prev) => ({
-      ...prev,
+    setChartOption({
       options: {
-        ...prev.options,
+        ...chartOption.options,
         labels: labels,
-        legend: {
-          ...prev.options.legend,
-          labels: {
-            colors: darkMode ? "black" : "white",
-          },
-        },
-        plotOptions: {
-          ...prev.options.plotOptions,
-          pie: {
-            ...prev.options.plotOptions.pie,
-            donut: {
-              ...prev.options.plotOptions.pie.donut,
-              labels: {
-                ...prev.options.plotOptions.pie.donut.labels,
-                total: {
-                  ...prev.options.plotOptions.pie.donut.labels.total,
-                  color: darkMode ? "#FFFFFF" : "#000000",
-                },
-              },
-            },
-          },
-        },
       },
       series: series,
-    }));
+    });
   };
 
   useEffect(() => {
     updateChartOptions();
-  }, [departmentData, darkMode]);
+  }, [departmentData]);
+
+  useEffect(() => {
+    setChartOption((prevOptions) => ({
+      ...prevOptions,
+      options: {
+        ...prevOptions.options,
+        title: {
+          text: "Departments Chart",
+          style: {
+            color: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var(--primaryDashMenuColor)",
+            fontWeight: "normal",
+          },
+        },
+        legend: {
+          ...prevOptions.options.legend,
+          labels: {
+            colors: darkMode
+              ? [
+                  "var(--primaryDashColorDark)",
+                  "var(--primaryDashColorDark)",
+                  "var(--primaryDashColorDark)",
+                  "var(--primaryDashColorDark)",
+                  "var(--primaryDashColorDark)",
+                  "var(--primaryDashColorDark)",
+                ]
+              : [
+                  "var(--primaryDashMenuColor)",
+                  "var(--primaryDashMenuColor)",
+                  "var(--primaryDashMenuColor)",
+                  "var(--primaryDashMenuColor)",
+                  "var(--primaryDashMenuColor)",
+                  "var(--primaryDashMenuColor)",
+                ],
+          },
+          markers: {
+            fillColors: [
+              "var(--basecolor)",
+              "var(--basecolor)",
+              "var(--basecolor)",
+              "var(--basecolor)",
+              "var(--basecolor)",
+              "var(--basecolor)",
+            ],
+          },
+        },
+      },
+    }));
+  }, [darkMode]);
 
   return (
     <div
@@ -129,33 +200,12 @@ const DepartmentChart = () => {
       }}
       className="ChartCard p-2 shadow"
     >
-      <div
-        style={{
-          background: darkMode
-            ? "var(--primaryDashMenuColor)"
-            : "var(--primaryDashColorDark)",
-          color: darkMode
-            ? "var(--primaryDashColorDark)"
-            : "var(--primaryDashMenuColor)",
-        }}
-        className="ChartHeader"
-      >
-        <h6
-          style={{
-            width: "fit-content",
-            boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
-          }}
-          className="fw-bolder d-flex px-3 rounded-5 py-1"
-        >
-          Employee By Department
-        </h6>
-      </div>
       <Chart
         options={chartOption.options}
         series={chartOption.series}
-        type="donut"
+        type="pie"
         width="100%"
-        height="335px"
+        height="352px"
       />
     </div>
   );

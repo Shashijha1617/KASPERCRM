@@ -577,7 +577,6 @@ const ManagerActiveTask = () => {
                         style={{
                           maxWidth: "100%",
                           overflow: "auto",
-                          display: viewDetsils === true ? "block" : "none",
                         }}
                       >
                         <table striped bordered hover>

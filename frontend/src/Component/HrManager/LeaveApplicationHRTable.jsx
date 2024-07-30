@@ -201,10 +201,21 @@ const LeaveApplicationHRTable = (props) => {
   };
 
   return (
-    <div className="container-fluid">
+    <div
+      style={{
+        color: darkMode
+          ? "var(--secondaryDashColorDark)"
+          : "var(--primaryDashMenuColor)",
+      }}
+      className="container-fluid"
+    >
       <div className="d-flex flex-column justify-between m-0 mt-3">
         <div className="d-flex justify-content-between aline-items-center">
-        <TittleHeader title={"Leaves Request"} numbers={filteredData.length}  message={"You can view all new leave requests here."}/>
+          <TittleHeader
+            title={"Leaves Request"}
+            numbers={filteredData.length}
+            message={"You can view all new leave requests here."}
+          />
           <div className="d-flex gap-2 justify-content-between py-3">
             <button
               className="btn btn-danger rounded-0 py-0 shadow-sm d-flex justify-center  aline-center gap-2"
@@ -239,7 +250,8 @@ const LeaveApplicationHRTable = (props) => {
       <div>
         <div
           style={{
-            maxHeight: "83vh",
+            maxHeight: "80vh",
+            minHeight: "80vh",
             overflow: "auto",
             position: "relative",
           }}

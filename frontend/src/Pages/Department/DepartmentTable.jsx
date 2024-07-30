@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./DepartmentTable.css";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import Position from "../../img/Position/Position.svg";
 import BASE_URL from "../config/config";
-import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 import { HiOutlineOfficeBuilding } from "react-icons/hi";
 import { PiOfficeChair } from "react-icons/pi";
-import { MdOutlineEdit } from "react-icons/md";
+import OverLayToolTip from "../../Utils/OverLayToolTip";
+import { IoTrashBin } from "react-icons/io5";
+import { FaEdit } from "react-icons/fa";
 const DepartmentTable = ({ onAddDepartment, onEditDepartment }) => {
   const [departmentData, setDepartmentData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -141,10 +141,7 @@ const DepartmentTable = ({ onAddDepartment, onEditDepartment }) => {
                   <PiOfficeChair /> Department
                 </th>
                 <th style={rowHeadStyle} className="text-end">
-                  <MdOutlineEdit /> Edit
-                </th>
-                <th style={rowHeadStyle} className="text-end">
-                  <AiOutlineDelete /> Delete
+                  Action
                 </th>
               </tr>
             </thead>
@@ -160,27 +157,19 @@ const DepartmentTable = ({ onAddDepartment, onEditDepartment }) => {
                   <td style={rowBodyStyle} className="text-capitalize">
                     {items.DepartmentName}
                   </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    <span
+                  <td style={rowBodyStyle} className="text-capitalize text-end">
+                    <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<FaEdit />}
                       onClick={() => onEditDepartment(items)}
-                      title="Update"
-                      style={{ cursor: "pointer", width: "fit-content" }}
-                      className="border border-primary px-2 py-1 text-primary  ms-auto d-flex gap-3 align-items-center"
-                    >
-                      <FontAwesomeIcon icon={faEdit} />
-                      <span className="d-none d-md-flex">Edit</span>
-                    </span>
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    <span
+                      tooltip={"Edit Department"}
+                    />
+                    <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<IoTrashBin />}
                       onClick={() => onDepartmentDelete(items._id)}
-                      title="Delete"
-                      style={{ cursor: "pointer", width: "fit-content" }}
-                      className="border border-danger px-2 py-1 text-danger  ms-auto d-flex gap-3 align-items-center"
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                      <span className="d-none d-md-flex">Delete</span>
-                    </span>
+                      tooltip={"Delete Department"}
+                    />
                   </td>
                 </tr>
               ))}

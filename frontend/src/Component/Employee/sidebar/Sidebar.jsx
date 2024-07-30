@@ -4,22 +4,32 @@ import { MdMenuOpen, MdTaskAlt } from "react-icons/md";
 import {
   FaCalendarCheck,
   FaMale,
+  FaRegUser,
   FaTasks,
   FaUniversity,
   FaUserCircle,
 } from "react-icons/fa";
 import { TbDeviceIpadMinus } from "react-icons/tb";
-import { FaBriefcase, FaFolderOpen, FaUser } from "react-icons/fa6";
+import {
+  FaBriefcase,
+  FaFolderOpen,
+  FaRegCircleUser,
+  FaUser,
+} from "react-icons/fa6";
 import {
   BsCalendar2,
   BsCalendar2CheckFill,
   BsDeviceHddFill,
   BsFillCalendarEventFill,
+  BsFolderCheck,
 } from "react-icons/bs";
 import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { RiTaskFill } from "react-icons/ri";
+import { RiFileUserLine, RiTaskFill } from "react-icons/ri";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { IoCalendarOutline } from "react-icons/io5";
+import { GoTasklist } from "react-icons/go";
 
 const Sidebar = (props) => {
   const [extended, setExtended] = useState(false);
@@ -31,12 +41,12 @@ const Sidebar = (props) => {
   };
   const allLinks = [
     {
-      icon: <FaUser />,
+      icon: <FaRegUser />,
       name: "Dashboard",
       navLinks: [{ to: "/employee/dashboard", label: "Dashboard" }],
     },
     {
-      icon: <FaUserCircle />,
+      icon: <FaRegCircleUser />,
       name: "Profile",
       navLinks: [
         {
@@ -45,45 +55,26 @@ const Sidebar = (props) => {
         },
       ],
     },
-
-    // {
-    //   icon: <FaUniversity />,
-    //   name: "Info",
-    //   navLinks: [
-    //     {
-    //       to: "/employee/" + props.data["_id"] + "/family-info",
-    //       label: "Dependents",
-    //     },
-    //     {
-    //       to: "/employee/" + props.data["_id"] + "/education",
-    //       label: "Education",
-    //     },
-    //     {
-    //       to: "/employee/" + props.data["_id"] + "/work-experience",
-    //       label: "WorkExp",
-    //     },
-    //   ],
-    // },
     {
-      icon: <BsCalendar2CheckFill />,
+      icon: <IoMdCheckmarkCircleOutline className="fs-4" />,
       name: "Attendance",
       navLinks: [
         {
           to: "/employee/" + props.data["_id"] + "/attendance",
           label: "Create Attendance",
         },
-        // {
-        //   to: "/employee/" + props.data["_id"] + "/attendanceList",
-        //   label: "View Attendance"
-        // },
-        // {
-        //   to: "/employee/" + props.data["_id"] + "/selfAtteend",
-        //   label: "self Attendance"
-        // }
+        {
+          to: "/employee/" + props.data["_id"] + "/attendanceList",
+          label: "View Attendance",
+        },
+        {
+          to: "/employee/" + props.data["_id"] + "/selfAtteend",
+          label: "self Attendance",
+        },
       ],
     },
     {
-      icon: <BsFillCalendarEventFill />,
+      icon: <IoCalendarOutline />,
       name: "Leave",
       navLinks: [
         {
@@ -97,7 +88,7 @@ const Sidebar = (props) => {
       ],
     },
     {
-      icon: <FaTasks />,
+      icon: <GoTasklist />,
       name: "Task",
       navLinks: [
         { to: "/employee/newTask", label: " New Task" },
@@ -107,7 +98,7 @@ const Sidebar = (props) => {
       ],
     },
     {
-      icon: <FaFolderOpen />,
+      icon: <BsFolderCheck />,
       name: "Documents",
       navLinks: [
         {

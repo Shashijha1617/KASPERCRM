@@ -2,7 +2,6 @@ import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import Moment from "moment";
-import { RiLoginCircleFill, RiLogoutCircleFill } from "react-icons/ri";
 import { PiCoffeeFill } from "react-icons/pi";
 import { FaComputerMouse } from "react-icons/fa6";
 import toast from "react-hot-toast";

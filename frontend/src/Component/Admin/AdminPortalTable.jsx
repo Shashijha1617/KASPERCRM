@@ -11,6 +11,8 @@ import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import SearchLight from "../../img/Attendance/SearchLight.svg";
 import { FaPlus, FaTrash } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
+import OverLayToolTip from "../../Utils/OverLayToolTip";
+import TittleHeader from "../../Pages/TittleHeader/TittleHeader";
 
 const override = css`
   display: block;
@@ -99,27 +101,12 @@ const AdminPortalTable = ({ onAddPortal, onEditPortal }) => {
   return (
     <div className="container-fluid py-2">
       <div className="d-flex justify-between align-items-start ">
-        <div className="my-auto">
-          <h5
-            style={{
-              color: darkMode
-                ? "var(--primaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)",
-              fontWeight: "600",
-            }}
-          >
-            Portal Details ( {portalData.length} )
-          </h5>
-          <p
-            style={{
-              color: darkMode
-                ? "var(--primaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)",
-            }}
-          >
-            You can view and create new portal here.
-          </p>
-        </div>
+        <TittleHeader
+          title={"Portal Details"}
+          numbers={portalData.length}
+          message={"You can view all portals here."}
+        />
+
         <button
           className="btn btn-primary d-flex align-items-center  gap-2 justify-content-center"
           variant="primary"
@@ -149,10 +136,7 @@ const AdminPortalTable = ({ onAddPortal, onEditPortal }) => {
                   <th style={rowHeadStyle}>Portal</th>
                   <th style={rowHeadStyle}>Status</th>
                   <th className="text-end" style={rowHeadStyle}>
-                    Edit
-                  </th>
-                  <th className="text-end" style={rowHeadStyle}>
-                    Delete
+                    Action
                   </th>
                 </tr>
               </thead>
@@ -165,31 +149,27 @@ const AdminPortalTable = ({ onAddPortal, onEditPortal }) => {
                       <span
                         className={
                           item.Status === "enabled"
-                            ? "border border-success py-1 px-1 rounded-5 text-capitalize"
-                            : "border border-danger py-1 px-1 rounded-5 text-capitalize"
+                            ? "border border-success px-1 rounded-5 text-capitalize"
+                            : "border border-danger px-1 rounded-5 text-capitalize"
                         }
                       >
                         {" "}
                         {item.Status}
                       </span>
                     </td>
-                    <td style={rowBodyStyle}>
-                      <button
-                        className="btn btn-primary d-flex align-items-center rounded-5  ms-auto  gap-2 justify-content-center"
+                    <td className="text-end" style={rowBodyStyle}>
+                      <OverLayToolTip
+                        style={{ color: darkMode ? "black" : "white" }}
+                        icon={<FaEdit />}
                         onClick={() => onEditPortal(item)}
-                      >
-                        <FaEdit />
-                        <span className="d-none d-md-flex">Edit</span>
-                      </button>
-                    </td>
-                    <td style={rowBodyStyle}>
-                      <button
-                        className="btn btn-primary d-flex align-items-center rounded-5 ms-auto gap-2 justify-content-center"
+                        tooltip={"Edit Portal"}
+                      />
+                      <OverLayToolTip
+                        style={{ color: darkMode ? "black" : "white" }}
+                        icon={<FaTrash />}
                         onClick={() => onPortalDelete(item._id)}
-                      >
-                        <FaTrash />
-                        <span className="d-none d-md-flex">Delete</span>
-                      </button>
+                        tooltip={"Delete Portal"}
+                      />
                     </td>
                   </tr>
                 ))}

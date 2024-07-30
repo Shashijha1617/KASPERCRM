@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./PositionTable.css";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
-import { css } from "@emotion/core";
 import { Table } from "react-bootstrap";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import Position from "../../img/Position/Position.svg";
 import BASE_URL from "../config/config";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import OverLayToolTip from "../../Utils/OverLayToolTip";
+import { FaEdit } from "react-icons/fa";
+import { IoTrashBin } from "react-icons/io5";
 
 const PositionTable = ({
   updateTotalPositions,
@@ -145,13 +145,11 @@ const PositionTable = ({
           <Table className="table" style={{ fontSize: ".9rem" }}>
             <thead>
               <tr>
+                <th style={rowHeadStyle}>S. No.</th>
                 <th style={rowHeadStyle}>Company</th>
                 <th style={rowHeadStyle}>Position</th>
                 <th style={rowHeadStyle} className="text-end">
-                  Edit
-                </th>
-                <th style={rowHeadStyle} className="text-end">
-                  Delete
+                  Action
                 </th>
               </tr>
             </thead>
@@ -159,33 +157,27 @@ const PositionTable = ({
               {positionData.map((data, index) => (
                 <tr key={index}>
                   <td style={rowBodyStyle} className="text-capitalize">
+                    {index + 1}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
                     {data.company[0].CompanyName}
                   </td>
                   <td style={rowBodyStyle} className="text-capitalize">
                     {data.PositionName}
                   </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    <span
+                  <td style={rowBodyStyle} className="text-capitalize text-end">
+                    <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<FaEdit />}
                       onClick={() => onEditPosition(data)}
-                      title="Update"
-                      style={{ cursor: "pointer", width: "fit-content" }}
-                      className="border border-primary px-2 py-1 text-primary  ms-auto d-flex gap-3 align-items-center"
-                    >
-                      <FontAwesomeIcon icon={faEdit} />
-                      <span className="d-none d-md-flex">Edit</span>
-                    </span>
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    <span
+                      tooltip={"Edit Position"}
+                    />
+                    <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<IoTrashBin />}
                       onClick={() => onPositionDelete(data._id)}
-                      title="Delete"
-                      style={{ cursor: "pointer", width: "fit-content" }}
-                      className="border border-danger px-2 py-1 text-danger  ms-auto d-flex gap-3 align-items-center"
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-
-                      <span className="d-none d-md-flex">Delete</span>
-                    </span>
+                      tooltip={"Delete Position"}
+                    />
                   </td>
                 </tr>
               ))}

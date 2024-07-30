@@ -12,6 +12,7 @@ import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import { MdNearbyError } from "react-icons/md";
 import BASE_URL from "../../../Pages/config/config";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -144,8 +145,6 @@ const LeaveApplicationHRTable = (props) => {
         row.Days,
         row.Reasonforleave,
         row.Status,
-
-        "", // Action column - you can customize this based on your requirements
       ]);
       doc.setFontSize(12);
       doc.autoTable({
@@ -244,18 +243,11 @@ const LeaveApplicationHRTable = (props) => {
     <div className="container-fluid">
       <div className="d-flex flex-column justify-between">
         <div className="d-flex justify-content-between aline-items-center">
-          <h6
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)",
-            }}
-            className="fw-bold my-auto"
-          >
-            {" "}
-            Approved Leaves{" "}
-            <span className="text-warning"> ({approvedLeaves}) </span>
-          </h6>
+          <TittleHeader
+            numbers={approvedLeaves}
+            title={"Approved Leaves"}
+            message={"You can view all approved leaves here."}
+          />
           <div className="d-flex gap-2 justify-content-between py-3">
             <button
               className="btn btn-danger shadow-sm d-flex justify-center rounded-0  aline-center gap-2"
@@ -301,9 +293,6 @@ const LeaveApplicationHRTable = (props) => {
               <thead>
                 <tr>
                   <th style={rowHeadStyle} onClick={() => sortData("empID")}>
-                    Profile
-                  </th>
-                  <th style={rowHeadStyle} onClick={() => sortData("empID")}>
                     Employee Name
                   </th>
                   <th style={rowHeadStyle}>Emp ID</th>
@@ -342,11 +331,8 @@ const LeaveApplicationHRTable = (props) => {
                                 alt=""
                               />
                             </div>
-                            <div className="d-flex flex-column"></div>
+                            <span>{data.Name}</span>
                           </div>
-                        </td>
-                        <td style={rowBodyStyle}>
-                          <span>{data.Name}</span>
                         </td>
                         <td style={rowBodyStyle}>
                           <span>{data.empID}</span>
@@ -358,7 +344,7 @@ const LeaveApplicationHRTable = (props) => {
                         <td style={rowBodyStyle}>{data.Days}</td>
                         <td style={rowBodyStyle}>{data.Reasonforleave}</td>
                         <td style={rowBodyStyle}>
-                          <span className="text-white border border-success shadow-sm px-2 py-1 rounded-5">
+                          <span className="border border-success px-2 py-1 rounded-5">
                             {data.Status}
                           </span>
                         </td>

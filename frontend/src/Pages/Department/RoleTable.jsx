@@ -10,6 +10,9 @@ import Position from "../../img/Position/Position.svg";
 import BASE_URL from "../config/config";
 import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import { MdOutlineEdit } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { IoTrashBin } from "react-icons/io5";
+import OverLayToolTip from "../../Utils/OverLayToolTip";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -157,13 +160,11 @@ const RoleTable = (props) => {
           >
             <thead>
               <tr>
+                <th style={rowHeadStyle}>S. No.</th>
                 <th style={rowHeadStyle}>Company</th>
                 <th style={rowHeadStyle}>Role</th>
                 <th style={rowHeadStyle} className="text-end">
-                  <MdOutlineEdit /> Edit
-                </th>
-                <th style={rowHeadStyle} className="text-end">
-                  <AiOutlineDelete /> Delete
+                  Action
                 </th>
               </tr>
             </thead>
@@ -171,32 +172,27 @@ const RoleTable = (props) => {
               {roleData.map((data, index) => (
                 <tr key={index}>
                   <td style={rowBodyStyle} className="text-capitalize">
+                    {index + 1}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
                     {data["company"][0]["CompanyName"]}
                   </td>
                   <td style={rowBodyStyle} className="text-capitalize">
                     {data["RoleName"]}
                   </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    <span
+                  <td style={rowBodyStyle} className="text-capitalize text-end">
+                    <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<FaEdit />}
                       onClick={() => props.onEditRole(data)}
-                      title="Update"
-                      style={{ cursor: "pointer", width: "fit-content" }}
-                      className="border border-primary px-2 py-1 text-primary  ms-auto d-flex gap-3 align-items-center"
-                    >
-                      <FontAwesomeIcon icon={faEdit} />
-                      <span className="d-none d-md-flex">Edit</span>
-                    </span>
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    <span
+                      tooltip={"Edit Role"}
+                    />
+                    <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<IoTrashBin />}
                       onClick={() => onRoleDelete(data["_id"])}
-                      title="Delete"
-                      style={{ cursor: "pointer", width: "fit-content" }}
-                      className="border border-danger px-2 py-1 text-danger  ms-auto d-flex gap-3 align-items-center"
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                      <span className="d-none d-md-flex">Delete</span>
-                    </span>
+                      tooltip={"Delete Role"}
+                    />
                   </td>
                 </tr>
               ))}

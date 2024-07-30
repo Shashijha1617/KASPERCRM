@@ -64,6 +64,32 @@ const MyTodaysLoginData = (props) => {
 
     return hours + " Hrs " + remainingMinutes + " Min";
   }
+
+  const labelData = [
+    {
+      icon: <RiLoginCircleFill />,
+      title: "Login",
+      data: attendanceData.loginTime,
+    },
+    {
+      icon: <MdCoffee />,
+      title: "Total Break",
+      data: convertMinutesToHoursAndMinutes(attendanceData.totalBrake),
+    },
+    {
+      icon: <BsFillBriefcaseFill />,
+      title: "Total Working",
+      data: convertMinutesToHoursAndMinutes(attendanceData.totalLoginTime),
+    },
+    {
+      icon: <RiLoginCircleFill />,
+      title: "Logout",
+      data: attendanceData.logoutTime
+        ? attendanceData.logoutTime
+        : "Not Logged out",
+    },
+  ];
+
   return (
     <div
       style={{
@@ -71,64 +97,33 @@ const MyTodaysLoginData = (props) => {
       }}
       className="row justify-content-between rounded-0 row-gap-3 container-fluid my-2 mx-auto"
     >
-      <div
-        className="col-6 col-lg-3  row rounded-0 py-2"
-        style={{ height: "5rem", background: "var(--basecolor)" }}
-      >
-        <div className="col-8 my-auto">
-          <span>Login </span>
-          <p className="m-0">{attendanceData.loginTime}</p>
-        </div>
-        <div className="col-4 d-flex  align-items-center justify-content-center m-auto fs-2">
-          <RiLoginCircleFill />
-        </div>
-      </div>
-      <div
-        className="col-6 d-gllex col-lg-3 row rounded-0 py-2"
-        style={{ height: "5rem", background: "var(--basecolor2)" }}
-      >
-        <div className="col-8 my-auto">
-          <span>Total Break</span>
-          <p className="m-0">
-            {convertMinutesToHoursAndMinutes(attendanceData.totalBrake)}
-          </p>
-        </div>
-        <div className="col-4 d-flex  align-items-center justify-content-center m-auto fs-2">
-          <MdCoffee />
-        </div>
-      </div>
-      <div
-        className="col-6 col-lg-3 row rounded-0 py-2"
-        style={{ height: "5rem", background: "var(--basecolor3)" }}
-      >
-        <div className="col-8 my-auto">
-          <span>Total Working</span>
-          <p className="m-0">
-            {convertMinutesToHoursAndMinutes(attendanceData.totalLoginTime)}
-          </p>
-        </div>
-        <div className="col-4 d-flex  align-items-center justify-content-center m-auto fs-2">
-          <BsFillBriefcaseFill />
-        </div>
-      </div>
-      <div
-        className="col-6 col-lg-3 row rounded-0 py-2"
-        style={{ height: "5rem", background: "var(--basecolor4)" }}
-      >
-        <div className="col-8 my-auto">
-          <span>Logout</span>
-          <p className="m-0">
-            {attendanceData.logoutTime
-              ? attendanceData.logoutTime
-              : "Not Logged out"}
-          </p>
-        </div>
-        <div className="col-4 d-flex  align-items-center justify-content-center m-auto fs-2">
-          <RiLogoutCircleFill />
-        </div>
-      </div>
+      {labelData.map((item, index) => (
+        <Labels
+          key={index}
+          icon={item.icon}
+          title={item.title}
+          data={item.data}
+        />
+      ))}
     </div>
   );
 };
 
 export default MyTodaysLoginData;
+
+const Labels = ({ title, data, icon }) => {
+  return (
+    <div
+      className="col-6 col-lg-3 row rounded-0 py-2"
+      style={{ height: "5rem", background: "var(--basecolor4)" }}
+    >
+      <div className="col-8 my-auto">
+        <span>{title}</span>
+        <p className="m-0">{data}</p>
+      </div>
+      <div className="col-4 d-flex align-items-center justify-content-center m-auto fs-2">
+        {icon}
+      </div>
+    </div>
+  );
+};

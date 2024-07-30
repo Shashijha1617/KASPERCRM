@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 // import "react-toastify/dist/ReactToastify.css";
 import BASE_URL from "../../../Pages/config/config";
 
-const TaskAssign = () => {
+const AdminTaskStatus = () => {
   const [departmentData, setDepartmentData] = useState([]);
   const [endDateError, setEndDateError] = useState(false);
   const [managerData, setManagerData] = useState(null);
@@ -23,7 +23,7 @@ const TaskAssign = () => {
     attachments: null,
     managerEmail: "",
     department: "",
-    comment: ""
+    comment: "",
   });
 
   const isFormValid = () => {
@@ -44,8 +44,8 @@ const TaskAssign = () => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((val) => {
         let mana = val.data.filter((val) => {
@@ -124,7 +124,7 @@ const TaskAssign = () => {
           Account: 4,
           message: `New task assigned by ${email}`,
           status: "unseen",
-          path: "newTask"
+          path: "newTask",
         };
 
         socket.emit("managerTaskNotification", taskNotificationData);
@@ -141,7 +141,7 @@ const TaskAssign = () => {
           attachments: null,
           managerEmail: "",
           department: "",
-          comment: ""
+          comment: "",
         });
       })
       .catch((err) => {
@@ -205,8 +205,8 @@ const TaskAssign = () => {
     axios
       .get(`${BASE_URL}/api/department`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setDepartmentData(response.data);
@@ -364,4 +364,4 @@ const TaskAssign = () => {
   );
 };
 
-export default TaskAssign;
+export default AdminTaskStatus;

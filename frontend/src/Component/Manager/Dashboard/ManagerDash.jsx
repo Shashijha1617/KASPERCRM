@@ -1,11 +1,11 @@
 import React from "react";
-import DepartmentChart from "../Chart/DepartmentChart";
+import DepartmentChart from "../../../Pages/Chart/DepartmentChart";
+import DailyAttendChart from "../../../Pages/Chart/DailyAttendChart";
+import EmployeeLogCount from "../../../Pages/Chart/EmployeeLogCount";
+import AdminEmployeeTable from "../../../Pages/Chart/EmployeeCountTable";
 import TaskChart from "./Chart/TaskChart";
 import "./ManagerDash.css";
 import WelcomeBoard from "../../../Pages/WelcomeBoard/WelcomeBoard";
-import EmployeeLogCount from "../../HrManager/Dashboard/CountData/EmplooyeeLogCount";
-import AdminEmployeeTable from "../../HrManager/Dashboard/CountData/EmployeeCount";
-import DailyAttendChart from "../../../Pages/Chart/DailyAttendChart";
 import MyTodaysLoginData from "../../Employee/WelcomeBoard/MyTodaysLoginData/MyTodaysLoginData";
 import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 

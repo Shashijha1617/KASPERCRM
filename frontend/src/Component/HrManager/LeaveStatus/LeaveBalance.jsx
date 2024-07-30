@@ -37,7 +37,10 @@ const LeaveBalance = () => {
   return (
     <div className="container-fluid py-2">
       <div className="d-flex justify-content-between aline-items-center">
-      <TittleHeader title={"Leaves Balance"}  message={"You can see all new leave balances here."}/>
+        <TittleHeader
+          title={"Leaves Balance"}
+          message={"You can see all new leave balances here."}
+        />
       </div>
 
       <div className="d-flex flex-wrap justify-content-between gap-2 my-2">
@@ -63,7 +66,10 @@ const LeaveBalance = () => {
                     {leaveType.charAt(0).toUpperCase() + leaveType.slice(1)}
                   </p>
                 </div>
-                <h6 style={{fontWeight:'400'}} className="card-text text-center mb-4">
+                <h6
+                  style={{ fontWeight: "400" }}
+                  className="card-text text-center mb-4"
+                >
                   {totalBalance - balance} Out of / {totalBalance}
                 </h6>
                 <div>
@@ -71,7 +77,7 @@ const LeaveBalance = () => {
                     {calculatePercentage(totalBalance - balance, totalBalance)}%
                     of 100%
                   </p>
-                  <div style={{ height: "6px" ,}} className="progress">
+                  <div style={{ height: "6px" }} className="progress">
                     <div
                       className="progress-bar bg-primary"
                       role="progressbar"
@@ -105,9 +111,9 @@ const LeaveBalance = () => {
               className="card-body border rounded-1"
             >
               <div className="d-flex justify-content-between gap-3">
-                <p className="fw-bold ">Sick Leave</p>
+                <p className=" ">Sick Leave</p>
               </div>
-              <h5 className="card-text fw-bold">You Have ( 0 ) Leaves </h5>
+              <h6 className="card-text ">You Have ( 0 ) Leaves </h6>
             </div>
             <div
               style={{
@@ -122,9 +128,9 @@ const LeaveBalance = () => {
               className="card-body border rounded-1"
             >
               <div className="d-flex justify-content-between gap-3">
-                <p className="fw-bold ">Paid Leave</p>
+                <p className=" ">Paid Leave</p>
               </div>
-              <h5 className="card-text fw-bold">You Have ( 0 ) Leaves </h5>
+              <h6 className="card-text ">You Have ( 0 ) Leaves </h6>
             </div>
             <div
               style={{
@@ -139,9 +145,9 @@ const LeaveBalance = () => {
               className="card-body border rounded-1"
             >
               <div className="d-flex justify-content-between gap-3">
-                <p className="fw-bold ">Casual Leave</p>
+                <p className=" ">Casual Leave</p>
               </div>
-              <h5 className="card-text fw-bold">You Have ( 0 ) Leaves </h5>
+              <h6 className="card-text ">You Have ( 0 ) Leaves </h6>
             </div>
             <div
               style={{
@@ -156,9 +162,9 @@ const LeaveBalance = () => {
               className="card-body border rounded-1"
             >
               <div className="d-flex justify-content-between gap-3">
-                <p className="fw-bold ">Paternity Leave</p>
+                <p className=" ">Paternity Leave</p>
               </div>
-              <h5 className="card-text fw-bold">You Have ( 0 ) Leaves </h5>
+              <h6 className="card-text ">You Have ( 0 ) Leaves </h6>
             </div>
             <div
               style={{
@@ -173,9 +179,9 @@ const LeaveBalance = () => {
               className="card-body border rounded-1"
             >
               <div className="d-flex justify-content-between gap-3">
-                <p className="fw-bold ">Maternity Leave</p>
+                <p className=" ">Maternity Leave</p>
               </div>
-              <h5 className="card-text fw-bold">You Have ( 0 ) Leaves </h5>
+              <h6 className="card-text ">You Have ( 0 ) Leaves </h6>
             </div>
           </div>
         )}

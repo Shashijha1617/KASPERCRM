@@ -203,7 +203,6 @@ const SelfAttendance = () => {
 
         {attendanceData && (
           <div className="d-flex gap-3">
-            <SetBreakLogs />
             <div>
               <select
                 className="form-select rounded-0 shadow"

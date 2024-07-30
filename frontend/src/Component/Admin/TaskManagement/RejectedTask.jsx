@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import BASE_URL from "../../../Pages/config/config";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
+import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
+import { getFormattedDate } from "../../../Utils/GetDayFormatted";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 
 const RejectedTask = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [timeinfo, setTimeinfo] = useState(false);
+  const [expandedTaskId, setExpandedTaskId] = useState(null);
+  const { darkMode } = useTheme();
 
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/tasks`, {
-        params: { status: "Completed" } // Filter by status "Completed"
+        params: { status: "Completed" }, // Filter by status "Completed"
       });
 
       setTasks(response.data);
@@ -28,12 +35,24 @@ const RejectedTask = () => {
     return () => clearTimeout();
   }, []);
 
+  const toggleTaskDetails = (taskId) => {
+    setExpandedTaskId((prevId) => (prevId === taskId ? null : taskId));
+  };
+
   return (
-    <div className="p-4">
-      <h1 className="fs-2 text-muted fw-bolder text-uppercase">
-        ❌ Rejected Tasks
-      </h1>
-      <p className="text-muted">You can view all rejected task here!</p>{" "}
+    <div
+      style={{
+        color: darkMode
+          ? "var(--secondaryDashColorDark)"
+          : "var(--primaryDashMenuColor)",
+      }}
+      className="container-fluid py-3"
+    >
+      <TittleHeader
+        title={"Revoked Task"}
+        numbers={tasks.filter((task) => task.status === "Rejected").length}
+        message={"You can view all revoked task status here."}
+      />
       {loading && (
         <div
           style={{ width: "100%", height: "100%" }}
@@ -48,126 +67,127 @@ const RejectedTask = () => {
           <span className="text-primary fw-bold">Loading...</span>
         </div>
       )}
-      <div
-        style={{
-          overflowY: "scroll",
-          height: "80vh",
-          scrollbarWidth: "thin",
-          scrollbarGutter: "stable",
-          scrollMargin: "1rem"
-        }}
-        className="d-flex flex-column gap-3"
-      >
+
+      <div className="row mx-auto">
         {tasks
           .filter((task) => task.status === "Rejected")
           .map((task, index) => (
-            <details
+            <div
+              key={task._id}
               style={{
-                boxShadow: "-1px 1px 10px gray"
+                color: darkMode
+                  ? "var(--primaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
               }}
-              className="p-1 position-relative mt-3 fs-4 rounded mx-3"
-              key={task.id}
+              className="col-12 col-md-6 col-lg-4 p-2"
             >
-              <summary
+              <div
                 style={{
-                  height: "fit-content",
-                  background: "linear-gradient(#1D267D, #2F58CD)"
+                  border: !darkMode
+                    ? "1px solid var(--primaryDashMenuColor)"
+                    : "1px solid var(--secondaryDashColorDark)",
                 }}
-                className="d-flex justify-content-between aline-center form-control text-white"
+                className="task-hover-effect p-2"
               >
-                <div className="fw-bold fs-5 d-flex justify-content-center flex-column">
-                  # Task {index + 1} : {task.Taskname}
+                <div className="d-flex align-items-center justify-content-between">
+                  <h5>{task.Taskname}</h5>
+                  <button className="btn btn-danger">{task.status}</button>
                 </div>
-                <div
-                  style={{ position: "absolute", top: "-10px", left: "20px" }}
-                  className="fw-bold bg-white rounded-5 px-3 text-success fs-6 d-flex justify-content-center aline-center flex-column"
-                >
-                  {task.department}
+                <hr />
+                <div className="d-flex align-items-center justify-content-between gap-2">
+                  <div className="d-flex align-items-center gap-2">
+                    <img
+                      style={{
+                        height: "30px",
+                        width: "30px",
+                        borderRadius: "50%",
+                      }}
+                      src="https://rihodjango.pixelstrap.net/riho/rihoapp/static/assets/images/user/3.jpg"
+                      alt=""
+                    />
+                    <span>Kishor.kumar@kasperinfotech.org</span>
+                  </div>
+                  <span
+                    style={{
+                      border: darkMode
+                        ? "1px solid var(--primaryDashColorDark)"
+                        : "1px solid var(--primaryDashMenuColor)",
+                    }}
+                    className="px-2 py-1 text-center"
+                  >
+                    {task.department}
+                  </span>
+                </div>
+                <hr />
+                <div className="my-3 d-flex flex-column gap-1">
+                  <h6>Task Description</h6>
+                  <span>{task.description}</span>
                 </div>
                 <div>
-                  <p className="btn btn-light m-auto py-1 px-3 fw-bold">
-                    Rejected
-                  </p>
-                </div>
-              </summary>
-              <div
-                style={{ position: "relative" }}
-                className="row p-1 my-2 mx-0 bg-light text-dark rounded"
-              >
-                <div
-                  style={{
-                    width: "99.4%",
-                    height: "100%",
-                    zIndex: "5",
-                    backgroundColor: "rgba(5, 128, 8, 0.384)",
-                    textShadow: "-5px 5px 5px rgba(128, 128, 128, 0.422)"
-                  }}
-                  className="watermark form-control   position-absolute d-flex justify-content-center aline-center"
-                >
-                  <h1 className="text-uppercase text-light fw-bolder">
-                    R E J E C T E D
-                  </h1>
-                </div>
-                <div style={{ height: "fit-content" }} className="form-control">
-                  <p
-                    style={{ height: "fit-content" }}
-                    className="text-start fs-6 form-control"
-                  >
-                    <h6 className="fw-bold">Task Discription</h6>{" "}
-                    {task.description}
-                  </p>
-                  <div
-                    style={{ height: "fit-content" }}
-                    className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
-                  >
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      Task Durations <br /> <span>{task.duration} days</span>{" "}
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      Manager's Email <br /> <span>{task.managerEmail}</span>
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      Start Date <br />{" "}
-                      <span>
-                        {new Date(task.startDate).toLocaleDateString()}
+                  <div className="d-flex justify-content-between gap-3 my-2">
+                    <span className="d-flex flex-column">
+                      <h6>Task Duration</h6>
+                      <span style={{ width: "fit-content" }}>
+                        {task.duration} days
                       </span>
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      End Date <br />{" "}
-                      <span>{new Date(task.endDate).toLocaleDateString()}</span>
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      <span>
-                        Task Status <br /> {task.status}
+                    </span>{" "}
+                    <span className="d-flex flex-column">
+                      <h6>Start Date</h6>{" "}
+                      <span style={{ width: "fit-content" }}>
+                        {getFormattedDate(task.startDate)}
                       </span>
-                    </p>
+                    </span>
+                    <span className="d-flex flex-column">
+                      <h6>End Date</h6>{" "}
+                      <span style={{ width: "fit-content" }}>
+                        {getFormattedDate(task.endDate)}
+                      </span>
+                    </span>
                   </div>
-                  <div
-                    style={{ height: "fit-content" }}
-                    className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
-                  >
-                    <p>
-                      <span className="fw-bold">Remarks : </span> {task.comment}
-                    </p>
+                  <div className="mt-4">
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onMouseEnter={() => setTimeinfo("name")}
+                      onMouseLeave={() => setTimeinfo(false)}
+                      onClick={() => toggleTaskDetails(task._id)}
+                    >
+                      {expandedTaskId === task._id ? (
+                        <span>
+                          View Less <MdArrowDropUp className="fs-4" />
+                        </span>
+                      ) : (
+                        <span>
+                          {" "}
+                          View Details <MdArrowDropDown className="fs-4" />
+                        </span>
+                      )}
+                    </span>
                   </div>
+                  {expandedTaskId === task._id && (
+                    <div>
+                      <div className="d-flex flex-column my-2">
+                        <h6>Remarks</h6>
+                        <span>{task.comment}</span>
+                      </div>
+                      <hr />
+                      <div className="d-flex flex-column gap-2 my-2">
+                        {task.status === "Rejected" && (
+                          <span className="border border-danger px-2 py-1 text-center">
+                            The task has been rejected by{" "}
+                            <span className="text-danger">
+                              {" "}
+                              {task.managerEmail}
+                            </span>
+                            . Please communicate any discrepancies you
+                            encounter.
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            </details>
+            </div>
           ))}
       </div>
     </div>

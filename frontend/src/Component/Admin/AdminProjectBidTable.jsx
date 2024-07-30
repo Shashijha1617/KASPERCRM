@@ -11,6 +11,7 @@ import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { FaEdit } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa6";
+import TittleHeader from "../../Pages/TittleHeader/TittleHeader";
 
 const override = css`
   display: block;
@@ -135,29 +136,12 @@ const AdminProjectBidTable = (props) => {
   return (
     <div className="container-fluid py-3">
       <div className="d-flex justify-between align-items-start mb-3">
-        <div className="my-auto">
-          <h5
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)",
-              fontWeight: "600",
-            }}
-            className="m-0"
-          >
-            Bidding Details
-          </h5>
-          <p
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var(--secondaryDashMenuColor)",
-            }}
-            className="m-0"
-          >
-            You can see all your bids here.
-          </p>
-        </div>
+        <TittleHeader
+          title={"Bidding Details"}
+          numbers={projectBidData.length}
+          message={"You can view all bids here."}
+        />
+
         <button
           className="btn btn-primary gap-1 d-flex my-auto align-items-center justify-content-center"
           onClick={props.onAddProjectBid}

@@ -207,7 +207,7 @@ const LeaveCalendar = () => {
                 <div
                   style={{
                     height: "100%",
-                    width: "80%",
+                    width: "93%",
                     position: "absolute",
                     top: "0",
                     left: "0",

@@ -216,6 +216,7 @@ const ManagerNewTask = () => {
               (task) =>
                 task.status === "Assigned" && task.managerEmail === email
             )
+            .reverse()
             .map((task) => (
               <div
                 key={task._id}

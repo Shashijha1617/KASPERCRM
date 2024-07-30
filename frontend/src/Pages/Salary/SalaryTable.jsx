@@ -8,11 +8,14 @@ import { Button } from "react-bootstrap";
 import "./SalaryTable.css";
 import { LuSearch } from "react-icons/lu";
 import { GrFormPrevious } from "react-icons/gr";
-import { MdNearbyError } from "react-icons/md";
+import { MdNearbyError, MdOutlineCurrencyRupee } from "react-icons/md";
 import { IoTrashBin } from "react-icons/io5";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../config/config";
 import { FaEdit } from "react-icons/fa";
+import TittleHeader from "../TittleHeader/TittleHeader";
+import OverLayToolTip from "../../Utils/OverLayToolTip";
+import { TbUserEdit } from "react-icons/tb";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -159,7 +162,11 @@ const AdminSalaryTable = (props) => {
         className=" row mx-auto mb-3 py-1 mt-2"
       >
         <div className="my-auto d-flex justify-content-between">
-          <h5 className="my-auto text-capitalize">Salary Details</h5>
+          <TittleHeader
+            title={"Salary Details"}
+            message={"You can view or create employees salary here."}
+          />
+          <h5 className="my-auto text-capitalize"></h5>
 
           <div className="d-flex gap-2 justify-content-between py-1">
             <div className="searchholder p-0 d-flex  position-relative">
@@ -222,22 +229,20 @@ const AdminSalaryTable = (props) => {
               <thead>
                 <tr style={{ position: "sticky", top: "0", zIndex: "3" }}>
                   <th
+                    colSpan={2}
                     style={rowHeadStyle}
-                    className="py-2 px-0 text-center fw-normal border-0"
+                    className="py-2 fw-normal  border-0"
                   >
-                    Profile
-                  </th>
-                  <th style={rowHeadStyle} className="py-2 fw-normal  border-0">
-                    Name
+                    Employee Name
                   </th>
                   <th style={rowHeadStyle} className="py-2 fw-normal border-0">
-                    Emp ID
+                    # ID
                   </th>
                   <th style={rowHeadStyle} className="py-2 fw-normal border-0">
                     Designation
                   </th>
                   <th style={rowHeadStyle} className="py-2 fw-normal border-0">
-                    Salary
+                    <MdOutlineCurrencyRupee /> Salary
                   </th>
                   <th style={rowHeadStyle} className="py-2 fw-normal border-0">
                     Bank Name
@@ -252,19 +257,13 @@ const AdminSalaryTable = (props) => {
                     IFSC Code
                   </th>
                   <th style={rowHeadStyle} className="py-2 fw-normal border-0">
-                    Tax Deduction
+                    <MdOutlineCurrencyRupee /> Tax Deduction
                   </th>
                   <th
                     style={rowHeadStyle}
-                    className="py-2 fw-normal text-center border-0"
+                    className="py-2 fw-normal text-end border-0"
                   >
-                    Edit
-                  </th>
-                  <th
-                    style={rowHeadStyle}
-                    className="py-2 fw-normal text-center border-0"
-                  >
-                    Delete
+                    Action
                   </th>
                 </tr>
               </thead>
@@ -308,7 +307,7 @@ const AdminSalaryTable = (props) => {
                       {item.PositionName}
                     </td>
                     <td style={rowBodyStyle} className=" border-0">
-                      {item.BasicSalary}
+                      <MdOutlineCurrencyRupee /> {item.BasicSalary}/-
                     </td>
                     <td
                       style={rowBodyStyle}
@@ -335,43 +334,21 @@ const AdminSalaryTable = (props) => {
                       {item.IFSCcode}
                     </td>
                     <td style={rowBodyStyle} className="border-0">
-                      {item.TaxDeduction}
+                      <MdOutlineCurrencyRupee /> {item.TaxDeduction}/-
                     </td>
-                    <td style={rowBodyStyle} className="border-0">
-                      <div className="d-flex  gap-3 justify-content-around">
-                        <button
-                          style={{
-                            background: darkMode
-                              ? "var(--secondaryDashMenuColor)"
-                              : "var(--secondaryDashColorDark)",
-                            color: darkMode
-                              ? "var(--secondaryDashColorDark)"
-                              : "var(--primaryDashMenuColor)",
-                          }}
-                          className="btn"
-                          onClick={() => props.onEditSalary(item.data)}
-                        >
-                          <FaEdit /> Edit
-                        </button>
-                      </div>
-                    </td>
-                    <td style={rowBodyStyle} className="border-0">
-                      <div className="d-flex  gap-3 justify-content-around">
-                        <button
-                          style={{
-                            background: darkMode
-                              ? "var(--secondaryDashMenuColor)"
-                              : "var(--secondaryDashColorDark)",
-                            color: darkMode
-                              ? "var(--secondaryDashColorDark)"
-                              : "var(--primaryDashMenuColor)",
-                          }}
-                          className="btn"
-                          onClick={() => onSalaryDelete(item.data._id)}
-                        >
-                          <IoTrashBin /> Delete
-                        </button>
-                      </div>
+                    <td style={rowBodyStyle} className="border-0 text-end">
+                      <OverLayToolTip
+                        style={{ color: darkMode ? "black" : "white" }}
+                        icon={<FaEdit />}
+                        onClick={() => props.onEditSalary(item.data)}
+                        tooltip={"Edit Salary"}
+                      />
+                      <OverLayToolTip
+                        style={{ color: darkMode ? "black" : "white" }}
+                        icon={<IoTrashBin />}
+                        onClick={() => onSalaryDelete(item.data._id)}
+                        tooltip={"Delete Salary"}
+                      />
                     </td>
                   </tr>
                 ))}

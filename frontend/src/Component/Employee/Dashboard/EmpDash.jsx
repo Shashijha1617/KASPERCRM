@@ -2,7 +2,7 @@ import React from "react";
 import "./EmpDash.css";
 // import "../../HrManager/DashboardHR.css";
 import EmpTaskChart from "./EmpChart.jsx/EmpTaskChart";
-import DepartmentChart from "./EmpChart.jsx/DepartmentChart";
+import DepartmentChart from "../../../Pages/Chart/DepartmentChart";
 // import WelcomeBoard from "../../../Pages/WelcomeBoard/WelcomeBoard";
 import WelcomeBoard from "../WelcomeBoard/WelcomeBoard";
 import AttendanceDetails from "../attendance/SelfAttendance";
