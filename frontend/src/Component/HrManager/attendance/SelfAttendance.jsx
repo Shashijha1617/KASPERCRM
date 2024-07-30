@@ -11,6 +11,7 @@ import { GoHash } from "react-icons/go";
 import { HiOutlineLogin, HiOutlineLogout } from "react-icons/hi";
 import { IoIosTimer, IoMdTimer } from "react-icons/io";
 import { GrStatusInfo } from "react-icons/gr";
+import TakeBreakLogs from "../../../Pages/Attendance/TakeBreakLogs";
 
 const SelfAttendance = () => {
   const [attendanceData, setAttendanceData] = useState(null);
@@ -269,18 +270,8 @@ const SelfAttendance = () => {
 
         {attendanceData && (
           <div className="d-flex gap-3">
+            <TakeBreakLogs />
             <div>
-              <label
-                style={{
-                  color: darkMode
-                    ? "var(--secondaryDashColorDark)"
-                    : "var(--secondaryDashMenuColor)",
-                }}
-                className="m-0"
-                htmlFor="year"
-              >
-                Select a year:
-              </label>
               <select
                 className="form-select my-0 rounded-0 shadow"
                 id="year"
@@ -295,17 +286,7 @@ const SelfAttendance = () => {
               </select>
             </div>
             <div>
-              <label
-                style={{
-                  color: darkMode
-                    ? "var(--secondaryDashColorDark)"
-                    : "var(--secondaryDashMenuColor)",
-                }}
-                className="m-0"
-                htmlFor="month"
-              >
-                Select a month:
-              </label>
+            
               <select
                 className="form-select my-0 rounded-0 shadow"
                 id="month"

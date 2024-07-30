@@ -198,7 +198,7 @@ const DepartmentChart = () => {
           ? "var(--primaryDashColorDark)"
           : "var(--primaryDashMenuColor)",
       }}
-      className="ChartCard p-2 shadow"
+      className="ChartCard p-2 shadow rounded-0"
     >
       <Chart
         options={chartOption.options}

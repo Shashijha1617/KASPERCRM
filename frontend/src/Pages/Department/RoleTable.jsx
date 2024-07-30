@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./RoleTable.css";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import Position from "../../img/Position/Position.svg";
 import BASE_URL from "../config/config";
-import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
-import { MdOutlineEdit } from "react-icons/md";
+import {AiOutlinePlusCircle } from "react-icons/ai";
 import { FaEdit } from "react-icons/fa";
 import { IoTrashBin } from "react-icons/io5";
 import OverLayToolTip from "../../Utils/OverLayToolTip";

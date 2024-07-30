@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./StateTable.css";
 import axios from "axios";
-import { FaRegEdit } from "react-icons/fa";
+import { FaEdit, FaRegEdit } from "react-icons/fa";
 import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../config/config";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
+import OverLayToolTip from "../../Utils/OverLayToolTip";
+import { IoTrashBin } from "react-icons/io5";
 
 const override = css`
   display: block;
@@ -152,11 +154,9 @@ const StateTable = (props) => {
                 <th style={rowHeadStyle}>Country</th>
                 <th style={rowHeadStyle}>State</th>
                 <th className="text-end" style={rowHeadStyle}>
-                  Edit
+                  Action
                 </th>
-                <th className="text-end" style={rowHeadStyle}>
-                  Delete
-                </th>
+
               </tr>
             </thead>
             <tbody>
@@ -168,26 +168,22 @@ const StateTable = (props) => {
                   <td style={rowBodyStyle} className="text-uppercase">
                     {items.StateName}
                   </td>
-                  <td style={rowBodyStyle} className="text-uppercase">
-                    <span
+                  <td className="text-end" style={rowBodyStyle}>
+                <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<FaEdit />}
                       onClick={() => props.onEditState(items)}
-                      style={{ cursor: "pointer", width: "fit-content" }}
-                      className="border border-primary px-2 py-1 text-primary  ms-auto d-flex gap-3 align-items-center"
-                    >
-                      <FaRegEdit />
-                      <span className="d-none d-md-flex">Edit</span>
-                    </span>
-                  </td>
-                  <td style={rowBodyStyle} className="text-uppercase">
-                    <span
+                      tooltip={"Edit State"}
+                    />
+                    <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<IoTrashBin />}
                       onClick={() => onStateDelete(items._id)}
-                      style={{ cursor: "pointer", width: "fit-content" }}
-                      className="border border-danger px-2 py-1 text-danger  ms-auto d-flex gap-3 align-items-center"
-                    >
-                      <AiOutlineDelete />
-                      <span className="d-none d-md-flex">Delete</span>
-                    </span>
-                  </td>
+                      tooltip={"Delete State"}
+                    />
+                  
+                </td>
+            
                 </tr>
               ))}
             </tbody>

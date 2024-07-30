@@ -1,32 +1,18 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { MdMenuOpen, MdTaskAlt } from "react-icons/md";
+import { MdMenuOpen } from "react-icons/md";
 import {
-  FaCalendarCheck,
-  FaMale,
   FaRegUser,
-  FaTasks,
-  FaUniversity,
-  FaUserCircle,
 } from "react-icons/fa";
-import { TbDeviceIpadMinus } from "react-icons/tb";
 import {
-  FaBriefcase,
-  FaFolderOpen,
   FaRegCircleUser,
-  FaUser,
 } from "react-icons/fa6";
 import {
-  BsCalendar2,
-  BsCalendar2CheckFill,
-  BsDeviceHddFill,
-  BsFillCalendarEventFill,
+
   BsFolderCheck,
 } from "react-icons/bs";
 import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { RiFileUserLine, RiTaskFill } from "react-icons/ri";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { IoCalendarOutline } from "react-icons/io5";
 import { GoTasklist } from "react-icons/go";
@@ -59,18 +45,22 @@ const Sidebar = (props) => {
       icon: <IoMdCheckmarkCircleOutline className="fs-4" />,
       name: "Attendance",
       navLinks: [
+        // {
+        //   to: "/employee/" + props.data["_id"] + "/attendance",
+        //   label: "Create Attendance",
+        // },
         {
-          to: "/employee/" + props.data["_id"] + "/attendance",
-          label: "Create Attendance",
-        },
-        {
-          to: "/employee/" + props.data["_id"] + "/attendanceList",
+          to: "/employee/MyAttendance",
           label: "View Attendance",
         },
-        {
-          to: "/employee/" + props.data["_id"] + "/selfAtteend",
-          label: "self Attendance",
-        },
+        // {
+        //   to: "/employee/" + props.data["_id"] + "/attendanceList",
+        //   label: "View Attendance",
+        // },
+        // {
+        //   to: "/employee/" + props.data["_id"] + "/selfAtteend",
+        //   label: "self Attendance",
+        // },
       ],
     },
     {

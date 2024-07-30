@@ -9,7 +9,7 @@ import { useSidebar } from "../../Context/AttendanceContext/smallSidebarcontext.
 import SidebarSmallScreen from "./sidebar/SidebarSmallScreen.jsx";
 import { useTheme } from "../../Context/TheamContext/ThemeContext.js";
 import SidebarSlider from "../../Pages/Sidebar/SidebarSlider.jsx";
-import Footer from "../../Pages/Footer/Footer.jsx";
+// import Footer from "../../Pages/Footer/Footer.jsx";
 
 const DashboardEmployee = (props) => {
   const [checked, setChecked] = useState(true);
@@ -33,8 +33,12 @@ const DashboardEmployee = (props) => {
         backgroundColor: darkMode
           ? "var(--secondaryDashMenuColor)"
           : "var(--secondaryDashColorDark)",
-        height: "100vh",
-        overflow: "hidden"
+        maxHeight: "100vh",
+        overflow: "hidden",
+        position: "fixed",
+        width: "100%",
+        left: "0",
+        top: "0",
       }}
     >
       <SidebarSlider />

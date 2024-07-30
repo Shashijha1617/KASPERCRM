@@ -2,14 +2,15 @@ import React, { useState, useEffect, useCallback } from "react";
 import "./CountryTable.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Button } from "react-bootstrap";
-import { FaRegEdit } from "react-icons/fa";
+import { FaEdit, FaRegEdit } from "react-icons/fa";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../config/config";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import OverLayToolTip from "../../Utils/OverLayToolTip";
+import { IoTrashBin } from "react-icons/io5";
 
 const override = css`
   display: block;
@@ -153,10 +154,7 @@ const CountryTable = (props) => {
             <tr style={{ position: "sticky", top: "0" }}>
               <th style={rowHeadStyle}>Country</th>
               <th className="text-end" style={rowHeadStyle}>
-                Edit
-              </th>
-              <th className="text-end" style={rowHeadStyle}>
-                Delete
+                Action
               </th>
             </tr>
           </thead>
@@ -164,24 +162,20 @@ const CountryTable = (props) => {
             {countryData.map((item, index) => (
               <tr key={index}>
                 <td style={rowBodyStyle}>{item.CountryName}</td>
-                <td style={rowBodyStyle}>
-                  <span
-                    onClick={() => props.onEditCountry(item)}
-                    style={{ cursor: "pointer", width: "fit-content" }}
-                    className="border border-primary px-2 py-1 text-primary  ms-auto d-flex gap-3 align-items-center"
-                  >
-                    <FaRegEdit /> <span className="d-none d-md-flex">Edit</span>
-                  </span>
-                </td>
-                <td style={rowBodyStyle}>
-                  <span
-                    onClick={() => onCountryDelete(item._id)}
-                    style={{ cursor: "pointer", width: "fit-content" }}
-                    className="border border-danger px-2 py-1 text-danger  ms-auto d-flex gap-3 align-items-center"
-                  >
-                    <FontAwesomeIcon icon={faTrash} />{" "}
-                    <span className="d-none d-md-flex">Delete</span>
-                  </span>
+                <td className="text-end" style={rowBodyStyle}>
+                <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<FaEdit />}
+                      onClick={() => props.onEditCountry(item)}
+                      tooltip={"Edit Country"}
+                    />
+                    <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<IoTrashBin />}
+                      onClick={() => onCountryDelete(item._id)}
+                      tooltip={"Delete Country"}
+                    />
+                  
                 </td>
               </tr>
             ))}

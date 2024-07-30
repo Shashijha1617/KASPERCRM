@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MdCoffee } from "react-icons/md";
-import { RiLoginCircleFill, RiLogoutCircleFill } from "react-icons/ri";
+import { RiLoginCircleFill } from "react-icons/ri";
 import { BsFillBriefcaseFill } from "react-icons/bs";
 import axios from "axios";
 import BASE_URL from "../../../../Pages/config/config";
@@ -56,7 +56,7 @@ const MyTodaysLoginData = (props) => {
   }, [employeeId]);
 
   if (!attendanceData) {
-    return <div>Loading...</div>; // or any other loading indicator
+    return <div>Loading...</div>; 
   }
   function convertMinutesToHoursAndMinutes(minutes) {
     var hours = Math.floor(minutes / 60);
@@ -93,12 +93,15 @@ const MyTodaysLoginData = (props) => {
   return (
     <div
       style={{
-        color: "var(--primaryDashMenuColor)",
+        color: darkMode
+        ? "var(--primaryDashColorDark)"
+        : "var(--secondaryDashMenuColor)",
       }}
       className="row justify-content-between rounded-0 row-gap-3 container-fluid my-2 mx-auto"
     >
       {labelData.map((item, index) => (
         <Labels
+          style={{background : darkMode ? "var(--basecolor)" : "var(--basecolor4)", height:'5rem'}}
           key={index}
           icon={item.icon}
           title={item.title}
@@ -111,11 +114,11 @@ const MyTodaysLoginData = (props) => {
 
 export default MyTodaysLoginData;
 
-const Labels = ({ title, data, icon }) => {
+const Labels = ({ title, data, icon , style}) => {
   return (
     <div
       className="col-6 col-lg-3 row rounded-0 py-2"
-      style={{ height: "5rem", background: "var(--basecolor4)" }}
+      style={style}
     >
       <div className="col-8 my-auto">
         <span>{title}</span>

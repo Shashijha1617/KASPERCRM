@@ -13,13 +13,16 @@ import Attendance from "../attendance/Attendance.jsx";
 import AttendanceList from "../attendance/AttendanceList.jsx";
 import EmpDash from "../Dashboard/EmpDash.jsx";
 import LeaveApplicationEmpTable from "../EmpLeave/LeaveApplicationEmp.jsx";
-import SelfAttendance from "../attendance/SelfAttendance.jsx";
 import DepartmentChart from "../Dashboard/EmpChart.jsx/DepartmentChart.jsx";
 import UpcomingBirthdays from "../Dashboard/CountData/UpcomingBirthdays.jsx";
 import Notification from "../Notification/Notification.jsx";
 import Document from "../Document/Document.jsx";
 import InnerDashContainer from "../../InnerDashContainer.jsx";
 import LeaveBalance from "../../HrManager/LeaveStatus/LeaveBalance.jsx";
+import AttendanceDetails from "../attendance/SelfAttendance.jsx";
+import EmpViewAttendance from "../../HrManager/attendance/SelfAttendance.jsx"
+
+
 const RouterContent = ({ data }) => {
   return (
     <InnerDashContainer>
@@ -80,6 +83,11 @@ const RouterContent = ({ data }) => {
         />
         <Route
           exact
+          path="/employee/MyAttendance"
+          render={(props) => <EmpViewAttendance />}
+        />
+        <Route
+          exact
           path="/employee/:id/departmentchart"
           render={(props) => <DepartmentChart data={data} />}
         />
@@ -102,7 +110,7 @@ const RouterContent = ({ data }) => {
         <Route
           path="/employee/:id/selfAtteend"
           exact
-          component={SelfAttendance}
+          component={AttendanceDetails}
         />
         <Route
           path="/employee/:id/birthDay"

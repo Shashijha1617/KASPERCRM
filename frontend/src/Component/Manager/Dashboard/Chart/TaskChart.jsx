@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Chart from "react-apexcharts";
-import { FaChartLine } from "react-icons/fa";
 import BASE_URL from "../../../../Pages/config/config";
 import { useTheme } from "../../../../Context/TheamContext/ThemeContext";
 const TaskChart = () => {

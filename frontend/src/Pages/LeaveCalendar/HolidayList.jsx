@@ -94,8 +94,7 @@ function HolidayList({ title, newFolderLink, holidayIcons }) {
           </Link>
         </h6>
 
-        {filteredHolidays.length > 0 && (
-          <div className="row mx-auto shadow-sm p-0 pb-1">
+        <div className="row mx-auto shadow-sm p-0 pb-1">
             <div className="col-11 mx-auto p-0">
               <input
                 type="text"
@@ -106,7 +105,6 @@ function HolidayList({ title, newFolderLink, holidayIcons }) {
               />
             </div>
           </div>
-        )}
 
         <div style={{ maxHeight: "350px", overflow: "auto" }}>
           {filteredHolidays.length > 0 ? (

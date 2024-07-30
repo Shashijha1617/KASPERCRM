@@ -4,9 +4,11 @@ import axios from "axios";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
-import { FaRegEdit } from "react-icons/fa";
+import { FaEdit, FaRegEdit } from "react-icons/fa";
 import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import BASE_URL from "../config/config";
+import OverLayToolTip from "../../Utils/OverLayToolTip";
+import { IoTrashBin } from "react-icons/io5";
 
 const override = css`
   display: block;
@@ -145,10 +147,7 @@ const CityTable = ({ onAddCity, onEditCity }) => {
               <th style={rowHeadStyle}>State</th>
               <th style={rowHeadStyle}>City</th>
               <th style={rowHeadStyle} className="text-end">
-                Edit
-              </th>
-              <th style={rowHeadStyle} className="text-end">
-                Delete
+                Action
               </th>
             </tr>
           </thead>
@@ -160,24 +159,20 @@ const CityTable = ({ onAddCity, onEditCity }) => {
                 </td>
                 <td style={rowBodyStyle}>{items.state[0].StateName}</td>
                 <td style={rowBodyStyle}>{items.CityName}</td>
-                <td style={rowBodyStyle}>
-                  <span
-                    onClick={() => onEditCity(items)}
-                    style={{ cursor: "pointer", width: "fit-content" }}
-                    className="border border-primary px-2 py-1 text-primary  ms-auto d-flex gap-3 align-items-center"
-                  >
-                    <FaRegEdit /> <span className="d-none d-md-flex">Edit</span>
-                  </span>
-                </td>
-                <td style={rowBodyStyle}>
-                  <span
-                    onClick={() => onCityDelete(items._id)}
-                    style={{ cursor: "pointer", width: "fit-content" }}
-                    className="border border-danger px-2 py-1 text-danger  ms-auto d-flex gap-3 align-items-center"
-                  >
-                    <AiOutlineDelete />{" "}
-                    <span className="d-none d-md-flex">Delete</span>
-                  </span>
+                <td className="text-end" style={rowBodyStyle}>
+                <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<FaEdit />}
+                      onClick={() => onEditCity(items)}
+                      tooltip={"Edit City"}
+                    />
+                    <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<IoTrashBin />}
+                      onClick={() => onCityDelete(items._id)}
+                      tooltip={"Delete City"}
+                    />
+                  
                 </td>
               </tr>
             ))}

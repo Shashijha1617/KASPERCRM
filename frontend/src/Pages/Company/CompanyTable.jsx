@@ -8,6 +8,9 @@ import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../config/config";
 import Position from "../../img/Position/Position.svg";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import OverLayToolTip from "../../Utils/OverLayToolTip";
+import { FaEdit } from "react-icons/fa";
+import { IoTrashBin } from "react-icons/io5";
 
 const AdminCompanyTable = (props) => {
   const [companyData, setCompanyData] = useState([]);
@@ -115,6 +118,7 @@ const AdminCompanyTable = (props) => {
             : "var(--secondaryDashMenuColor)",
           overflow: "auto",
           maxHeight: "80vh",
+          minHeight: "80vh",
           position: "relative",
         }}
       >
@@ -136,8 +140,7 @@ const AdminCompanyTable = (props) => {
                 <th style={rowHeadStyle}>Pan No</th>
                 <th style={rowHeadStyle}>GST No</th>
                 <th style={rowHeadStyle}>CIN No</th>
-                <th style={rowHeadStyle}>Edit</th>
-                <th style={rowHeadStyle}>Delete</th>
+                <th className="text-end" style={rowHeadStyle}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -161,26 +164,22 @@ const AdminCompanyTable = (props) => {
                   <td style={rowBodyStyle}>{item.PanNo}</td>
                   <td style={rowBodyStyle}>{item.GSTNo}</td>
                   <td style={rowBodyStyle}>{item.CINNo}</td>
-                  <td style={rowBodyStyle}>
-                    <span
-                      style={{ cursor: "pointer", width: "fit-content" }}
-                      className="border border-primary px-2 py-1 text-primary  ms-auto d-flex gap-3 align-items-center"
+                  <td className="text-end" style={rowBodyStyle}>
+                  <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<FaEdit />}
                       onClick={() => props.onEditCompany(item)}
-                    >
-                      <FontAwesomeIcon icon={faEdit} />{" "}
-                      <span className="d-none d-md-flex">Edit</span>
-                    </span>
-                  </td>
-                  <td style={rowBodyStyle}>
-                    <span
-                      style={{ cursor: "pointer", width: "fit-content" }}
-                      className="border border-danger px-2 py-1 text-danger  ms-auto d-flex gap-3 align-items-center"
+                      tooltip={"Edit Company"}
+                    />
+                    <OverLayToolTip
+                      style={{ color: darkMode ? "black" : "white" }}
+                      icon={<IoTrashBin />}
                       onClick={() => onCompanyDelete(item._id)}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />{" "}
-                      <span className="d-none d-md-flex">Delete</span>
-                    </span>
+                      tooltip={"Delete Company"}
+                    />
+                   
                   </td>
+                  
                 </tr>
               ))}
             </tbody>

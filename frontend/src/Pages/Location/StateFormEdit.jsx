@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Form, Button, Col, Row } from "react-bootstrap";
 import BASE_URL from "../config/config";
 import "./StateForm.css";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
@@ -44,7 +43,7 @@ const StateForm = ({ editData, onStateEditUpdate, onFormEditClose }) => {
       className="container-fluid py-3"
     >
       <h5>Edit State Details</h5>
-      <form id="form" onSubmit={handleSubmit}>
+      <form className="d-flex flex-column gap-3 mt-3" onSubmit={handleSubmit}>
         <div>
           <label>Country</label>
           <div>
@@ -80,17 +79,11 @@ const StateForm = ({ editData, onStateEditUpdate, onFormEditClose }) => {
           </div>
         </div>
 
-        <div id="form-submit-button">
-          <div sm={{ span: 10, offset: 2 }}>
-            <Button type="submit">Update</Button>
-          </div>
-        </div>
-        <div id="form-cancel-button">
-          <div sm={{ span: 10, offset: 2 }} id="form-cancel-button-inner">
-            <Button type="reset" onClick={onFormEditClose}>
+        <div  className="d-flex gap-3">
+        <button className="btn btn-primary " type="submit">Update</button>
+            <button className="btn btn-danger " type="reset" onClick={onFormEditClose}>
               Cancel
-            </Button>
-          </div>
+            </button>
         </div>
       </form>
     </div>
