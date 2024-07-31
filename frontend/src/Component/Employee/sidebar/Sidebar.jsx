@@ -1,15 +1,8 @@
 import React, { useState } from "react";
 import { MdMenuOpen } from "react-icons/md";
-import {
-  FaRegUser,
-} from "react-icons/fa";
-import {
-  FaRegCircleUser,
-} from "react-icons/fa6";
-import {
-
-  BsFolderCheck,
-} from "react-icons/bs";
+import { FaRegUser } from "react-icons/fa";
+import { FaRegCircleUser } from "react-icons/fa6";
+import { BsFolderCheck } from "react-icons/bs";
 import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
@@ -70,10 +63,6 @@ const Sidebar = (props) => {
         {
           to: "/employee/leaveApplication",
           label: "Apply Leave",
-        },
-        {
-          to: "/employee/leaveBalance",
-          label: "Leave Balance",
         },
       ],
     },

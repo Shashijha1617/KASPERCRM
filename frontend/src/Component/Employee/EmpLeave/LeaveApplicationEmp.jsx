@@ -16,14 +16,14 @@ const LeaveApplicationEmp = (props) => {
   const [empData, setEmpData] = useState(null);
   const email = localStorage.getItem("Email");
   const name = localStorage.getItem("Name");
-  const id  = localStorage.getItem("_id");
+  const id = localStorage.getItem("_id");
   const { socket } = useContext(AttendanceContext);
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         console.log(response.data);
@@ -37,7 +37,6 @@ const LeaveApplicationEmp = (props) => {
     loadEmployeeData();
   }, []);
   const handleLeaveApplicationEmpSubmit = (event) => {
-   
     event.preventDefault();
     console.log("id", event.target[0].value, event.target[1].value);
     setTable(true);
@@ -49,7 +48,7 @@ const LeaveApplicationEmp = (props) => {
       managerEmail: event.target[4].value,
       hrEmail: event.target[5].value,
       Reasonforleave: event.target[6].value,
-      email
+      email,
     };
     console.log(body);
     axios
@@ -58,8 +57,8 @@ const LeaveApplicationEmp = (props) => {
         body,
         {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         }
       )
       .then((res) => {
@@ -68,17 +67,18 @@ const LeaveApplicationEmp = (props) => {
         setLeaveRequestDone(!leaveRequestDone);
         const taskId = uuid();
         if (empData.profile) {
-        const data = {
-          taskId,
-          managerEmail: body.managerEmail,
-          hrEmail: body.hrEmail,
-          message: `Leave request`,
-          messageBy: name,
-          profile: empData.profile.image_url,
-          status: "unseen",
-          path: "leaveApplication"
-        };
-        socket.emit("leaveNotification", data);}else{
+          const data = {
+            taskId,
+            managerEmail: body.managerEmail,
+            hrEmail: body.hrEmail,
+            message: `Leave request`,
+            messageBy: name,
+            profile: empData.profile.image_url,
+            status: "unseen",
+            path: "leaveApplication",
+          };
+          socket.emit("leaveNotification", data);
+        } else {
           const data = {
             taskId,
             managerEmail: body.managerEmail,
@@ -87,9 +87,9 @@ const LeaveApplicationEmp = (props) => {
             messageBy: name,
             profile: null,
             status: "unseen",
-            path: "leaveApplication"
+            path: "leaveApplication",
           };
-          socket.emit("leaveNotification", data)
+          socket.emit("leaveNotification", data);
         }
       })
       .catch((err) => {
@@ -129,7 +129,7 @@ const LeaveApplicationEmp = (props) => {
       Status: newInfo.target[3].value,
       managerEmail: newInfo.target[4].value,
       hrEmail: newInfo.target[5].value,
-      Reasonforleave: newInfo.target[6].value
+      Reasonforleave: newInfo.target[6].value,
     };
 
     console.log("update", body);
@@ -137,8 +137,8 @@ const LeaveApplicationEmp = (props) => {
     axios
       .put(`${BASE_URL}/api/leave-application-emp/` + info["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((res) => {
         setTable(false);
@@ -183,4 +183,3 @@ const LeaveApplicationEmp = (props) => {
 };
 
 export default LeaveApplicationEmp;
-

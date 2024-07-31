@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 
 import { toast } from "react-hot-toast";
 import Table from "react-bootstrap/Table";
 import BASE_URL from "../../../Pages/config/config";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
-
+import { MdOutlineAssignmentInd } from "react-icons/md";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 const EmployeeActiveTask = () => {
+  const {setMessageData}  =useContext(AttendanceContext)
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,7 +18,9 @@ const EmployeeActiveTask = () => {
   const [isAccepted, setIsAccepted] = useState(false);
   const [isRejected, setIsRejected] = useState(false);
   const { darkMode } = useTheme();
+  const history = useHistory()
 const email = localStorage.getItem("Email")
+
   const calculateRemainingTime = (endDate) => {
     const now = new Date();
     const endDateTime = new Date(endDate);
@@ -42,6 +47,13 @@ const email = localStorage.getItem("Email")
     try {
       const response = await axios.get(`${BASE_URL}/api/tasks`);
       setTasks(response.data);
+    let fildata =   response.data
+      .filter(
+        (task) =>
+          task.status === "Pending" &&
+          task.employees.some((taskemp) => taskemp.empemail === email && taskemp==="Accepted")
+      )
+      console.log(fildata)
     } catch (error) {
       console.error("Error fetching tasks:", error.message);
       setError("Error fetching tasks. Please try again later.");
@@ -144,7 +156,21 @@ const email = localStorage.getItem("Email")
       setIsCanceling(false);
     }
   };
+  const navigateEmpHandler=(task)=>{
+    console.log(task)
+const taskId = task._id;
+const managerEmail = task.managerEmail;
+let to = task.employees.filter((val)=>{
+  return val.empemail !==email
+}).map((val)=> val.empemail)
+to = [...to, managerEmail]
+if(to.length>0){
+setMessageData({taskId, to})
+    history.push("/employee/emp_manager")
+}
 
+    
+  }
   return (
     <div className="container-fluid">
       <h5 style={{ color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)" }} className="fw-bolder text-uppercase py-2 mt-2 ">🌟 Active Task</h5>
@@ -175,7 +201,7 @@ const email = localStorage.getItem("Email")
             .filter(
               (task) =>
                 task.status === "Pending" &&
-                task.employees.some((taskemp) => taskemp.empemail === email)
+                task.employees.some((taskemp) => taskemp.empemail === email && taskemp.emptaskStatus ==="Accepted")
             )
           .map((task, index) => (
             <details
@@ -437,6 +463,26 @@ const email = localStorage.getItem("Email")
                       </button>
                     </div> */}
                   </div>
+                  <div
+                      style={{ height: "fit-content" }}
+                      className="d-flex  pt-3 rounded mx-1 justify-content-between"
+                    >
+                      <button
+                        className="btn btn-primary rounded-5 d-flex justify-center aline-center gap-2"
+                        onClick={() =>{
+                          navigateEmpHandler(task)
+                        }
+                          
+                        }
+                      >
+                        <MdOutlineAssignmentInd />{" "}
+                        <span className="d-none d-md-flex">Update Manager</span>
+                      </button>
+                    
+                    
+                     
+                    
+                    </div>
                 </div>
               </div>
             </details>

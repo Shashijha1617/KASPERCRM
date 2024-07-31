@@ -8,7 +8,6 @@ import HolidayList from "../LeaveCalendar/HolidayList";
 
 const SidebarSlider = () => {
   const [isDark, setIsDark] = useState("Light");
-  const [modeButton, setModeButton] = useState("🌞 Light");
   const [isOpen, setIsOpen] = useState("Open");
 
   const openSidebar = () => {
@@ -61,8 +60,9 @@ const SidebarSlider = () => {
             padding: ".5rem",
             position: "absolute",
             left: "-17%",
-            bottom: "50%",
+            bottom: "20px",
             borderRadius: "50px 0px 0px 50px",
+            border: "5px solid white",
           }}
         >
           🪄

@@ -19,9 +19,8 @@ import Notification from "../Notification/Notification.jsx";
 import Document from "../Document/Document.jsx";
 import InnerDashContainer from "../../InnerDashContainer.jsx";
 import LeaveBalance from "../../HrManager/LeaveStatus/LeaveBalance.jsx";
-import AttendanceDetails from "../attendance/SelfAttendance.jsx";
-import EmpViewAttendance from "../../HrManager/attendance/SelfAttendance.jsx"
-
+import AttendanceDetails from "../attendance/AttendanceDetails.jsx";
+import EmpViewAttendance from "../../HrManager/attendance/SelfAttendance.jsx";
 
 const RouterContent = ({ data }) => {
   return (

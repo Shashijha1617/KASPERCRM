@@ -47,7 +47,7 @@ const DashboardEmployee = (props) => {
           <div
             style={{
               transform: isOpen ? "translateX(0%)" : "translateX(-500%)",
-              transition: "1s ease"
+              transition: "1s ease",
             }}
             className="sidebarsmall d-flex "
           >
