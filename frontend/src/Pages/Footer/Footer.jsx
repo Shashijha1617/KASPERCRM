@@ -8,6 +8,7 @@ import CurrentTime from "../../Utils/CurrentTime";
 import CameraModal from "../../Utils/CameraModal";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import ScreenShareModal from "../../Utils/ScreenShareModal";
+import ScreenRecorder from "../../Utils/ScreenRecorder/ScreenRecorder";
 
 const Footer = () => {
   const { darkMode } = useTheme();
@@ -19,18 +20,19 @@ const Footer = () => {
           : "var(--primaryDashColorDark)",
         color: darkMode
           ? "var(--primaryDashColorDark)"
-          : "var(--primaryDashMenuColor)"
+          : "var(--primaryDashMenuColor)",
       }}
       className="d-flex align-items-center gap-3 p-1"
     >
       <CurrentTime />
       <WifiStatus />
-      {/* <BatteryStatus /> */}
+      <BatteryStatus />
       <BrowserIcon />
       <IPAddress />
       <GeoLocation />
-      <CameraModal />
-      <ScreenShareModal />
+      {/* <CameraModal /> */}
+      {/* <ScreenShareModal /> */}
+      {/* <ScreenRecorder /> */}
     </div>
   );
 };

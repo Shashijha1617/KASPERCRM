@@ -19,7 +19,7 @@ const EmployeeNewTask = () => {
   const { socket } = useContext(AttendanceContext);
   const [empData, setEmpData] = useState(null);
 
-const name = localStorage.getItem("Name")
+  const name = localStorage.getItem("Name");
   const id = localStorage.getItem("_id");
 
   useEffect(() => {
@@ -29,11 +29,11 @@ const name = localStorage.getItem("Name")
           `${BASE_URL}/api/personal-info/` + id,
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         );
-        setEmpData(response.data)
+        setEmpData(response.data);
         setEmail(response.data.Email);
       } catch (error) {
         console.error("Error fetching employees:", error);
@@ -43,9 +43,6 @@ const name = localStorage.getItem("Name")
 
     loadPersonalInfoData();
   }, [id]);
-
-
-
 
   const calculateRemainingTime = (endDate) => {
     const now = new Date();
@@ -93,7 +90,7 @@ const name = localStorage.getItem("Name")
 
       await axios.put(`${BASE_URL}/api/tasks/${taskId}/employees/${empEmail}`, {
         emptaskStatus: "Accepted",
-        empTaskComment: empRemarks
+        empTaskComment: empRemarks,
       });
 
       toast.success("Task accepted successfully!");
@@ -102,8 +99,8 @@ const name = localStorage.getItem("Name")
           return val.empemail;
         }
       });
-      console.log(empData)
-      if(empData.profile){
+      console.log(empData);
+      if (empData.profile) {
         const employeeTaskNotification = {
           senderMail: empMail,
           employeesEmail: [...employeeNotificationArr, task.managerEmail],
@@ -115,11 +112,11 @@ const name = localStorage.getItem("Name")
           profile: empData.profile.image_url,
           taskStatus: "Accepted",
           Account: 3,
-          path: "activeTask"
+          path: "activeTask",
         };
-  
+
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
-      }else{
+      } else {
         const employeeTaskNotification = {
           senderMail: empMail,
           employeesEmail: [...employeeNotificationArr, task.managerEmail],
@@ -131,12 +128,12 @@ const name = localStorage.getItem("Name")
           profile: null,
           taskStatus: "Accepted",
           Account: 3,
-          path: "activeTask"
+          path: "activeTask",
         };
-  
+
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
       }
-     
+
       fetchData();
     } catch (error) {
       console.error("Error accepting task:", error.message);
@@ -154,25 +151,11 @@ const name = localStorage.getItem("Name")
 
       await axios.put(`${BASE_URL}/api/tasks/${taskId}/employees/${empEmail}`, {
         emptaskStatus: "Rejected",
-        empTaskComment: empRemarks
+        empTaskComment: empRemarks,
       });
 
       toast.success("Task rejected successfully!");
-      if(empData.profile){
-      const employeeTaskNotification = {
-        senderMail: empMail,
-        employeesEmail: [task.managerEmail],
-        taskId,
-        status: "unseen",
-        taskName: task.Taskname,
-        message: `Task Rejected`,
-          messageBy: name,
-          profile: empData.profile.image_url,
-        taskStatus: "Rejected",
-        Account: 3,
-        path: "activeTask"
-      };
-      socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);}else{
+      if (empData.profile) {
         const employeeTaskNotification = {
           senderMail: empMail,
           employeesEmail: [task.managerEmail],
@@ -180,13 +163,28 @@ const name = localStorage.getItem("Name")
           status: "unseen",
           taskName: task.Taskname,
           message: `Task Rejected`,
-            messageBy: name,
-            profile: null,
+          messageBy: name,
+          profile: empData.profile.image_url,
           taskStatus: "Rejected",
           Account: 3,
-          path: "activeTask"
+          path: "activeTask",
         };
-        socket.emit("employeeTaskUpdateNotification", employeeTaskNotification)
+        socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
+      } else {
+        const employeeTaskNotification = {
+          senderMail: empMail,
+          employeesEmail: [task.managerEmail],
+          taskId,
+          status: "unseen",
+          taskName: task.Taskname,
+          message: `Task Rejected`,
+          messageBy: name,
+          profile: null,
+          taskStatus: "Rejected",
+          Account: 3,
+          path: "activeTask",
+        };
+        socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
       }
       fetchData();
     } catch (error) {
@@ -205,7 +203,7 @@ const name = localStorage.getItem("Name")
 
       await axios.put(`${BASE_URL}/api/tasks/${taskId}/employees/${empEmail}`, {
         emptaskStatus: "Completed",
-        empTaskComment: empRemarks
+        empTaskComment: empRemarks,
       });
 
       toast.success("Task completed successfully!");
@@ -214,21 +212,22 @@ const name = localStorage.getItem("Name")
           return val.empemail;
         }
       });
-      if(empData.profile){
-      const employeeTaskNotification = {
-        senderMail: empMail,
-        employeesEmail: [...employeeNotificationArr, task.managerEmail],
-        taskId,
-        status: "unseen",
-        taskName: task.Taskname,
-        taskStatus: "Completed",
-        message: `Task Completed`,
-        messageBy: name,
-        profile: empData.profile.image_url,
-        Account: 3,
-        path: "activeTask"
-      };
-      socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);}else{
+      if (empData.profile) {
+        const employeeTaskNotification = {
+          senderMail: empMail,
+          employeesEmail: [...employeeNotificationArr, task.managerEmail],
+          taskId,
+          status: "unseen",
+          taskName: task.Taskname,
+          taskStatus: "Completed",
+          message: `Task Completed`,
+          messageBy: name,
+          profile: empData.profile.image_url,
+          Account: 3,
+          path: "activeTask",
+        };
+        socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
+      } else {
         const employeeTaskNotification = {
           senderMail: empMail,
           employeesEmail: [...employeeNotificationArr, task.managerEmail],
@@ -240,9 +239,10 @@ const name = localStorage.getItem("Name")
           messageBy: name,
           profile: null,
           Account: 3,
-          path: "activeTask"
+          path: "activeTask",
         };
-        socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);}
+        socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
+      }
       fetchData();
     } catch (error) {
       console.error("Error completing task:", error.message);
@@ -250,8 +250,7 @@ const name = localStorage.getItem("Name")
     }
   };
 
-  const totalTaskAssigned =  tasks
-  .filter(
+  const totalTaskAssigned = tasks.filter(
     (task) =>
       task.status === "Pending" &&
       task.employees.some((taskemp) => taskemp.empemail === email)
@@ -259,7 +258,16 @@ const name = localStorage.getItem("Name")
 
   return (
     <div className="container-fluid">
-      <h5 style={{ color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)" }} className="fw-bolder text-uppercase py-2 mt-2 ">🌟New Task ({totalTaskAssigned}) </h5>
+      <h5
+        style={{
+          color: darkMode
+            ? "var(--primaryDashColorDark)"
+            : "var(--primaryDashMenuColor)",
+        }}
+        className="fw-bolder text-uppercase py-2 mt-2 "
+      >
+        🌟New Task ({totalTaskAssigned}){" "}
+      </h5>
 
       {loading && (
         <div
@@ -275,14 +283,16 @@ const name = localStorage.getItem("Name")
         </div>
       )}
       {error && <p className="text-danger">{error}</p>}
-      {!loading && !tasks.length && <p className="text-danger">Data not available.</p>}
+      {!loading && !tasks.length && (
+        <p className="text-danger">Data not available.</p>
+      )}
       <div
         style={{
           overflowY: "auto",
           maxHeight: "80vh",
           scrollbarWidth: "thin",
           scrollbarGutter: "stable",
-          scrollMargin: "1rem"
+          scrollMargin: "1rem",
         }}
       >
         {email &&
@@ -296,16 +306,31 @@ const name = localStorage.getItem("Name")
             .map((task, index) => (
               <details
                 style={{
-                  background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)',
+                  background: darkMode
+                    ? "var( --primaryDashMenuColor)"
+                    : "var(--primaryDashColorDark)",
                 }}
                 className="p-1 position-relative fs-4 rounded mx-2 my-3"
                 key={task.id}
               >
                 <summary
-                  style={{ height: "fit-content", background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', position: "relative" }}
+                  style={{
+                    height: "fit-content",
+                    background: darkMode
+                      ? "var( --primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                    position: "relative",
+                  }}
                   className="d-flex flex-column justify-content-between py-4 align-center form-control"
                 >
-                  <div style={{ color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", }} className="fs-5 d-flex justify-content-center flex-column text-capitalize">
+                  <div
+                    style={{
+                      color: darkMode
+                        ? "var(--secondaryDashColorDark)"
+                        : "var( --primaryDashMenuColor)",
+                    }}
+                    className="fs-5 d-flex justify-content-center flex-column text-capitalize"
+                  >
                     #{index + 1} : {task.Taskname}
                   </div>
                   <div
@@ -314,7 +339,17 @@ const name = localStorage.getItem("Name")
                   >
                     {task.department}
                   </div>
-                  <div style={{ color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", fontSize: '.8rem', position: 'absolute', bottom: '5px' }} className="d-flex gap-2 RemainingTimeHandel justify-content-start">
+                  <div
+                    style={{
+                      color: darkMode
+                        ? "var(--secondaryDashColorDark)"
+                        : "var( --primaryDashMenuColor)",
+                      fontSize: ".8rem",
+                      position: "absolute",
+                      bottom: "5px",
+                    }}
+                    className="d-flex gap-2 RemainingTimeHandel justify-content-start"
+                  >
                     {calculateRemainingTime(task.endDate).delay ? (
                       <div>
                         <div className="text-center d-none">
@@ -323,7 +358,10 @@ const name = localStorage.getItem("Name")
                           </div>
                           <div>Days</div>
                         </div>
-                        <h5 style={{ fontSize: '.8rem' }} className='text-danger p-0 m-0'>
+                        <h5
+                          style={{ fontSize: ".8rem" }}
+                          className="text-danger p-0 m-0"
+                        >
                           Task is running Late
                         </h5>
                       </div>
@@ -347,67 +385,367 @@ const name = localStorage.getItem("Name")
                       </div>
                     ) : (
                       <div className="text-center">
-                        and {calculateRemainingTime(task.endDate).minutes} Min Remaining
+                        and {calculateRemainingTime(task.endDate).minutes} Min
+                        Remaining
                       </div>
                     )}
                   </div>
                 </summary>
                 <div
-                  style={{ position: "relative", background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', }}
+                  style={{
+                    position: "relative",
+                    background: darkMode
+                      ? "var( --primaryDashMenuColor)"
+                      : "var(--primaryDashColorDark)",
+                  }}
                   className="row p-1 my-2 mx-0 rounded"
                 >
                   <div
-                    style={{ height: "fit-content", background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', }}
+                    style={{
+                      height: "fit-content",
+                      background: darkMode
+                        ? "var( --primaryDashMenuColor)"
+                        : "var(--primaryDashColorDark)",
+                    }}
                     className="form-control"
                   >
                     <p
-                      style={{ height: "fit-content", background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", }}
+                      style={{
+                        height: "fit-content",
+                        background: darkMode
+                          ? "var( --primaryDashMenuColor)"
+                          : "var(--primaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var( --primaryDashMenuColor)",
+                      }}
                       className="text-start fs-6 form-control border-0 "
                     >
                       <h6 className="fw-bold">Task Description</h6>{" "}
                       {task.description}
                     </p>
                     <div
-                      style={{ height: "fit-content", background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", }}
+                      style={{
+                        height: "fit-content",
+                        background: darkMode
+                          ? "var( --primaryDashMenuColor)"
+                          : "var(--primaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var( --primaryDashMenuColor)",
+                      }}
                       className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
                     >
                       <Table>
                         <thead>
                           <tr>
-                            <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>Task Durations</th>
-                            <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>Manager Email</th>
-                            <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>Start Date</th>
-                            <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>End Date</th>
-                            <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>Task Status</th>
+                            <th
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --primaryDashMenuColor)"
+                                  : "var(--primaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              Task Durations
+                            </th>
+                            <th
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --primaryDashMenuColor)"
+                                  : "var(--primaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              Manager Email
+                            </th>
+                            <th
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --primaryDashMenuColor)"
+                                  : "var(--primaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              Start Date
+                            </th>
+                            <th
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --primaryDashMenuColor)"
+                                  : "var(--primaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              End Date
+                            </th>
+                            <th
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --primaryDashMenuColor)"
+                                  : "var(--primaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              Task Status
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>{task.duration} days</td>
-                            <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>{task.managerEmail}</td>
-                            <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>{new Date(task.startDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '')}</td>
-                            <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>{new Date(task.endDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '')}</td>
-                            <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>{task.status}</td>
+                            <td
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --secondaryDashMenuColor)"
+                                  : "var(--secondaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--secondaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              {task.duration} days
+                            </td>
+                            <td
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --secondaryDashMenuColor)"
+                                  : "var(--secondaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--secondaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              {task.managerEmail}
+                            </td>
+                            <td
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --secondaryDashMenuColor)"
+                                  : "var(--secondaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--secondaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              {new Date(task.startDate)
+                                .toLocaleDateString("en-US", {
+                                  day: "numeric",
+                                  month: "short",
+                                  year: "numeric",
+                                })
+                                .replace(",", "")}
+                            </td>
+                            <td
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --secondaryDashMenuColor)"
+                                  : "var(--secondaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--secondaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              {new Date(task.endDate)
+                                .toLocaleDateString("en-US", {
+                                  day: "numeric",
+                                  month: "short",
+                                  year: "numeric",
+                                })
+                                .replace(",", "")}
+                            </td>
+                            <td
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --secondaryDashMenuColor)"
+                                  : "var(--secondaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--secondaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              {task.status}
+                            </td>
                           </tr>
                         </tbody>
                       </Table>
                     </div>
                     <div
-                      style={{ height: "fit-content", background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", }}
+                      style={{
+                        height: "fit-content",
+                        background: darkMode
+                          ? "var( --primaryDashMenuColor)"
+                          : "var(--primaryDashColorDark)",
+                        color: darkMode
+                          ? "var(--primaryDashColorDark)"
+                          : "var( --primaryDashMenuColor)",
+                      }}
                       className="row form-control d-flex my-1 mt-3 pt-3 rounded mx-1 justify-content-between"
                     >
                       <h6 className="fw-bold">Project Members</h6>
                       <Table>
                         <thead>
                           <tr>
-                            <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>S. No</th>
-                            <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>Name</th>
-                            <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>Email</th>
-                            <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>Designation</th>
-                            <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }} className="">Attach <IoMdAttach /></th>
-                            <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>Action</th>
-                            <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>Task Status</th>
-                            <th style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)', color: darkMode ? 'var(--primaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>Remarks</th>
+                            <th
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --primaryDashMenuColor)"
+                                  : "var(--primaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              S. No
+                            </th>
+                            <th
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --primaryDashMenuColor)"
+                                  : "var(--primaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              Name
+                            </th>
+                            <th
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --primaryDashMenuColor)"
+                                  : "var(--primaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              Email
+                            </th>
+                            <th
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --primaryDashMenuColor)"
+                                  : "var(--primaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              Designation
+                            </th>
+                            <th
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --primaryDashMenuColor)"
+                                  : "var(--primaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                              className=""
+                            >
+                              Attach <IoMdAttach />
+                            </th>
+                            <th
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --primaryDashMenuColor)"
+                                  : "var(--primaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              Action
+                            </th>
+                            <th
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --primaryDashMenuColor)"
+                                  : "var(--primaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              Task Status
+                            </th>
+                            <th
+                              style={{
+                                verticalAlign: "middle",
+                                whiteSpace: "pre",
+                                background: darkMode
+                                  ? "var( --primaryDashMenuColor)"
+                                  : "var(--primaryDashColorDark)",
+                                color: darkMode
+                                  ? "var(--primaryDashColorDark)"
+                                  : "var( --primaryDashMenuColor)",
+                                border: "none",
+                              }}
+                            >
+                              Remarks
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
@@ -416,16 +754,97 @@ const name = localStorage.getItem("Name")
                               .filter((taskemp) => taskemp.empemail === email)
                               .map((taskemp, i) => (
                                 <tr key={i}>
-                                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>{i + 1}</td>
-                                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }} className="text-capitalize">{taskemp.empname}</td>
-                                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>{taskemp.empemail}</td>
-                                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>{taskemp.empdesignation}</td>
-                                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>
+                                  <td
+                                    style={{
+                                      verticalAlign: "middle",
+                                      whiteSpace: "pre",
+                                      background: darkMode
+                                        ? "var( --secondaryDashMenuColor)"
+                                        : "var(--secondaryDashColorDark)",
+                                      color: darkMode
+                                        ? "var(--secondaryDashColorDark)"
+                                        : "var( --primaryDashMenuColor)",
+                                      border: "none",
+                                    }}
+                                  >
+                                    {i + 1}
+                                  </td>
+                                  <td
+                                    style={{
+                                      verticalAlign: "middle",
+                                      whiteSpace: "pre",
+                                      background: darkMode
+                                        ? "var( --secondaryDashMenuColor)"
+                                        : "var(--secondaryDashColorDark)",
+                                      color: darkMode
+                                        ? "var(--secondaryDashColorDark)"
+                                        : "var( --primaryDashMenuColor)",
+                                      border: "none",
+                                    }}
+                                    className="text-capitalize"
+                                  >
+                                    {taskemp.empname}
+                                  </td>
+                                  <td
+                                    style={{
+                                      verticalAlign: "middle",
+                                      whiteSpace: "pre",
+                                      background: darkMode
+                                        ? "var( --secondaryDashMenuColor)"
+                                        : "var(--secondaryDashColorDark)",
+                                      color: darkMode
+                                        ? "var(--secondaryDashColorDark)"
+                                        : "var( --primaryDashMenuColor)",
+                                      border: "none",
+                                    }}
+                                  >
+                                    {taskemp.empemail}
+                                  </td>
+                                  <td
+                                    style={{
+                                      verticalAlign: "middle",
+                                      whiteSpace: "pre",
+                                      background: darkMode
+                                        ? "var( --secondaryDashMenuColor)"
+                                        : "var(--secondaryDashColorDark)",
+                                      color: darkMode
+                                        ? "var(--secondaryDashColorDark)"
+                                        : "var( --primaryDashMenuColor)",
+                                      border: "none",
+                                    }}
+                                  >
+                                    {taskemp.empdesignation}
+                                  </td>
+                                  <td
+                                    style={{
+                                      verticalAlign: "middle",
+                                      whiteSpace: "pre",
+                                      background: darkMode
+                                        ? "var( --secondaryDashMenuColor)"
+                                        : "var(--secondaryDashColorDark)",
+                                      color: darkMode
+                                        ? "var(--secondaryDashColorDark)"
+                                        : "var( --primaryDashMenuColor)",
+                                      border: "none",
+                                    }}
+                                  >
                                     <button className="btn btn-light w-100 shadow-sm">
-                                      <IoMdEye style={{ cursor: 'pointer' }} />
+                                      <IoMdEye style={{ cursor: "pointer" }} />
                                     </button>
                                   </td>
-                                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>
+                                  <td
+                                    style={{
+                                      verticalAlign: "middle",
+                                      whiteSpace: "pre",
+                                      background: darkMode
+                                        ? "var( --secondaryDashMenuColor)"
+                                        : "var(--secondaryDashColorDark)",
+                                      color: darkMode
+                                        ? "var(--secondaryDashColorDark)"
+                                        : "var( --primaryDashMenuColor)",
+                                      border: "none",
+                                    }}
+                                  >
                                     <div className="d-flex align-items-center justify-content-evenly">
                                       <button
                                         className="btn btn-primary py-1"
@@ -437,8 +856,10 @@ const name = localStorage.getItem("Name")
                                           )
                                         }
                                         disabled={
-                                          taskemp.emptaskStatus === "Accepted" ||
-                                          taskemp.emptaskStatus === "Rejected" ||
+                                          taskemp.emptaskStatus ===
+                                            "Accepted" ||
+                                          taskemp.emptaskStatus ===
+                                            "Rejected" ||
                                           taskemp.emptaskStatus === "Completed"
                                         }
                                       >
@@ -454,8 +875,10 @@ const name = localStorage.getItem("Name")
                                           )
                                         }
                                         disabled={
-                                          taskemp.emptaskStatus === "Accepted" ||
-                                          taskemp.emptaskStatus === "Rejected" ||
+                                          taskemp.emptaskStatus ===
+                                            "Accepted" ||
+                                          taskemp.emptaskStatus ===
+                                            "Rejected" ||
                                           taskemp.emptaskStatus === "Completed"
                                         }
                                       >
@@ -478,14 +901,36 @@ const name = localStorage.getItem("Name")
                                       </button>
                                     </div>
                                   </td>
-                                  <td style={{ verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none' }}>{taskemp.emptaskStatus} </td>
+                                  <td
+                                    style={{
+                                      verticalAlign: "middle",
+                                      whiteSpace: "pre",
+                                      background: darkMode
+                                        ? "var( --secondaryDashMenuColor)"
+                                        : "var(--secondaryDashColorDark)",
+                                      color: darkMode
+                                        ? "var(--secondaryDashColorDark)"
+                                        : "var( --primaryDashMenuColor)",
+                                      border: "none",
+                                    }}
+                                  >
+                                    {taskemp.emptaskStatus}{" "}
+                                  </td>
                                   <td
                                     style={{
                                       maxWidth: "10rem",
                                       overflow: "hidden",
                                       whiteSpace: "nowrap",
                                       textOverflow: "ellipsis",
-                                      verticalAlign: 'middle', whiteSpace: 'pre', background: darkMode ? "var( --secondaryDashMenuColor)" : 'var(--secondaryDashColorDark)', color: darkMode ? 'var(--secondaryDashColorDark)' : "var( --primaryDashMenuColor)", border: 'none'
+                                      verticalAlign: "middle",
+                                      whiteSpace: "pre",
+                                      background: darkMode
+                                        ? "var( --secondaryDashMenuColor)"
+                                        : "var(--secondaryDashColorDark)",
+                                      color: darkMode
+                                        ? "var(--secondaryDashColorDark)"
+                                        : "var( --primaryDashMenuColor)",
+                                      border: "none",
                                     }}
                                   >
                                     {taskemp.empTaskComment}
@@ -500,7 +945,7 @@ const name = localStorage.getItem("Name")
               </details>
             ))}
       </div>
-    </div >
+    </div>
   );
 };
 

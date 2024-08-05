@@ -17,8 +17,8 @@ const UpcomingBirthdays = () => {
     axios
       .get(`${BASE_URL}/api/employee/` + localStorage.getItem("_id"), {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         // Ensure that response.data is an array
@@ -56,7 +56,7 @@ const UpcomingBirthdays = () => {
               PositionName: data["position"][0]
                 ? data["position"][0]["PositionName"]
                 : "",
-              DateOfJoining: data["DateOfJoining"].slice(0, 10)
+              DateOfJoining: data["DateOfJoining"].slice(0, 10),
             };
 
             // Use set function to update state
@@ -102,11 +102,11 @@ const UpcomingBirthdays = () => {
             position: "sticky",
             top: "0",
             backgroundColor: "var(--primaryDashColorDark)",
-            color: "var(--primaryDashMenuColor)"
+            color: "var(--primaryDashMenuColor)",
           }}
           className="fw-bolder pb-3 px-3 pt-3 d-flex justify-content-between gap-0 text-center"
         >
-          <GiPartyPopper /> Upcoming Birthdays{" "}
+          <GiPartyPopper /> Upcoming Birthdays
           <span className="text-primary">({upcomingBirthdays.length})</span>
         </h5>
         <div>
@@ -129,7 +129,7 @@ const UpcomingBirthdays = () => {
                               border: "3px solid gray",
                               borderRadius: "50%",
                               overflow: "hidden",
-                              objectFit: "cover"
+                              objectFit: "cover",
                             }}
                             src={
                               employee?.data?.profile?.image_url

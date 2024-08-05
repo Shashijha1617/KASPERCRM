@@ -52,11 +52,6 @@ const RouterContent = ({ data }) => {
         />
         <Route
           exact
-          path="/employee/:id/leave-application-emp"
-          render={(props) => <LeaveApplicationEmp data={data} />}
-        />
-        <Route
-          exact
           path="/employee/leaveApplication"
           render={(props) => <LeaveApplicationEmpTable data={data} />}
         />

@@ -160,19 +160,18 @@ const CityTable = ({ onAddCity, onEditCity }) => {
                 <td style={rowBodyStyle}>{items.state[0].StateName}</td>
                 <td style={rowBodyStyle}>{items.CityName}</td>
                 <td className="text-end" style={rowBodyStyle}>
-                <OverLayToolTip
-                      style={{ color: darkMode ? "black" : "white" }}
-                      icon={<FaEdit />}
-                      onClick={() => onEditCity(items)}
-                      tooltip={"Edit City"}
-                    />
-                    <OverLayToolTip
-                      style={{ color: darkMode ? "black" : "white" }}
-                      icon={<IoTrashBin />}
-                      onClick={() => onCityDelete(items._id)}
-                      tooltip={"Delete City"}
-                    />
-                  
+                  <OverLayToolTip
+                    style={{ color: darkMode ? "black" : "white" }}
+                    icon={<FaEdit />}
+                    onClick={() => onEditCity(items)}
+                    tooltip={"Edit City"}
+                  />
+                  <OverLayToolTip
+                    style={{ color: darkMode ? "black" : "white" }}
+                    icon={<IoTrashBin />}
+                    onClick={() => onCityDelete(items._id)}
+                    tooltip={"Delete City"}
+                  />
                 </td>
               </tr>
             ))}

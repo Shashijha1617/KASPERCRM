@@ -6,10 +6,17 @@ import EmployeeCount from "../../../Pages/Chart/EmployeeCountTable";
 import DailyAttendChart from "../../../Pages/Chart/DailyAttendChart";
 import EmplooyeeLogCount from "./CountData/EmplooyeeLogCount";
 import WelcomeBoard from "../../../Pages/WelcomeBoard/WelcomeBoard";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
+import MyTodaysLoginData from "../../Employee/WelcomeBoard/MyTodaysLoginData/MyTodaysLoginData";
 
 const HRDash = () => {
   return (
     <div className="container-fluid mb-5 pb-3">
+      <TittleHeader
+        title={"Dashboard"}
+        message={"View a comprehensive analysis of your data here."}
+      />
+      <MyTodaysLoginData />
       <div className="row justif-content-between align-items-center">
         <div className="col-6 col-md-6 col-lg-4">
           <WelcomeBoard />

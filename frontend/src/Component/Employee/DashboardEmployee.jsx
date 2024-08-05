@@ -9,6 +9,7 @@ import { useSidebar } from "../../Context/AttendanceContext/smallSidebarcontext.
 import SidebarSmallScreen from "./sidebar/SidebarSmallScreen.jsx";
 import { useTheme } from "../../Context/TheamContext/ThemeContext.js";
 import SidebarSlider from "../../Pages/Sidebar/SidebarSlider.jsx";
+import Footer from "../../Pages/Footer/Footer.jsx";
 // import Footer from "../../Pages/Footer/Footer.jsx";
 
 const DashboardEmployee = (props) => {
@@ -70,7 +71,7 @@ const DashboardEmployee = (props) => {
               style={{ zIndex: "50", position: "absolute", bottom: "0" }}
               className="HrPannelFooter bg-dark w-100 text-white"
             >
-              {/* <Footer /> */}
+              <Footer />
             </div>
           </div>
         </div>

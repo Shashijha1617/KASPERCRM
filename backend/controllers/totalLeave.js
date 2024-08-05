@@ -1,6 +1,7 @@
 const { TotalLeave } = require('../models/totalLeave');
 const express = require('express');
 const { Employee } = require("../models/employeeModel");
+const { LeaveApplication } = require('../models/leaveModel');
 
 const assignLeave = async (req, res) => {
     try {
@@ -105,8 +106,6 @@ let data = [{
     }
 };
 
-
-
 const getAllAvailableLeave = async (req, res) => {
     try {
  
@@ -209,6 +208,27 @@ const rejectedLeave = async (req, res) => {
     }
 };
 
+const getAllApprovedLeaveApplication = async (req, res) => {
+    try {
+        const leaveApplications = await LeaveApplication.find({ Status: 2 })
+            .populate({
+                path: 'employee',
+                select: 'FirstName LastName empID',
+            })
+            .exec();
+        
+        if (leaveApplications.length === 0) {
+            return res.status(404).json({ error: 'No approved leave applications found' });
+        }
+
+        res.status(200).json(leaveApplications);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
 module.exports = {
-    assignLeave,getAllAvailableLeave,getAvailableLeave,deductLeave,rejectedLeave,getAvailableLeaveByEmail
+    assignLeave,getAllAvailableLeave,getAvailableLeave,deductLeave,rejectedLeave,getAvailableLeaveByEmail , getAllApprovedLeaveApplication
 };

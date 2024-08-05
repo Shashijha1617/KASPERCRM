@@ -33,6 +33,12 @@ const DashboardHR = (props) => {
         backgroundColor: darkMode
           ? "var(--secondaryDashMenuColor)"
           : "var(--secondaryDashColorDark)",
+        maxHeight: "100vh",
+        overflow: "hidden",
+        position: "fixed",
+        width: "100%",
+        left: "0",
+        top: "0",
       }}
     >
       <SidebarSlider />

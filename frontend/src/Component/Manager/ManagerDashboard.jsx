@@ -6,6 +6,7 @@ import MainContent from "./Router.jsx";
 import NavBar from "../../Pages/Navbar/NavBar.jsx";
 import SidebarSlider from "../../Pages/Sidebar/SidebarSlider.jsx";
 import { useTheme } from "../../Context/TheamContext/ThemeContext.js";
+import Footer from "../../Pages/Footer/Footer.jsx";
 
 const DashboardHR = (props) => {
   const [checked, setChecked] = useState(true);
@@ -63,6 +64,12 @@ const DashboardHR = (props) => {
               id="main-area"
             >
               <MainContent />
+              <div
+                style={{ zIndex: "50", position: "absolute", bottom: "0" }}
+                className="HrPannelFooter bg-dark w-100 text-white"
+              >
+                <Footer />
+              </div>
             </div>
           </div>
         </div>

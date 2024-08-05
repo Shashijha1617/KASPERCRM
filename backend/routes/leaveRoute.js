@@ -17,6 +17,7 @@ const {
   getAllLeaveApplicationHr,
   deleteLeaveApplicationHr
 } = require("../controllers/leaveController");
+const { getAllApprovedLeaveApplication } = require("../controllers/totalLeave");
 
 // GET: Retrieve all leave
 leaveRoute.get(
@@ -70,5 +71,11 @@ leaveRoute.delete(
   // verifyAdminHR,
   deleteLeaveApplicationHr
 );
+
+leaveRoute.get(
+  "/approved-leave-application-emp",
+  getAllApprovedLeaveApplication
+);
+
 
 module.exports = leaveRoute;

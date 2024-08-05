@@ -1,18 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { FaCheck } from "react-icons/fa6";
-import { IoCheckmarkDone, IoCheckmarkDoneSharp } from "react-icons/io5";
+import { IoCheckmarkDone } from "react-icons/io5";
 import {
   MdArrowDropDown,
   MdArrowDropUp,
   MdDeleteForever,
   MdOutlineAssignmentInd,
-  MdOutlineCancel,
 } from "react-icons/md";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import Modal from "react-bootstrap/Modal";
-import Table from "react-bootstrap/esm/Table";
-import { BsFiletypeDoc } from "react-icons/bs";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import { v4 as uuid } from "uuid";
@@ -20,9 +16,7 @@ import BASE_URL from "../../../Pages/config/config";
 import ActiveTask from "../../../img/Task/ActiveTask.svg";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import "./TaskManagement.css";
-import { HiDocumentSearch } from "react-icons/hi";
-import { IoMdDoneAll } from "react-icons/io";
-import { RiArrowDropDownLine, RiAttachmentLine } from "react-icons/ri";
+import { RiAttachmentLine } from "react-icons/ri";
 import { PiInfoLight } from "react-icons/pi";
 import { getFormattedDate } from "../../../Utils/GetDayFormatted";
 import AvatarGroup from "../../../Pages/AvatarGroup/AvatarGroup";
@@ -890,9 +884,7 @@ const ManagerActiveTask = () => {
               <input
                 className="w-100 py-1 px-2 rounded-5 border"
                 type="search"
-                name=""
                 placeholder="Search..."
-                id=""
                 value={inputEmail}
                 onChange={(e) => {
                   handleInputChange(e);
@@ -900,18 +892,15 @@ const ManagerActiveTask = () => {
                 }}
               />
               <div>
-                <div className=" p-2">
-                  {" "}
+                <div className="p-2">
                   <input
                     type="checkbox"
-                    name=""
-                    id=""
                     onChange={toggleSelectAll}
                     checked={selectAll}
                   />{" "}
                   <span>Select All</span>
                 </div>
-                <table class="table">
+                <table className="table">
                   <thead>
                     <tr>
                       <th>Select</th>
@@ -921,15 +910,12 @@ const ManagerActiveTask = () => {
                       <th>Designation</th>
                     </tr>
                   </thead>
-
                   <tbody>
                     {rowData.map((row, index) => (
                       <tr key={index}>
                         <th scope="row">
                           <input
                             type="checkbox"
-                            name=""
-                            id=""
                             onChange={() => addSelectedEmployee(row)}
                             checked={selectedEmployees.some(
                               (emp) => emp.Email === row.Email
@@ -946,13 +932,13 @@ const ManagerActiveTask = () => {
                 </table>
               </div>
             </form>
-            <div className="d-flex flex-column col-4 gap-2 ">
+            <div className="d-flex flex-column col-4 gap-2">
               <div
                 className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
                 style={{ height: "fit-content" }}
               >
                 <div>
-                  <span className="fw-bold ">Selected Employees:</span>
+                  <span className="fw-bold">Selected Employees:</span>
                   {selectedEmployees.map((employee, index) => (
                     <div key={index} className="d-flex">
                       <span
@@ -960,7 +946,7 @@ const ManagerActiveTask = () => {
                           boxShadow: "-3px 3px 5px rgba(204, 201, 201, 0.767)",
                           width: "fit-content",
                         }}
-                        className="selected-employee-email d-flex btn gap-2 aline-center  btn-light py-1 px-2 m-1"
+                        className="selected-employee-email d-flex btn gap-2 align-center btn-light py-1 px-2 m-1"
                         onClick={() => removeSelectedEmployee(employee.Email)}
                       >
                         {employee.FirstName} - {employee.PositionName}
@@ -972,9 +958,8 @@ const ManagerActiveTask = () => {
                   ))}
                 </div>
               </div>
-
               <button
-                className="btn  btn-primary "
+                className="btn btn-primary"
                 onClick={() => forwardTaskToEmployees(selectedTaskId)}
                 disabled={isForwardButtonDisabled}
               >

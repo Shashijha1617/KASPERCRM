@@ -18,6 +18,9 @@ const createAttendance = async (req, res) => {
     status,
     totalLogAfterBreak
   } = req.body;
+  const currentDate = new Date();
+  const currentDay = currentDate.getDate();
+  const isWeekend = [0, 6].includes(currentDate.getDay());
   const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
   const currentTime = Moment().format("HH:mm:ss");
   let loginTime;
@@ -68,94 +71,157 @@ const createAttendance = async (req, res) => {
     }
 
     let yearObject = attendanceRecord.years.find((y) => y.year === year);
-
+    console.log(yearObject)
     if (!yearObject) {
-      yearObject = { year, months: [] };
+      yearObject = {
+        year: year,
+        months: [
+          {
+            month: month,
+            dates: [
+              {
+                date: date,
+                day: new Date(
+                  year,
+                  month - 1,
+                  currentDay
+                ).getDay(),
+                loginTime: isWeekend ? ["WO"] : loginTime? loginTime: [],
+                logoutTime: isWeekend ? ["WO"] : [],
+                loginTimeMs: isWeekend? ["WO"]: loginTimeMs? loginTimeMs:[],
+                logoutTimeMs: isWeekend? ["WO"]: [],
+                breakTime: isWeekend ? ["WO"] : [],
+                resumeTime: isWeekend ? [0] : [],
+                breakTimeMs: isWeekend ? [0] : [],
+                resumeTimeMS: isWeekend ? [0] : [],
+                BreakReasion: isWeekend ? ["WO"] : [],
+                BreakData: isWeekend ? [0] : [],
+                status: isWeekend ? "WO" : "logout",
+                totalBrake: isWeekend ? 0 : 0
+              }
+            ]
+          }
+        ]
+      };
       attendanceRecord.years.push(yearObject);
     }
 
     let monthObject = yearObject.months.find((m) => m.month === month);
 
     if (!monthObject) {
-      monthObject = { month, dates: [] };
+      monthObject = {
+        month: month,
+        dates: [
+          {
+            date: date,
+            day: new Date(
+              year,
+              month - 1,
+              currentDay
+            ).getDay(),
+            loginTime: isWeekend ? ["WO"] : loginTime? loginTime: [],
+            logoutTime: isWeekend ? ["WO"] : [],
+            loginTimeMs: isWeekend? ["WO"]: loginTimeMs? loginTimeMs:[],
+            logoutTimeMs: isWeekend? ["WO"]: [],
+            breakTime: isWeekend ? ["WO"] : [],
+            resumeTime: isWeekend ? [0] : [],
+            breakTimeMs: isWeekend ? [0] : [],
+            resumeTimeMS: isWeekend ? [0] : [],
+            BreakReasion: isWeekend ? ["WO"] : [],
+            BreakData: isWeekend ? [0] : [],
+            status: isWeekend ? "WO" : "logout",
+            totalBrake: isWeekend ? 0 : 0
+          }
+        ]
+      };
       yearObject.months.push(monthObject);
     }
 
     let dateObject = monthObject.dates.find((d) => d.date === date);
 
     if (!dateObject) {
-      dateObject = {
-        date,
-        day: new Date(year, month - 1, date).getDay(),
-        loginTime: [],
-        logoutTime: [],
-        breakTime: [],
-        ResumeTime: [],
-        breakTimeMs: [],
-        loginTimeMs: [],
-        resumeTimeMS: [],
-        BreakReasion: [],
-        BreakData: [],
-        status: "logout",
-        totalBrake: 0,
-        totalLogAfterBreak: 0
+      dateObject =  {
+        date: date,
+        day: new Date(
+          year,
+          month - 1,
+          currentDay
+        ).getDay(),
+        loginTime: isWeekend ? ["WO"] : loginTime? loginTime: [],
+        logoutTime: isWeekend ? ["WO"] : [],
+        loginTimeMs: isWeekend? ["WO"]: loginTimeMs? loginTimeMs:[],
+        logoutTimeMs: isWeekend? ["WO"]: [],
+        breakTime: isWeekend ? ["WO"] : [],
+        resumeTime: isWeekend ? [0] : [],
+        breakTimeMs: isWeekend ? [0] : [],
+        resumeTimeMS: isWeekend ? [0] : [],
+        BreakReasion: isWeekend ? ["WO"] : [],
+        BreakData: isWeekend ? [0] : [],
+        status: isWeekend ? "WO" : "logout",
+        totalBrake: isWeekend ? 0 : 0
       };
 
-      if (dateObject.day === 0) {
-        dateObject.loginTime = ["Weekends"];
-        dateObject.logoutTime = ["Weekends"];
-        dateObject.breakTime = [0];
-        dateObject.breakTimeMs = [0];
-        dateObject.resumeTimeMS = [0];
-        dateObject.ResumeTime = [0];
-        dateObject.BreakData = [0];
-        dateObject.BreakReasion = [0];
-        dateObject.totalBrake = 0;
-        dateObject.status = "Weekends";
-      }
+      // if (dateObject.day === 0) {
+      //   dateObject.loginTime = ["WO"];
+      //   dateObject.logoutTime = ["WO"];
+      //   dateObject.breakTime = [0];
+      //   dateObject.breakTimeMs = [0];
+      //   dateObject.resumeTimeMS = [0];
+      //   dateObject.ResumeTime = [0];
+      //   dateObject.BreakData = [0];
+      //   dateObject.BreakReasion = [0];
+      //   dateObject.totalBrake = 0;
+      //   dateObject.status = "WO";
+      // }
 
       monthObject.dates.push(dateObject);
     } else if (dateObject.day === 0) {
       return res.status(400).json({ error: "Cannot modify data for Sunday." });
     }
+  
+if(dateObject.logoutTime.length===dateObject.loginTime.length){
+  if (loginTime) {
+    dateObject.loginTime = [...dateObject.loginTime, ...loginTime];
+  }
+  if (loginTimeMs) {
+    dateObject.loginTimeMs = [...dateObject.loginTimeMs, ...loginTimeMs];
+  }
 
-    if (loginTime) {
-      dateObject.loginTime = [...dateObject.loginTime, ...loginTime];
-    }
-    if (loginTimeMs) {
-      dateObject.loginTimeMs = [...dateObject.loginTimeMs, ...loginTimeMs];
-    }
+ 
+} else if(dateObject.logoutTime.length<dateObject.loginTime.length){
+  if (logoutTime) {
+    dateObject.logoutTime = [...dateObject.logoutTime, ...logoutTime];
+  }
+  
+  if (logoutTimeMs) {
+    dateObject.logoutTimeMs = [...dateObject.logoutTimeMs, ...logoutTimeMs];
+  
+    const logoutTimeMSArray = dateObject.logoutTimeMs.slice(
+      -logoutTimeMs.length
+    );
+    const loginTimeMsArray = dateObject.loginTimeMs.slice(
+      -logoutTimeMs.length
+    );
+  
+    const loginDataArray = logoutTimeMSArray.map((login, index) => {
+      const LogMs = loginTimeMsArray[index];
+      return login - LogMs;
+    });
+  
+    dateObject.LogData = [...dateObject.LogData, ...loginDataArray];
+  
+    dateObject.TotalLogin = dateObject.LogData.reduce(
+      (sum, value) => sum + value,
+      0
+    );
+    dateObject.totalLogAfterBreak = Math.max(
+      0,
+      dateObject.TotalLogin - dateObject.totalBrake
+    );
+  }
+}
 
-    if (logoutTime) {
-      dateObject.logoutTime = [...dateObject.logoutTime, ...logoutTime];
-    }
-
-    if (logoutTimeMs) {
-      dateObject.logoutTimeMs = [...dateObject.logoutTimeMs, ...logoutTimeMs];
-
-      const logoutTimeMSArray = dateObject.logoutTimeMs.slice(
-        -logoutTimeMs.length
-      );
-      const loginTimeMsArray = dateObject.loginTimeMs.slice(
-        -logoutTimeMs.length
-      );
-
-      const loginDataArray = logoutTimeMSArray.map((login, index) => {
-        const LogMs = loginTimeMsArray[index];
-        return login - LogMs;
-      });
-
-      dateObject.LogData = [...dateObject.LogData, ...loginDataArray];
-
-      dateObject.TotalLogin = dateObject.LogData.reduce(
-        (sum, value) => sum + value,
-        0
-      );
-      dateObject.totalLogAfterBreak = Math.max(
-        0,
-        dateObject.TotalLogin - dateObject.totalBrake
-      );
-    }
+  
 
     if (breakTime) {
       dateObject.breakTime = [...dateObject.breakTime, ...breakTime];
@@ -477,7 +543,8 @@ const getEmployeeTodayAttendance = async (req, res) => {
       loginTime: dateData.loginTime[0],
       logoutTime: dateData.logoutTime[0],
       totalBrake: dateData.totalBrake,
-      totalLoginTime: dateData.totalLogAfterBreak // Assuming this is the total login time after deducting break time
+    status: dateData.status,
+      totalLoginTime: dateData.totalLogAfterBreak// Assuming this is the total login time after deducting break time
     };
 
     res.status(200).json(employeeAttendanceData);
@@ -486,7 +553,6 @@ const getEmployeeTodayAttendance = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 module.exports = {
   createAttendance,
@@ -497,5 +563,5 @@ module.exports = {
   findAllHolidays,
   attendanceRegister,
   todaysAttendance,
-  getEmployeeTodayAttendance,
+  getEmployeeTodayAttendance
 };

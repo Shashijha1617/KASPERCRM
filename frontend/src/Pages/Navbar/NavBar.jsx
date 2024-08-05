@@ -1,10 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import Logo from "../../img/logo.png";
+import Logo from "../../img/logo.webp";
 import MiniLogo from "../../img/MiniLogo.png";
 import "./NavBar.css";
-import { IoMdClose } from "react-icons/io";
-// import Switch from "react-switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { AttendanceContext } from "../../Context/AttendanceContext/AttendanceContext";
@@ -12,16 +10,16 @@ import { useHistory } from "react-router-dom";
 import addNotification from "react-push-notification";
 import { useLocation } from "react-router-dom/cjs/react-router-dom";
 import DarkModeToggle from "../TheamChanger/DarkModeToggle";
-import { FaBell } from "react-icons/fa6";
+
 import { LuMenu } from "react-icons/lu";
 import { useSidebar } from "../../Context/AttendanceContext/smallSidebarcontext";
-import DarkMode from "../TheamChanger/DarkMode/DarkMode";
 import profile from "../../img/profile.jpg";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import BASE_URL from "../config/config";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import SearchComponent from "../../Utils/SearchComponent/SearchComponent ";
+import { FiBell } from "react-icons/fi";
 
 const NavBar = (props, data) => {
   const [activeProfile, setActiveProfile] = useState(null);
@@ -368,13 +366,13 @@ const NavBar = (props, data) => {
         <span>
           <img
             className="d-flex d-sm-none"
-            style={{ width: "30px", height: "auto" }}
-            src={MiniLogo}
+            style={{ width: "auto", height: "30px" }}
+            src={Logo}
             alt=""
           />
           <img
             className="d-sm-flex d-none"
-            style={{ width: "100px", height: "auto" }}
+            style={{ width: "auto", height: "50px" }}
             src={Logo}
             alt=""
           />
@@ -389,7 +387,7 @@ const NavBar = (props, data) => {
           >
             {notification.length > 0 && (
               <div
-                className="notilenghth bg-warning text-muted fw-bold"
+                className="notilenghth bg-warning text-muted"
                 style={{
                   display: uniqueNotification.length <= 0 ? "none" : "flex",
                   height: "fit-content",
@@ -407,7 +405,15 @@ const NavBar = (props, data) => {
                 <span className="m-auto">{uniqueNotification.length}</span>
               </div>
             )}
-            <FaBell className="fs-5 text-primary" />
+            <FiBell
+              style={{
+                cursor: "pointer",
+                color: darkMode
+                  ? "var(--primaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
+              }}
+              className="fs-4"
+            />
             {notification.length > 0 && (
               <div className="position-relative">
                 <div
@@ -473,7 +479,7 @@ const NavBar = (props, data) => {
                               <div>
                                 <p
                                   style={{ fontSize: ".75rem" }}
-                                  className="p-0 m-0 w-100 text-muted fw-bold"
+                                  className="p-0 m-0 w-100 text-muted"
                                 >
                                   {val.message}
                                 </p>
@@ -488,7 +494,7 @@ const NavBar = (props, data) => {
                             <div className="d-flex align-items-center gap-1">
                               <span
                                 style={{ fontSize: ".80rem" }}
-                                className="btn py-1 py-0 px-1 rounded-5 text-white  w-100 fw-bold bg-danger"
+                                className="btn py-1 py-0 px-1 rounded-5 text-white  w-100 bg-danger"
                                 onClick={(e) => (
                                   notificationDeleteHandler(val.taskId),
                                   e.stopPropagation()
@@ -505,16 +511,17 @@ const NavBar = (props, data) => {
             )}
             {/* profile section */}
           </div>
-          <span className="navbar-right-content my-auto d-flex  fw-bold">
+          <span className="navbar-right-content my-auto d-flex">
             <div
               onMouseEnter={() => setActiveProfile("name")}
               onMouseLeave={() => setActiveProfile(null)}
               style={{
-                height: "35px",
-                width: "35px",
-                border: "1px solid blue",
+                height: "30px",
+                width: "30px",
+                border: "2px solid blue",
                 borderRadius: "50%",
                 position: "relative",
+                padding: "0",
               }}
             >
               <img
@@ -522,7 +529,6 @@ const NavBar = (props, data) => {
                   height: "100%",
                   width: "100%",
                   objectFit: "cover",
-                  border: "1px solid red",
                   borderRadius: "50%",
                 }}
                 src={
@@ -545,47 +551,40 @@ const NavBar = (props, data) => {
                 }}
               >
                 <span>
-                  {" "}
-                  <p className="m-0 p-0">
-                    Hello{" "}
-                    <span className="text-capitalize m-0 p-0 text-primary">
-                      {props.loginInfo["Name"]}
-                    </span>{" "}
-                  </p>
                   <p
-                    style={{ fontSize: ".9rem" }}
-                    className="m-0 text-muted p-0"
-                  >
-                    {props.loginInfo["Email"]}
-                  </p>
-                  <p
-                    style={{ fontSize: ".9rem" }}
-                    className="m-0 text-muted p-0"
+                    style={{ width: "fit-content", fontSize: ".8rem" }}
+                    className="m-0 my-1 border-danger border rounded-5 text-muted p-0 px-2"
                   >
                     {props.loginInfo["empID"]}
                   </p>
+                  <p className="m-0 p-0">
+                    <span className="text-capitalize m-0 p-0">
+                      {props.loginInfo["Name"]}
+                    </span>{" "}
+                  </p>
+                  <p className="m-0 text-muted p-0">
+                    {props.loginInfo["Email"]}
+                  </p>
                 </span>
-                {/* <p>Profile</p> */}
-
                 <Link
-                  className="text-decoration-none"
+                  className="text-decoration-none text-black"
                   to={
                     location === "employee"
                       ? `/employee/${id}/personal-info`
                       : `/${location}/personal-info`
                   }
                 >
-                  My Profile
+                  <span> My Profile</span>
                 </Link>
 
                 <button
                   onClick={props.onLogout}
                   style={{ cursor: "pointer" }}
-                  className="btn w-100 p-0 m-0 border-0 d-flex justify-content-between aline-items-center navbar-right-content"
+                  className="btn btn-danger d-flex align-items-center justify-content-between"
                 >
                   Logout
                   <FontAwesomeIcon
-                    className="my-auto fs-6 text-muted"
+                    className="my-auto fs-6"
                     icon={faSignOutAlt}
                   />
                 </button>

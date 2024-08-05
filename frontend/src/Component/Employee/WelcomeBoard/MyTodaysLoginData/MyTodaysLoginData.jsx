@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { MdCoffee } from "react-icons/md";
-import { RiLoginCircleFill } from "react-icons/ri";
-import { BsFillBriefcaseFill } from "react-icons/bs";
+import { MdOutlineFreeBreakfast, MdWorkOutline } from "react-icons/md";
+import { RiLoginCircleLine, RiLogoutCircleRLine } from "react-icons/ri";
 import axios from "axios";
 import BASE_URL from "../../../../Pages/config/config";
 import { useTheme } from "../../../../Context/TheamContext/ThemeContext";
@@ -56,7 +55,7 @@ const MyTodaysLoginData = (props) => {
   }, [employeeId]);
 
   if (!attendanceData) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
   function convertMinutesToHoursAndMinutes(minutes) {
     var hours = Math.floor(minutes / 60);
@@ -67,22 +66,22 @@ const MyTodaysLoginData = (props) => {
 
   const labelData = [
     {
-      icon: <RiLoginCircleFill />,
+      icon: <RiLoginCircleLine style={{ rotate: "180deg" }} />,
       title: "Login",
       data: attendanceData.loginTime,
     },
     {
-      icon: <MdCoffee />,
+      icon: <MdOutlineFreeBreakfast />,
       title: "Total Break",
       data: convertMinutesToHoursAndMinutes(attendanceData.totalBrake),
     },
     {
-      icon: <BsFillBriefcaseFill />,
+      icon: <MdWorkOutline />,
       title: "Total Working",
       data: convertMinutesToHoursAndMinutes(attendanceData.totalLoginTime),
     },
     {
-      icon: <RiLoginCircleFill />,
+      icon: <RiLogoutCircleRLine />,
       title: "Logout",
       data: attendanceData.logoutTime
         ? attendanceData.logoutTime
@@ -94,14 +93,17 @@ const MyTodaysLoginData = (props) => {
     <div
       style={{
         color: darkMode
-        ? "var(--primaryDashColorDark)"
-        : "var(--secondaryDashMenuColor)",
+          ? "var(--primaryDashColorDark)"
+          : "var(--secondaryDashMenuColor)",
       }}
       className="row justify-content-between rounded-0 row-gap-3 container-fluid my-2 mx-auto"
     >
       {labelData.map((item, index) => (
         <Labels
-          style={{background : darkMode ? "var(--basecolor)" : "var(--basecolor4)", height:'5rem'}}
+          style={{
+            background: darkMode ? "var(--basecolor)" : "var(--basecolor4)",
+            height: "5rem",
+          }}
           key={index}
           icon={item.icon}
           title={item.title}
@@ -114,12 +116,9 @@ const MyTodaysLoginData = (props) => {
 
 export default MyTodaysLoginData;
 
-const Labels = ({ title, data, icon , style}) => {
+const Labels = ({ title, data, icon, style }) => {
   return (
-    <div
-      className="col-6 col-lg-3 row rounded-0 py-2"
-      style={style}
-    >
+    <div className="col-6 col-lg-3 row rounded-0 py-2" style={style}>
       <div className="col-8 my-auto">
         <span>{title}</span>
         <p className="m-0">{data}</p>
