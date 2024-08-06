@@ -1,22 +1,24 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import { ImBin } from 'react-icons/im';
-import { AttendanceContext } from '../../../Context/AttendanceContext/AttendanceContext';
-import './notification.css';
-import BASE_URL from '../../../Pages/config/config';
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { ImBin } from "react-icons/im";
+import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
+import "./notification.css";
+import BASE_URL from "../../../Pages/config/config";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 const Notification = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState([]);
   const [notification, setNotification] = useState(null);
   const { socket } = useContext(AttendanceContext);
-  const id = localStorage.getItem('_id');
-  const email = localStorage.getItem('Email');
+  const id = localStorage.getItem("_id");
+  const email = localStorage.getItem("Email");
+  const { darkMode } = useTheme();
 
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem('token') || '',
+          authorization: localStorage.getItem("token") || "",
         },
       })
       .then((response) => {
@@ -26,20 +28,18 @@ const Notification = () => {
         console.log(error);
       });
   };
-useEffect(()=>{
-  loadEmployeeData();
-},[])
   useEffect(() => {
-    
+    loadEmployeeData();
+  }, []);
+  useEffect(() => {
     if (socket) {
-      socket.on('taskNotificationReceived', () => {
+      socket.on("taskNotificationReceived", () => {
         loadEmployeeData();
       });
     }
   }, [socket]);
 
   useEffect(() => {
-    // Check if all notifications are selected and update the "Select All" checkbox accordingly
     setSelectAll(
       notification && selectedNotification.length === notification.length
     );
@@ -63,25 +63,29 @@ useEffect(()=>{
     setSelectAll(!selectAll);
     setSelectedNotification(selectAll ? [] : [...notification]);
   };
-  const clearAllHandler = ()=>{
-    if(notification.length>0){
-      console.log("clearALL")
-      axios.post(`${BASE_URL}/api/selectedNotificationDelete`,{email},{
-        headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
-      })
-      .then((response) => {
-        console.log(response)
-        setNotification(response.data.result.Notification);
-        socket.emit("notificationPageUpdate", true)
-      })
-      .catch((error) => {
-        console.log(error);
-      }); 
+  const clearAllHandler = () => {
+    if (notification.length > 0) {
+      console.log("clearALL");
+      axios
+        .post(
+          `${BASE_URL}/api/selectedNotificationDelete`,
+          { email },
+          {
+            headers: {
+              authorization: localStorage.getItem("token") || "",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          setNotification(response.data.result.Notification);
+          socket.emit("notificationPageUpdate", true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-  
-   }
+  };
   const multiNotificationDeleteHandler = () => {
     if (selectedNotification.length > 0) {
       const taskIDArray = selectedNotification.map((val) => val.taskId);
@@ -89,78 +93,107 @@ useEffect(()=>{
         employeeMail: email,
         tasks: taskIDArray,
       };
-if(selectAll){
-
-   clearAllHandler()
-}else{
- 
-  axios
-  .post(
-    `${BASE_URL}/api/multiSelectedNotificationDelete`,
-    data,
-    {
-      headers: {
-        authorization: localStorage.getItem('token') || '',
-      },
-    }
-  )
-  .then((response) => {
-    setNotification(response.data.result.Notification);
-    setSelectedNotification([])
-    console.log("emittted")
-    socket.emit("notificationPageUpdate", true)
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-}
-      
+      if (selectAll) {
+        clearAllHandler();
+      } else {
+        axios
+          .post(`${BASE_URL}/api/multiSelectedNotificationDelete`, data, {
+            headers: {
+              authorization: localStorage.getItem("token") || "",
+            },
+          })
+          .then((response) => {
+            setNotification(response.data.result.Notification);
+            setSelectedNotification([]);
+            console.log("emittted");
+            socket.emit("notificationPageUpdate", true);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     }
   };
-  const notificationDeleteHandler = (id)=>{
-    console.log(id)
+  const notificationDeleteHandler = (id) => {
+    console.log(id);
     axios
-    .post(`${BASE_URL}/api/notificationDeleteHandler/${id}`, {email},{
-      headers: {
-        authorization: localStorage.getItem("token") || ""
-      }
-    })
-    .then((response) => {
+      .post(
+        `${BASE_URL}/api/notificationDeleteHandler/${id}`,
+        { email },
+        {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        }
+      )
+      .then((response) => {
+        setNotification(response.data.result.Notification);
+        setSelectedNotification([]);
+        console.log("emittted");
+        socket.emit("notificationPageUpdate", true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
 
-      setNotification(response.data.result.Notification);
-      setSelectedNotification([]) 
-      console.log("emittted")
-      socket.emit("notificationPageUpdate", true)
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }
-console.log(notification)
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
+
   return (
-    <>
-      <div className="row">
-        <form className="d-flex col-8 flex-column gap-3">
+    <div
+      style={{
+        color: darkMode
+          ? "var(--secondaryDashColorDark)"
+          : "var(--primaryDashMenuColor)",
+      }}
+      className="container-fluid py-3 "
+    >
+      <div>
+        <form className="d-flex flex-column gap-3">
           <div>
             <div className="p-2">
-              {' '}
+              {" "}
               <input
                 type="checkbox"
                 name=""
                 id=""
                 onChange={toggleSelectAll}
                 checked={selectAll}
-              />{' '}
+              />{" "}
               <span>Select All</span>
             </div>
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">Select</th>
-                  <th scope="col">task Name</th>
-                  <th scope="col">Sender</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Action</th>
+                  <th style={rowHeadStyle}>Select</th>
+                  <th style={rowHeadStyle}>task Name</th>
+                  <th style={rowHeadStyle}>Sender</th>
+                  <th style={rowHeadStyle}>Status</th>
+                  <th style={rowHeadStyle}>Action</th>
                 </tr>
               </thead>
 
@@ -168,7 +201,7 @@ console.log(notification)
                 {notification &&
                   notification.map((val, index) => (
                     <tr key={index}>
-                      <th scope="row">
+                      <th style={rowBodyStyle}>
                         <input
                           type="checkbox"
                           name=""
@@ -179,15 +212,18 @@ console.log(notification)
                           )}
                         />
                       </th>
-                      <td>{val.taskName}</td>
-                      <td>{val.senderMail}</td>
-                      {val.status === 'unseen' ? (
+                      <td style={rowBodyStyle}>{val.taskName}</td>
+                      <td style={rowBodyStyle}>{val.senderMail}</td>
+                      {val.status === "unseen" ? (
                         <td>Unread</td>
                       ) : (
                         <td>read</td>
                       )}
-                      <td>
-                        <ImBin onClick={()=>notificationDeleteHandler(val.taskId)} className="bin" />
+                      <td style={rowBodyStyle}>
+                        <ImBin
+                          onClick={() => notificationDeleteHandler(val.taskId)}
+                          className="bin"
+                        />
                       </td>
                     </tr>
                   ))}
@@ -203,7 +239,7 @@ console.log(notification)
       >
         Delete
       </button>
-    </>
+    </div>
   );
 };
 

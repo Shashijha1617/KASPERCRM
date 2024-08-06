@@ -75,10 +75,10 @@ const LeaveDataComponent = () => {
           ? "var(--primaryDashColorDark)"
           : "var(--secondaryDashMenuColor)",
       }}
-      className="p-3 py-3 shadow"
+      className="p-3 py-3 shadow "
     >
       <h6 className="mb-3">Leave List</h6>
-      <div style={{ maxHeight: "15rem", overflow: "hidden" }}>
+      <div style={{ maxHeight: "14rem", overflow: "auto", minHeight: "14rem" }}>
         {leaveData.length > 0 ? (
           <table className="table">
             <thead>

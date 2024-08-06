@@ -17,8 +17,8 @@ const Notification = () => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setNotification(response.data.Notification);
@@ -72,8 +72,8 @@ const Notification = () => {
           { email },
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         )
         .then((response) => {
@@ -91,7 +91,7 @@ const Notification = () => {
       const taskIDArray = selectedNotification.map((val) => val.taskId);
       const data = {
         employeeMail: email,
-        tasks: taskIDArray
+        tasks: taskIDArray,
       };
       if (selectAll) {
         clearAllHandler();
@@ -99,8 +99,8 @@ const Notification = () => {
         axios
           .post(`${BASE_URL}/api/multiSelectedNotificationDelete`, data, {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           })
           .then((response) => {
             setNotification(response.data.result.Notification);
@@ -122,8 +122,8 @@ const Notification = () => {
         { email },
         {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         }
       )
       .then((response) => {

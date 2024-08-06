@@ -4,12 +4,36 @@ import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import { SearchRouteData } from "./SearchRouteData";
+import BASE_URL from "../../Pages/config/config";
+import axios from "axios";
 
 const SearchComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [expanded, setExpanded] = useState(false);
   const inputRef = useRef(null);
+  const [employeeData, setEmployeeData] = useState({});
   const { darkMode } = useTheme();
+  const id = localStorage.getItem("_id");
+
+  const loadEmployeeData = () => {
+    axios
+      .get(`${BASE_URL}/api/particularEmployee/${id}`, {
+        headers: {
+          authorization: localStorage.getItem("token") || "",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setEmployeeData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    loadEmployeeData();
+  }, []);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -25,9 +49,26 @@ const SearchComponent = () => {
   };
 
   const filteredRoutes = searchTerm
-    ? SearchRouteData.filter((route) =>
-        route.name.toLowerCase().includes(searchTerm.toLowerCase())
-      ).slice(0, 5)
+    ? SearchRouteData.filter((route) => {
+        const isNameMatch = route.name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+        const isUserTypeMatch = (() => {
+          switch (employeeData.Account) {
+            case 1: // Admin
+              return route.control === "Admin";
+            case 2: // HR
+              return route.control === "hr";
+            case 3: // Employee
+              return route.control === "employee";
+            case 4: // Manager
+              return route.control === "manager";
+            default:
+              return false;
+          }
+        })();
+        return isNameMatch && isUserTypeMatch;
+      }).slice(0, 5)
     : [];
 
   useEffect(() => {
