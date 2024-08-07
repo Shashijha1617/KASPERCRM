@@ -3,6 +3,8 @@ import axios from "axios";
 import Logo from "../../img/logo.webp";
 import MiniLogo from "../../img/MiniLogo.png";
 import "./NavBar.css";
+import { IoMdClose } from "react-icons/io";
+// import Switch from "react-switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { AttendanceContext } from "../../Context/AttendanceContext/AttendanceContext";
@@ -10,16 +12,16 @@ import { useHistory } from "react-router-dom";
 import addNotification from "react-push-notification";
 import { useLocation } from "react-router-dom/cjs/react-router-dom";
 import DarkModeToggle from "../TheamChanger/DarkModeToggle";
-
+import { FaBell } from "react-icons/fa6";
 import { LuMenu } from "react-icons/lu";
 import { useSidebar } from "../../Context/AttendanceContext/smallSidebarcontext";
+import DarkMode from "../TheamChanger/DarkMode/DarkMode";
 import profile from "../../img/profile.jpg";
-import { toast } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import BASE_URL from "../config/config";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import SearchComponent from "../../Utils/SearchComponent/SearchComponent ";
-import { FiBell } from "react-icons/fi";
 
 const NavBar = (props, data) => {
   const [activeProfile, setActiveProfile] = useState(null);
@@ -387,7 +389,7 @@ const NavBar = (props, data) => {
           >
             {notification.length > 0 && (
               <div
-                className="notilenghth bg-warning text-muted"
+                className="notilenghth bg-warning text-muted fw-bold"
                 style={{
                   display: uniqueNotification.length <= 0 ? "none" : "flex",
                   height: "fit-content",
@@ -405,15 +407,7 @@ const NavBar = (props, data) => {
                 <span className="m-auto">{uniqueNotification.length}</span>
               </div>
             )}
-            <FiBell
-              style={{
-                cursor: "pointer",
-                color: darkMode
-                  ? "var(--primaryDashColorDark)"
-                  : "var(--secondaryDashMenuColor)",
-              }}
-              className="fs-4"
-            />
+            <FaBell className="fs-5 text-primary" />
             {notification.length > 0 && (
               <div className="position-relative">
                 <div
@@ -479,7 +473,7 @@ const NavBar = (props, data) => {
                               <div>
                                 <p
                                   style={{ fontSize: ".75rem" }}
-                                  className="p-0 m-0 w-100 text-muted"
+                                  className="p-0 m-0 w-100 text-muted fw-bold"
                                 >
                                   {val.message}
                                 </p>
@@ -494,7 +488,7 @@ const NavBar = (props, data) => {
                             <div className="d-flex align-items-center gap-1">
                               <span
                                 style={{ fontSize: ".80rem" }}
-                                className="btn py-1 py-0 px-1 rounded-5 text-white  w-100 bg-danger"
+                                className="btn py-1 py-0 px-1 rounded-5 text-white  w-100 fw-bold bg-danger"
                                 onClick={(e) => (
                                   notificationDeleteHandler(val.taskId),
                                   e.stopPropagation()
@@ -511,17 +505,16 @@ const NavBar = (props, data) => {
             )}
             {/* profile section */}
           </div>
-          <span className="navbar-right-content my-auto d-flex">
+          <span className="navbar-right-content my-auto d-flex  fw-bold">
             <div
               onMouseEnter={() => setActiveProfile("name")}
               onMouseLeave={() => setActiveProfile(null)}
               style={{
                 height: "30px",
                 width: "30px",
-                border: "2px solid blue",
+                border: "1px solid blue",
                 borderRadius: "50%",
                 position: "relative",
-                padding: "0",
               }}
             >
               <img
@@ -529,6 +522,7 @@ const NavBar = (props, data) => {
                   height: "100%",
                   width: "100%",
                   objectFit: "cover",
+                  border: "1px solid red",
                   borderRadius: "50%",
                 }}
                 src={

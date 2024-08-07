@@ -12,15 +12,15 @@ const {
 
 // GET: Retrieve all countries
 // verifyAdminHR
-cityRoute.get("/city",  getAllcity);
+cityRoute.get("/city", verifyAdminHR, getAllcity);
 
 // POST: Create a new city
-cityRoute.post("/city",  createCity);
+cityRoute.post("/city", verifyAdminHR, createCity);
 
 // PUT: Update an existing city
-cityRoute.put("/city/:id",  updateCity);
+cityRoute.put("/city/:id", verifyAdminHR, updateCity);
 
 // DELETE: Delete a city
-cityRoute.delete("/city/:id",  deleteCity);
+cityRoute.delete("/city/:id", verifyAdminHR, deleteCity);
 
 module.exports = cityRoute;

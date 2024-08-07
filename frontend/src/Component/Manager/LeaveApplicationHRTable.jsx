@@ -20,7 +20,6 @@ const override = css`
 `;
 
 const LeaveApplicationHRTable = (props) => {
-  console.log(props);
   const [leaveApplicationHRData, setLeaveApplicationHRData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rowData, setRowData] = useState([]);
@@ -31,6 +30,7 @@ const LeaveApplicationHRTable = (props) => {
   const { darkMode } = useTheme();
   const email = localStorage.getItem("Email");
   const formatDate = (dateString) => {
+    if (!dateString) return;
     const dateParts = dateString.split("-");
     return `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
   };
@@ -42,8 +42,8 @@ const LeaveApplicationHRTable = (props) => {
         { manager: email },
         {
           headers: {
-            authorization: localStorage.getItem("token") || "",
-          },
+            authorization: localStorage.getItem("token") || ""
+          }
         }
       )
       .then((response) => {
@@ -64,10 +64,12 @@ const LeaveApplicationHRTable = (props) => {
             Days: calculateDays(data?.FromDate, data?.ToDate),
             Reasonforleave: data?.Reasonforleave,
             Status: status(data?.Status),
-            empObjID: data.empObjID,
+            empObjID: data?.empObjID,
+            reportHr: data?.reportHr,
+            reportManager: data?.reportManager
           };
         });
-
+        console.log(rowDataT);
         setRowData(rowDataT);
         setFilteredData(rowDataT);
         // props.updateTotalLeaves(leaveApplicationHRObj.length);
@@ -105,8 +107,8 @@ const LeaveApplicationHRTable = (props) => {
       axios
         .delete(`${BASE_URL}/api/leave-application-hr/` + e1 + "/" + e2, {
           headers: {
-            authorization: localStorage.getItem("token") || "",
-          },
+            authorization: localStorage.getItem("token") || ""
+          }
         })
         .then((res) => {
           loadLeaveApplicationHRData();
@@ -124,7 +126,7 @@ const LeaveApplicationHRTable = (props) => {
       const doc = new jsPDF({
         orientation: "landscape",
         unit: "mm",
-        format: [pdfWidth, pdfHeight],
+        format: [pdfWidth, pdfHeight]
       });
 
       doc.setFontSize(18);
@@ -137,7 +139,7 @@ const LeaveApplicationHRTable = (props) => {
         "Remarks",
         "Days",
         "CreatedOn",
-        "Status",
+        "Status"
       ];
       const data = filteredData.map((row) => [
         row.empID,
@@ -147,13 +149,13 @@ const LeaveApplicationHRTable = (props) => {
         row.Days,
         row.CreatedOn,
         row.Reasonforleave,
-        row.Status,
+        row.Status
       ]);
       doc.setFontSize(12);
       doc.autoTable({
         head: [headers],
         body: data,
-        startY: 25,
+        startY: 25
       });
 
       doc.save("leaveApplication_data.pdf");
@@ -184,7 +186,7 @@ const LeaveApplicationHRTable = (props) => {
       ? "var(--primaryDashColorDark)"
       : "var(--primaryDashMenuColor)",
     border: "none",
-    whiteSpace: "pre",
+    whiteSpace: "pre"
   };
 
   const rowBodyStyle = {
@@ -195,7 +197,7 @@ const LeaveApplicationHRTable = (props) => {
     color: darkMode
       ? "var(--secondaryDashColorDark)"
       : "var(--primaryDashMenuColor)",
-    border: "none",
+    border: "none"
   };
 
   return (
@@ -207,7 +209,7 @@ const LeaveApplicationHRTable = (props) => {
               style={{
                 color: darkMode
                   ? "var(--secondaryDashColorDark)"
-                  : "var(--secondaryDashMenuColor)",
+                  : "var(--secondaryDashMenuColor)"
               }}
               className="m-0 p-0 "
             >
@@ -217,7 +219,7 @@ const LeaveApplicationHRTable = (props) => {
               style={{
                 color: darkMode
                   ? "var(--secondaryDashColorDark)"
-                  : "var(--secondaryDashMenuColor)",
+                  : "var(--secondaryDashMenuColor)"
               }}
               className="m-0 p-0 "
             >
@@ -237,7 +239,7 @@ const LeaveApplicationHRTable = (props) => {
                 style={{
                   height: "100%",
                   width: "100%",
-                  paddingLeft: "15%",
+                  paddingLeft: "15%"
                 }}
                 className="form-control border rounded-0"
                 type="text"
@@ -260,7 +262,7 @@ const LeaveApplicationHRTable = (props) => {
           style={{
             maxHeight: "76vh",
             overflow: "auto",
-            position: "relative",
+            position: "relative"
           }}
           className="table-responsive border border-1 border-black"
         >
@@ -295,7 +297,7 @@ const LeaveApplicationHRTable = (props) => {
                                 width: "100%",
                                 borderRadius: "50%",
                                 overflow: "hidden",
-                                objectFit: "cover",
+                                objectFit: "cover"
                               }}
                               src={
                                 data?.data?.profile?.image_url
@@ -366,13 +368,13 @@ const LeaveApplicationHRTable = (props) => {
                 alignItems: "center",
                 wordSpacing: "5px",
                 flexDirection: "column",
-                gap: "2rem",
+                gap: "2rem"
               }}
             >
               <img
                 style={{
                   height: "auto",
-                  width: "25%",
+                  width: "25%"
                 }}
                 src={darkMode ? LeaveDark : LeaveLight}
                 alt="img"
@@ -381,7 +383,7 @@ const LeaveApplicationHRTable = (props) => {
                 style={{
                   color: darkMode
                     ? "var(--secondaryDashColorDark)"
-                    : "var( --primaryDashMenuColor)",
+                    : "var( --primaryDashMenuColor)"
                 }}
               >
                 No Leave requests found.

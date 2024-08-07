@@ -41,11 +41,11 @@ const Sidebar = (props) => {
       icon: <TbUserCheck />,
       name: "Attendance",
       navLinks: [
-        { to: "/hr/attenDance", label: "My Attendance" },
+        { to: "/hr/attenDance", label: "Create Attendance" },
         { to: "/hr/AttendanceRegister", label: "Attendance Register" },
         { to: "/hr/todaysAttendance", label: "TodaysAttendance" },
         { to: "/hr/viewAttenDance", label: "View Attendance" },
-        { to: "/hr/manualAttand", label: "Manual Attendance" },
+        { to: "/hr/manualAttand", label: "All Emp Attendance" },
       ],
     },
     {
@@ -58,6 +58,7 @@ const Sidebar = (props) => {
         { to: "/hr/leaveRejected", label: "Rejected " },
         { to: "/hr/assignLeave", label: "Assign Leave" },
         { to: "/hr/allEmpLeave", label: "All Emp Leave" },
+        { to: "/hr/leaveBalance", label: "Leave Balance" },
       ],
     },
     {

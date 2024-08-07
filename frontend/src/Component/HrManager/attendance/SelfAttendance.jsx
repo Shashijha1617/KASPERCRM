@@ -264,7 +264,7 @@ const SelfAttendance = () => {
       <div className="d-flex gap-3 justify-content-between"></div>
       <div className="d-flex align-items-center  justify-content-between">
         <TittleHeader
-          title={"My Attendance"}
+          title={"Attendance List"}
           message={"You can check yous attendance here."}
         />
 
@@ -286,6 +286,7 @@ const SelfAttendance = () => {
               </select>
             </div>
             <div>
+            
               <select
                 className="form-select my-0 rounded-0 shadow"
                 id="month"

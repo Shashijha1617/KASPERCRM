@@ -17,12 +17,12 @@ const { getAllWorkExperience, createWorkExperience, updateWorkExperience, delete
 workExperienceRoute.get("/work-experience/:id",  getAllWorkExperience);
 
 // POST: Create a new city
-workExperienceRoute.post("/work-experience/:id",   createWorkExperience);
+workExperienceRoute.post("/work-experience/:id", verifyEmployee,  createWorkExperience);
 
 // PUT: Update an existing work
-workExperienceRoute.put("/work-experience/:id",   updateWorkExperience);
+workExperienceRoute.put("/work-experience/:id", verifyEmployee,  updateWorkExperience);
 
 // DELETE: Delete a work
-workExperienceRoute.delete("/work-experience/:id",   deleteWorkExperience);
+workExperienceRoute.delete("/work-experience/:id", verifyEmployee,  deleteWorkExperience);
 
 module.exports = workExperienceRoute;

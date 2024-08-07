@@ -1,0 +1,280 @@
+#search-bar {
+  /* margin-left: 15px; */
+  width: 98%;
+  margin: auto;
+  margin-bottom: 5px;
+}
+
+#search-bar div {
+  /* margin-left: 15px; */
+  width: 100%;
+}
+
+@media (max-width: 1000px) {
+  #search-bar {
+    width: 95%;
+  }
+}
+
+.employee-list {
+  margin: 0 auto;
+  max-width: 1366px;
+  padding: 0 20px;
+}
+
+.employee-list-drop-down {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.employee-list-drop-down-left {
+  border-radius: 8px;
+  border: 1px solid #e5eef5;
+  background: #fff;
+  box-shadow: -1px 1px 8px 0px rgba(0, 0, 0, 0.1);
+}
+
+.employee-list-drop-down-left ul,
+.employee-list-drop-down-right ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+
+  padding: 8px;
+}
+
+.employee-list-drop-down-right ul {
+  padding: 0px;
+}
+
+.employee-list-drop-down-left ul li a,
+.employee-list-drop-down-right ul li a {
+  margin: 0 4px;
+  background: rgba(85, 112, 241, 0.15);
+
+  color: rgba(0, 0, 0, 0.9);
+  text-decoration: none;
+  padding: 8px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: poppins;
+  border-radius: 4px;
+}
+
+.employee-list-drop-down-right ul li a {
+  padding: 14px 24px;
+}
+
+.employee-list-drop-down-left ul li:first-child a,
+.employee-list-drop-down-right ul li:last-child a {
+  background: #5932ea;
+  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.15);
+  color: white;
+}
+
+#drop {
+  display: flex;
+  justify-content: center;
+  padding: 10px 10px;
+  margin-left: 32px;
+  background-color: white;
+  border: 1px solid #b3b3b3;
+}
+
+#drop svg {
+  font-size: 18px;
+}
+
+.employee-list-card-container {
+  display: flex;
+  gap: 18px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.employee-list-card {
+  width: 246px;
+  background-color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20.418px;
+  border: 0.851px solid #98c4e1;
+  padding: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.employee-image {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 3.033px solid #284d79;
+  overflow: hidden;
+}
+
+.employee-image img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.employee-list-card h6 {
+  color: #284d79;
+  font-family: poppins;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 600;
+}
+
+.employee-list-card p {
+  color: #22659a;
+  font-family: poppins;
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 500;
+}
+
+.employee-list-card h4 {
+  border-radius: 25px;
+  background: rgba(85, 112, 241, 0.25);
+  padding: 6px 40px;
+  margin: 8px 0;
+  color: rgba(0, 0, 0, 0.9);
+  font-family: poppins;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.463px;
+}
+
+.employee-list-card-contact,
+.employee-list-card-role {
+  border-radius: 13.612px;
+  border: 0.851px solid #98c4e1;
+  background: #f9fcfe;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 5px 0;
+}
+
+.employee-list-card-role {
+  background: rgba(174, 159, 229, 0.8);
+  border: none;
+}
+
+.employee-list-card-contact-mail {
+  display: flex;
+  gap: 5px;
+  overflow: hidden;
+  justify-content: flex-start;
+}
+
+.employee-list-card-contact-mail svg {
+  font-size: 18px;
+}
+
+.employee-list-card-contact-mail p {
+  color: rgba(0, 0, 0, 0.9);
+  font-family: poppins;
+  font-size: 15px;
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.employee-list-card-role-department {
+  display: flex;
+  justify-content: space-between;
+}
+
+.employee-list-card-role-department p,
+.employee-list-card-role-department h3 {
+  color: #fff;
+  font-family: Poppins;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 17.015px;
+}
+
+.employee-list-card-role-department h3 {
+  font-weight: 600;
+}
+
+.more-info {
+  position: absolute;
+  right: 8px;
+  top: 12px;
+  font-size: 20px;
+  color: #717171;
+  background-color: white;
+  z-index: 2;
+}
+
+.more-Info-option {
+  list-style: none;
+  position: absolute;
+  top: -24%;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  right: 5px;
+  transition: 0.3s;
+}
+
+.more-Info-option li a {
+  text-decoration: none;
+
+  display: flex;
+  align-items: center;
+}
+
+.more-Info-option li a svg {
+  font-size: 25px;
+  padding: 2px;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.more-Info-option li a svg:hover {
+  background-color: #22649a25;
+}
+
+.info {
+  color: rgba(17, 133, 17, 0.627);
+}
+
+.edit {
+  color: #22649abd;
+}
+
+.delete {
+  color: rgba(255, 0, 0, 0.535);
+}
+
+.more-Info-option-hidden {
+  list-style: none;
+  position: absolute;
+  top: 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  right: 5px;
+}
+
+.employee-card-holder {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+
+.rdt_TableRow {
+  padding: 10px 0 !important;
+}

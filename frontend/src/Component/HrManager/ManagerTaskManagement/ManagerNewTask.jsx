@@ -3,7 +3,7 @@ import axios from "axios";
 import {
   MdArrowDropDown,
   MdArrowDropUp,
-  MdOutlineCancel,
+  MdOutlineCancel
 } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-hot-toast";
@@ -26,6 +26,8 @@ const ManagerNewTask = () => {
   const [allImage, setAllImage] = useState(null);
   const [timeinfo, setTimeinfo] = useState(false);
   const [expandedTaskId, setExpandedTaskId] = useState(null);
+  const [, setIsAccepted] = useState(false);
+  const [, setIsRejected] = useState(false);
 
   const { darkMode } = useTheme();
 
@@ -40,8 +42,8 @@ const ManagerNewTask = () => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
+          authorization: localStorage.getItem("token") || ""
+        }
       })
       .then((response) => {
         setEmpData(response.data);
@@ -118,71 +120,186 @@ const ManagerNewTask = () => {
     }
   };
 
-  const handleTaskAction = async (taskID, taskName, adminMail, action) => {
-    const actionMapping = {
-      accept: {
-        setStatus: setStatus,
-        statusKey: "accepted",
-        newStatus: "Pending",
-        message: "Accepted",
-        toastMessage: "Task Accepted successfully!",
-      },
-      reject: {
-        setStatus: setStatus,
-        statusKey: "rejected",
-        newStatus: "Rejected",
-        message: "Rejected",
-        toastMessage: "Task Rejected",
-      },
-    };
+  // const handleTaskAction = async (taskID, taskName, adminMail, action) => {
+  //   const actionMapping = {
+  //     accept: {
+  //       setStatus: setStatus,
+  //       statusKey: "accepted",
+  //       newStatus: "Pending",
+  //       message: "Accepted",
+  //       toastMessage: "Task Accepted successfully!"
+  //     },
+  //     reject: {
+  //       setStatus: setStatus,
+  //       statusKey: "rejected",
+  //       newStatus: "Rejected",
+  //       message: "Rejected",
+  //       toastMessage: "Task Rejected"
+  //     }
+  //   };
 
-    const actionConfig = actionMapping[action];
-    if (!actionConfig) return;
+  //   const actionConfig = actionMapping[action];
+  //   if (!actionConfig) return;
 
-    const { setStatus, statusKey, newStatus, message, toastMessage } =
-      actionConfig;
-    setStatus((prev) => ({ ...prev, [statusKey]: true }));
+  //   const { setStatus, statusKey, newStatus, message, toastMessage } =
+  //     actionConfig;
+  //   setStatus((prev) => ({ ...prev, [statusKey]: true }));
 
-    const remark = prompt(`Enter remarks for ${message} Task:`);
+  //   const remark = prompt(`Enter remarks for ${message} Task:`);
 
-    if (remark === null) {
-      setStatus((prev) => ({ ...prev, [statusKey]: false }));
-      return;
-    }
+  //   if (remark === null) {
+  //     setStatus((prev) => ({ ...prev, [statusKey]: false }));
+  //     return;
+  //   }
 
-    try {
-      await axios.put(`${BASE_URL}/api/tasks/${taskID}`, {
-        status: newStatus,
-        comment: remark,
-      });
+  //   try {
+  //     await axios.put(`${BASE_URL}/api/tasks/${taskID}`, {
+  //       status: newStatus,
+  //       comment: remark
+  //     });
 
-      toast.success(toastMessage);
+  //     toast.success(toastMessage);
 
-      const taskNotificationData = {
-        taskId,
-        taskName,
-        senderMail: email,
-        adminMail,
-        Account: 1,
-        message: `Task ${message}`,
-        messageBy: empData?.profile?.image_url ? name : null,
-        profile: empData?.profile?.image_url,
-        status: "unseen",
-        path: action === "accept" ? "taskassign" : "taskreject",
-      };
+  //     const taskNotificationData = {
+  //       taskId,
+  //       taskName,
+  //       senderMail: email,
+  //       adminMail,
+  //       Account: 1,
+  //       message: `Task ${message}`,
+  //       messageBy: empData?.profile?.image_url ? name : null,
+  //       profile: empData?.profile?.image_url,
+  //       status: "unseen",
+  //       path: action === "accept" ? "taskassign" : "taskreject"
+  //     };
 
-      socket.emit("adminTaskNotification", taskNotificationData);
-      fetchData();
-    } catch (error) {
-      console.error(`Error ${message.toLowerCase()} task:`, error.message);
-      toast.error(`Failed to ${message.toLowerCase()} task. Please try again.`);
-    } finally {
-      setStatus((prev) => ({ ...prev, [statusKey]: false }));
-    }
-  };
+  //     socket.emit("adminTaskNotification", taskNotificationData);
+  //     fetchData();
+  //   } catch (error) {
+  //     console.error(`Error ${message.toLowerCase()} task:`, error.message);
+  //     toast.error(`Failed to ${message.toLowerCase()} task. Please try again.`);
+  //   } finally {
+  //     setStatus((prev) => ({ ...prev, [statusKey]: false }));
+  //   }
+  // };
 
   const toggleTaskDetails = (taskId) => {
     setExpandedTaskId((prevId) => (prevId === taskId ? null : taskId));
+  };
+
+  const AcceptTask = async (taskID, taskName, adminMail) => {
+    try {
+      setIsAccepted(true);
+
+      // Prompt the user for Accept remarks
+      const AcceptTaskRemark = prompt("Enter remarks for Accept Task:");
+
+      if (AcceptTaskRemark === null) {
+        // If the user clicks Cancel in the prompt, do nothing
+        setIsAccepted(false);
+        return;
+      }
+
+      // Update the task status to "Cancelled" in the database
+      await axios.put(`${BASE_URL}/api/tasks/${taskID}`, {
+        status: "Pending",
+        comment: AcceptTaskRemark
+      });
+
+      // Display success notification
+      toast.success("Task Accepteed successfully!");
+      if (empData.profile) {
+        const taskNotificationData = {
+          taskId,
+          taskName,
+          senderMail: email,
+          adminMail,
+          Account: 1,
+          message: `Task Accepted`,
+          messageBy: name,
+          profile: empData.profile.image_url,
+          status: "unseen",
+          path: "taskassign"
+        };
+
+        socket.emit("adminTaskNotification", taskNotificationData);
+      } else {
+        const taskNotificationData = {
+          taskId,
+          taskName,
+          senderMail: email,
+          adminMail,
+          Account: 1,
+          message: `Task Accepted`,
+          messageBy: null,
+          status: "unseen",
+          path: "taskassign"
+        };
+
+        socket.emit("adminTaskNotification", taskNotificationData);
+      }
+      // Update the UI by fetching the latest tasks
+      fetchData();
+    } catch (error) {
+      console.error("Error canceling task:", error.message);
+      toast.error("Failed to cancel task. Please try again.");
+    } finally {
+      setIsAccepted(false);
+    }
+  };
+  const RejectTask = async (taskId, taskName, adminMail) => {
+    try {
+      setIsRejected(true);
+      const RejectRemarks = prompt("Enter remarks for Reject Task:");
+
+      if (RejectRemarks === null) {
+        setIsRejected(false);
+        return;
+      }
+
+      await axios.put(`${BASE_URL}/api/tasks/${taskId}`, {
+        status: "Rejected",
+        comment: RejectRemarks
+      });
+
+      toast.success("Task Rejected");
+      if (empData.profile) {
+        const taskNotificationData = {
+          taskId,
+          taskName,
+          senderMail: email,
+          adminMail,
+          Account: 1,
+          message: `Task Rejected`,
+          messageBy: name,
+          profile: empData.profile.image_url,
+          status: "unseen",
+          path: "taskreject"
+        };
+
+        socket.emit("adminTaskNotification", taskNotificationData);
+      } else {
+        const taskNotificationData = {
+          taskId,
+          taskName,
+          senderMail: email,
+          adminMail,
+          Account: 1,
+          message: `Task Rejected`,
+          messageBy: null,
+          status: "unseen",
+          path: "taskreject"
+        };
+
+        socket.emit("adminTaskNotification", taskNotificationData);
+      }
+      fetchData();
+    } catch (error) {
+      console.error("Error Rejecting task:", error.message);
+      toast.error("Failed to Reject task. Please try again.");
+    } finally {
+      setIsRejected(false);
+    }
   };
 
   return (
@@ -191,7 +308,7 @@ const ManagerNewTask = () => {
         style={{
           color: darkMode
             ? "var(--primaryDashColorDark)"
-            : "var(--primaryDashMenuColor)",
+            : "var(--primaryDashMenuColor)"
         }}
       >
         <h5 style={{ fontWeight: "600" }} className="p-0 m-0 text-uppercase">
@@ -217,13 +334,15 @@ const ManagerNewTask = () => {
                 task.status === "Assigned" && task.managerEmail === email
             )
             .reverse()
-            .map((task) => (
+            .map
+            
+            ((task) => (
               <div
                 key={task._id}
                 style={{
                   color: darkMode
                     ? "var(--primaryDashColorDark)"
-                    : "var(--secondaryDashMenuColor)",
+                    : "var(--secondaryDashMenuColor)"
                 }}
                 className="col-12 col-md-6 col-lg-4 p-2"
               >
@@ -231,7 +350,7 @@ const ManagerNewTask = () => {
                   style={{
                     border: !darkMode
                       ? "1px solid var(--primaryDashMenuColor)"
-                      : "1px solid var(--secondaryDashColorDark)",
+                      : "1px solid var(--secondaryDashColorDark)"
                   }}
                   className="task-hover-effect p-2"
                 >
@@ -246,7 +365,7 @@ const ManagerNewTask = () => {
                         style={{
                           height: "30px",
                           width: "30px",
-                          borderRadius: "50%",
+                          borderRadius: "50%"
                         }}
                         src="https://rihodjango.pixelstrap.net/riho/rihoapp/static/assets/images/user/3.jpg"
                         alt=""
@@ -257,7 +376,7 @@ const ManagerNewTask = () => {
                       style={{
                         border: darkMode
                           ? "1px solid var(--primaryDashColorDark)"
-                          : "1px solid var(--primaryDashMenuColor)",
+                          : "1px solid var(--primaryDashMenuColor)"
                       }}
                       className="px-2 py-1 text-center"
                     >
@@ -322,7 +441,7 @@ const ManagerNewTask = () => {
                             <div
                               style={{
                                 display:
-                                  expandedTaskId === task._id ? "flex" : "none",
+                                  expandedTaskId === task._id ? "flex" : "none"
                               }}
                             >
                               <div className="d-flex gap-2 justify-content-between">
@@ -341,7 +460,7 @@ const ManagerNewTask = () => {
                                         style={{
                                           boxShadow: "0 0 5px 2px gray inset",
                                           height: "30px",
-                                          minWidth: "30px",
+                                          minWidth: "30px"
                                         }}
                                       >
                                         {
@@ -357,7 +476,7 @@ const ManagerNewTask = () => {
                                         style={{
                                           boxShadow: "0 0 5px 2px gray inset",
                                           height: "30px",
-                                          minWidth: "30px",
+                                          minWidth: "30px"
                                         }}
                                       >
                                         {
@@ -373,7 +492,7 @@ const ManagerNewTask = () => {
                                         style={{
                                           boxShadow: "0 0 5px 2px gray inset",
                                           height: "30px",
-                                          minWidth: "30px",
+                                          minWidth: "30px"
                                         }}
                                       >
                                         {
@@ -389,7 +508,7 @@ const ManagerNewTask = () => {
                                         style={{
                                           boxShadow: "0 0 5px 2px gray inset",
                                           height: "30px",
-                                          minWidth: "30px",
+                                          minWidth: "30px"
                                         }}
                                       >
                                         {
@@ -410,11 +529,10 @@ const ManagerNewTask = () => {
                           <div className="d-flex gap-3">
                             <button
                               onClick={() =>
-                                handleTaskAction(
+                                AcceptTask(
                                   task._id,
                                   task.Taskname,
-                                  task.adminMail,
-                                  "accept"
+                                  task.adminMail
                                 )
                               }
                               className="btn btn-primary py-1"
@@ -429,11 +547,10 @@ const ManagerNewTask = () => {
                             </button>
                             <button
                               onClick={() =>
-                                handleTaskAction(
+                                RejectTask(
                                   task._id,
                                   task.Taskname,
-                                  task.adminMail,
-                                  "reject"
+                                  task.adminMail
                                 )
                               }
                               className="btn btn-danger py-1"
@@ -462,7 +579,7 @@ const ManagerNewTask = () => {
               style={{
                 color: darkMode
                   ? "var(--primaryDashColorDark)"
-                  : "var(--primaryDashMenuColor)",
+                  : "var(--primaryDashMenuColor)"
               }}
             >
               Sorry, there are no tasks assigned yet.

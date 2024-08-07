@@ -61,10 +61,10 @@ const LeaveApplicationEmpForm = (props) => {
                   Casual Leave
                 </option>
                 <option
-                  value="Privilege Leave"
-                  selected={props.editData["Leavetype"] === "Privilege Leave"}
+                  value="Paid Leave"
+                  selected={props.editData["Leavetype"] === "Paid Leave"}
                 >
-                  Privilege Leave
+                  Paid Leave
                 </option>
               </Form.Control>
             </Col>

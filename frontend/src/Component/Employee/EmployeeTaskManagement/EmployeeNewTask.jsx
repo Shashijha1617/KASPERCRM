@@ -29,8 +29,8 @@ const EmployeeNewTask = () => {
           `${BASE_URL}/api/personal-info/` + id,
           {
             headers: {
-              authorization: localStorage.getItem("token") || "",
-            },
+              authorization: localStorage.getItem("token") || ""
+            }
           }
         );
         setEmpData(response.data);
@@ -90,7 +90,7 @@ const EmployeeNewTask = () => {
 
       await axios.put(`${BASE_URL}/api/tasks/${taskId}/employees/${empEmail}`, {
         emptaskStatus: "Accepted",
-        empTaskComment: empRemarks,
+        empTaskComment: empRemarks
       });
 
       toast.success("Task accepted successfully!");
@@ -112,7 +112,7 @@ const EmployeeNewTask = () => {
           profile: empData.profile.image_url,
           taskStatus: "Accepted",
           Account: 3,
-          path: "activeTask",
+          path: "activeTask"
         };
 
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
@@ -128,7 +128,7 @@ const EmployeeNewTask = () => {
           profile: null,
           taskStatus: "Accepted",
           Account: 3,
-          path: "activeTask",
+          path: "activeTask"
         };
 
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
@@ -151,7 +151,7 @@ const EmployeeNewTask = () => {
 
       await axios.put(`${BASE_URL}/api/tasks/${taskId}/employees/${empEmail}`, {
         emptaskStatus: "Rejected",
-        empTaskComment: empRemarks,
+        empTaskComment: empRemarks
       });
 
       toast.success("Task rejected successfully!");
@@ -167,7 +167,7 @@ const EmployeeNewTask = () => {
           profile: empData.profile.image_url,
           taskStatus: "Rejected",
           Account: 3,
-          path: "activeTask",
+          path: "activeTask"
         };
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
       } else {
@@ -182,7 +182,7 @@ const EmployeeNewTask = () => {
           profile: null,
           taskStatus: "Rejected",
           Account: 3,
-          path: "activeTask",
+          path: "activeTask"
         };
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
       }
@@ -203,7 +203,7 @@ const EmployeeNewTask = () => {
 
       await axios.put(`${BASE_URL}/api/tasks/${taskId}/employees/${empEmail}`, {
         emptaskStatus: "Completed",
-        empTaskComment: empRemarks,
+        empTaskComment: empRemarks
       });
 
       toast.success("Task completed successfully!");
@@ -224,7 +224,7 @@ const EmployeeNewTask = () => {
           messageBy: name,
           profile: empData.profile.image_url,
           Account: 3,
-          path: "activeTask",
+          path: "activeTask"
         };
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
       } else {
@@ -239,7 +239,7 @@ const EmployeeNewTask = () => {
           messageBy: name,
           profile: null,
           Account: 3,
-          path: "activeTask",
+          path: "activeTask"
         };
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
       }
@@ -262,7 +262,7 @@ const EmployeeNewTask = () => {
         style={{
           color: darkMode
             ? "var(--primaryDashColorDark)"
-            : "var(--primaryDashMenuColor)",
+            : "var(--primaryDashMenuColor)"
         }}
         className="fw-bolder text-uppercase py-2 mt-2 "
       >
@@ -292,7 +292,7 @@ const EmployeeNewTask = () => {
           maxHeight: "80vh",
           scrollbarWidth: "thin",
           scrollbarGutter: "stable",
-          scrollMargin: "1rem",
+          scrollMargin: "1rem"
         }}
       >
         {email &&
@@ -308,7 +308,7 @@ const EmployeeNewTask = () => {
                 style={{
                   background: darkMode
                     ? "var( --primaryDashMenuColor)"
-                    : "var(--primaryDashColorDark)",
+                    : "var(--primaryDashColorDark)"
                 }}
                 className="p-1 position-relative fs-4 rounded mx-2 my-3"
                 key={task.id}
@@ -319,7 +319,7 @@ const EmployeeNewTask = () => {
                     background: darkMode
                       ? "var( --primaryDashMenuColor)"
                       : "var(--primaryDashColorDark)",
-                    position: "relative",
+                    position: "relative"
                   }}
                   className="d-flex flex-column justify-content-between py-4 align-center form-control"
                 >
@@ -327,7 +327,7 @@ const EmployeeNewTask = () => {
                     style={{
                       color: darkMode
                         ? "var(--secondaryDashColorDark)"
-                        : "var( --primaryDashMenuColor)",
+                        : "var( --primaryDashMenuColor)"
                     }}
                     className="fs-5 d-flex justify-content-center flex-column text-capitalize"
                   >
@@ -346,7 +346,7 @@ const EmployeeNewTask = () => {
                         : "var( --primaryDashMenuColor)",
                       fontSize: ".8rem",
                       position: "absolute",
-                      bottom: "5px",
+                      bottom: "5px"
                     }}
                     className="d-flex gap-2 RemainingTimeHandel justify-content-start"
                   >
@@ -396,7 +396,7 @@ const EmployeeNewTask = () => {
                     position: "relative",
                     background: darkMode
                       ? "var( --primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
+                      : "var(--primaryDashColorDark)"
                   }}
                   className="row p-1 my-2 mx-0 rounded"
                 >
@@ -405,7 +405,7 @@ const EmployeeNewTask = () => {
                       height: "fit-content",
                       background: darkMode
                         ? "var( --primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)",
+                        : "var(--primaryDashColorDark)"
                     }}
                     className="form-control"
                   >
@@ -417,7 +417,7 @@ const EmployeeNewTask = () => {
                           : "var(--primaryDashColorDark)",
                         color: darkMode
                           ? "var(--primaryDashColorDark)"
-                          : "var( --primaryDashMenuColor)",
+                          : "var( --primaryDashMenuColor)"
                       }}
                       className="text-start fs-6 form-control border-0 "
                     >
@@ -432,7 +432,7 @@ const EmployeeNewTask = () => {
                           : "var(--primaryDashColorDark)",
                         color: darkMode
                           ? "var(--primaryDashColorDark)"
-                          : "var( --primaryDashMenuColor)",
+                          : "var( --primaryDashMenuColor)"
                       }}
                       className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
                     >
@@ -449,7 +449,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               Task Durations
@@ -464,7 +464,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               Manager Email
@@ -479,7 +479,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               Start Date
@@ -494,7 +494,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               End Date
@@ -509,7 +509,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               Task Status
@@ -528,7 +528,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--secondaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               {task.duration} days
@@ -543,7 +543,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--secondaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               {task.managerEmail}
@@ -558,14 +558,14 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--secondaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               {new Date(task.startDate)
                                 .toLocaleDateString("en-US", {
                                   day: "numeric",
                                   month: "short",
-                                  year: "numeric",
+                                  year: "numeric"
                                 })
                                 .replace(",", "")}
                             </td>
@@ -579,14 +579,14 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--secondaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               {new Date(task.endDate)
                                 .toLocaleDateString("en-US", {
                                   day: "numeric",
                                   month: "short",
-                                  year: "numeric",
+                                  year: "numeric"
                                 })
                                 .replace(",", "")}
                             </td>
@@ -600,7 +600,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--secondaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               {task.status}
@@ -617,7 +617,7 @@ const EmployeeNewTask = () => {
                           : "var(--primaryDashColorDark)",
                         color: darkMode
                           ? "var(--primaryDashColorDark)"
-                          : "var( --primaryDashMenuColor)",
+                          : "var( --primaryDashMenuColor)"
                       }}
                       className="row form-control d-flex my-1 mt-3 pt-3 rounded mx-1 justify-content-between"
                     >
@@ -635,7 +635,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               S. No
@@ -650,7 +650,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               Name
@@ -665,7 +665,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               Email
@@ -680,7 +680,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               Designation
@@ -695,7 +695,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                               className=""
                             >
@@ -711,7 +711,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               Action
@@ -726,7 +726,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               Task Status
@@ -741,7 +741,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none",
+                                border: "none"
                               }}
                             >
                               Remarks
@@ -764,7 +764,7 @@ const EmployeeNewTask = () => {
                                       color: darkMode
                                         ? "var(--secondaryDashColorDark)"
                                         : "var( --primaryDashMenuColor)",
-                                      border: "none",
+                                      border: "none"
                                     }}
                                   >
                                     {i + 1}
@@ -779,7 +779,7 @@ const EmployeeNewTask = () => {
                                       color: darkMode
                                         ? "var(--secondaryDashColorDark)"
                                         : "var( --primaryDashMenuColor)",
-                                      border: "none",
+                                      border: "none"
                                     }}
                                     className="text-capitalize"
                                   >
@@ -795,7 +795,7 @@ const EmployeeNewTask = () => {
                                       color: darkMode
                                         ? "var(--secondaryDashColorDark)"
                                         : "var( --primaryDashMenuColor)",
-                                      border: "none",
+                                      border: "none"
                                     }}
                                   >
                                     {taskemp.empemail}
@@ -810,7 +810,7 @@ const EmployeeNewTask = () => {
                                       color: darkMode
                                         ? "var(--secondaryDashColorDark)"
                                         : "var( --primaryDashMenuColor)",
-                                      border: "none",
+                                      border: "none"
                                     }}
                                   >
                                     {taskemp.empdesignation}
@@ -825,7 +825,7 @@ const EmployeeNewTask = () => {
                                       color: darkMode
                                         ? "var(--secondaryDashColorDark)"
                                         : "var( --primaryDashMenuColor)",
-                                      border: "none",
+                                      border: "none"
                                     }}
                                   >
                                     <button className="btn btn-light w-100 shadow-sm">
@@ -842,7 +842,7 @@ const EmployeeNewTask = () => {
                                       color: darkMode
                                         ? "var(--secondaryDashColorDark)"
                                         : "var( --primaryDashMenuColor)",
-                                      border: "none",
+                                      border: "none"
                                     }}
                                   >
                                     <div className="d-flex align-items-center justify-content-evenly">
@@ -911,7 +911,7 @@ const EmployeeNewTask = () => {
                                       color: darkMode
                                         ? "var(--secondaryDashColorDark)"
                                         : "var( --primaryDashMenuColor)",
-                                      border: "none",
+                                      border: "none"
                                     }}
                                   >
                                     {taskemp.emptaskStatus}{" "}
@@ -930,7 +930,7 @@ const EmployeeNewTask = () => {
                                       color: darkMode
                                         ? "var(--secondaryDashColorDark)"
                                         : "var( --primaryDashMenuColor)",
-                                      border: "none",
+                                      border: "none"
                                     }}
                                   >
                                     {taskemp.empTaskComment}

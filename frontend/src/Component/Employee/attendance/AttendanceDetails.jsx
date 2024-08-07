@@ -8,7 +8,6 @@ import {
 } from "react-icons/fa";
 import BASE_URL from "../../../Pages/config/config";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
-import { BsStopwatch } from "react-icons/bs";
 
 const AttendanceDetails = ({ data }) => {
   const [employees, setEmployees] = useState([]);
@@ -16,7 +15,6 @@ const AttendanceDetails = ({ data }) => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [viewType, setViewType] = useState("monthly");
-  const [selectedWeek, setSelectedWeek] = useState(1);
 
   const employeeId = localStorage.getItem("_id");
   const { darkMode } = useTheme();
@@ -24,12 +22,12 @@ const AttendanceDetails = ({ data }) => {
   useEffect(() => {
     fetchEmployees();
     handleFetchAttendance();
-  }, [selectedYear, selectedMonth, selectedWeek, viewType]);
+  }, [selectedYear, selectedMonth]);
 
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/api/employee/${data["_id"]}`,
+        `${BASE_URL}/api/employee/ ` + localStorage.getItem("_id"),
         {
           headers: { authorization: localStorage.getItem("token") || "" },
         }
@@ -75,25 +73,6 @@ const AttendanceDetails = ({ data }) => {
       (year) => year.year <= new Date().getFullYear()
     ) || [];
 
-  const getWeekRanges = (year, month) => {
-    const date = new Date(year, month - 1, 1);
-    const weeks = [];
-    let start = 1;
-
-    while (date.getMonth() === month - 1) {
-      const end = new Date(year, month - 1, start + 6);
-      if (end.getMonth() === month - 1) {
-        weeks.push({ start, end: end.getDate() });
-      } else {
-        weeks.push({ start, end: new Date(year, month, 0).getDate() });
-      }
-      start += 7;
-      date.setDate(start);
-    }
-
-    return weeks;
-  };
-
   const millisecondsToTime = (milliseconds) => {
     const hours = Math.floor(milliseconds / 3600000);
     const minutes = Math.floor((milliseconds % 3600000) / 60000);
@@ -123,7 +102,7 @@ const AttendanceDetails = ({ data }) => {
       (yearData) => yearData.year === selectedYear
     );
     const monthData =
-      type === "monthly" || type === "weekly"
+      type === "monthly"
         ? yearData?.months.find((month) => month.month === selectedMonth)
         : null;
 
@@ -137,15 +116,6 @@ const AttendanceDetails = ({ data }) => {
     const dates =
       type === "monthly"
         ? monthData?.dates
-        : type === "weekly"
-        ? monthData?.dates.filter(
-            (date) =>
-              date.date >=
-                getWeekRanges(selectedYear, selectedMonth)[selectedWeek - 1]
-                  .start &&
-              date.date <=
-                getWeekRanges(selectedYear, selectedMonth)[selectedWeek - 1].end
-          )
         : yearData?.months.flatMap((month) => month.dates);
     if (dates) {
       dates.forEach((date) => {
@@ -161,8 +131,8 @@ const AttendanceDetails = ({ data }) => {
   };
 
   const totals =
-    viewType === "monthly" || viewType === "weekly"
-      ? calculateTotals(attendanceData, viewType)
+    viewType === "monthly"
+      ? calculateTotals(attendanceData, "monthly")
       : calculateTotals(attendanceData, "yearly");
 
   const containerStyle = {
@@ -211,25 +181,6 @@ const AttendanceDetails = ({ data }) => {
                 </select>
               </div>
             )}
-            {viewType === "weekly" && (
-              <div>
-                <label htmlFor="week">Select a week:</label>
-                <select
-                  className="form-select shadow"
-                  id="week"
-                  value={selectedWeek}
-                  onChange={(e) => setSelectedWeek(Number(e.target.value))}
-                >
-                  {getWeekRanges(selectedYear, selectedMonth).map(
-                    (week, index) => (
-                      <option key={index} value={index + 1}>
-                        {`Week ${index + 1} (${week.start}-${week.end})`}
-                      </option>
-                    )
-                  )}
-                </select>
-              </div>
-            )}
           </div>
           <div className="container-fluid d-flex align-items-center justify-content-between">
             <div className="mb-3">
@@ -243,9 +194,8 @@ const AttendanceDetails = ({ data }) => {
                 value={viewType}
                 onChange={(e) => setViewType(e.target.value)}
               >
-                <option value="yearly">View Yearly Logs</option>
                 <option value="monthly">View Monthly Logs</option>
-                <option value="weekly">View Weekly Logs</option>
+                <option value="yearly">View Yearly Logs</option>
               </select>
             </div>
             <h6
@@ -256,11 +206,7 @@ const AttendanceDetails = ({ data }) => {
                 fontWeight: "normal",
               }}
             >
-              {viewType === "monthly"
-                ? "Monthly Logs"
-                : viewType === "weekly"
-                ? "Weekly Logs"
-                : "Yearly Logs"}
+              {viewType === "monthly" ? "Monthly Logs" : "Yearly Logs"}
             </h6>
           </div>
           {totals && (
@@ -291,52 +237,16 @@ const AttendanceDetails = ({ data }) => {
                       </div>
                       <div className="col-4 d-flex justify-content-center align-items-center">
                         {key === "totalWorkingHours" && (
-                          <span
-                            className={`${
-                              darkMode
-                                ? "d-flex align-items-center  justify-content-center border-2  border border-black rounded-5"
-                                : "d-flex align-items-center  justify-content-center border-2  border border-white text-white rounded-5"
-                            }`}
-                            style={{ height: "2rem", width: "2rem" }}
-                          >
-                            W
-                          </span>
+                          <FaRegClock className="fs-3" />
                         )}
                         {key === "totalPresent" && (
-                          <span
-                            className={`${
-                              darkMode
-                                ? "d-flex align-items-center  justify-content-center border-2  border border-black rounded-5"
-                                : "d-flex align-items-center  justify-content-center border-2  border border-white text-white rounded-5"
-                            }`}
-                            style={{ height: "2rem", width: "2rem" }}
-                          >
-                            P
-                          </span>
+                          <FaCheckCircle className="fs-3" />
                         )}
                         {key === "totalAbsent" && (
-                          <span
-                            className={`${
-                              darkMode
-                                ? "d-flex align-items-center  justify-content-center border-2  border border-black rounded-5"
-                                : "d-flex align-items-center  justify-content-center border-2  border border-white text-white rounded-5"
-                            }`}
-                            style={{ height: "2rem", width: "2rem" }}
-                          >
-                            A
-                          </span>
+                          <FaTimesCircle className="fs-3" />
                         )}
                         {key === "totalHalfDays" && (
-                          <span
-                            className={`${
-                              darkMode
-                                ? "d-flex align-items-center  justify-content-center border-2  border border-black rounded-5"
-                                : "d-flex align-items-center  justify-content-center border-2  border border-white text-white rounded-5"
-                            }`}
-                            style={{ height: "2rem", width: "2rem" }}
-                          >
-                            H
-                          </span>
+                          <FaHourglassHalf className="fs-3" />
                         )}
                       </div>
                     </div>

@@ -7,6 +7,8 @@ import { AttendanceContext } from "../../../Context/AttendanceContext/Attendance
 import { v4 as uuid } from "uuid";
 import BASE_URL from "../../../Pages/config/config";
 import toast from "react-hot-toast";
+
+
 const ManagerNewTask = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,6 +20,8 @@ const ManagerNewTask = () => {
   const name = localStorage.getItem("Name");
   const { socket } = useContext(AttendanceContext);
   const email = localStorage.getItem("Email");
+
+
   const calculateRemainingTime = (endDate) => {
     const now = new Date();
     const endDateTime = new Date(endDate);
@@ -39,6 +43,7 @@ const ManagerNewTask = () => {
       return { delay: false, days, hours, minutes };
     }
   };
+  
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/tasks`);
@@ -75,6 +80,7 @@ const ManagerNewTask = () => {
   useEffect(() => {
     loadEmployeeData();
   }, []);
+  
   const AcceptTask = async (taskID, taskName, adminMail) => {
     try {
       setIsAccepted(true);

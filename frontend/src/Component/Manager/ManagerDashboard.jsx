@@ -35,7 +35,7 @@ const DashboardHR = (props) => {
         position: "fixed",
         width: "100%",
         left: "0",
-        top: "0",
+        top: "0"
       }}
     >
       <SidebarSlider />
@@ -53,7 +53,7 @@ const DashboardHR = (props) => {
           <div
             className="d-flex"
             style={{
-              maxHeight: "100vh",
+              maxHeight: "100vh"
             }}
             id="main-non-nav"
           >

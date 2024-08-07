@@ -59,7 +59,7 @@ const Login = (props) => {
                 name="email"
                 placeholder="abcd@xyz.com"
                 className="form-control rounded-5 bg-white border-3 border-muted"
-                type="email"
+                type="text"
               />
             </div>
 

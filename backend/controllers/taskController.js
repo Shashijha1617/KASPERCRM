@@ -30,6 +30,7 @@ const year = day.getFullYear();
 // create a new task
 const CreateTask = async (req, res) => {
   const { Taskname } = req.body;
+  const { Priority } = req.body;
   const { path } = req.file;
   const { description } = req.body;
   const { department } = req.body;
@@ -46,6 +47,7 @@ const CreateTask = async (req, res) => {
   const extradate = dateDifference;
   const newPdf = new Task({
     Taskname: Taskname,
+    Priority: Priority,
     pdf: path,
     description: description,
     department: department,
@@ -62,7 +64,7 @@ const CreateTask = async (req, res) => {
   // console.log(Taskname, path, description, department, managerEmail, comment, duration, status, startDate, endDate);
   try {
     // await PdfSchema.create({ title: title, pdf: fileName });
-
+    console.log("newPdf ====", newPdf);
     await newPdf.save();
     res.status(201).json({
       message: "ok"

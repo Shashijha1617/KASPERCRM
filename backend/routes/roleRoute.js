@@ -11,15 +11,15 @@ const { getAllRole, createRole, updateRole, deleteRole } = require('../controlle
 
 // GET: Retrieve all countries
 // verifyHR
-roleRoute.get("/role", getAllRole);
+roleRoute.get("/role", verifyAdminHR, getAllRole);
 
 // POST: Create a new city
-roleRoute.post("/role",   createRole);
+roleRoute.post("/role", verifyAdminHR,  createRole);
 
 // PUT: Update an existing city
-roleRoute.put("/role/:id",   updateRole);
+roleRoute.put("/role/:id", verifyAdminHR,  updateRole);
 
 // DELETE: Delete a city
-roleRoute.delete("/role/:id",   deleteRole);
+roleRoute.delete("/role/:id", verifyAdminHR,  deleteRole);
 
 module.exports = roleRoute;

@@ -8,6 +8,7 @@ import SidebarSmallScreen from "./Sidebar/SidebarSmallScreen.jsx";
 import { useSidebar } from "../../Context/AttendanceContext/smallSidebarcontext.jsx";
 import SidebarSlider from "../../Pages/Sidebar/SidebarSlider.jsx";
 import { useTheme } from "../../Context/TheamContext/ThemeContext.js";
+import Footer from "../../Pages/Footer/Footer.jsx";
 
 const DashboardAdmin = (props) => {
   const [checked, setChecked] = useState(true);
@@ -52,7 +53,7 @@ const DashboardAdmin = (props) => {
           >
             <SidebarSmallScreen />
           </div>
-          <div style={{ maxHeight: "fit-contenty=" }} className="navbar-grid">
+          <div style={{ maxHeight: "fit-content" }} className="navbar-grid">
             <NavBar
               loginInfo={props.data}
               checked={checked}
@@ -65,6 +66,12 @@ const DashboardAdmin = (props) => {
           </div>
           <div className="mainbar-grid">
             <AdminRoutes />
+            <div
+              style={{ zIndex: "50", position: "absolute", bottom: "0" }}
+              className="HrPannelFooter bg-dark w-100 text-white"
+            >
+              <Footer />
+            </div>
           </div>
         </div>
       </Router>

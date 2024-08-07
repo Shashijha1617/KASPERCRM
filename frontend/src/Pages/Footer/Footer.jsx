@@ -8,7 +8,6 @@ import CurrentTime from "../../Utils/CurrentTime";
 import CameraModal from "../../Utils/CameraModal";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import ScreenShareModal from "../../Utils/ScreenShareModal";
-import ScreenRecorder from "../../Utils/ScreenRecorder/ScreenRecorder";
 
 const Footer = () => {
   const { darkMode } = useTheme();
@@ -26,13 +25,12 @@ const Footer = () => {
     >
       <CurrentTime />
       <WifiStatus />
-      <BatteryStatus />
+      {/* <BatteryStatus /> */}
       <BrowserIcon />
       <IPAddress />
       <GeoLocation />
       {/* <CameraModal /> */}
       {/* <ScreenShareModal /> */}
-      {/* <ScreenRecorder /> */}
     </div>
   );
 };

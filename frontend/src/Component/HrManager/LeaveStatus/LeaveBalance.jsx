@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { IoMdDownload } from "react-icons/io";
 import axios from "axios";
-import BASE_URL from "../../../Pages/config/config";
-import { useTheme } from "../../../Context/TheamContext/ThemeContext";
-import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
+
 const LeaveBalance = () => {
   const [leaveBalance, setLeaveBalance] = useState([]);
-  const email = localStorage.getItem("Email");
-  const { darkMode } = useTheme();
+  const id = localStorage.getItem("_id");
 
   useEffect(() => {
     axios
-      .post(`${BASE_URL}/api/getLeave`, { email })
+      .post("http://localhost:4000/api/getLeave", { id })
       .then((response) => {
         const formattedData = response.data.map((item) => {
           const leaveType = Object.keys(item)[0];
@@ -29,164 +28,77 @@ const LeaveBalance = () => {
   }, []);
 
   const calculatePercentage = (used, total) => {
-    if (total === 0) return 0;
+    if (total === 0) return 0; // Prevent division by zero
     const percentage = (used / total) * 100;
-    return Math.round(percentage) || 0;
+    return Math.round(percentage) || 0; // Use '|| 0' to handle NaN results by returning 0
   };
 
   return (
-    <div className="container-fluid py-2">
-      <div className="d-flex justify-content-between aline-items-center">
-        <TittleHeader
-          title={"Leaves Balance"}
-          message={"You can see all new leave balances here."}
-        />
+    <>
+      <div className="d-flex justify-content-between mb-2 mt-4 p-2">
+        <h4 className="fw-bold text-muted my-auto">Leave Balance</h4>
+        <div className="d-flex align-items-center gap-2"></div>
       </div>
 
-      <div className="d-flex flex-wrap justify-content-between gap-2 my-2">
+      <div className="card-deck d-flex flex-wrap gap-1 justify-content-between w-100">
         {leaveBalance.length > 0 ? (
           <>
             {" "}
             {leaveBalance.map(({ leaveType, balance, totalBalance }) => (
               <div
-                key={leaveType}
                 style={{
-                  color: darkMode
-                    ? "var(--secondaryDashColorDark)"
-                    : "var(--secondaryDashMenuColor)",
-                  background: darkMode
-                    ? "var(--primaryDashMenuColor)"
-                    : "var(--primaryDashColorDark)",
                   minWidth: "250px",
+                  boxShadow: "2px 2px 8px 2px black",
                 }}
-                className="card-body rounded-2"
+                key={leaveType}
+                className="border-0 rounded shadow-sm"
               >
-                <div className="d-flex justify-content-between">
-                  <p className="">
-                    {leaveType.charAt(0).toUpperCase() + leaveType.slice(1)}
-                  </p>
-                </div>
-                <h6
-                  style={{ fontWeight: "400" }}
-                  className="card-text text-center mb-4"
-                >
-                  {totalBalance - balance} Out of / {totalBalance}
-                </h6>
-                <div>
-                  <p className="p-0 m-0 text-end" style={{ fontSize: ".8rem" }}>
-                    {calculatePercentage(totalBalance - balance, totalBalance)}%
-                    of 100%
-                  </p>
-                  <div style={{ height: "6px" }} className="progress">
-                    <div
-                      className="progress-bar bg-primary"
-                      role="progressbar"
-                      style={{
-                        width: `${calculatePercentage(
-                          totalBalance - balance,
-                          totalBalance
-                        )}%`,
-                      }}
-                      aria-valuenow={25}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    />
+                <div className="card-body">
+                  <div className="d-flex justify-content-between">
+                    <p className="fw-bold text-primary">
+                      {leaveType.charAt(0).toUpperCase() + leaveType.slice(1)}
+                    </p>
+                  </div>
+                  <h6 className="card-text text-center fs-2 fw-bold">
+                    {totalBalance - balance} / {totalBalance}
+                  </h6>
+                  <div>
+                    <p style={{ fontSize: ".8rem" }}>
+                      {calculatePercentage(
+                        totalBalance - balance,
+                        totalBalance
+                      )}
+                      % of 100%
+                    </p>
+                    <div style={{ height: "4px" }} className="progress">
+                      <div
+                        className="progress-bar"
+                        role="progressbar"
+                        style={{
+                          width: `${calculatePercentage(
+                            totalBalance - balance,
+                            totalBalance
+                          )}%`,
+                        }}
+                        aria-valuenow={25}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
           </>
         ) : (
-          <div className="d-flex flex-wrap justify-content-between gap-2 my-2">
-            <div
-              style={{
-                color: darkMode
-                  ? "var(--secondaryDashColorDark)"
-                  : "var(--secondaryDashMenuColor)",
-                background: darkMode
-                  ? "var(--primaryDashMenuColor)"
-                  : "var(--primaryDashColorDark)",
-                minWidth: "250px",
-              }}
-              className="card-body border rounded-1"
-            >
-              <div className="d-flex justify-content-between gap-3">
-                <p className=" ">Sick Leave</p>
-              </div>
-              <h6 className="card-text ">You Have ( 0 ) Leaves </h6>
-            </div>
-            <div
-              style={{
-                color: darkMode
-                  ? "var(--secondaryDashColorDark)"
-                  : "var(--secondaryDashMenuColor)",
-                background: darkMode
-                  ? "var(--primaryDashMenuColor)"
-                  : "var(--primaryDashColorDark)",
-                minWidth: "250px",
-              }}
-              className="card-body border rounded-1"
-            >
-              <div className="d-flex justify-content-between gap-3">
-                <p className=" ">Paid Leave</p>
-              </div>
-              <h6 className="card-text ">You Have ( 0 ) Leaves </h6>
-            </div>
-            <div
-              style={{
-                color: darkMode
-                  ? "var(--secondaryDashColorDark)"
-                  : "var(--secondaryDashMenuColor)",
-                background: darkMode
-                  ? "var(--primaryDashMenuColor)"
-                  : "var(--primaryDashColorDark)",
-                minWidth: "250px",
-              }}
-              className="card-body border rounded-1"
-            >
-              <div className="d-flex justify-content-between gap-3">
-                <p className=" ">Casual Leave</p>
-              </div>
-              <h6 className="card-text ">You Have ( 0 ) Leaves </h6>
-            </div>
-            <div
-              style={{
-                color: darkMode
-                  ? "var(--secondaryDashColorDark)"
-                  : "var(--secondaryDashMenuColor)",
-                background: darkMode
-                  ? "var(--primaryDashMenuColor)"
-                  : "var(--primaryDashColorDark)",
-                minWidth: "250px",
-              }}
-              className="card-body border rounded-1"
-            >
-              <div className="d-flex justify-content-between gap-3">
-                <p className=" ">Paternity Leave</p>
-              </div>
-              <h6 className="card-text ">You Have ( 0 ) Leaves </h6>
-            </div>
-            <div
-              style={{
-                color: darkMode
-                  ? "var(--secondaryDashColorDark)"
-                  : "var(--secondaryDashMenuColor)",
-                background: darkMode
-                  ? "var(--primaryDashMenuColor)"
-                  : "var(--primaryDashColorDark)",
-                minWidth: "250px",
-              }}
-              className="card-body border rounded-1"
-            >
-              <div className="d-flex justify-content-between gap-3">
-                <p className=" ">Maternity Leave</p>
-              </div>
-              <h6 className="card-text ">You Have ( 0 ) Leaves </h6>
-            </div>
-          </div>
+          <>
+            <h4 className="fw-bold text-muted my-auto pl-4">
+              No Leave Record Found
+            </h4>
+          </>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

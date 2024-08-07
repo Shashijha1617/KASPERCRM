@@ -33,8 +33,8 @@ const LeaveApplicationEmpTable = (props) => {
         `${BASE_URL}/api/leave-application-man/` + localStorage.getItem("_id"),
         {
           headers: {
-            authorization: localStorage.getItem("token") || "",
-          },
+            authorization: localStorage.getItem("token") || ""
+          }
         }
       )
       .then((response) => {
@@ -53,11 +53,11 @@ const LeaveApplicationEmpTable = (props) => {
               Reasonforleave: data["Reasonforleave"],
               Status: data["Status"],
               updatedBy: data["updatedBy"],
-              reasonOfRejection: data["reasonOfRejection"],
+              reasonOfRejection: data["reasonOfRejection"]
             };
           }
         );
-
+        console.log(newRowsData);
         setRowData(newRowsData);
       })
       .catch((error) => {
@@ -84,13 +84,14 @@ const LeaveApplicationEmpTable = (props) => {
   // };
 
   const status = (s) => {
-    if (s === 1) {
+    console.log(s===3)
+    if (s === "1") {
       return "Pending";
     }
-    if (s === 2) {
+    if (s === "2") {
       return "Approved";
     }
-    if (s === 3) {
+    if (s === "3") {
       return "Rejected";
     }
     return "Unknown Status";
@@ -118,7 +119,7 @@ const LeaveApplicationEmpTable = (props) => {
       ? "var(--primaryDashColorDark)"
       : "var(--primaryDashMenuColor)",
     border: "none",
-    whiteSpace: "pre",
+    whiteSpace: "pre"
   };
 
   const rowBodyStyle = {
@@ -129,7 +130,7 @@ const LeaveApplicationEmpTable = (props) => {
     color: darkMode
       ? "var(--secondaryDashColorDark)"
       : "var(--primaryDashMenuColor)",
-    border: "none",
+    border: "none"
   };
 
   return (
@@ -137,29 +138,31 @@ const LeaveApplicationEmpTable = (props) => {
       <LeaveBalance />
       <div className="container-fluid">
         <div className="d-flex justify-content-between py-2">
-        <TittleHeader title={"Your Leave Application"} numbers={rowData.length} message={"You can view your applied leaves here."}/>
+          <TittleHeader
+            title={"Your Leave Application"}
+            numbers={rowData.length}
+            message={"You can view your applied leaves here."}
+          />
           <div className="my-auto">
             <h5
               style={{
                 color: darkMode
                   ? "var(--secondaryDashColorDark)"
                   : "var(--secondaryDashMenuColor)",
-                fontWeight: "600",
+                fontWeight: "600"
               }}
               className=" m-0"
             >
-               {/* ( {} ) */}
+              {/* ( {} ) */}
             </h5>
             <p
               style={{
                 color: darkMode
                   ? "var(--secondaryDashColorDark)"
-                  : "var(--secondaryDashMenuColor)",
+                  : "var(--secondaryDashMenuColor)"
               }}
               className=" m-0"
-            >
-              
-            </p>
+            ></p>
           </div>
           <Button
             variant="primary"
@@ -197,7 +200,9 @@ const LeaveApplicationEmpTable = (props) => {
                   <th style={rowHeadStyle}>Remarks</th>
                   <th style={rowHeadStyle}>Status</th>
                   <th style={rowHeadStyle}>Update By</th>
-                  <th className="text-end" style={rowHeadStyle}>Reason for Rejection</th>
+                  <th className="text-end" style={rowHeadStyle}>
+                    Reason for Rejection
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -213,14 +218,24 @@ const LeaveApplicationEmpTable = (props) => {
                         {data.updatedBy ? (
                           data.updatedBy
                         ) : (
-                          <span className="border border-danger rounded-5 px-2" style={{ opacity: "50%" , fontSize:'.9rem'}}>Not Updated</span>
+                          <span
+                            className="border border-danger rounded-5 px-2"
+                            style={{ opacity: "50%", fontSize: ".9rem" }}
+                          >
+                            Not Updated
+                          </span>
                         )}
                       </td>
                       <td className="text-end" style={rowBodyStyle}>
                         {data.reasonOfRejection ? (
                           data.reasonOfRejection
                         ) : (
-                          <span className="border border-danger rounded-5 px-2" style={{ opacity: "50%" , fontSize:'.9rem'}}>Not Updated</span>
+                          <span
+                            className="border border-danger rounded-5 px-2"
+                            style={{ opacity: "50%", fontSize: ".9rem" }}
+                          >
+                            Not Updated
+                          </span>
                         )}
                       </td>
                     </tr>
@@ -238,13 +253,13 @@ const LeaveApplicationEmpTable = (props) => {
                 alignItems: "center",
                 wordSpacing: "5px",
                 flexDirection: "column",
-                gap: "2rem",
+                gap: "2rem"
               }}
             >
               <img
                 style={{
                   height: "auto",
-                  width: "25%",
+                  width: "25%"
                 }}
                 src={darkMode ? LeaveDark : LeaveLight}
                 alt="img"
@@ -253,7 +268,7 @@ const LeaveApplicationEmpTable = (props) => {
                 style={{
                   color: darkMode
                     ? "var(--secondaryDashColorDark)"
-                    : "var( --primaryDashMenuColor)",
+                    : "var( --primaryDashMenuColor)"
                 }}
               >
                 No Leave requests found.

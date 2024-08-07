@@ -9,13 +9,13 @@ const { getAllCompanyDetails, createCompany, updateCompanyDtails } = require('..
 
 // verifyHR
 // GET: Retrieve all company
-companyRoute.get("/company",  getAllCompanyDetails);
+companyRoute.get("/company", verifyAdminHR, getAllCompanyDetails);
 
 // POST: Create a new company
-companyRoute.post("/company", createCompany);
+companyRoute.post("/company", verifyHR, createCompany);
 
 // PUT: Update an existing company
-companyRoute.put("/company/:id",  updateCompanyDtails);
+companyRoute.put("/company/:id", verifyHR, updateCompanyDtails);
 
 
 module.exports = companyRoute;

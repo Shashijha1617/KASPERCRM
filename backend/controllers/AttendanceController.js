@@ -71,7 +71,7 @@ const createAttendance = async (req, res) => {
     }
 
     let yearObject = attendanceRecord.years.find((y) => y.year === year);
-    console.log(yearObject)
+    console.log(yearObject);
     if (!yearObject) {
       yearObject = {
         year: year,
@@ -81,15 +81,15 @@ const createAttendance = async (req, res) => {
             dates: [
               {
                 date: date,
-                day: new Date(
-                  year,
-                  month - 1,
-                  currentDay
-                ).getDay(),
-                loginTime: isWeekend ? ["WO"] : loginTime? loginTime: [],
+                day: new Date(year, month - 1, currentDay).getDay(),
+                loginTime: isWeekend ? ["WO"] : loginTime ? loginTime : [],
                 logoutTime: isWeekend ? ["WO"] : [],
-                loginTimeMs: isWeekend? ["WO"]: loginTimeMs? loginTimeMs:[],
-                logoutTimeMs: isWeekend? ["WO"]: [],
+                loginTimeMs: isWeekend
+                  ? ["WO"]
+                  : loginTimeMs
+                  ? loginTimeMs
+                  : [],
+                logoutTimeMs: isWeekend ? ["WO"] : [],
                 breakTime: isWeekend ? ["WO"] : [],
                 resumeTime: isWeekend ? [0] : [],
                 breakTimeMs: isWeekend ? [0] : [],
@@ -114,15 +114,11 @@ const createAttendance = async (req, res) => {
         dates: [
           {
             date: date,
-            day: new Date(
-              year,
-              month - 1,
-              currentDay
-            ).getDay(),
-            loginTime: isWeekend ? ["WO"] : loginTime? loginTime: [],
+            day: new Date(year, month - 1, currentDay).getDay(),
+            loginTime: isWeekend ? ["WO"] : loginTime ? loginTime : [],
             logoutTime: isWeekend ? ["WO"] : [],
-            loginTimeMs: isWeekend? ["WO"]: loginTimeMs? loginTimeMs:[],
-            logoutTimeMs: isWeekend? ["WO"]: [],
+            loginTimeMs: isWeekend ? ["WO"] : loginTimeMs ? loginTimeMs : [],
+            logoutTimeMs: isWeekend ? ["WO"] : [],
             breakTime: isWeekend ? ["WO"] : [],
             resumeTime: isWeekend ? [0] : [],
             breakTimeMs: isWeekend ? [0] : [],
@@ -140,17 +136,13 @@ const createAttendance = async (req, res) => {
     let dateObject = monthObject.dates.find((d) => d.date === date);
 
     if (!dateObject) {
-      dateObject =  {
+      dateObject = {
         date: date,
-        day: new Date(
-          year,
-          month - 1,
-          currentDay
-        ).getDay(),
-        loginTime: isWeekend ? ["WO"] : loginTime? loginTime: [],
+        day: new Date(year, month - 1, currentDay).getDay(),
+        loginTime: isWeekend ? ["WO"] : loginTime ? loginTime : [],
         logoutTime: isWeekend ? ["WO"] : [],
-        loginTimeMs: isWeekend? ["WO"]: loginTimeMs? loginTimeMs:[],
-        logoutTimeMs: isWeekend? ["WO"]: [],
+        loginTimeMs: isWeekend ? ["WO"] : loginTimeMs ? loginTimeMs : [],
+        logoutTimeMs: isWeekend ? ["WO"] : [],
         breakTime: isWeekend ? ["WO"] : [],
         resumeTime: isWeekend ? [0] : [],
         breakTimeMs: isWeekend ? [0] : [],
@@ -178,50 +170,46 @@ const createAttendance = async (req, res) => {
     } else if (dateObject.day === 0) {
       return res.status(400).json({ error: "Cannot modify data for Sunday." });
     }
-  
-if(dateObject.logoutTime.length===dateObject.loginTime.length){
-  if (loginTime) {
-    dateObject.loginTime = [...dateObject.loginTime, ...loginTime];
-  }
-  if (loginTimeMs) {
-    dateObject.loginTimeMs = [...dateObject.loginTimeMs, ...loginTimeMs];
-  }
 
- 
-} else if(dateObject.logoutTime.length<dateObject.loginTime.length){
-  if (logoutTime) {
-    dateObject.logoutTime = [...dateObject.logoutTime, ...logoutTime];
-  }
-  
-  if (logoutTimeMs) {
-    dateObject.logoutTimeMs = [...dateObject.logoutTimeMs, ...logoutTimeMs];
-  
-    const logoutTimeMSArray = dateObject.logoutTimeMs.slice(
-      -logoutTimeMs.length
-    );
-    const loginTimeMsArray = dateObject.loginTimeMs.slice(
-      -logoutTimeMs.length
-    );
-  
-    const loginDataArray = logoutTimeMSArray.map((login, index) => {
-      const LogMs = loginTimeMsArray[index];
-      return login - LogMs;
-    });
-  
-    dateObject.LogData = [...dateObject.LogData, ...loginDataArray];
-  
-    dateObject.TotalLogin = dateObject.LogData.reduce(
-      (sum, value) => sum + value,
-      0
-    );
-    dateObject.totalLogAfterBreak = Math.max(
-      0,
-      dateObject.TotalLogin - dateObject.totalBrake
-    );
-  }
-}
+    if (dateObject.logoutTime.length === dateObject.loginTime.length) {
+      if (loginTime) {
+        dateObject.loginTime = [...dateObject.loginTime, ...loginTime];
+      }
+      if (loginTimeMs) {
+        dateObject.loginTimeMs = [...dateObject.loginTimeMs, ...loginTimeMs];
+      }
+    } else if (dateObject.logoutTime.length < dateObject.loginTime.length) {
+      if (logoutTime) {
+        dateObject.logoutTime = [...dateObject.logoutTime, ...logoutTime];
+      }
 
-  
+      if (logoutTimeMs) {
+        dateObject.logoutTimeMs = [...dateObject.logoutTimeMs, ...logoutTimeMs];
+
+        const logoutTimeMSArray = dateObject.logoutTimeMs.slice(
+          -logoutTimeMs.length
+        );
+        const loginTimeMsArray = dateObject.loginTimeMs.slice(
+          -logoutTimeMs.length
+        );
+
+        const loginDataArray = logoutTimeMSArray.map((login, index) => {
+          const LogMs = loginTimeMsArray[index];
+          return login - LogMs;
+        });
+
+        dateObject.LogData = [...dateObject.LogData, ...loginDataArray];
+
+        dateObject.TotalLogin = dateObject.LogData.reduce(
+          (sum, value) => sum + value,
+          0
+        );
+        dateObject.totalLogAfterBreak = Math.max(
+          0,
+          dateObject.TotalLogin - dateObject.totalBrake
+        );
+      }
+    }
 
     if (breakTime) {
       dateObject.breakTime = [...dateObject.breakTime, ...breakTime];
@@ -543,8 +531,8 @@ const getEmployeeTodayAttendance = async (req, res) => {
       loginTime: dateData.loginTime[0],
       logoutTime: dateData.logoutTime[0],
       totalBrake: dateData.totalBrake,
-    status: dateData.status,
-      totalLoginTime: dateData.totalLogAfterBreak// Assuming this is the total login time after deducting break time
+      status: dateData.status,
+      totalLoginTime: dateData.totalLogAfterBreak // Assuming this is the total login time after deducting break time
     };
 
     res.status(200).json(employeeAttendanceData);

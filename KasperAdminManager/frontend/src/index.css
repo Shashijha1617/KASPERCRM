@@ -1,0 +1,377 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+html {
+  font-size: 14px;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem; /* 14px */
+  margin: 0;
+}
+
+h1 {
+  font-size: 2rem; /* 28px */
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1.75rem; /* 24.5px */
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.5rem; /* 21px */
+  font-weight: 500;
+}
+
+h4 {
+  font-size: 1.25rem; /* 17.5px */
+  font-weight: 500;
+}
+
+h5 {
+  font-size: 1.125rem; /* 15.75px */
+  font-weight: 400;
+}
+
+h6 {
+  font-size: 1rem; /* 14px */
+  font-weight: 400;
+}
+
+nav, button {
+  font-size: 1rem;
+  font-family: 'Open Sans', sans-serif;
+}
+
+label, input {
+  font-size: 1rem;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Responsive Typography */
+@media (max-width: 1200px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 992px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 576px) {
+  html {
+    font-size: 10px;
+  }
+}
+
+
+/* Button Styles  */
+
+
+/* .btn-primary {
+  background: linear-gradient(145deg, #050C9C, #3572EF) !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.btn-secondary {
+  background: linear-gradient(145deg, #FF5F00, #FF9F66) !important;
+  border-radius: 0 !important;
+}
+
+.btn-danger {
+  background: linear-gradient(145deg, #BB2525, #FF6969) !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.btn-success {
+  background: linear-gradient(145deg, #059212, #06D001) !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.btn-warning {
+  background: linear-gradient(145deg, #FF9A00, #FFBF00) !important;
+  border-radius: 0 !important;
+  border: none !important;
+  color: white !important;
+}
+
+.btn-info {
+  background: linear-gradient(145deg, #850F8D, #C738BD) !important;
+  border-radius: 0 !important;
+  border: none !important;
+  color: white !important;
+} */
+
+/* Background Style */
+
+/* .bg-primary {
+  background: linear-gradient(145deg, #050C9C, #3572EF) !important;
+}
+
+.bg-secondary {
+  background: linear-gradient(145deg, #bb4703, #FF9F66) !important;
+}
+
+.bg-danger {
+  background: linear-gradient(145deg, #BB2525, #FF6969) !important;
+}
+
+.bg-success {
+  background: linear-gradient(145deg, #059212, #06D001) !important;
+}
+
+.bg-warning {
+  background: linear-gradient(145deg, #FF9A00, #FFBF00) !important;
+}
+
+.bg-info {
+  background: linear-gradient(145deg, #850F8D, #C738BD) !important;
+} */
+
+/* Button Styles */
+
+.btn-primary {
+  background-color: #1a2a8b !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.btn-secondary {
+  background-color: #ff6000 !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.btn-danger {
+  background-color: #bb2525 !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.btn-success {
+  background-color: #059212 !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.btn-warning {
+  background-color: #ff9a00 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  color: white !important;
+}
+
+.btn-info {
+  background-color: #850f8d !important;
+  border-radius: 0 !important;
+  border: none !important;
+  color: white !important;
+}
+
+/* Background Styles */
+
+.bg-primary {
+  background-color: #1a2a8b !important;
+}
+
+.bg-secondary {
+  background-color: #ff6000 !important;
+}
+
+.bg-danger {
+  background-color: #bb2525 !important;
+}
+
+.bg-success {
+  background-color: #059212 !important;
+}
+
+.bg-warning {
+  background-color: #ff9a00 !important;
+}
+
+.bg-info {
+  background-color: #850f8d !important;
+}
+
+
+
+
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primaryDashColorDark: #000000;
+  --secondaryDashColorDark: #1d1d1d;
+
+  --primaryDashMenuColor: #FFFFFF;
+  --secondaryDashMenuColor: #F2F2F2;
+  
+  /* --basecolor: #9ba9ff;
+  --basecolor1: #a5adff;
+  --basecolor2: #afb1ff;
+  --basecolor3: #b9b5ff;
+  --basecolor4: #c4baff;
+  --basecolor5: #cebeff; */
+  /* --basecolor: #00b2ca;
+  --basecolor1: #04a6c2;
+  --basecolor2: #0899ba;
+  --basecolor3: #0f80aa;
+  --basecolor4: #1e81be;
+  --basecolor5: #1a5b92;
+  --basecolorTransparent: #3f94df57; */
+  --basecolor: #20cfe6;
+  --basecolor1: #20b7d1;
+  --basecolor2: #25afce;
+  --basecolor3: #2597c0;
+  --basecolor4: #2b96d8;
+  --basecolor5: #2972b3;
+  --basecolorTransparent: #3f94df57;
+}
+
+.LightModeTheam {
+  --PrimaryColor: #302ae6;
+  --SecondaryColor: #ffffff;
+  --fontColor: #424242;
+  --bgColor: #fff
+}
+
+/* .bg-primary {
+  background-color: #175CD3 !important;
+  color: black !important;
+} */
+
+
+*::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.377);
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: transparent !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(221, 221, 217, 0.671);
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  background-origin: border-box;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.list-none {
+  list-style: none;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.aline-center {
+  align-items: center;
+
+}
+
+
+.aline-end {
+  align-items: end;
+}
+
+.react-calendar_tile {
+  position: relative;
+}
+
+.react-calendar_tile .holiday-marker {
+  position: relative;
+}
+
+.registration-page {
+  background: linear-gradient(165deg, rgba(23, 59, 158, 0.836), rgb(14, 182, 194));
+  font-weight: bold;
+  color: white;
+}
+
+.registration-page sup {
+  font-size: .8rem;
+}
+
+.btn-dark {
+  width: 100%;
+  text-align: start !important;
+}
+
+.registration-page::-webkit-scrollbar {
+  width: 2px;
+}
+
+.registration-page::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.registration-page::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+.active {
+  background-color: rgb(23, 119, 230) !important;
+  color: rgba(100, 193, 255, 0.87) !important;
+}
+
+.selected-employee-email:hover span {
+  display: block !important;
+}
+
+.search-hoverable-text:hover {
+  color: #01005E !important;
+}
+
+
+
+.react-calendar__tile--active {
+  background: #dc00ac;
+  color: white;
+}
+
+/* Table  */
+
+table {
+  font-size: 1rem !important;
+}
+
+table tr th {
+  font-weight:400 !important;
+}

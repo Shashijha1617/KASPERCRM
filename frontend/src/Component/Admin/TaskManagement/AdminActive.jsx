@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import axios from "axios";
 import {
@@ -19,6 +19,8 @@ import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 import { getFormattedDate } from "../../../Utils/GetDayFormatted";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import AvatarGroup from "../../../Pages/AvatarGroup/AvatarGroup";
+import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const AdminActive = () => {
   const [tasks, setTasks] = useState([]);
@@ -32,7 +34,8 @@ const AdminActive = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const { darkMode } = useTheme();
   const [flash, setFlash] = useState(false);
-
+  const { setMessageData } = useContext(AttendanceContext);
+  const history = useHistory();
   const [updatedTask, setUpdatedTask] = useState({
     id: "",
     Taskname: "",
@@ -172,6 +175,11 @@ const AdminActive = () => {
 
   const handleCloseUpdateModal = () => {
     setShowUpdateModal(false);
+  };
+
+  const navigateHandler = (taskId, to) => {
+    setMessageData({ taskId, to: [to] });
+    history.push("/admin/admin_manager");
   };
 
   const handleUpdate = async () => {
@@ -522,7 +530,7 @@ const AdminActive = () => {
                         Remarks
                         <span>{task.comment}</span>
                       </div>
-                      <div className="d-flex flex-column gap-1 mt-2 ">
+                      {/* <div className="d-flex flex-column gap-1 mt-2 ">
                         <span className="mb-2">Remaining Time</span>
                         <div className="d-flex gap-2 RemainingTimeHandel justify-content-between ">
                           {calculateRemainingTime(task.endDate).delay ? (
@@ -616,7 +624,7 @@ const AdminActive = () => {
                             </div>
                           )}
                         </div>
-                      </div>
+                      </div> */}
                       <hr />
                       <div className="d-flex flex-column gap-2 my-2">
                         Action
@@ -741,6 +749,15 @@ const AdminActive = () => {
                           >
                             <MdEdit />
                             Update Task
+                          </button>
+                          <button
+                            className="btn btn-primary d-flex justify-center aline-center gap-2"
+                            onClick={() =>
+                              navigateHandler(task._id, task.managerEmail)
+                            }
+                          >
+                            <MdEdit />
+                            Ask Update
                           </button>
                         </div>
                       </div>

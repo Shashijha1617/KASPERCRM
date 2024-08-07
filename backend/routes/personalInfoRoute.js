@@ -1,11 +1,11 @@
 const express = require("express");
 const personalInfoRoute = express.Router();
 
-// const {
-//   verifyEmployee,
-//   verifyHREmployee,
-//   verifyAdminHREmployee
-// } = require("../middleware/authMiddleware");
+const {
+  verifyEmployee,
+  verifyHREmployee,
+  verifyAdminHREmployee
+} = require("../middleware/authMiddleware");
 
 const {
   personalInfo,

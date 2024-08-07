@@ -4,6 +4,7 @@ import axios from "axios";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../config/config";
 import TakeBreakLogs from "../Attendance/TakeBreakLogs";
+// import HrAttendance from "../../Component/HrManager/attendance/AttendanceSample";
 
 const WelcomeBoard = ({ height = "220px" }) => {
   const [employeeData, setEmployeeData] = useState(null);

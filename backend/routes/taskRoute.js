@@ -7,13 +7,13 @@ const {
   CreateTaskEmployee,
   findTask
 } = require("../controllers/taskController");
-// const { upload, ChackTaskFile } = require("../middleware/taskImageMulter");
+const { upload, checkFileSize } = require("../middleware/multer");
 
 const taskRoute = express.Router();
 
 taskRoute.get("/tasks", FindAllTask);
 // taskRoute.get("/getTask", findTask);
-// taskRoute.post("/tasks", ChackTaskFile, upload.single("file"), CreateTask); // create task  in admin
+taskRoute.post("/tasks", checkFileSize, upload.single("file"), CreateTask); // create task  in admin
 taskRoute.post("/tasks/:taskId/employees", CreateTaskEmployee); //
 taskRoute.put("/tasks/:taskId", UpdateTaskAdminManager); // update tsk admin and Manager
 taskRoute.put("/tasks/:taskId/employees/:empEmail", UpdateTaskAdminEmployee);

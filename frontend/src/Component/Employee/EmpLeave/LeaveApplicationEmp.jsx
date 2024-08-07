@@ -22,8 +22,8 @@ const LeaveApplicationEmp = (props) => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
+          authorization: localStorage.getItem("token") || ""
+        }
       })
       .then((response) => {
         console.log(response.data);
@@ -37,9 +37,10 @@ const LeaveApplicationEmp = (props) => {
     loadEmployeeData();
   }, []);
   const handleLeaveApplicationEmpSubmit = (event) => {
+    console.log("hello");
     event.preventDefault();
     console.log("id", event.target[0].value, event.target[1].value);
-    setTable(true);
+    // setTable(true);
     let body = {
       Leavetype: event.target[0].value,
       FromDate: event.target[2].value,
@@ -47,8 +48,9 @@ const LeaveApplicationEmp = (props) => {
       Status: 1,
       managerEmail: event.target[4].value,
       hrEmail: event.target[5].value,
-      Reasonforleave: event.target[6].value,
-      email,
+      aditionalManager: event.target[6].value,
+      Reasonforleave: event.target[7].value,
+      email
     };
     console.log(body);
     axios
@@ -57,8 +59,8 @@ const LeaveApplicationEmp = (props) => {
         body,
         {
           headers: {
-            authorization: localStorage.getItem("token") || "",
-          },
+            authorization: localStorage.getItem("token") || ""
+          }
         }
       )
       .then((res) => {
@@ -73,21 +75,25 @@ const LeaveApplicationEmp = (props) => {
             hrEmail: body.hrEmail,
             message: `Leave request`,
             messageBy: name,
+            aditionalManager: body.aditionalManager,
             profile: empData.profile.image_url,
             status: "unseen",
-            path: "leaveApplication",
+            path: "leaveApplication"
           };
           socket.emit("leaveNotification", data);
         } else {
           const data = {
             taskId,
-            managerEmail: body.managerEmail,
-            hrEmail: body.hrEmail,
+
             message: `Leave request`,
             messageBy: name,
+            aditionalManager: body.aditionalManager,
+            managerEmail: body.managerEmail,
+            hrEmail: body.hrEmail,
+
             profile: null,
             status: "unseen",
-            path: "leaveApplication",
+            path: "leaveApplication"
           };
           socket.emit("leaveNotification", data);
         }
@@ -129,7 +135,7 @@ const LeaveApplicationEmp = (props) => {
       Status: newInfo.target[3].value,
       managerEmail: newInfo.target[4].value,
       hrEmail: newInfo.target[5].value,
-      Reasonforleave: newInfo.target[6].value,
+      Reasonforleave: newInfo.target[6].value
     };
 
     console.log("update", body);
@@ -137,8 +143,8 @@ const LeaveApplicationEmp = (props) => {
     axios
       .put(`${BASE_URL}/api/leave-application-emp/` + info["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
+          authorization: localStorage.getItem("token") || ""
+        }
       })
       .then((res) => {
         setTable(false);

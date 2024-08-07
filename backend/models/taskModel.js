@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const taskSchema = new mongoose.Schema({
   pdf: String,
   Taskname: String,
+  Priority: String,
   description: String,
   startDate: String,
   endDate: String,
@@ -12,7 +13,6 @@ const taskSchema = new mongoose.Schema({
   department: String,
   comment: String,
   adminMail: String,
-  TaskID: Number,
   employees: [
     {
       empname: String,

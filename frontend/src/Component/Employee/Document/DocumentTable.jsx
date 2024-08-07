@@ -184,36 +184,36 @@ const DocumentTable = (props) => {
             </div>
           ) : (
             <div
-              style={{
-                height: "65vh",
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                wordSpacing: "5px",
-                flexDirection: "column",
-                gap: "2rem",
-              }}
-            >
-              <img
-                style={{
-                  height: "auto",
-                  width: "200px",
-                }}
-                src={SearchLight}
-                alt="img"
-              />
-              <p
-                className="text-center w-75 mx-auto"
-                style={{
-                  color: darkMode
-                    ? "var(--secondaryDashColorDark)"
-                    : "var( --primaryDashMenuColor)",
-                }}
-              >
-                Details not available please upload documents
-              </p>
-            </div>
+          style={{
+            height: "65vh",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            wordSpacing: "5px",
+            flexDirection: "column",
+            gap: "2rem",
+          }}
+        >
+          <img
+            style={{
+              height: "auto",
+              width: "30%",
+            }}
+            src={SearchLight}
+            alt="img"
+          />
+          <p
+            className="text-center w-75 mx-auto"
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var( --primaryDashMenuColor)",
+            }}
+          >
+            Details not available please upload documents 
+          </p>
+        </div>
           )}
         </div>
       </div>

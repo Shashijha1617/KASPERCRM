@@ -28,8 +28,41 @@ const AdminSalaryTable = (props) => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(2);
+  const [itemsPerPage] = useState(10);
   const { darkMode } = useTheme();
+
+  // const loadSalaryData = () => {
+  //   axios
+  //     .get(`${BASE_URL}/api/salary`, {
+  //       headers: {
+  //         authorization: localStorage.getItem("token") || "",
+  //       },
+  //     })
+  //     .then((response) => {
+  //       const salaryObj = response.data;
+  //       console.log("response", response.data);
+  //       setSalaryData(response.data);
+  //       setLoading(false);
+
+  //       const rowDataT = salaryObj.map((data) => ({
+  //         data,
+  //         empID: data["empID"],
+  //         EmployeeName: `${data["FirstName"]} ${data["LastName"]}`,
+  //         PositionName: data["position"][0]["PositionName"],
+  //         BasicSalary: data["salary"][0]["BasicSalary"],
+  //         BankName: data["salary"][0]["BankName"],
+  //         AccountNo: data["salary"][0]["AccountNo"],
+  //         AccountHolderName: data["salary"][0]["AccountHolderName"],
+  //         IFSCcode: data["salary"][0]["IFSCcode"],
+  //         TaxDeduction: data["salary"][0]["TaxDeduction"],
+  //       }));
+
+  //       setSalaryData(rowDataT);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   const loadSalaryData = () => {
     axios
@@ -49,12 +82,20 @@ const AdminSalaryTable = (props) => {
           empID: data["empID"],
           EmployeeName: `${data["FirstName"]} ${data["LastName"]}`,
           PositionName: data["position"][0]["PositionName"],
+          // Email: data["email"][0]["Email"],
           BasicSalary: data["salary"][0]["BasicSalary"],
           BankName: data["salary"][0]["BankName"],
           AccountNo: data["salary"][0]["AccountNo"],
           AccountHolderName: data["salary"][0]["AccountHolderName"],
           IFSCcode: data["salary"][0]["IFSCcode"],
           TaxDeduction: data["salary"][0]["TaxDeduction"],
+          HRASalary: data["salary"][0]["HRASalary"],
+          PFDeduct: data["salary"][0]["PFDeduct"],
+          LeaveDeduct: data["salary"][0]["LeaveDeduct"],
+          MAllowance: data["salary"][0]["MAllowance"],
+          SpecialAllowance: data["salary"][0]["SpecialAllowance"],
+          otherAllowance: data["salary"][0]["otherAllowance"],
+          totalSalary: data["salary"][0]["totalSalary"],
         }));
 
         setSalaryData(rowDataT);
@@ -63,7 +104,6 @@ const AdminSalaryTable = (props) => {
         console.log(error);
       });
   };
-
   const onSalaryDelete = (e) => {
     console.log(e);
     if (window.confirm("Are you sure to delete this record? ")) {
@@ -250,9 +290,9 @@ const AdminSalaryTable = (props) => {
                   <th style={rowHeadStyle} className="py-2 fw-normal border-0">
                     Account No
                   </th>
-                  <th style={rowHeadStyle} className="py-2 fw-normal border-0">
+                  {/* <th style={rowHeadStyle} className="py-2 fw-normal border-0">
                     Account Holder Name
-                  </th>
+                  </th> */}
                   <th style={rowHeadStyle} className="py-2 fw-normal border-0">
                     IFSC Code
                   </th>
@@ -307,7 +347,7 @@ const AdminSalaryTable = (props) => {
                       {item.PositionName}
                     </td>
                     <td style={rowBodyStyle} className=" border-0">
-                      <MdOutlineCurrencyRupee /> {item.BasicSalary}/-
+                      <MdOutlineCurrencyRupee /> {item.totalSalary}/-
                     </td>
                     <td
                       style={rowBodyStyle}
@@ -321,12 +361,12 @@ const AdminSalaryTable = (props) => {
                     >
                       {item.AccountNo}
                     </td>
-                    <td
+                    {/* <td
                       style={rowBodyStyle}
                       className="text-capitalize border-0"
                     >
                       {item.AccountHolderName}
-                    </td>
+                    </td> */}
                     <td
                       style={rowBodyStyle}
                       className="text-uppercase border-0"

@@ -46,7 +46,7 @@ const createEmployee = async (req, res) => {
     }
 
     const { file } = req;
-    console.log(req.body)
+    console.log(req.body);
     const {
       Email,
       Password,
@@ -313,6 +313,7 @@ const findParticularEmployee = async (req, res) => {
 const notificationStatusUpdate = async (req, res) => {
   const id = req.params.id;
   const { email } = req.body;
+  console.log(id);
   try {
     const findEmployee = await Employee.findOne({ Email: email });
     console.log(findEmployee);
@@ -472,7 +473,42 @@ const selectedDeleteNotification = async (req, res) => {
     console.log(error);
   }
 };
+const getEmployeeByStatus = async (req, res) => {
+  const { status, email } = req.body;
+
+  if (status === "employee") {
+    const manager = await Employee.find({
+      $or: [{ Account: 4 }, { Account: 1 }, { Account: 2 }]
+    }).select("Email");
+    const employee = await Employee.find({ Email: email }).select(
+      "reportManager reportHr"
+    );
+    const mails = manager.filter(
+      (val) =>
+        (val.Email !== employee[0].reportManager) &
+        (val.Email !== employee[0].reportHr)
+    );
+
+    res.status(200).send(mails);
+  } else if (status === "manager" || status === "hr") {
+    const manager = await Employee.find({
+      $or: [{ Account: 1 }]
+    }).select("Email");
+
+    const employee = await Employee.find({ Email: email }).select(
+      "reportManager reportHr"
+    );
+    const mails = manager.filter(
+      (val) =>
+        (val.Email !== employee[0].reportManager) &
+        (val.Email !== employee[0].reportHr)
+    );
+
+    res.status(200).send(mails);
+  }
+};
 module.exports = {
+  getEmployeeByStatus,
   getAllEmployee,
   upcomingBirthDay,
   createEmployee,

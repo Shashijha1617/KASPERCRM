@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Select from "react-select";
 import "bootstrap/dist/css/bootstrap.min.css";
-import BASE_URL from "../../../Pages/config/config";
 
 const LeaveAssign = () => {
   const [empData, setEmpData] = useState([]);
@@ -19,7 +18,7 @@ const LeaveAssign = () => {
 
   const loadEmployeeData = () => {
     axios
-      .get(`${BASE_URL}/api/employee`, {
+      .get("http://localhost:4000/api/employee", {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -30,7 +29,7 @@ const LeaveAssign = () => {
             return val.Account === 3 && val.status === "active";
           })
           .map((employee) => ({
-            value: employee.Email,
+            value: employee._id,
             label: employee.Email
           }));
         setEmpData([
@@ -75,7 +74,7 @@ const LeaveAssign = () => {
     e.preventDefault();
     console.log("Form Data:", formData);
     axios
-      .post(`${BASE_URL}/api/assignLeave`, formData)
+      .post("http://localhost:4000/api/assignLeave", formData)
       .then((response) => {
         alert("Leave Assign Successfully");
         setFormData({

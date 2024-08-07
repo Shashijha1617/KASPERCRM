@@ -37,8 +37,8 @@ const ManagerActiveTask = () => {
     axios
       .get(`${BASE_URL}/api/employee`, {
         headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
+          authorization: localStorage.getItem("token") || ""
+        }
       })
       .then((response) => {
         const employeeObj = response.data;
@@ -54,7 +54,7 @@ const ManagerActiveTask = () => {
             ContactNo: data["ContactNo"],
             PositionName: data["position"][0]
               ? data["position"][0]["PositionName"]
-              : "",
+              : ""
           };
         });
         console.log(rowDataT);
@@ -131,13 +131,13 @@ const ManagerActiveTask = () => {
             empname: employee.FirstName,
             empemail: employee.Email,
             empdesignation: employee.PositionName,
-            emptaskStatus: "Task Assigned",
+            emptaskStatus: "Task Assigned"
           };
 
           await axios.post(
             `${BASE_URL}/api/tasks/${selectedTaskId}/employees`,
             {
-              employees: [employeeData],
+              employees: [employeeData]
             }
           );
         } catch (error) {
@@ -172,7 +172,7 @@ const ManagerActiveTask = () => {
 
       await axios.put(`${BASE_URL}/api/tasks/${taskId}`, {
         status: "Completed",
-        comment: CompleteRemarks,
+        comment: CompleteRemarks
       });
 
       toast.success("Task completed successfully!");
@@ -271,7 +271,7 @@ const ManagerActiveTask = () => {
           scrollMargin: "1rem",
           backgroundColor: darkMode
             ? "var(--primaryDashMenuColor)"
-            : "var(--primaryDashColorDark)",
+            : "var(--primaryDashColorDark)"
         }}
       >
         {tasks
@@ -279,7 +279,7 @@ const ManagerActiveTask = () => {
           .map((task, index) => (
             <details
               style={{
-                boxShadow: "-1px 1px 10px gray",
+                boxShadow: "-1px 1px 10px gray"
               }}
               className="p-1 position-relative mt-3 fs-4 rounded mx-3"
               key={task.id}
@@ -379,7 +379,7 @@ const ManagerActiveTask = () => {
                           text={`${calculateProgress(task).toFixed(2)}%`}
                           styles={buildStyles({
                             pathColor: "#28a745",
-                            textColor: "#28a745",
+                            textColor: "#28a745"
                           })}
                         />
                       </div>
@@ -461,7 +461,7 @@ const ManagerActiveTask = () => {
                                     ? "rgba(25, 201, 84, 0.436)"
                                     : taskemp.emptaskStatus === "Rejected"
                                     ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit",
+                                    : "inherit"
                               }}
                             >
                               {i + 1}
@@ -473,7 +473,7 @@ const ManagerActiveTask = () => {
                                     ? "rgba(25, 201, 84, 0.436)"
                                     : taskemp.emptaskStatus === "Rejected"
                                     ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit",
+                                    : "inherit"
                               }}
                             >
                               {taskemp.empname}
@@ -485,7 +485,7 @@ const ManagerActiveTask = () => {
                                     ? "rgba(25, 201, 84, 0.436)"
                                     : taskemp.emptaskStatus === "Rejected"
                                     ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit",
+                                    : "inherit"
                               }}
                             >
                               {taskemp.empemail}
@@ -497,7 +497,7 @@ const ManagerActiveTask = () => {
                                     ? "rgba(25, 201, 84, 0.436)"
                                     : taskemp.emptaskStatus === "Rejected"
                                     ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit",
+                                    : "inherit"
                               }}
                             >
                               {taskemp.empdesignation}
@@ -509,7 +509,7 @@ const ManagerActiveTask = () => {
                                     ? "rgba(25, 201, 84, 0.436)"
                                     : taskemp.emptaskStatus === "Rejected"
                                     ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit",
+                                    : "inherit"
                               }}
                             >
                               {taskemp.emptaskStatus}
@@ -521,7 +521,7 @@ const ManagerActiveTask = () => {
                                     ? "rgba(25, 201, 84, 0.436)"
                                     : taskemp.emptaskStatus === "Rejected"
                                     ? "rgba(214, 92, 44, 0.636)"
-                                    : "inherit",
+                                    : "inherit"
                               }}
                             >
                               {taskemp.empTaskComment}
@@ -640,7 +640,7 @@ const ManagerActiveTask = () => {
                       <span
                         style={{
                           boxShadow: "-3px 3px 5px rgba(204, 201, 201, 0.767)",
-                          width: "fit-content",
+                          width: "fit-content"
                         }}
                         className="selected-employee-email d-flex btn gap-2 aline-center  btn-light py-1 px-2 m-1"
                         onClick={() => removeSelectedEmployee(employee.Email)}

@@ -56,7 +56,7 @@ const SearchComponent = () => {
         const isUserTypeMatch = (() => {
           switch (employeeData.Account) {
             case 1: // Admin
-              return route.control === "Admin";
+              return route.control === "admin";
             case 2: // HR
               return route.control === "hr";
             case 3: // Employee

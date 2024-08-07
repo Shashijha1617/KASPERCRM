@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
-import { Dropdown, DropdownButton } from "react-bootstrap";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { BsFillFileEarmarkPdfFill } from "react-icons/bs";
@@ -14,6 +11,7 @@ import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import BASE_URL from "../../../Pages/config/config";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
+import LeaveLight from "../../../img/Leave/LeaveLight.svg";
 
 const override = css`
   display: block;
@@ -208,19 +206,20 @@ const LeaveApplicationHRTable = (props) => {
     setSortDirection(newSortDirection);
   };
 
-  const approvedLeaves = filteredData.filter(
+  const RejectedLeaves = filteredData.filter(
     (data) => data.Status === "Rejected"
   ).length;
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid py-2">
       <div className="d-flex flex-column justify-between">
         <div className="d-flex justify-content-between aline-items-center">
           <TittleHeader
-            numbers={approvedLeaves}
             title={"Rejected Leaves"}
-            message={"You can view all rejected leaves here"}
+            numbers={RejectedLeaves}
+            message={"You can view all rejected leaves here."}
           />
+
           <div className="d-flex gap-2 justify-content-between py-3">
             <button
               className="btn btn-danger rounded-0 shadow-sm d-flex justify-center  aline-center gap-2"
@@ -251,17 +250,23 @@ const LeaveApplicationHRTable = (props) => {
       </div>
 
       <div id="clear-both" />
-      {!loading ? (
-        <div>
-          <div
-            style={{
-              maxHeight: "80vh",
-              minHeight: "80vh",
-              overflow: "auto",
-              position: "relative",
-            }}
-            className="table-responsive border"
-          >
+      {loading && (
+        <div id="loading-bar">
+          <RingLoader
+            css={override}
+            sizeUnit={"px"}
+            size={50}
+            color={"#0000ff"}
+            loading={true}
+          />
+        </div>
+      )}
+      <div>
+        <div
+          className="border border-1 border-dark"
+          style={{ overflow: "auto", maxHeight: "80vh", minHeight: "80vh" }}
+        >
+          {filteredData.length > 0 ? (
             <table className="table">
               <thead>
                 <tr>
@@ -453,14 +458,8 @@ const LeaveApplicationHRTable = (props) => {
                           }}
                           className="py-1"
                         >
-                          <div
-                            style={{ maxWidth: "fit-content" }}
-                            className="d-flex align-items-center gap-2"
-                          >
-                            <div
-                              className=""
-                              style={{ height: "35px", width: "35px" }}
-                            >
+                          <div className="d-flex aline-center gap-2">
+                            <div style={{ height: "35px", width: "35px" }}>
                               <img
                                 style={{
                                   height: "100%",
@@ -477,7 +476,7 @@ const LeaveApplicationHRTable = (props) => {
                                 alt=""
                               />
                             </div>
-                            <span>{data.Name}</span>
+                            <div className="d-flex flex-column"></div>
                           </div>
                         </td>
                         <td
@@ -493,7 +492,9 @@ const LeaveApplicationHRTable = (props) => {
                             border: "none",
                           }}
                           className="py-1"
-                        ></td>
+                        >
+                          <span>{data.Name}</span>
+                        </td>
                         <td
                           style={{
                             verticalAlign: "middle",
@@ -601,9 +602,10 @@ const LeaveApplicationHRTable = (props) => {
                               ? "var(----secondaryDashMenuColor)"
                               : "var( --primaryDashMenuColor)",
                             border: "none",
+                            fontSize: ".8rem",
                           }}
                         >
-                          <span className="border border-danger  px-2 py-1 rounded-5">
+                          <span className="text-white bg-danger px-2 py-0 shadow-sm rounded-5">
                             {data.Status}
                           </span>
                         </td>
@@ -691,19 +693,40 @@ const LeaveApplicationHRTable = (props) => {
                 )}
               </tbody>
             </table>
-          </div>
+          ) : (
+            <div
+              style={{
+                height: "80vh",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                wordSpacing: "5px",
+                flexDirection: "column",
+                gap: "2rem",
+              }}
+            >
+              <img
+                style={{
+                  height: "auto",
+                  width: "25%",
+                }}
+                src={LeaveLight}
+                alt="img"
+              />
+              <p
+                style={{
+                  color: darkMode
+                    ? "var(--secondaryDashColorDark)"
+                    : "var( --primaryDashMenuColor)",
+                }}
+              >
+                No rejected leaves found here.
+              </p>
+            </div>
+          )}
         </div>
-      ) : (
-        <div id="loading-bar">
-          <RingLoader
-            css={override}
-            sizeUnit={"px"}
-            size={50}
-            color={"#0000ff"}
-            loading={true}
-          />
-        </div>
-      )}
+      </div>
     </div>
   );
 };

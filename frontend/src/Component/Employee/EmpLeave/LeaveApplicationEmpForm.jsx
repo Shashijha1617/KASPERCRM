@@ -5,7 +5,7 @@ import "./LeaveApplicationEmpForm.css";
 import LeaveImg from "./Leave.svg";
 import InnerDashContainer from "../../InnerDashContainer";
 import BASE_URL from "../../../Pages/config/config";
-
+import { useLocation } from "react-router-dom";
 const LeaveApplicationEmpForm = (props) => {
   const id = localStorage.getItem("_id");
   const [empData, setEmpData] = useState([]);
@@ -15,8 +15,14 @@ const LeaveApplicationEmpForm = (props) => {
     endDate: ""
   });
   const [leaveType, setLeaveType] = useState("");
+  const [addManager, setAddManager] = useState("");
   const [leaveCount, setLeaveCount] = useState(null);
+  const [aditionalManager, setAditionalManager] = useState([]);
   const email = localStorage.getItem("Email");
+  const location = useLocation();
+
+  const status = location.pathname.split("/")[1];
+
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
@@ -32,10 +38,21 @@ const LeaveApplicationEmpForm = (props) => {
         console.log(error);
       });
   };
+  const loadManagersData = () => {
+    axios
+      .post(`${BASE_URL}/api/managersList`, { status, email })
+      .then((response) => {
+        console.log(response.data);
+        setAditionalManager(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
     axios
       .post(`${BASE_URL}/api/particularLeave`, {
-        email
+        id
       })
       .then((response) => {
         console.log(response.data);
@@ -47,12 +64,14 @@ const LeaveApplicationEmpForm = (props) => {
   }, []);
   useEffect(() => {
     loadEmployeeData();
+    loadManagersData();
   }, []);
 
   const handleInputChange = (e) => {
     setLeaveCount(leaveBalance[0][e.target.value]);
     setLeaveType(e.target.value);
   };
+
   function dateDifference(date1, date2) {
     const firstDate = new Date(date1);
     const secondDate = new Date(date2);
@@ -76,7 +95,8 @@ const LeaveApplicationEmpForm = (props) => {
     setFormData((prev) => ({ ...prev, endDate: e.target.value }));
   };
 
-  const deductLeave = () => {
+  const deductLeave = (e) => {
+    e.preventDefault();
     let requiredLeave = dateDifference(formData.startDate, formData.endDate);
     if (requiredLeave === undefined) return;
     if (leaveCount < requiredLeave + 1) {
@@ -86,6 +106,7 @@ const LeaveApplicationEmpForm = (props) => {
     const totalLeaveRequired = requiredLeave + 1;
     axios
       .post(`${BASE_URL}/api/deductLeave`, {
+        id,
         email,
         leaveType,
         totalLeaveRequired
@@ -97,7 +118,7 @@ const LeaveApplicationEmpForm = (props) => {
         console.log(error);
       });
   };
-
+  console.log(aditionalManager);
   return (
     <InnerDashContainer>
       {leaveBalance === null ? (
@@ -112,7 +133,9 @@ const LeaveApplicationEmpForm = (props) => {
           <div className="col-6">
             <form
               className="text-white shadow bg-dark px-3 py-4 rounded row"
-              onSubmit={props.onLeaveApplicationEmpSubmit}
+              onSubmit={(e) => (
+                deductLeave(e), props.onLeaveApplicationEmpSubmit(e)
+              )}
             >
               <h4 className="fw-bolder text-white mb-5">
                 Create Leave Request
@@ -130,14 +153,28 @@ const LeaveApplicationEmpForm = (props) => {
                   onChange={handleInputChange}
                   required
                 >
-                  <option value="" disabled selected>
-                    -- Select --
-                  </option>
-                  <option value="Sick Leave">Sick Leave</option>
-                  <option value="Casual Leave">Casual Leave</option>
-                  <option value="Paid Leave">Paid Leave</option>
-                  <option value="Paternity Leave">Paternity Leave</option>
-                  <option value="Maternity Leave">Maternity Leave</option>
+                  {empData.length > 0 && empData.Gender === "male" ? (
+                    <>
+                      <option value="" disabled selected>
+                        -- Select --
+                      </option>
+                      <option value="Sick Leave">Sick Leave</option>
+                      <option value="Casual Leave">Casual Leave</option>
+                      <option value="Paid Leave">Paid Leave</option>
+                      <option value="Paternity Leave">Paternity Leave</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="" disabled selected>
+                        -- Select --
+                      </option>
+                      <option value="Sick Leave">Sick Leave</option>
+                      <option value="Casual Leave">Casual Leave</option>
+                      <option value="Paid Leave">Paid Leave</option>
+
+                      <option value="Maternity Leave">Maternity Leave</option>
+                    </>
+                  )}
                 </select>
               </div>
               <div className="mb-3 col-12">
@@ -220,6 +257,25 @@ const LeaveApplicationEmpForm = (props) => {
                 />
               </div>
               <div className="mb-3">
+                <label htmlFor="manager" className="form-label">
+                  Additional Manager:
+                </label>
+                <select
+                  className="form-select"
+                  id="leaveType"
+                  name="leaveType"
+                  value={addManager}
+                  onChange={(e) => setAddManager(e.target.value)}
+                >
+                  <option value="" disabled selected>
+                    -- Select --
+                  </option>
+                  {aditionalManager.map((val) => {
+                    return <option value={val.Email}>{val.Email}</option>;
+                  })}
+                </select>
+              </div>
+              <div className="mb-3">
                 <label htmlFor="reason" className="form-label">
                   Reason:
                 </label>
@@ -238,7 +294,7 @@ const LeaveApplicationEmpForm = (props) => {
                 <button
                   type="submit"
                   className="btn btn-primary col-5"
-                  onClick={deductLeave}
+                  // onClick={deductLeave}
                 >
                   Submit
                 </button>

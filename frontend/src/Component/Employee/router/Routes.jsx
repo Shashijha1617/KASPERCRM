@@ -21,6 +21,7 @@ import InnerDashContainer from "../../InnerDashContainer.jsx";
 import LeaveBalance from "../../HrManager/LeaveStatus/LeaveBalance.jsx";
 import AttendanceDetails from "../attendance/AttendanceDetails.jsx";
 import EmpViewAttendance from "../../HrManager/attendance/SelfAttendance.jsx";
+import UpdateTaskEmpManager from "../../../Pages/UpdateTaskEmpManager.jsx";
 
 const RouterContent = ({ data }) => {
   return (
@@ -49,6 +50,11 @@ const RouterContent = ({ data }) => {
           exact
           path="/employee/:id/work-experience"
           render={(props) => <WorkExperience data={data} back={false} />}
+        />
+        <Route
+          exact
+          path="/employee/:id/leave-application-emp"
+          render={(props) => <LeaveApplicationEmp data={data} />}
         />
         <Route
           exact
@@ -113,6 +119,11 @@ const RouterContent = ({ data }) => {
         />
         <Route path="/employee/notification" exact component={Notification} />
         <Route path="/employee/document" exact component={Document} />
+        <Route
+          path="/employee/emp_manager"
+          exact
+          component={UpdateTaskEmpManager}
+        />
       </div>
     </InnerDashContainer>
   );

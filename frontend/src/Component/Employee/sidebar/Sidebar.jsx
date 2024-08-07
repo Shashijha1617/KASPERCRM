@@ -99,12 +99,8 @@ const Sidebar = (props) => {
         backgroundColor: darkMode
           ? "var(--primaryDashMenuColor)"
           : "var(--primaryDashColorDark)",
-        padding: !extended
-          ? ".5rem .5rem .5rem .5rem"
-          : ".5rem 1.5rem .5rem .5rem",
-        // boxShadow: "0 0 3px 2px   #64646428 inset",
       }}
-      className="d-none d-sm-flex flex-column gap-2"
+      className="d-none d-sm-flex flex-column gap-2 p-2"
     >
       <h3
         style={{ borderBottom: "3px solid green" }}

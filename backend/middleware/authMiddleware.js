@@ -56,7 +56,7 @@ function verifyAdminHR(req, res, next) {
 }
 
 function verifyAdminHREmployee(req, res, next) {
-  console.log("header",req.headers["authorization"]);
+  console.log("header", req.headers["authorization"]);
   const Header = req.headers["authorization"];
 
   if (typeof Header !== "undefined") {
@@ -70,6 +70,34 @@ function verifyAdminHREmployee(req, res, next) {
           authData.Account == 1 ||
           authData.Account == 2 ||
           authData.Account == 3
+        ) {
+          next();
+        } else {
+          res.sendStatus(403);
+        }
+      }
+    });
+  } else {
+    // Forbidden
+    res.sendStatus(403);
+  }
+}
+function verifyAll(req, res, next) {
+  console.log("header", req.headers["authorization"]);
+  const Header = req.headers["authorization"];
+
+  if (typeof Header !== "undefined") {
+    // decodedData = jwt.decode(req.headers['authorization']);
+    // if(decodedData.Account)
+    jwt.verify(Header, process.env.jwtKey, (err, authData) => {
+      if (err) {
+        res.sendStatus(403);
+      } else {
+        if (
+          authData.Account == 1 ||
+          authData.Account == 2 ||
+          authData.Account == 3 ||
+          authData.Account == 4
         ) {
           next();
         } else {
@@ -198,6 +226,7 @@ module.exports = {
   verifyHREmployee,
   verifyEmployee,
   verifyManager,
-  verifyAdminHREmployee
+  verifyAdminHREmployee,
+  verifyAll
   // Export other middleware functions...
 };

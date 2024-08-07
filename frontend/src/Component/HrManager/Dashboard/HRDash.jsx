@@ -6,9 +6,8 @@ import EmployeeCount from "../../../Pages/Chart/EmployeeCountTable";
 import DailyAttendChart from "../../../Pages/Chart/DailyAttendChart";
 import EmplooyeeLogCount from "./CountData/EmplooyeeLogCount";
 import WelcomeBoard from "../../../Pages/WelcomeBoard/WelcomeBoard";
-import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 import MyTodaysLoginData from "../../Employee/WelcomeBoard/MyTodaysLoginData/MyTodaysLoginData";
-
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 const HRDash = () => {
   return (
     <div className="container-fluid mb-5 pb-3">

@@ -22,6 +22,7 @@ import Pagination from "../../Utils/Pagination";
 import OverLayToolTip from "../../Utils/OverLayToolTip";
 import { RiUserAddLine } from "react-icons/ri";
 import TittleHeader from "../TittleHeader/TittleHeader";
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 
 const override = css`
   display: block;
@@ -31,6 +32,9 @@ const override = css`
 `;
 
 const AdminEmployeeTable = (props) => {
+  const location = useLocation();
+
+  const route = location.pathname.split("/")[1];
   const [employeeData, setEmployeeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rowData, setRowData] = useState([]);
@@ -60,6 +64,7 @@ const AdminEmployeeTable = (props) => {
           setRowData([]);
 
           response.data.forEach((data) => {
+            if (route === "hr" && data["Account"] === 1) return;
             let temp = {
               data,
               Email: data["Email"],

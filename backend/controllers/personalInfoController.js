@@ -5,7 +5,10 @@ const {
   EmployeePersonalInfoValidation
 } = require("../validations/employeeValidation");
 const { fileUploadMiddleware, checkFileSize } = require("../middleware/multer");
-const { cloudinaryFileUploder, removeCloudinaryImage} = require("../cloudinary/cloudinaryFileUpload")
+const {
+  cloudinaryFileUploder,
+  removeCloudinaryImage
+} = require("../cloudinary/cloudinaryFileUpload");
 const personalInfo = async (req, res) => {
   Employee.findById(req.params.id)
     // .populate({ path: "city", populate: { path: "state" } ,populate: { populate: { path: "country" } } })
@@ -68,9 +71,9 @@ const updatepersonalInfo = async (req, res) => {
     // Middleware to handle file upload
     fileUploadMiddleware(req, res, async (err) => {
       if (err instanceof multer.MulterError) {
-        return res.status(400).send('Multer error');
+        return res.status(400).send("Multer error");
       } else if (err) {
-        return res.status(500).send('Internal server error');
+        return res.status(500).send("Internal server error");
       }
 
       // Handle other form fields
@@ -85,14 +88,17 @@ const updatepersonalInfo = async (req, res) => {
         PANcardNo: req.body.PANcardNo,
         PermanetAddress: req.body.PermanetAddress,
         PresentAddress: req.body.PresentAddress,
+        BankName: req.body.BankName,
+        BankAccount: req.body.BankAccount,
+        BankIFSC: req.body.BankIFSC
       };
 
       // Handle file upload to Cloudinary
       if (req.file) {
-        const cloudinaryResponse = await cloudinaryFileUploder            (req.file.path);
+        const cloudinaryResponse = await cloudinaryFileUploder(req.file.path);
         newEmployee.profile = {
           image_url: cloudinaryResponse.image_url,
-          publicId: cloudinaryResponse.publicId,
+          publicId: cloudinaryResponse.publicId
         };
       }
 
@@ -108,10 +114,9 @@ const updatepersonalInfo = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Server error');
+    res.status(500).send("Server error");
   }
 };
-
 
 module.exports = {
   personalInfo,

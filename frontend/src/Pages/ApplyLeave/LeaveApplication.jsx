@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import "./LeaveApplicationEmp.css";
 import axios from "axios";
 import LeaveApplicationEmpTable from "./LeaveApplicationTable.jsx";
-import LeaveApplicationEmpForm from "./LeaveApplicationForm.jsx";
+import LeaveApplicationEmpForm from "../../Component/Employee/EmpLeave/LeaveApplicationEmpForm.jsx";
 import LeaveApplicationEmpFormEdit from "./LeaveApplicationFormEdit.jsx";
 import { AttendanceContext } from "../../Context/AttendanceContext/AttendanceContext.js";
 import { v4 as uuid } from "uuid";
@@ -50,7 +50,8 @@ const LeaveApplicationEmp = (props) => {
       Status: 1,
       managerEmail: event.target[4].value,
       hrEmail: event.target[5].value,
-      Reasonforleave: event.target[6].value,
+      aditionalManager: event.target[6].value,
+      Reasonforleave: event.target[7].value,
     };
     console.log(body);
     axios
@@ -74,6 +75,7 @@ const LeaveApplicationEmp = (props) => {
             taskId,
             managerEmail: body.managerEmail,
             hrEmail: body.hrEmail,
+            aditionalManager: body.aditionalManager,
             message: `Leave request`,
             messageBy: name,
             profile: empData.profile.image_url,
@@ -86,6 +88,8 @@ const LeaveApplicationEmp = (props) => {
             taskId,
             managerEmail: body.managerEmail,
             hrEmail: body.hrEmail,
+            aditionalManager: body.aditionalManager,
+
             message: `Leave request`,
             messageBy: name,
             profile: null,

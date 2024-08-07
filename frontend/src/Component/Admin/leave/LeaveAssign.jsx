@@ -3,11 +3,12 @@ import axios from "axios";
 import Select from "react-select";
 import "bootstrap/dist/css/bootstrap.min.css";
 import BASE_URL from "../../../Pages/config/config";
-import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 
 const LeaveAssign = () => {
   const [empData, setEmpData] = useState([]);
+  const { darkMode } = useTheme();
   const [formData, setFormData] = useState({
     employees: [],
     sickLeave: "",
@@ -16,7 +17,6 @@ const LeaveAssign = () => {
     paternityLeave: "",
     maternityLeave: "",
   });
-  const { darkMode } = useTheme();
 
   const id = localStorage.getItem("_id");
 
@@ -28,6 +28,7 @@ const LeaveAssign = () => {
         },
       })
       .then((response) => {
+        console.log(response.data);
         const employees = response.data
           .filter((val) => {
             return (
@@ -36,7 +37,7 @@ const LeaveAssign = () => {
             );
           })
           .map((employee) => ({
-            value: employee.Email,
+            value: employee._id,
             label: employee.Email,
           }));
         setEmpData([
@@ -83,6 +84,7 @@ const LeaveAssign = () => {
     axios
       .post(`${BASE_URL}/api/assignLeave`, formData)
       .then((response) => {
+        console.log(response.data);
         alert("Leave Assign Successfully");
         setFormData({
           employees: [],
@@ -101,9 +103,10 @@ const LeaveAssign = () => {
   const customStyles = {
     menu: (provided) => ({
       ...provided,
-      maxHeight: "400px",
+      maxHeight: "400px", // Increase maximum height further
       overflowY: "auto",
     }),
+    // Optionally adjust menuPortal styles
     menuPortal: (provided) => ({
       ...provided,
       zIndex: 9999,
@@ -114,24 +117,24 @@ const LeaveAssign = () => {
     <div
       style={{
         color: darkMode
-          ? "var(--secondaryDashColorDark)"
-          : "var(--primaryDashMenuColor)",
+          ? "var(--primaryDashColorDark)"
+          : "var(--secondaryDashMenuColor)",
       }}
       className="container-fluid py-3"
     >
       <TittleHeader
-        title={"Leave Assignment Form"}
-        message={"You can assign leaves to the selected employee"}
+        title={"Assign Leave Form"}
+        message={"You Can Assign leave to single employee or multiple here."}
       />
-
-      <form className="my-2 " onSubmit={handleSubmit}>
-        <div className="row  row row-gap-3">
-          <div className="col-12">
+      <form className="mt-3" onSubmit={handleSubmit}>
+        <div className="row mb-3">
+          <div className="col-md-6">
             <label htmlFor="employees" className="form-label">
               Select Employees
             </label>
             <Select
               id="employees"
+              className="rounded-0"
               name="employees"
               value={formData.employees}
               onChange={handleSelectChange}
@@ -144,23 +147,23 @@ const LeaveAssign = () => {
               menuPortalTarget={document.body}
             />
           </div>
-          <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div className="col-md-6">
             <label htmlFor="sickLeave" className="form-label">
               Sick Leave
             </label>
             <input
               type="number"
-              className="form-control py-3"
+              className="form-control"
               id="sickLeave"
               name="sickLeave"
               value={formData.sickLeave}
-              placeholder="0"
               onChange={handleChange}
               min="0"
             />
           </div>
-
-          <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+        </div>
+        <div className="row mb-3">
+          <div className="col-md-6">
             <label htmlFor="paidLeave" className="form-label">
               Paid Leave
             </label>
@@ -170,12 +173,11 @@ const LeaveAssign = () => {
               id="paidLeave"
               name="paidLeave"
               value={formData.paidLeave}
-              placeholder="0"
               onChange={handleChange}
               min="0"
             />
           </div>
-          <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div className="col-md-6">
             <label htmlFor="casualLeave" className="form-label">
               Casual Leave
             </label>
@@ -184,13 +186,14 @@ const LeaveAssign = () => {
               className="form-control"
               id="casualLeave"
               name="casualLeave"
-              placeholder="0"
               value={formData.casualLeave}
               onChange={handleChange}
               min="0"
             />
           </div>
-          <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+        </div>
+        <div className="row mb-3">
+          <div className="col-md-6">
             <label htmlFor="paternityLeave" className="form-label">
               Paternity Leave
             </label>
@@ -199,13 +202,12 @@ const LeaveAssign = () => {
               className="form-control"
               id="paternityLeave"
               name="paternityLeave"
-              placeholder="0"
               value={formData.paternityLeave}
               onChange={handleChange}
               min="0"
             />
           </div>
-          <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div className="col-md-6">
             <label htmlFor="maternityLeave" className="form-label">
               Maternity Leave
             </label>
@@ -214,14 +216,13 @@ const LeaveAssign = () => {
               className="form-control"
               id="maternityLeave"
               name="maternityLeave"
-              placeholder="0"
               value={formData.maternityLeave}
               onChange={handleChange}
               min="0"
             />
           </div>
         </div>
-        <button type="submit" className=" my-3 btn btn-primary">
+        <button type="submit" className="btn btn-primary">
           Submit
         </button>
       </form>

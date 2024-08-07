@@ -71,7 +71,7 @@ const Sidebar = () => {
       navLinks: [
         { to: "/admin/task", label: "Create New Task" },
         { to: "/admin/taskassign", label: "Assigned" },
-        { to: "/admin/taskActive", label: "Active Taask" },
+        { to: "/admin/taskActive", label: "Active Task" },
         { to: "/admin/taskcancle", label: "Cancelled Task" },
         { to: "/admin/taskcomplete", label: "Completed Task" },
         { to: "/admin/taskreject", label: "Revoked Task" },

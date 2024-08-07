@@ -22,7 +22,7 @@ function TakeBreakLogs(props) {
     attendanceID,
     setAttendanceID,
     message,
-    setMessage,
+    setMessage
   } = useContext(AttendanceContext);
 
   const fetchAllData = async () => {
@@ -36,8 +36,8 @@ function TakeBreakLogs(props) {
         `${BASE_URL}/api/employee/` + localStorage.getItem("_id"),
         {
           headers: {
-            authorization: localStorage.getItem("token") || "",
-          },
+            authorization: localStorage.getItem("token") || ""
+          }
         }
       );
       setEmployees(employeeResponse.data);
@@ -46,8 +46,8 @@ function TakeBreakLogs(props) {
         `${BASE_URL}/api/attendance/` + localStorage.getItem("_id"),
         {
           headers: {
-            authorization: localStorage.getItem("token") || "",
-          },
+            authorization: localStorage.getItem("token") || ""
+          }
         }
       );
       const lastEntry =
@@ -72,8 +72,8 @@ function TakeBreakLogs(props) {
           `${BASE_URL}/api/personal-info/` + localStorage.getItem("_id"),
           {
             headers: {
-              authorization: localStorage.getItem("token") || "",
-            },
+              authorization: localStorage.getItem("token") || ""
+            }
           }
         );
         setEmpName(response.data.FirstName);
@@ -112,22 +112,22 @@ function TakeBreakLogs(props) {
       const statusMapping = {
         login: {
           status: "login",
-          loginTime: [currentTime],
+          loginTime: [currentTime]
         },
         logout: {
           status: "logout",
-          logoutTime: [currentTime],
+          logoutTime: [currentTime]
         },
         break: {
           status: "break",
           breakTime: [currentTime],
-          breakTimeMs: [currentTimeMs],
+          breakTimeMs: [currentTimeMs]
         },
         resume: {
           status: "login",
           ResumeTime: [currentTime],
-          resumeTimeMS: [currentTimeMs],
-        },
+          resumeTimeMS: [currentTimeMs]
+        }
       };
 
       await axios.post(`${BASE_URL}/api/attendance/${attendanceID}`, {
@@ -135,7 +135,7 @@ function TakeBreakLogs(props) {
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1,
         date: new Date().getDate(),
-        ...statusMapping[action],
+        ...statusMapping[action]
       });
 
       setMessage(

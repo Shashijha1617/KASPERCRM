@@ -142,20 +142,20 @@ const EmployeeFormEdit = (props) => {
   const managerFilterHandler = (value) => {
     if (+value === 2 || +value === 4 || +value === 1) {
       const data = rowData.filter((val) => {
-        return +val.Account === 1;
+        return +val.Account === 1 && props.editData.Email !== val.Email;
       });
       console.log(data);
       setFilterManagerData(data);
     } else if (+value === 3) {
       const data = rowData.filter((val) => {
-        return +val.Account === 4;
+        return +val.Account === 4 && props.editData.Email !== val.Email;
       });
       console.log(data);
 
       setFilterManagerData(data);
     }
     const hrData = rowData.filter((val) => {
-      return val.Account === 2;
+      return val.Account === 2 && props.editData.Email !== val.Email;
     });
     console.log(hrData);
 

@@ -1,115 +1,131 @@
-
-
-
-
-
-const Joi = require('joi');
-const { Employee } = require('../models/employeeModel');
-const { Salary } = require('../models/salaryModel');
-const { SalaryValidation } = require('../validations/salaryValidation');
+const Joi = require("joi");
+const { Employee } = require("../models/employeeModel");
+const { Salary } = require("../models/salaryModel");
+const { SalaryValidation } = require("../validations/salaryValidation");
 
 const getAllSalary = async (req, res) => {
   Employee.find()
     .populate({
       path: "salary"
     })
-    .select("FirstName LastName MiddleName empID")
+    .select("FirstName LastName empID")
     .populate({
       path: "position"
     })
     .exec(function (err, company) {
-      let filteredCompany = company.filter(data => data["salary"].length == 1);
+      let filteredCompany = company.filter(
+        (data) => data["salary"].length == 1
+      );
       res.send(filteredCompany);
     });
-}
+};
 
-// create a Salary 
+// create a Salary
+
 const createSalary = async (req, res) => {
-  Joi.validate(req.body, SalaryValidation, (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(400).send(err.details[0].message);
-    } else {
-      Employee.findById(req.params.id, function (err, employee) {
-        if (err) {
-          console.log(err);
-          res.send("err");
-        } else {
-          if (employee.salary.length == 0) {
-            let newSalary;
+  try {
+    await Joi.validate(req.body, SalaryValidation);
 
-            newSalary = {
-              BasicSalary: req.body.BasicSalary,
-              BankName: req.body.BankName,
-              AccountNo: req.body.AccountNo,
-              AccountHolderName: req.body.AccountHolderName,
-              IFSCcode: req.body.IFSCcode,
-              TaxDeduction: req.body.TaxDeduction
-            };
-
-            Salary.create(newSalary, function (err, salary) {
-              if (err) {
-                console.log(err);
-                res.send("error");
-              } else {
-                employee.salary.push(salary);
-                employee.save(function (err, data) {
-                  if (err) {
-                    console.log(err);
-                    res.send("err");
-                  } else {
-                    console.log(data);
-                    res.send(salary);
-                  }
-                });
-                console.log("new salary Saved");
-              }
-            });
-            console.log(req.body);
-          } else {
-            res
-              .status(403)
-              .send("Salary Information about this employee already exits");
-          }
-        }
-      });
+    const employee = await Employee.findById(req.params.id);
+    if (!employee) {
+      return res.status(404).send("Employee not found");
     }
-  });
-}
 
-// find and update the Salary 
+    if (employee.salary.length > 0) {
+      return res
+        .status(403)
+        .send("Salary information about this employee already exists");
+    }
+
+    const totalSalary =
+      Number(req.body.BasicSalary) +
+      Number(req.body.HRASalary) +
+      Number(req.body.MAllowance) +
+      Number(req.body.SpecialAllowance) +
+      Number(req.body.otherAllowance) -
+      Number(req.body.LeaveDeduct) -
+      Number(req.body.PFDeduct) -
+      Number(req.body.TaxDeduction);
+
+    const newSalary = {
+      BasicSalary: Number(req.body.BasicSalary),
+      HRASalary: Number(req.body.HRASalary),
+      MAllowance: Number(req.body.MAllowance),
+      SpecialAllowance: Number(req.body.SpecialAllowance),
+      otherAllowance: Number(req.body.otherAllowance),
+      LeaveDeduct: Number(req.body.LeaveDeduct),
+      PFDeduct: Number(req.body.PFDeduct),
+      BankName: req.body.BankName,
+      AccountNo: req.body.AccountNo,
+      AccountHolderName: req.body.AccountHolderName,
+      IFSCcode: req.body.IFSCcode,
+      TaxDeduction: Number(req.body.TaxDeduction),
+      totalSalary: totalSalary
+    };
+
+    const salary = await Salary.create(newSalary);
+    employee.salary.push(salary);
+    await employee.save();
+
+    res.send(salary);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send(err.message || "An error occurred");
+  }
+};
+
 const updateSalary = async (req, res) => {
   Joi.validate(req.body, SalaryValidation, (err, result) => {
     if (err) {
       console.log(err);
       res.status(400).send(err.details[0].message);
     } else {
-      let newSalary;
+      // Calculate total salary
+      const totalSalary =
+        Number(req.body.BasicSalary) +
+        Number(req.body.HRASalary) +
+        Number(req.body.MAllowance) +
+        Number(req.body.SpecialAllowance) +
+        Number(req.body.otherAllowance) -
+        Number(req.body.LeaveDeduct) -
+        Number(req.body.PFDeduct) -
+        Number(req.body.TaxDeduction);
 
-      newSalary = {
-        BasicSalary: req.body.BasicSalary,
+      const newSalary = {
+        BasicSalary: Number(req.body.BasicSalary),
+        HRASalary: Number(req.body.HRASalary),
+        MAllowance: Number(req.body.MAllowance),
+        SpecialAllowance: Number(req.body.SpecialAllowance),
+        otherAllowance: Number(req.body.otherAllowance),
+        LeaveDeduct: Number(req.body.LeaveDeduct),
+        PFDeduct: Number(req.body.PFDeduct),
         BankName: req.body.BankName,
         AccountNo: req.body.AccountNo,
         AccountHolderName: req.body.AccountHolderName,
         IFSCcode: req.body.IFSCcode,
-        TaxDeduction: req.body.TaxDeduction
+        TaxDeduction: Number(req.body.TaxDeduction),
+        totalSalary: totalSalary
       };
 
-      Salary.findByIdAndUpdate(req.params.id, newSalary, function (err, salary) {
-        if (err) {
-          res.send("error");
-        } else {
-          res.send(newSalary);
+      Salary.findByIdAndUpdate(
+        req.params.id,
+        newSalary,
+        { new: true },
+        (err, salary) => {
+          if (err) {
+            res.status(500).send("An error occurred while updating the salary");
+          } else {
+            res.send(newSalary);
+          }
         }
-      });
+      );
     }
 
     console.log("put");
     console.log(req.body);
   });
-}
+};
 
-// find and delete the Salary 
 const deleteSalary = async (req, res) => {
   Employee.findById({ _id: req.params.id }, function (err, employee) {
     console.log("uuuuuuuunnnnnnnnnnnnnnndef", employee.salary[0]);
@@ -117,35 +133,34 @@ const deleteSalary = async (req, res) => {
       res.send("error");
       console.log(err);
     } else {
-      Salary.findByIdAndRemove({ _id: employee.salary[0] }, function (
-        err,
-        salary
-      ) {
-        if (!err) {
-          console.log("salary deleted");
-          Employee.update(
-            { _id: req.params.id },
-            { $pull: { salary: employee.salary[0] } },
-            function (err, numberAffected) {
-              console.log(numberAffected);
-              res.send(salary);
-            }
-          );
-        } else {
-          console.log(err);
-          res.send("error");
+      Salary.findByIdAndRemove(
+        { _id: employee.salary[0] },
+        function (err, salary) {
+          if (!err) {
+            console.log("salary deleted");
+            Employee.update(
+              { _id: req.params.id },
+              { $pull: { salary: employee.salary[0] } },
+              function (err, numberAffected) {
+                console.log(numberAffected);
+                res.send(salary);
+              }
+            );
+          } else {
+            console.log(err);
+            res.send("error");
+          }
         }
-      });
+      );
       console.log("delete");
       console.log(req.params.id);
     }
   });
-}
-
+};
 
 module.exports = {
   getAllSalary,
   createSalary,
   updateSalary,
   deleteSalary
-}
+};

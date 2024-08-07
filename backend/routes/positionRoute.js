@@ -11,15 +11,15 @@ const { getAllEmployerPosition, createEmployerPosition, updateEmployerPosition, 
 
 // GET: Retrieve all countries
 // verifyHR
-positionRoute.get("/position",  getAllEmployerPosition);
+positionRoute.get("/position", verifyAdminHR, getAllEmployerPosition);
 
 // POST: Create a new city
-positionRoute.post("/position",   createEmployerPosition);
+positionRoute.post("/position", verifyAdminHR,  createEmployerPosition);
 
 // PUT: Update an existing city
-positionRoute.put("/position/:id",   updateEmployerPosition);
+positionRoute.put("/position/:id", verifyAdminHR,  updateEmployerPosition);
 
 // DELETE: Delete a city
-positionRoute.delete("/position/:id",   deleteEmployerPosition);
+positionRoute.delete("/position/:id", verifyAdminHR,  deleteEmployerPosition);
 
 module.exports = positionRoute;

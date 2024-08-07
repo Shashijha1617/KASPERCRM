@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { IoCheckmarkDone } from "react-icons/io5";
+import { FaCheck } from "react-icons/fa6";
+import { IoCheckmarkDone, IoCheckmarkDoneSharp } from "react-icons/io5";
 import {
   MdArrowDropDown,
   MdArrowDropUp,
   MdDeleteForever,
   MdOutlineAssignmentInd,
+  MdOutlineCancel,
 } from "react-icons/md";
-import { toast } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import Modal from "react-bootstrap/Modal";
+import Table from "react-bootstrap/esm/Table";
+import { BsFiletypeDoc } from "react-icons/bs";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import { v4 as uuid } from "uuid";
@@ -16,12 +20,16 @@ import BASE_URL from "../../../Pages/config/config";
 import ActiveTask from "../../../img/Task/ActiveTask.svg";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import "./TaskManagement.css";
-import { RiAttachmentLine } from "react-icons/ri";
+import { HiDocumentSearch } from "react-icons/hi";
+import { IoMdDoneAll } from "react-icons/io";
+import { RiArrowDropDownLine, RiAttachmentLine } from "react-icons/ri";
 import { PiInfoLight } from "react-icons/pi";
 import { getFormattedDate } from "../../../Utils/GetDayFormatted";
 import AvatarGroup from "../../../Pages/AvatarGroup/AvatarGroup";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const ManagerActiveTask = () => {
+  const history = useHistory();
   const [modalShow, setModalShow] = React.useState(false);
   const name = localStorage.getItem("Name");
   const [tasks, setTasks] = useState([]);
@@ -39,7 +47,7 @@ const ManagerActiveTask = () => {
   const [employeeData, setEmployeeData] = useState([]);
   const [rowData, setRowData] = useState([]);
   const [taskDepartment, setTaskDepartment] = useState("");
-  const { socket } = useContext(AttendanceContext);
+  // const { socket } = useContext(AttendanceContext);
   const [taskName, setTaskName] = useState("");
   const [allImage, setAllImage] = useState(null);
   const [empData, setEmpData] = useState(null);
@@ -49,6 +57,7 @@ const ManagerActiveTask = () => {
   const [viewDetsils, setViewDetails] = useState(false);
   const [timeinfo, setTimeinfo] = useState(false);
   const [expandedTaskId, setExpandedTaskId] = useState(null);
+  const { socket, setMessageData } = useContext(AttendanceContext);
 
   const loadEmployeeData = () => {
     axios
@@ -91,13 +100,6 @@ const ManagerActiveTask = () => {
     loadEmployeeData();
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000); // Update every second
-    return () => clearInterval(interval);
-  }, []);
-
   const calculateRemainingTime = (endDate) => {
     const now = currentTime;
     const endDateTime = new Date(endDate);
@@ -136,14 +138,19 @@ const ManagerActiveTask = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    console.log("getEmployee:", getEmployee);
-  }, [getEmployee]);
-
-  const forwordTaskToEmployee = async (taskId, dep, taskName) => {
+  const forwordTaskToEmployee = async (taskId, dep, taskName, task) => {
+    console.log(task);
     setTaskName(taskName);
+
+    const employeeEmails = task.employees.map((emp) => emp.empemail);
+
     let filteredData = rowData.filter((val) => {
-      return val.department === dep;
+      return (
+        val.department === dep &&
+        !employeeEmails.includes(val.Email) &&
+        val.Email !== email &&
+        (val.data.reportHr || val.data.reportManager)
+      );
     });
     setRowData(filteredData);
     setTaskDepartment(dep);
@@ -367,14 +374,6 @@ const ManagerActiveTask = () => {
     window.open(`${BASE_URL}/${require[0].pdf}`, "_blank", "noreferrer");
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFlash((prevFlash) => !prevFlash);
-    }, 15000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   const images = [
     "https://i.pinimg.com/originals/07/33/ba/0733ba760b29378474dea0fdbcb97107.png",
     "https://th.bing.com/th/id/OIP.JOHFjMBnZGE-SOXzMSxdRwAAAA?w=402&h=467&rs=1&pid=ImgDetMain",
@@ -402,6 +401,25 @@ const ManagerActiveTask = () => {
 
   const toggleTaskDetails = (taskId) => {
     setExpandedTaskId((prevId) => (prevId === taskId ? null : taskId));
+  };
+
+  const navigateHandler = (taskId, to) => {
+    setMessageData({ taskId, to: [to], name });
+    history.push("/manager/admin_manager");
+  };
+  const navigateEmpHandler = (task) => {
+    console.log(task);
+    const taskId = task._id;
+    const to = task.employees
+      .filter((val) => {
+        return val.emptaskStatus !== "Task Assigned";
+      })
+      .map((val) => val.empemail);
+
+    if (to.length > 0) {
+      setMessageData({ taskId, to, name });
+      history.push("/manager/emp_manager");
+    }
   };
 
   return (
@@ -434,7 +452,7 @@ const ManagerActiveTask = () => {
 
       <div className="row  mx-auto text-white">
         {tasks.filter(
-          (task) => task.status === "Assigned" && task.managerEmail === email
+          (task) => task.status === "Pending" && task.managerEmail === email
         ).length > 0 ? (
           tasks
             .filter(
@@ -806,7 +824,7 @@ const ManagerActiveTask = () => {
                         </div>
                       </div>
                       <hr />
-                      <div className="d-flex flex-column gap-2 my-2">
+                      {/* <div className="d-flex flex-column gap-2 my-2">
                         Action
                         <div className="d-flex gap-3  just">
                           <button
@@ -828,6 +846,18 @@ const ManagerActiveTask = () => {
                             <RiAttachmentLine /> Attachment
                           </button>
                           <button
+                            onClick={() => showPdf(task._id)}
+                            className="btn btn-secondary py-1"
+                          >
+                            Update Admin
+                          </button>
+                          <button
+                            onClick={() => navigateEmpHandler(task)}
+                            className="btn btn-secondary py-1"
+                          >
+                            update Emp
+                          </button>
+                          <button
                             onClick={() =>
                               completeTask(
                                 task._id,
@@ -841,6 +871,73 @@ const ManagerActiveTask = () => {
                             <IoCheckmarkDone /> Complete
                           </button>
                         </div>
+                      </div> */}
+                      <div
+                        style={{ height: "fit-content" }}
+                        className="d-flex  pt-3 rounded mx-1 justify-content-between"
+                      >
+                        <button
+                          className="btn btn-primary rounded-5 d-flex justify-center aline-center gap-2"
+                          onClick={() =>
+                            forwordTaskToEmployee(
+                              task._id,
+                              task.department,
+                              task.Taskname,
+                              task
+                            )
+                          }
+                        >
+                          <MdOutlineAssignmentInd />{" "}
+                          <span className="d-none d-md-flex">Forward Task</span>
+                        </button>
+                        <button
+                          className="btn btn-warning rounded-5 d-flex justify-center aline-center gap-2"
+                          onClick={() => showPdf(task._id)}
+                        >
+                          <HiDocumentSearch />{" "}
+                          <span className="d-none d-md-flex">
+                            View attachment
+                          </span>
+                        </button>
+                        <button
+                          className="btn btn-success rounded-5 d-flex justify-center aline-center gap-2"
+                          onClick={() =>
+                            navigateHandler(task._id, task.adminMail)
+                          }
+                        >
+                          <IoMdDoneAll />
+                          <span className="d-none d-md-flex">Update Admin</span>
+                        </button>
+                        {task.employees.length > 0 &&
+                        task.employees.filter((val) => {
+                          return val.emptaskStatus !== "Task Assigned";
+                        }).length > 0 ? (
+                          <button
+                            className="btn btn-success rounded-5 d-flex justify-center aline-center gap-2"
+                            onClick={() => navigateEmpHandler(task)}
+                          >
+                            <IoMdDoneAll />
+                            <span className="d-none d-md-flex">Update Emp</span>
+                          </button>
+                        ) : (
+                          <></>
+                        )}
+                        <button
+                          className="btn btn-success rounded-5 d-flex justify-center aline-center gap-2"
+                          onClick={() =>
+                            completeTask(
+                              task._id,
+                              task.adminMail,
+                              task.Taskname
+                            )
+                          }
+                          disabled={calculateProgress(task) !== 100}
+                        >
+                          <IoMdDoneAll />
+                          <span className="d-none d-md-flex">
+                            Complete Task
+                          </span>
+                        </button>
                       </div>
                     </>
                   )}
@@ -884,7 +981,9 @@ const ManagerActiveTask = () => {
               <input
                 className="w-100 py-1 px-2 rounded-5 border"
                 type="search"
+                name=""
                 placeholder="Search..."
+                id=""
                 value={inputEmail}
                 onChange={(e) => {
                   handleInputChange(e);
@@ -892,15 +991,18 @@ const ManagerActiveTask = () => {
                 }}
               />
               <div>
-                <div className="p-2">
+                <div className=" p-2">
+                  {" "}
                   <input
                     type="checkbox"
+                    name=""
+                    id=""
                     onChange={toggleSelectAll}
                     checked={selectAll}
                   />{" "}
                   <span>Select All</span>
                 </div>
-                <table className="table">
+                <table class="table">
                   <thead>
                     <tr>
                       <th>Select</th>
@@ -910,12 +1012,15 @@ const ManagerActiveTask = () => {
                       <th>Designation</th>
                     </tr>
                   </thead>
+
                   <tbody>
                     {rowData.map((row, index) => (
                       <tr key={index}>
                         <th scope="row">
                           <input
                             type="checkbox"
+                            name=""
+                            id=""
                             onChange={() => addSelectedEmployee(row)}
                             checked={selectedEmployees.some(
                               (emp) => emp.Email === row.Email
@@ -932,13 +1037,13 @@ const ManagerActiveTask = () => {
                 </table>
               </div>
             </form>
-            <div className="d-flex flex-column col-4 gap-2">
+            <div className="d-flex flex-column col-4 gap-2 ">
               <div
                 className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
                 style={{ height: "fit-content" }}
               >
                 <div>
-                  <span className="fw-bold">Selected Employees:</span>
+                  <span className="fw-bold ">Selected Employees:</span>
                   {selectedEmployees.map((employee, index) => (
                     <div key={index} className="d-flex">
                       <span
@@ -946,7 +1051,7 @@ const ManagerActiveTask = () => {
                           boxShadow: "-3px 3px 5px rgba(204, 201, 201, 0.767)",
                           width: "fit-content",
                         }}
-                        className="selected-employee-email d-flex btn gap-2 align-center btn-light py-1 px-2 m-1"
+                        className="selected-employee-email d-flex btn gap-2 aline-center  btn-light py-1 px-2 m-1"
                         onClick={() => removeSelectedEmployee(employee.Email)}
                       >
                         {employee.FirstName} - {employee.PositionName}
@@ -958,8 +1063,9 @@ const ManagerActiveTask = () => {
                   ))}
                 </div>
               </div>
+
               <button
-                className="btn btn-primary"
+                className="btn  btn-primary "
                 onClick={() => forwardTaskToEmployees(selectedTaskId)}
                 disabled={isForwardButtonDisabled}
               >
