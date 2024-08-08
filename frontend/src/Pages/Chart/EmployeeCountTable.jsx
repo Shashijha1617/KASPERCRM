@@ -109,17 +109,27 @@ const EmployeeCountTable = (props) => {
             </span> */}
           </div>
         </div>
-        <div className="EmpcountCardBG col-4  w-100 rounded-3 d-flex justify-content-center align-items-center shadow-sm">
+        <div
+          style={{
+            background: darkMode
+              ? "var(--primaryDashMenuColor)"
+              : "var(--primaryDashColorDark)",
+            color: darkMode
+              ? "var(--primaryDashColorDark)"
+              : "var(--secondaryDashMenuColor)",
+          }}
+          className="EmpcountCardBG col-4  w-100 rounded-3 d-flex justify-content-center align-items-center shadow-sm"
+        >
           <div
             style={{
               height: "130px",
               width: "130px",
-              border: "5px solid white",
-              boxShadow: "0px 0px 5px 20px rgba(256,256,256,.5)",
+              border: "5px solid #4bd3f2b3",
+              boxShadow: "0px 0px 5px 20px #4bd1efa2",
               position: "relative",
               zIndex: 2,
             }}
-            className="rounded-circle d-flex justify-content-center align-items-center  flex-column text-white"
+            className="rounded-circle d-flex justify-content-center align-items-center  flex-column fw-bold"
           >
             {rowData.length} <span>Total Users</span>
           </div>
