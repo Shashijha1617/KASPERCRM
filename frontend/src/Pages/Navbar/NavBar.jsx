@@ -349,7 +349,7 @@ const NavBar = (props, data) => {
 
   return (
     <div
-      className="px-2 py-1"
+      className="px-2 py-3 py-md-2"
       style={{
         height: "fit-content",
         backgroundColor: darkMode
@@ -402,6 +402,7 @@ const NavBar = (props, data) => {
                   height: "fit-content",
                   width: "fit-content",
                   minWidth: "18px",
+                  minHeight: "18px",
                   position: "absolute",
                   top: "-30%",
                   right: "-35%",
@@ -414,7 +415,7 @@ const NavBar = (props, data) => {
                 <span className="m-auto">{uniqueNotification.length}</span>
               </div>
             )}
-            <FaBell className="fs-5 text-primary" />
+            <FaBell style={{ fontSize: "22px" }} className="text-primary" />
             {notification.length > 0 && (
               <div className="position-relative">
                 <div
@@ -460,8 +461,8 @@ const NavBar = (props, data) => {
                             >
                               <div
                                 style={{
-                                  height: "30px",
-                                  width: "30px",
+                                  height: "25px",
+                                  width: "25px",
                                   overflow: "hidden",
                                 }}
                               >
@@ -522,8 +523,8 @@ const NavBar = (props, data) => {
               onMouseEnter={() => setActiveProfile("name")}
               onMouseLeave={() => setActiveProfile(null)}
               style={{
-                height: "30px",
-                width: "30px",
+                height: "28px",
+                width: "28px",
                 border: "1px solid blue",
                 borderRadius: "50%",
                 position: "relative",
@@ -549,10 +550,11 @@ const NavBar = (props, data) => {
                 className="bg-white shadow pb-3 pt-1 px-3 flex-column gap-3"
                 style={{
                   position: "absolute",
-                  zIndex: "100",
+                  zIndex: "1000",
                   width: "fit-content",
                   right: "0",
                   top: "90%",
+
                   display: activeProfile === "name" ? "flex" : "none",
                 }}
               >

@@ -1,7 +1,6 @@
 import React from "react";
 import "./EmpDash.css";
 import EmpTaskChart from "./EmpChart.jsx/EmpTaskChart";
-import DepartmentChart from "../../../Pages/Chart/DepartmentChart";
 import WelcomeBoard from "../../../Pages/WelcomeBoard/WelcomeBoard";
 import MyTodaysLoginData from "../WelcomeBoard/MyTodaysLoginData/MyTodaysLoginData";
 import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
@@ -24,10 +23,7 @@ const HRDash = () => {
         </div>
       </div>
       <div className="row justif-content-between row-gap-4 mt-3 align-items-center">
-        <div className="col-12 col-md-6 col-lg-6">
-          <DepartmentChart />
-        </div>
-        <div className="col-12 col-md-6 col-lg-6">
+        <div className="col-12">
           <EmpTaskChart />
         </div>
       </div>

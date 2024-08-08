@@ -6,6 +6,7 @@ import DocumentFormEdit from "./DocumentFormEdit.jsx";
 import BASE_URL from "../../../Pages/config/config.js";
 
 const Document = (props) => {
+  console.log(props.data);
   const [table, setTable] = useState(true);
   const [editForm, setEditForm] = useState(false);
   const [editData, setEditData] = useState({});
@@ -32,6 +33,7 @@ const Document = (props) => {
       setTitle("");
 
       setNumber("");
+      setTable(true);
       setFiles([]);
     } catch (error) {
       console.error("Error uploading document:", error);
@@ -103,6 +105,7 @@ const Document = (props) => {
             onEditDocument={handleEditDocument}
             data={props.data}
             back={props.back}
+            table={table}
           />
         )
       ) : (
@@ -110,6 +113,7 @@ const Document = (props) => {
           onDocumentSubmit={handleDocumentSubmit}
           onFormClose={handleFormClose}
           onGenderChange={handleAddFormGenderChange}
+          data={props.data}
         />
       )}
     </React.Fragment>

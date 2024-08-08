@@ -11,7 +11,7 @@ const WorkExperience = (props) => {
   const [editForm, setEditForm] = useState(false);
   const [editData, setEditData] = useState({});
 
-  const handleWorkExperienceSubmit = (event) => {
+  const handleWorkExperienceSubmit = (event, id) => {
     event.preventDefault();
     console.log("id", event.target[0].value, event.target[1].value);
     setTable(true);
@@ -24,7 +24,7 @@ const WorkExperience = (props) => {
     };
 
     axios
-      .post(`${BASE_URL}/api/work-experience/` + props.data["_id"], body, {
+      .post(`${BASE_URL}/api/work-experience/` + id, body, {
         headers: {
           authorization: localStorage.getItem("token") || "",
         },
@@ -110,6 +110,7 @@ const WorkExperience = (props) => {
           onWorkExperienceSubmit={handleWorkExperienceSubmit}
           onFormClose={handleFormClose}
           onGenderChange={handleAddFormGenderChange}
+          data={props.data}
         />
       )}
     </React.Fragment>

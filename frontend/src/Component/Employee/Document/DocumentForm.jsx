@@ -22,7 +22,13 @@ const DocumentUploadForm = (props) => {
   const [number, setNumber] = useState("");
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
-  const email = localStorage.getItem("Email");
+  let email;
+  if(props.data){
+    email=props.data["Email"]
+  }else{
+    email = localStorage.getItem("Email");
+  }
+  
   const { darkMode } = useTheme();
 
   const handleDocumentSubmit = async (e) => {
@@ -36,7 +42,14 @@ const DocumentUploadForm = (props) => {
     for (let i = 0; i < files.length; i++) {
       formData.append("files", files[i]);
     }
+    
+if(files.length===0){
+  setLoading(false);
+  toast.error("please Select documents");
 
+
+  return;
+} ;
     try {
       const response = await axios.post(`${BASE_URL}/upload`, formData, {
         headers: {
@@ -49,6 +62,7 @@ const DocumentUploadForm = (props) => {
       setNumber("");
       setFiles([]);
       toast.success("Document uploaded successfully");
+      props.onFormClose()
     } catch (error) {
       console.error("Error uploading documents:", error);
     } finally {

@@ -33,6 +33,7 @@ import SelfAttendance from "../HrManager/attendance/SelfAttendance.jsx";
 import LeaveBalance from "../HrManager/LeaveStatus/LeaveBalance.jsx";
 import UpdateTask from "../../Pages/UpdateTask.jsx";
 import UpdateTaskEmpManager from "../../Pages/UpdateTaskEmpManager.jsx";
+import NoticeManagement from "../Admin/Notification/NoticeManagement.jsx";
 // import Createtask from "../Admin/TaskManagement/AdminAsignTask.jsx";
 
 const MainContent = () => {
@@ -95,6 +96,11 @@ const MainContent = () => {
           path="/manager/viewAttenDance"
           exact
           component={ViewAttendance}
+        />
+        <Route
+          path="/manager/NoticeManagement"
+          exact
+          component={NoticeManagement}
         />
         <Route path="/manager/holiday" exact component={LeaveCalendar} />
         <Route

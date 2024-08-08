@@ -5,7 +5,6 @@ import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Link } from "react-router-dom";
 
-
 import "./profilePage.css";
 
 import FloralAbstract from "./FloralAbstract.jpg";
@@ -19,6 +18,7 @@ import BASE_URL from "../../../Pages/config/config.js";
 
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min.js";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext.js";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader.jsx";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -98,13 +98,11 @@ const PersonalInfoTable = (props) => {
 
   useEffect(() => {
     loadPersonalInfoData();
-  }, [props.data])
+  }, [props.data]);
 
   const onToggleSection = (section) => {
     setActiveSection(section);
   };
-
-
 
   // task data
   const [tasks, setTasks] = useState([]);
@@ -131,7 +129,6 @@ const PersonalInfoTable = (props) => {
 
     loadPersonalInfoData();
   }, []);
-
 
   const fetchData = async () => {
     try {
@@ -179,8 +176,6 @@ const PersonalInfoTable = (props) => {
     )
   ).length;
 
-
-
   const rowBodyStyle = {
     background: darkMode
       ? "var(--secondaryDashMenuColor)"
@@ -198,7 +193,11 @@ const PersonalInfoTable = (props) => {
       <div id="clear-both" />
       {!loading ? (
         <div className="d-flex flex-column">
-          <Link className="m-2 mt-3" style={{width:'fit-content' , padding:'0'}} to="/hr/employee">
+          <Link
+            className="m-2 mt-3"
+            style={{ width: "fit-content", padding: "0" }}
+            to="/hr/employee"
+          >
             <button
               className="btn  m-0 d-flex gap-3 "
               style={{
@@ -214,14 +213,14 @@ const PersonalInfoTable = (props) => {
           <div style={{ position: "relative" }} className="row">
             <div
               style={{
-                minHeight: "85vh",
-                maxHeight: "85vh",
+                minHeight: "80vh",
+                maxHeight: "80vh",
               }}
               className="col-12 row mx-auto justify-content-center gap-3 w-100"
             >
               <div
                 style={{
-                 height:'35rem',
+                  height: "35rem",
                   background: `url(${FloralAbstract})`,
                   backgroundPosition: "center",
                   backgroundSize: "cover",
@@ -388,7 +387,7 @@ const PersonalInfoTable = (props) => {
                         style={{
                           borderBottom:
                             activeSection === "documentDetails"
-                              ? "3px solid yellow"
+                              ? "4px solid blue"
                               : "none",
                           borderRadius: "0",
                           position: "absolute",
@@ -423,15 +422,15 @@ const PersonalInfoTable = (props) => {
                       maxWidth: "100%",
                       overflow: "auto",
                     }}
-                    className="shift-pages w-100 shadow-sm d-flex justify-content-start gap-2 px-0 mb-3"
+                    className="shift-pages border w-100 shadow-sm d-flex justify-content-start gap-2 px-0 mb-3"
                   >
                     <span
                       onClick={() => onToggleSection("personalInfo")}
                       style={{
                         whiteSpace: "pre",
-                        borderTop:
+                        borderBottom:
                           activeSection === "personalInfo"
-                            ? "3px solid blue"
+                            ? "4px solid blue"
                             : "none",
                         borderRadius: "0",
                         color: darkMode
@@ -446,9 +445,9 @@ const PersonalInfoTable = (props) => {
                       onClick={() => onToggleSection("companyInfo")}
                       style={{
                         whiteSpace: "pre",
-                        borderTop:
+                        borderBottom:
                           activeSection === "companyInfo"
-                            ? "3px solid blue"
+                            ? "4px solid blue"
                             : "none",
                         borderRadius: "0",
                         color: darkMode
@@ -463,9 +462,9 @@ const PersonalInfoTable = (props) => {
                       onClick={() => onToggleSection("Educationalinfo")}
                       style={{
                         whiteSpace: "pre",
-                        borderTop:
+                        borderBottom:
                           activeSection === "Educationalinfo"
-                            ? "3px solid blue"
+                            ? "4px solid blue"
                             : "none",
                         borderRadius: "0",
                         color: darkMode
@@ -481,9 +480,9 @@ const PersonalInfoTable = (props) => {
                       onClick={() => onToggleSection("Document")}
                       style={{
                         whiteSpace: "pre",
-                        borderTop:
+                        borderBottom:
                           activeSection === "Document"
-                            ? "3px solid blue"
+                            ? "4px solid blue"
                             : "none",
                         borderRadius: "0",
                         color: darkMode
@@ -499,9 +498,9 @@ const PersonalInfoTable = (props) => {
                       onClick={() => onToggleSection("WorkExperience")}
                       style={{
                         whiteSpace: "pre",
-                        borderTop:
+                        borderBottom:
                           activeSection === "WorkExperience"
-                            ? "3px solid blue"
+                            ? "4px solid blue"
                             : "none",
                         borderRadius: "0",
                         color: darkMode
@@ -516,9 +515,9 @@ const PersonalInfoTable = (props) => {
                       onClick={() => onToggleSection("otherInfo")}
                       style={{
                         whiteSpace: "pre",
-                        borderTop:
+                        borderBottom:
                           activeSection === "otherInfo"
-                            ? "3px solid blue"
+                            ? "4px solid blue"
                             : "none",
                         borderRadius: "0",
                         color: darkMode
@@ -545,6 +544,10 @@ const PersonalInfoTable = (props) => {
                         {rowData.map((items, index) => {
                           return (
                             <div className="row w-100 container-fluid mx-auto justify-content-start py-3 row-gap-2">
+                              <TittleHeader
+                                title={"Personal Details"}
+                                message={"You can view personal details here."}
+                              />
                               <div className="col-12 col-sm-6 d-flex flex-column">
                                 <label htmlFor="" className=" ">
                                   First Name
@@ -668,13 +671,17 @@ const PersonalInfoTable = (props) => {
                       <div
                         style={{
                           overflow: "hidden auto",
-                          height: "29rem",
+                          height: "100%",
                           scrollbarWidth: "thin",
                         }}
                       >
                         {rowData.map((items, index) => {
                           return (
                             <div className="row container-fluid mx-auto justify-content-start py-3 row-gap-3">
+                              <TittleHeader
+                                title={"Company Details"}
+                                message={"You can view company details here."}
+                              />
                               <div className="col-12 col-sm-6 d-flex flex-column">
                                 <label htmlFor="" className="  ">
                                   Employee ID
@@ -773,23 +780,23 @@ const PersonalInfoTable = (props) => {
                   )}
                   {activeSection === "Educationalinfo" && (
                     <div className="w-100 container ">
-                      <Education />
+                      <Education data={props.data} />
                     </div>
                   )}
 
                   {activeSection === "Document" && (
                     <div className="w-100 container ">
-                      <Document />
+                      <Document data={props.data} />
                     </div>
                   )}
                   {activeSection === "WorkExperience" && (
                     <div className="w-100 container ">
-                      <WorkExperience />
+                      <WorkExperience data={props.data} />
                     </div>
                   )}
                   {activeSection === "otherInfo" && (
                     <div className="w-100 container ">
-                      <FamilyInfo />
+                      <FamilyInfo data={props.data} />
                     </div>
                   )}
                 </div>

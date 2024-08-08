@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Form, InputGroup, ListGroup } from "react-bootstrap";
-import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import { SearchRouteData } from "./SearchRouteData";
 import BASE_URL from "../../Pages/config/config";
 import axios from "axios";
+import { IoSearchOutline } from "react-icons/io5";
 
 const SearchComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -93,13 +93,16 @@ const SearchComponent = () => {
         borderRadius: expanded ? "0" : "50%",
         overflow: "hidden",
         transition: "1s ease",
-        height: "30px",
+        height: "25px",
         border: expanded ? "1px solid black" : "none",
       }}
-      className="searchComponent bg-white"
+      className="searchComponent bg-white rounded-5"
       ref={inputRef}
     >
-      <InputGroup style={{ position: "relative", height: "100%" }}>
+      <InputGroup
+        className="rounded-2"
+        style={{ position: "relative", height: "100%" }}
+      >
         <Form.Control
           className="rounded-0 border"
           placeholder="Search any page"
@@ -108,21 +111,21 @@ const SearchComponent = () => {
           style={{
             display: expanded ? "block" : "none",
             transition: "1s ease",
-            height: "30px",
+            height: "25px",
           }}
         />
         <span
           style={{
             position: "absolute",
             top: "50%",
-            width: "30px",
-            height: "30px",
+            width: "25px",
+            height: "25px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             borderRadius: "50%",
             right: "0",
-            transform: "translate(-0px, -50%)",
+            transform: "translate(-2px, -50%)",
             zIndex: "2001",
             color: darkMode
               ? "var(--primaryDashMenuColor)"
@@ -134,7 +137,7 @@ const SearchComponent = () => {
           }}
           onClick={handleIconClick}
         >
-          <FaSearch />
+          <IoSearchOutline />
         </span>
       </InputGroup>
 

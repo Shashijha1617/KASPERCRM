@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import BASE_URL from "../../../Pages/config/config";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import { BsStopwatch } from "react-icons/bs";
 
 const AttendanceDetails = ({ data }) => {
   const [employees, setEmployees] = useState([]);
@@ -15,6 +16,7 @@ const AttendanceDetails = ({ data }) => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [viewType, setViewType] = useState("monthly");
+  const [selectedWeek, setSelectedWeek] = useState(1);
 
   const employeeId = localStorage.getItem("_id");
   const { darkMode } = useTheme();
@@ -22,12 +24,12 @@ const AttendanceDetails = ({ data }) => {
   useEffect(() => {
     fetchEmployees();
     handleFetchAttendance();
-  }, [selectedYear, selectedMonth]);
+  }, [selectedYear, selectedMonth, selectedWeek, viewType]);
 
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/api/employee/ ` + localStorage.getItem("_id"),
+        `${BASE_URL}/api/employee/${data["_id"]}`,
         {
           headers: { authorization: localStorage.getItem("token") || "" },
         }
@@ -73,17 +75,54 @@ const AttendanceDetails = ({ data }) => {
       (year) => year.year <= new Date().getFullYear()
     ) || [];
 
-  const millisecondsToTime = (milliseconds) => {
-    const hours = Math.floor(milliseconds / 3600000);
-    const minutes = Math.floor((milliseconds % 3600000) / 60000);
-    const seconds = Math.floor((milliseconds % 60000) / 1000);
-    const millis = milliseconds % 1000;
+  const getWeekRanges = (year, month) => {
+    const date = new Date(year, month - 1, 1);
+    const weeks = [];
+    let start = 1;
 
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-      2,
-      "0"
-    )}:${String(seconds).padStart(2, "0")}:${String(millis).padStart(3, "0")}`;
+    while (date.getMonth() === month - 1) {
+      const end = new Date(year, month - 1, start + 6);
+      if (end.getMonth() === month - 1) {
+        weeks.push({ start, end: end.getDate() });
+      } else {
+        weeks.push({ start, end: new Date(year, month, 0).getDate() });
+      }
+      start += 7;
+      date.setDate(start);
+    }
+
+    return weeks;
   };
+
+  // const millisecondsToTime = (milliseconds) => {
+  //   const hours = Math.floor(milliseconds / 3600);
+  //   const minutes = Math.floor((milliseconds % 3600) / 60);
+  //   const seconds = Math.floor((milliseconds % 60) / 1000);
+
+  //   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+  //     2,
+  //     "0"
+  //   )}:${String(seconds).padStart(2, "0")}`;
+  // };
+
+  function minutesToTime(minutes) {
+    // Calculate total seconds
+    let totalSeconds = minutes * 60;
+
+    // Calculate hours, minutes, and seconds
+    let hours = Math.floor(totalSeconds / 3600);
+    let remainingMinutes = Math.floor((totalSeconds % 3600) / 60);
+    let seconds = totalSeconds % 60;
+
+    // Pad the numbers with leading zeros if needed
+    hours = hours < 10 ? "0" + hours : hours;
+    remainingMinutes =
+      remainingMinutes < 10 ? "0" + remainingMinutes : remainingMinutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    // Return the formatted time
+    return hours + " : " + remainingMinutes + " : " + seconds;
+  }
 
   const getAttendanceMark = (date) => {
     const [loginHour, loginMinute] = date?.loginTime[0]
@@ -102,7 +141,7 @@ const AttendanceDetails = ({ data }) => {
       (yearData) => yearData.year === selectedYear
     );
     const monthData =
-      type === "monthly"
+      type === "monthly" || type === "weekly"
         ? yearData?.months.find((month) => month.month === selectedMonth)
         : null;
 
@@ -116,6 +155,15 @@ const AttendanceDetails = ({ data }) => {
     const dates =
       type === "monthly"
         ? monthData?.dates
+        : type === "weekly"
+        ? monthData?.dates.filter(
+            (date) =>
+              date.date >=
+                getWeekRanges(selectedYear, selectedMonth)[selectedWeek - 1]
+                  .start &&
+              date.date <=
+                getWeekRanges(selectedYear, selectedMonth)[selectedWeek - 1].end
+          )
         : yearData?.months.flatMap((month) => month.dates);
     if (dates) {
       dates.forEach((date) => {
@@ -131,8 +179,8 @@ const AttendanceDetails = ({ data }) => {
   };
 
   const totals =
-    viewType === "monthly"
-      ? calculateTotals(attendanceData, "monthly")
+    viewType === "monthly" || viewType === "weekly"
+      ? calculateTotals(attendanceData, viewType)
       : calculateTotals(attendanceData, "yearly");
 
   const containerStyle = {
@@ -181,6 +229,25 @@ const AttendanceDetails = ({ data }) => {
                 </select>
               </div>
             )}
+            {viewType === "weekly" && (
+              <div>
+                <label htmlFor="week">Select a week:</label>
+                <select
+                  className="form-select shadow"
+                  id="week"
+                  value={selectedWeek}
+                  onChange={(e) => setSelectedWeek(Number(e.target.value))}
+                >
+                  {getWeekRanges(selectedYear, selectedMonth).map(
+                    (week, index) => (
+                      <option key={index} value={index + 1}>
+                        {`Week ${index + 1} (${week.start}-${week.end})`}
+                      </option>
+                    )
+                  )}
+                </select>
+              </div>
+            )}
           </div>
           <div className="container-fluid d-flex align-items-center justify-content-between">
             <div className="mb-3">
@@ -194,8 +261,9 @@ const AttendanceDetails = ({ data }) => {
                 value={viewType}
                 onChange={(e) => setViewType(e.target.value)}
               >
-                <option value="monthly">View Monthly Logs</option>
                 <option value="yearly">View Yearly Logs</option>
+                <option value="monthly">View Monthly Logs</option>
+                <option value="weekly">View Weekly Logs</option>
               </select>
             </div>
             <h6
@@ -206,7 +274,11 @@ const AttendanceDetails = ({ data }) => {
                 fontWeight: "normal",
               }}
             >
-              {viewType === "monthly" ? "Monthly Logs" : "Yearly Logs"}
+              {viewType === "monthly"
+                ? "Monthly Logs"
+                : viewType === "weekly"
+                ? "Weekly Logs"
+                : "Yearly Logs"}
             </h6>
           </div>
           {totals && (
@@ -226,27 +298,63 @@ const AttendanceDetails = ({ data }) => {
                       className="d-flex align-items-center py-3 rounded-2"
                     >
                       <div className="col-8">
-                        <p className="m-0">{`Total ${key
+                        <p className="m-0">{`${key
                           .replace(/([A-Z])/g, " $1")
                           .replace(/^./, (str) => str.toUpperCase())}`}</p>
                         <h6 className="m-0 fw-normal">
                           {key === "totalWorkingHours"
-                            ? millisecondsToTime(value) + " Hrs"
+                            ? minutesToTime(value) + " Hrs"
                             : `${value} Days`}
                         </h6>
                       </div>
                       <div className="col-4 d-flex justify-content-center align-items-center">
                         {key === "totalWorkingHours" && (
-                          <FaRegClock className="fs-3" />
+                          <span
+                            className={`${
+                              darkMode
+                                ? "d-flex align-items-center  justify-content-center border-2  border border-black rounded-5"
+                                : "d-flex align-items-center  justify-content-center border-2  border border-white text-white rounded-5"
+                            }`}
+                            style={{ height: "2rem", width: "2rem" }}
+                          >
+                            W
+                          </span>
                         )}
                         {key === "totalPresent" && (
-                          <FaCheckCircle className="fs-3" />
+                          <span
+                            className={`${
+                              darkMode
+                                ? "d-flex align-items-center  justify-content-center border-2  border border-black rounded-5"
+                                : "d-flex align-items-center  justify-content-center border-2  border border-white text-white rounded-5"
+                            }`}
+                            style={{ height: "2rem", width: "2rem" }}
+                          >
+                            P
+                          </span>
                         )}
                         {key === "totalAbsent" && (
-                          <FaTimesCircle className="fs-3" />
+                          <span
+                            className={`${
+                              darkMode
+                                ? "d-flex align-items-center  justify-content-center border-2  border border-black rounded-5"
+                                : "d-flex align-items-center  justify-content-center border-2  border border-white text-white rounded-5"
+                            }`}
+                            style={{ height: "2rem", width: "2rem" }}
+                          >
+                            A
+                          </span>
                         )}
                         {key === "totalHalfDays" && (
-                          <FaHourglassHalf className="fs-3" />
+                          <span
+                            className={`${
+                              darkMode
+                                ? "d-flex align-items-center  justify-content-center border-2  border border-black rounded-5"
+                                : "d-flex align-items-center  justify-content-center border-2  border border-white text-white rounded-5"
+                            }`}
+                            style={{ height: "2rem", width: "2rem" }}
+                          >
+                            H
+                          </span>
                         )}
                       </div>
                     </div>

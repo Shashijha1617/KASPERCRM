@@ -10,7 +10,7 @@ const FamilyInfo = (props) => {
   const [editForm, setEditForm] = useState(false);
   const [editData, setEditData] = useState({});
 
-  const handleFamilyInfoSubmit = (event) => {
+  const handleFamilyInfoSubmit = (event, id) => {
     event.preventDefault();
     console.log("id", event.target[0].value, event.target[1].value);
     setTable(true);
@@ -117,6 +117,7 @@ const FamilyInfo = (props) => {
           onFamilyInfoSubmit={handleFamilyInfoSubmit}
           onFormClose={handleFormClose}
           onGenderChange={handleAddFormGenderChange}
+          data={props.data}
         />
       )}
     </>

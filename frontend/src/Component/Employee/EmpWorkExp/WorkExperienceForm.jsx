@@ -72,11 +72,17 @@ import axios from "axios";
 import "./WorkExperienceForm.css";
 
 const WorkExperienceForm = (props) => {
+  let id;
+  if (props.data) {
+    id = props.data["_id"];
+  } else {
+    id = localStorage.getItem("_id");
+  }
   return (
     <div className="container-fluid">
       <h5 className="my-3">+ Add Experience</h5>
       <div>
-        <form onSubmit={props.onWorkExperienceSubmit}>
+        <form onSubmit={(e) => props.onWorkExperienceSubmit(e, id)}>
           <div>
             <label>Company Name</label>
             <div className="form-input">

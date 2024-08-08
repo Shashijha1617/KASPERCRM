@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MdMenuOpen } from "react-icons/md";
+import { MdFamilyRestroom, MdMenuOpen, MdWorkOutline } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { BsFolderCheck } from "react-icons/bs";
@@ -9,6 +9,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { IoCalendarOutline } from "react-icons/io5";
 import { GoTasklist } from "react-icons/go";
+import { PiBooks } from "react-icons/pi";
 
 const Sidebar = (props) => {
   const [extended, setExtended] = useState(false);
@@ -38,22 +39,10 @@ const Sidebar = (props) => {
       icon: <IoMdCheckmarkCircleOutline className="fs-4" />,
       name: "Attendance",
       navLinks: [
-        // {
-        //   to: "/employee/" + props.data["_id"] + "/attendance",
-        //   label: "Create Attendance",
-        // },
         {
           to: "/employee/MyAttendance",
           label: "View Attendance",
         },
-        // {
-        //   to: "/employee/" + props.data["_id"] + "/attendanceList",
-        //   label: "View Attendance",
-        // },
-        // {
-        //   to: "/employee/" + props.data["_id"] + "/selfAtteend",
-        //   label: "self Attendance",
-        // },
       ],
     },
     {
@@ -70,7 +59,7 @@ const Sidebar = (props) => {
       icon: <GoTasklist />,
       name: "Task",
       navLinks: [
-        { to: "/employee/newTask", label: " New Task" },
+        { to: "/employee/newTask", label: "New Task" },
         { to: "/employee/activeTask", label: "Active Task" },
         { to: "/employee/taskcomplete", label: "Completed Task" },
         { to: "/employee/taskreject", label: "Rejected Task" },
@@ -103,12 +92,16 @@ const Sidebar = (props) => {
       className="d-none d-sm-flex flex-column gap-2 p-2"
     >
       <h3
-        style={{ borderBottom: "3px solid green" }}
+        style={{ borderBottom: "3px solid #DE4E26" }}
         className="text-success justify-content-between py-2 d-flex gap-2"
       >
         <button
-          style={{ display: !extended ? "none" : "block", cursor: "none" }}
-          className=" btn btn-success rounded-5 py-0"
+          style={{
+            display: !extended ? "none" : "block",
+            cursor: "none",
+            background: "#DE4E26",
+          }}
+          className=" btn text-white rounded-0 py-0"
         >
           Emp
         </button>

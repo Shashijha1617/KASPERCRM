@@ -12,7 +12,7 @@ import EmployeeRejectTask from "../EmployeeTaskManagement/EmployeeRejectTask.jsx
 import Attendance from "../attendance/Attendance.jsx";
 import AttendanceList from "../attendance/AttendanceList.jsx";
 import EmpDash from "../Dashboard/EmpDash.jsx";
-import LeaveApplicationEmpTable from "../EmpLeave/LeaveApplicationEmp.jsx";
+import LeaveApplicationEmpTable from "../../../Pages/ApplyLeave/LeaveApplication.jsx";
 import DepartmentChart from "../Dashboard/EmpChart.jsx/DepartmentChart.jsx";
 import UpcomingBirthdays from "../Dashboard/CountData/UpcomingBirthdays.jsx";
 import Notification from "../Notification/Notification.jsx";

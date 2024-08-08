@@ -33,7 +33,6 @@ const override = css`
 
 const AdminEmployeeTable = (props) => {
   const location = useLocation();
-
   const route = location.pathname.split("/")[1];
   const [employeeData, setEmployeeData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -65,6 +64,7 @@ const AdminEmployeeTable = (props) => {
 
           response.data.forEach((data) => {
             if (route === "hr" && data["Account"] === 1) return;
+
             let temp = {
               data,
               Email: data["Email"],
@@ -525,30 +525,37 @@ const AdminEmployeeTable = (props) => {
                       }}
                     >
                       <div
+                        className="mx-auto d-flex align-items-center justify-content-center"
                         style={{
                           height: "35px",
                           width: "35px",
-                          overflow: "hidden",
                           borderRadius: "50%",
+                          backgroundColor: "#ccc",
+                          color: "white",
+                          fontWeight: "bold",
+                          overflow: "hidden",
+                          objectFit: "cover",
                         }}
-                        className="profile-image bg-white  mx-auto border-0"
                       >
-                        <img
-                          style={{
-                            height: "100%",
-                            width: "100%",
-                            overflow: "hidden",
-                            borderRadius: "50%",
-                            objectFit: "cover",
-                          }}
-                          className=" border-0"
-                          src={
-                            items?.data?.profile?.image_url
-                              ? items?.data?.profile?.image_url
-                              : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
-                          }
-                          alt=""
-                        />
+                        {items?.data?.profile?.image_url ? (
+                          <img
+                            style={{
+                              height: "100%",
+                              width: "100%",
+                              overflow: "hidden",
+                              borderRadius: "50%",
+                              objectFit: "cover",
+                            }}
+                            className="border-0"
+                            src={items?.data?.profile?.image_url}
+                            alt=""
+                          />
+                        ) : (
+                          <span>
+                            {items?.FirstName?.charAt(0).toUpperCase() ?? ""}
+                            {items?.LastName?.charAt(0).toUpperCase() ?? ""}
+                          </span>
+                        )}
                       </div>
                     </td>
                     <td

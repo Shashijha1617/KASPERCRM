@@ -92,7 +92,7 @@ const SalaryForm = (props) => {
       <Form
         id="form"
         onSubmit={props.onSalarySubmit}
-        style={{ color: "var(--primaryDashMenuColor)", width: "fit-content" }}
+        style={{ width: "fit-content" }}
         className=" w-100 row  row-gap-3 py-4 mb-5"
       >
         <div className="col-12 col-md-6 col-lg-4">

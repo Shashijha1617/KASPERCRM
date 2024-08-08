@@ -165,6 +165,9 @@ const Notification = () => {
       : "var(--primaryDashMenuColor)",
     border: "none",
   };
+
+  console.log(notification);
+
   return (
     <div
       style={{
@@ -213,20 +216,21 @@ const Notification = () => {
                           )}
                         />
                       </th>
-                      <td style={rowBodyStyle}>{val.taskName}</td>
-                      <td style={rowBodyStyle}>{val.senderMail}</td>
+                      <td style={rowBodyStyle}>{val.message}</td>
+                      <td style={rowBodyStyle}>{val.messageBy}</td>
                       {val.status === "unseen" ? (
                         <td style={rowBodyStyle}>Unread</td>
                       ) : (
-                        <td style={rowBodyStyle}>read</td>
+                        <td style={rowBodyStyle}>Read</td>
                       )}
                       <td style={rowBodyStyle}>
                         <button
                           onClick={() => notificationDeleteHandler(val.taskId)}
-                          className="btn btn-danger"
-                        ></button>
-                        <ImBin />{" "}
-                        <span className="d-none d-md-flex">Delete</span>
+                          className="btn btn-danger d-flex align-items-center gap-2 justify-content-center"
+                        >
+                          <ImBin />{" "}
+                          <span className="d-none d-md-flex">Delete</span>
+                        </button>
                       </td>
                     </tr>
                   ))}

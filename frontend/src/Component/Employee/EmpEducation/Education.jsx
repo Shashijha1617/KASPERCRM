@@ -13,7 +13,7 @@ const Education = (props) => {
   const [editData, setEditData] = useState({});
   const { darkMode } = useTheme();
 
-  const handleEducationSubmit = (event) => {
+  const handleEducationSubmit = (event, id) => {
     event.preventDefault();
     setTable(true);
 
@@ -25,7 +25,7 @@ const Education = (props) => {
     };
 
     axios
-      .post(`${BASE_URL}/api/education/` + localStorage.getItem("_id"), body, {
+      .post(`${BASE_URL}/api/education/` + id, body, {
         headers: {
           authorization: localStorage.getItem("token") || "",
         },
@@ -104,6 +104,7 @@ const Education = (props) => {
         <EducationForm
           onEducationSubmit={handleEducationSubmit}
           onFormClose={handleFormClose}
+          data={props.data}
         />
       )}
     </>

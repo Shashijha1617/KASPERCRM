@@ -154,32 +154,36 @@ const LeaveApplicationEmpTable = (props) => {
         <div id="clear-both" />
         {!loading ? (
           <div style={{ maxHeight: "76vh" }} className="border">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th style={rowHeadStyle}>Leave Type</th>
-                  <th style={rowHeadStyle}>Start Date</th>
-                  <th style={rowHeadStyle}>End Date</th>
-                  <th style={rowHeadStyle}>Remarks</th>
-                  <th style={rowHeadStyle}>Status</th>
-                  <th style={rowHeadStyle}>Updated By</th>
-                  <th style={rowHeadStyle}>Reason of Rejection</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rowData.map((data, index) => (
-                  <tr key={index}>
-                    <td style={rowBodyStyle}>{data.Leavetype}</td>
-                    <td style={rowBodyStyle}>{data.FromDate}</td>
-                    <td style={rowBodyStyle}>{data.ToDate}</td>
-                    <td style={rowBodyStyle}>{data.Reasonforleave}</td>
-                    <td style={rowBodyStyle}>{status(data.Status)}</td>
-                    <td style={rowBodyStyle}>{data.updatedBy}</td>
-                    <td style={rowBodyStyle}>{data.reasonOfRejection}</td>
+            {rowData > 0 ? (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th style={rowHeadStyle}>Leave Type</th>
+                    <th style={rowHeadStyle}>Start Date</th>
+                    <th style={rowHeadStyle}>End Date</th>
+                    <th style={rowHeadStyle}>Remarks</th>
+                    <th style={rowHeadStyle}>Status</th>
+                    <th style={rowHeadStyle}>Updated By</th>
+                    <th style={rowHeadStyle}>Reason of Rejection</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {rowData.map((data, index) => (
+                    <tr key={index}>
+                      <td style={rowBodyStyle}>{data.Leavetype}</td>
+                      <td style={rowBodyStyle}>{data.FromDate}</td>
+                      <td style={rowBodyStyle}>{data.ToDate}</td>
+                      <td style={rowBodyStyle}>{data.Reasonforleave}</td>
+                      <td style={rowBodyStyle}>{status(data.Status)}</td>
+                      <td style={rowBodyStyle}>{data.updatedBy}</td>
+                      <td style={rowBodyStyle}>{data.reasonOfRejection}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <>123</>
+            )}
           </div>
         ) : (
           <div id="loading-bar">

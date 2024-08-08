@@ -2,18 +2,23 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import BASE_URL from "../../../Pages/config/config";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
+import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
+import { getFormattedDate } from "../../../Utils/GetDayFormatted";
 
 const EmployeeCompletedTask = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { darkMode } = useTheme()
+  const { darkMode } = useTheme();
+  const [timeinfo, setTimeinfo] = useState(false);
+  const [expandedTaskId, setExpandedTaskId] = useState(null);
 
   const email = localStorage.getItem("Email");
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/tasks`, {
-        params: { status: "Completed" } // Filter by status "Completed"
+        params: { status: "Completed" }, // Filter by status "Completed"
       });
 
       setTasks(response.data);
@@ -35,9 +40,25 @@ const EmployeeCompletedTask = () => {
       task.employees.some((emp) => emp.emptaskStatus === "Completed")
   ).length;
 
+  const toggleTaskDetails = (taskId) => {
+    setExpandedTaskId((prevId) => (prevId === taskId ? null : taskId));
+  };
+
   return (
-    <div className="p-4">
-      <h5 style={{ color: darkMode ? "var(--primaryDashColorDark)" : "var(--primaryDashMenuColor)" }} className="fw-bolder text-uppercase mt-2 mb-4 ">✅ Completed Tasks ({completedTasksCount})</h5>
+    <div className="container-fluid py-2">
+      <TittleHeader
+        title={"Completed Task"}
+        numbers={
+          tasks.filter((task) =>
+            task.employees.some(
+              (taskemp) =>
+                taskemp.empemail === email &&
+                taskemp.emptaskStatus === "Completed"
+            )
+          ).length
+        }
+        message={"You can view all your Completed task here."}
+      />
       {loading && (
         <div
           style={{ width: "100%", height: "100%" }}
@@ -52,16 +73,7 @@ const EmployeeCompletedTask = () => {
           <span className="text-primary fw-bold">Loading...</span>
         </div>
       )}
-      <div
-        style={{
-          overflowY: "auto",
-          maxHeight: "80vh",
-          scrollbarWidth: "thin",
-          scrollbarGutter: "stable",
-          scrollMargin: "1rem"
-        }}
-        className="d-flex flex-column gap-3"
-      >
+      <div className="row mx-auto">
         {tasks
           .filter((task) =>
             task.employees.some(
@@ -71,112 +83,256 @@ const EmployeeCompletedTask = () => {
             )
           )
           .map((task, index) => (
-            <details
+            <div
+              key={task._id}
               style={{
-                background: darkMode ? "var( --primaryDashMenuColor)" : 'var(--primaryDashColorDark)',
+                color: darkMode
+                  ? "var(--primaryDashColorDark)"
+                  : "var(--secondaryDashMenuColor)",
               }}
-              className="p-1 position-relative fs-4 rounded mx-1 my-3"
-              key={task.id}
+              className="col-12 col-md-6 col-lg-4 p-2"
             >
-              <summary
-                style={{
-                  height: "fit-content",
-                  background:
-                    "linear-gradient(165deg,#11009E, #700B97, 90%, #C84B31)"
-                }}
-                className="d-flex justify-content-between aline-center form-control text-white"
-              >
-                <div className="fw-bold fs-5 d-flex justify-content-center flex-column">
-                  # Task {index + 1} : {task.Taskname}
-                </div>
-                <div
-                  style={{ position: "absolute", top: "-10px", left: "20px" }}
-                  className="fw-bold bg-white rounded-5 px-3 text-success fs-6 d-flex justify-content-center aline-center flex-column"
-                >
-                  {task.department}
-                </div>
-                <div className="">
-                  <p className="btn btn-success m-auto fw-bold">Completed</p>
-                </div>
-              </summary>
               <div
-                style={{ position: "relative" }}
-                className="row p-1 my-2 mx-0 bg-light text-dark rounded"
+                style={{
+                  border: !darkMode
+                    ? "1px solid var(--primaryDashMenuColor)"
+                    : "1px solid var(--secondaryDashColorDark)",
+                }}
+                className="task-hover-effect p-2"
               >
-                <div
-                  style={{
-                    width: "99.4%",
-                    height: "96.4%",
-                    zIndex: "5",
-                    backgroundColor: "rgba(0, 128, 0, 0.384)",
-                    textShadow: "-5px 5px 5px rgba(128, 128, 128, 0.422)"
-                  }}
-                  className="watermark form-control   position-absolute d-flex justify-content-center aline-center"
-                >
-                  <h1 className="text-uppercase text-light fw-bolder">
-                    C O M P L E T E D
-                  </h1>
+                <div className="d-flex align-items-center justify-content-between">
+                  <h6>{task.Taskname}</h6>
+                  <button
+                    style={{ cursor: "auto" }}
+                    className="btn btn-success"
+                  >
+                    {task.status}
+                  </button>
                 </div>
-                <div style={{ height: "fit-content" }} className="form-control">
-                  <p
-                    style={{ height: "fit-content" }}
-                    className="text-start fs-6 form-control"
-                  >
-                    <h6 className="fw-bold">Task Discription</h6>{" "}
-                    {task.description}
-                  </p>
-                  <div
-                    style={{ height: "fit-content" }}
-                    className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
-                  >
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      Task Durations <br /> <span>{task.duration} days</span>{" "}
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      Created By <br /> <span> {task.managerEmail}</span>
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      Start Date <br />{" "}
-                      <span>
-                        {new Date(task.startDate).toLocaleDateString()}
-                      </span>
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      End Date <br />{" "}
-                      <span>{new Date(task.endDate).toLocaleDateString()}</span>
-                    </p>
-                    <p
-                      style={{ fontSize: "1rem" }}
-                      className="col-6 col-sm-6 col-md-2"
-                    >
-                      <span>
-                        Task Status <br /> {task.status}
-                      </span>
-                    </p>
+                <hr />
+                <div className="d-flex align-items-center justify-content-between gap-2">
+                  <div className="d-flex align-items-center gap-2">
+                    <img
+                      style={{
+                        height: "30px",
+                        width: "30px",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                      }}
+                      src="https://www.portalcidade.news/wp-content/uploads/2021/11/email-logo.jpg"
+                      alt=""
+                    />
+                    <span>{task.adminMail}</span>
                   </div>
-                  <div
-                    style={{ height: "fit-content" }}
-                    className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
+                  <span
+                    style={{
+                      border: darkMode
+                        ? "1px solid var(--primaryDashColorDark)"
+                        : "1px solid var(--primaryDashMenuColor)",
+                    }}
+                    className="px-2 py-1 text-center"
                   >
-                    <p>
-                      <span className="fw-bold">Remarks : </span> {task.comment}
-                    </p>
+                    {task.department}
+                  </span>
+                </div>
+                <hr />
+                <div className="my-3 d-flex flex-column gap-1">
+                  <h6>Task Description</h6>
+                  <span>{task.description}</span>
+                </div>
+                <div>
+                  <div style={{ width: "100%", overflow: "auto" }}>
+                    <h6>Task Details</h6>
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th
+                            style={{
+                              verticalAlign: "middle",
+                              whiteSpace: "pre",
+                              background: darkMode
+                                ? "var( --primaryDashMenuColor)"
+                                : "var(--primaryDashColorDark)",
+                              color: darkMode
+                                ? "var(--primaryDashColorDark)"
+                                : "var( --primaryDashMenuColor)",
+                              border: "none",
+                            }}
+                          >
+                            Task Durations
+                          </th>
+                          <th
+                            style={{
+                              verticalAlign: "middle",
+                              whiteSpace: "pre",
+                              background: darkMode
+                                ? "var( --primaryDashMenuColor)"
+                                : "var(--primaryDashColorDark)",
+                              color: darkMode
+                                ? "var(--primaryDashColorDark)"
+                                : "var( --primaryDashMenuColor)",
+                              border: "none",
+                            }}
+                          >
+                            Manager Email
+                          </th>
+                          <th
+                            style={{
+                              verticalAlign: "middle",
+                              whiteSpace: "pre",
+                              background: darkMode
+                                ? "var( --primaryDashMenuColor)"
+                                : "var(--primaryDashColorDark)",
+                              color: darkMode
+                                ? "var(--primaryDashColorDark)"
+                                : "var( --primaryDashMenuColor)",
+                              border: "none",
+                            }}
+                          >
+                            Start Date
+                          </th>
+                          <th
+                            style={{
+                              verticalAlign: "middle",
+                              whiteSpace: "pre",
+                              background: darkMode
+                                ? "var( --primaryDashMenuColor)"
+                                : "var(--primaryDashColorDark)",
+                              color: darkMode
+                                ? "var(--primaryDashColorDark)"
+                                : "var( --primaryDashMenuColor)",
+                              border: "none",
+                            }}
+                          >
+                            End Date
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td
+                            style={{
+                              verticalAlign: "middle",
+                              whiteSpace: "pre",
+                              background: darkMode
+                                ? "var( --secondaryDashMenuColor)"
+                                : "var(--secondaryDashColorDark)",
+                              color: darkMode
+                                ? "var(--secondaryDashColorDark)"
+                                : "var( --primaryDashMenuColor)",
+                              border: "none",
+                            }}
+                          >
+                            {task.duration} days
+                          </td>
+                          <td
+                            style={{
+                              verticalAlign: "middle",
+                              whiteSpace: "pre",
+                              background: darkMode
+                                ? "var( --secondaryDashMenuColor)"
+                                : "var(--secondaryDashColorDark)",
+                              color: darkMode
+                                ? "var(--secondaryDashColorDark)"
+                                : "var( --primaryDashMenuColor)",
+                              border: "none",
+                            }}
+                          >
+                            {task.managerEmail}
+                          </td>
+                          <td
+                            style={{
+                              verticalAlign: "middle",
+                              whiteSpace: "pre",
+                              background: darkMode
+                                ? "var( --secondaryDashMenuColor)"
+                                : "var(--secondaryDashColorDark)",
+                              color: darkMode
+                                ? "var(--secondaryDashColorDark)"
+                                : "var( --primaryDashMenuColor)",
+                              border: "none",
+                            }}
+                          >
+                            {new Date(task.startDate)
+                              .toLocaleDateString("en-US", {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                              })
+                              .replace(",", "")}
+                          </td>
+                          <td
+                            style={{
+                              verticalAlign: "middle",
+                              whiteSpace: "pre",
+                              background: darkMode
+                                ? "var( --secondaryDashMenuColor)"
+                                : "var(--secondaryDashColorDark)",
+                              color: darkMode
+                                ? "var(--secondaryDashColorDark)"
+                                : "var( --primaryDashMenuColor)",
+                              border: "none",
+                            }}
+                          >
+                            {new Date(task.endDate)
+                              .toLocaleDateString("en-US", {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                              })
+                              .replace(",", "")}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
+                  <div className="mt-4">
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onMouseEnter={() => setTimeinfo("name")}
+                      onMouseLeave={() => setTimeinfo(false)}
+                      onClick={() => toggleTaskDetails(task._id)}
+                    >
+                      {expandedTaskId === task._id ? (
+                        <span>
+                          View Less <MdArrowDropUp className="fs-4" />
+                        </span>
+                      ) : (
+                        <span>
+                          {" "}
+                          View Details <MdArrowDropDown className="fs-4" />
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                  {expandedTaskId === task._id && (
+                    <div>
+                      <div className="d-flex flex-column my-2">
+                        <h6>Remarks</h6>
+                        <span>{task.comment}</span>
+                      </div>
+                      <hr />
+                      <div className="d-flex flex-column gap-2 my-2">
+                        {task.status === "Completed" && (
+                          <span className="border border-success px-2 py-1 text-center">
+                            <h6>Fully Completed</h6>
+                            This task is successfully completed and cannot be
+                            re-open for any query contact your admin.
+                          </span>
+                        )}
+                        {task.status === "Pending" && (
+                          <span className="border border-success px-2 py-1 text-center">
+                            <h6>Partial Completed</h6>
+                            This task is completed from your side but pending
+                            from others
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            </details>
+            </div>
           ))}
       </div>
     </div>

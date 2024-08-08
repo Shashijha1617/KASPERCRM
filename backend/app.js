@@ -274,8 +274,10 @@ io.on("connection", (socket) => {
   app.post("/api/notice", upload.single("file"), async (req, res) => {
     const { noticeId } = req.body;
     const { notice } = req.body;
+    const { creator } = req.body;
     const { path } = req.file;
     const data = {
+      creator,
       noticeId,
       notice,
       attachments: path
@@ -291,6 +293,7 @@ io.on("connection", (socket) => {
           $push: {
             Notice: {
               notice: notice,
+              creator,
               noticeId,
               attachments: path
             }

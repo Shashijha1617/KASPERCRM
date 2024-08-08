@@ -4,10 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
-import { FaPlus, FaRegEdit } from "react-icons/fa";
+import { FaPlus, FaRegEdit, FaTrash } from "react-icons/fa";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import SearchLight from "../../../img/Attendance/SearchLight.svg";
 import BASE_URL from "../../../Pages/config/config";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
+import OverLayToolTip from "../../../Utils/OverLayToolTip";
 
 const override = css`
   display: block;
@@ -17,6 +19,12 @@ const override = css`
 `;
 
 const EducationTable = (props) => {
+  let id;
+  if (props.data) {
+    id = props.data["_id"];
+  } else {
+    id = localStorage.getItem("_id");
+  }
   const [educationData, setEducationData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rowData, setRowData] = useState([]);
@@ -25,7 +33,7 @@ const EducationTable = (props) => {
   useEffect(() => {
     const loadEducationData = () => {
       axios
-        .get(`${BASE_URL}/api/education/` + localStorage.getItem("_id"), {
+        .get(`${BASE_URL}/api/education/` + id, {
           headers: {
             authorization: localStorage.getItem("token") || "",
           },
@@ -129,21 +137,13 @@ const EducationTable = (props) => {
   };
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid py-2">
       <div className="d-flex justify-content-between my-2">
-        <h6
-          style={{
-            color: darkMode
-              ? "var(--primaryDashColorDark)"
-              : "var(--primaryDashMenuColor)",
-          }}
-          className="my-auto"
-        >
-          Educational Details ( {rowData.length} )
-          {props.back
-            ? "of " + props.data["FirstName"] + " " + props.data["LastName"]
-            : ""}
-        </h6>
+        <TittleHeader
+          title={" Educational Details"}
+          numbers={rowData.length}
+          message={"You can view education details here."}
+        />
 
         <div className="py-1">
           <button
@@ -171,94 +171,85 @@ const EducationTable = (props) => {
       )}
 
       <div>
-        <table className="table">
-          <thead>
-            <tr>
-              <th style={rowHeadStyle}>School/University</th>
-              <th style={rowHeadStyle}>Degree</th>
-              <th style={rowHeadStyle}>Grade</th>
-              <th style={rowHeadStyle}>Passing Year</th>
-              <th style={rowHeadStyle} className="text-end">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {rowData.map((items, index) => (
-              <tr key={index}>
-                <td style={rowBodyStyle} className="text-capitalize">
-                  {items.SchoolUniversity}
-                </td>
-                <td style={rowBodyStyle} className="text-capitalize">
-                  {items.Degree}
-                </td>
-                <td style={rowBodyStyle} className="text-capitalize">
-                  {items.Grade}
-                </td>
-                <td style={rowBodyStyle} className="text-capitalize">
-                  {items.PassingOfYear}
-                </td>
-                <td style={rowBodyStyle} className="text-capitalize text-end">
-                  <button
-                    onClick={() => props.onEditEducation(items.data)}
-                    style={{
-                      zIndex: "1",
-                      cursor: "pointer",
-                    }}
-                    className="btn d-flex align-items-center justify-content-center gap-2"
-                  >
-                    <FaRegEdit />
-                    <span className="d-none d-md-flex">Edit</span>
-                  </button>
-
-                  <button
-                    onClick={() => props.onEducationDelete(items.data)}
-                    style={{
-                      zIndex: "1",
-                      cursor: "pointer",
-                    }}
-                    className="btn  d-flex align-items-center justify-content-center gap-2"
-                  >
-                    <FaRegEdit />
-                    <span className="d-none d-md-flex">Delete</span>
-                  </button>
-                </td>
+        {rowData.length > 0 ? (
+          <table className="table">
+            <thead>
+              <tr>
+                <th style={rowHeadStyle}>School/University</th>
+                <th style={rowHeadStyle}>Degree</th>
+                <th style={rowHeadStyle}>Grade</th>
+                <th style={rowHeadStyle}>Passing Year</th>
+                <th style={rowHeadStyle} className="text-end">
+                  Action
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div
-        style={{
-          height: "65vh",
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          wordSpacing: "5px",
-          flexDirection: "column",
-          gap: "2rem",
-        }}
-      >
-        <img
-          style={{
-            height: "auto",
-            width: "30%",
-          }}
-          src={SearchLight}
-          alt="img"
-        />
-        <p
-          className="text-center w-75 mx-auto"
-          style={{
-            color: darkMode
-              ? "var(--secondaryDashColorDark)"
-              : "var( --primaryDashMenuColor)",
-          }}
-        >
-          Details not available Please add.
-        </p>
+            </thead>
+            <tbody>
+              {rowData.map((items, index) => (
+                <tr key={index}>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.SchoolUniversity}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.Degree}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.Grade}
+                  </td>
+                  <td style={rowBodyStyle} className="text-capitalize">
+                    {items.PassingOfYear}
+                  </td>
+                  <td style={rowBodyStyle}>
+                    <div className="d-flex align-items-center justify-content-end gap-2">
+                      <OverLayToolTip
+                        onClick={() => props.onEditEducation(items.data)}
+                        tooltip={"Edit"}
+                        icon={<FaRegEdit className="text-primary" />}
+                      />
+                      <OverLayToolTip
+                        onClick={() => props.onEducationDelete(items.data)}
+                        tooltip={"Delete"}
+                        icon={<FaTrash className="text-danger" />}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div
+            style={{
+              height: "65vh",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              wordSpacing: "5px",
+              flexDirection: "column",
+              gap: "2rem",
+            }}
+          >
+            <img
+              style={{
+                height: "auto",
+                width: "30%",
+              }}
+              src={SearchLight}
+              alt="img"
+            />
+            <p
+              className="text-center w-75 mx-auto"
+              style={{
+                color: darkMode
+                  ? "var(--secondaryDashColorDark)"
+                  : "var( --primaryDashMenuColor)",
+              }}
+            >
+              Details not available Please add.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

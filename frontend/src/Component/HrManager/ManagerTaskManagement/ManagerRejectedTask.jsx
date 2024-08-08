@@ -62,7 +62,7 @@ const ManagerRejectedTask = () => {
         </div>
       )}
 
-      <div className="row mx-auto text-white mt-2">
+      <div className="row mx-auto">
         {tasks.filter((task) => task.status === "Rejected").length > 0 ? (
           tasks
             .filter((task) => task.status === "Rejected")
@@ -101,11 +101,12 @@ const ManagerRejectedTask = () => {
                           height: "30px",
                           width: "30px",
                           borderRadius: "50%",
+                          objectFit: "cover",
                         }}
-                        src="https://rihodjango.pixelstrap.net/riho/rihoapp/static/assets/images/user/3.jpg"
+                        src="https://www.portalcidade.news/wp-content/uploads/2021/11/email-logo.jpg"
                         alt=""
                       />
-                      <span>Kishor.kumar@kasperinfotech.org</span>
+                      <span>{task.adminMail}</span>
                     </div>
                     <span
                       style={{

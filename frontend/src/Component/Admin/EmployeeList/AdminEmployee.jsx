@@ -54,8 +54,8 @@ const AdminEmployee = () => {
     formData.append("PositionID", event.target[11].value);
     formData.append("DateOfJoining", event.target[12].value);
     formData.append("profile", event.target[13].files[0]);
-    formData.append("reportManager", event.target[14].value);
-    formData.append("reportHr", event.target[15].value);
+    formData.append("reportManager", event.target[14].value==="Select your option"?"":event.target[14].value);
+    formData.append("reportHr", event.target[15].value==="Select your option"?"":event.target[15].value);
     formData.append("status", "active");
     formData.append("loginStatus", "loggedOut");
     await axios
@@ -120,7 +120,8 @@ const AdminEmployee = () => {
     formData.append("PositionID", newInfo.target[10].value);
     formData.append("DateOfJoining", newInfo.target[11].value);
     formData.append("profile", newInfo.target[12].files[0]);
-    formData.append("reportManager", newInfo.target[13].value);
+    formData.append("reportManager", newInfo.target[13].value==="Select your option"? "":newInfo.target[13].value);
+    formData.append("reportHr", newInfo.target[14].value ==="Select your option"? "":newInfo.target[14].value);
     formData.append("status", editStatus);
     // formData.append("TerminateDate", newInfo.target[14].value);
 

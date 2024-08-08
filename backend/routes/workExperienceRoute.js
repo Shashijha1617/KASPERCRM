@@ -17,7 +17,7 @@ const { getAllWorkExperience, createWorkExperience, updateWorkExperience, delete
 workExperienceRoute.get("/work-experience/:id",  getAllWorkExperience);
 
 // POST: Create a new city
-workExperienceRoute.post("/work-experience/:id", verifyEmployee,  createWorkExperience);
+workExperienceRoute.post("/work-experience/:id",   createWorkExperience);
 
 // PUT: Update an existing work
 workExperienceRoute.put("/work-experience/:id", verifyEmployee,  updateWorkExperience);

@@ -18,7 +18,7 @@ import ManagerCencelledTask from "../HrManager/ManagerTaskManagement/ManagerCenc
 import ManagerCompletedTask from "../HrManager/ManagerTaskManagement/ManagerCompletedTask.jsx";
 import ManagerRejectedTask from "../HrManager/ManagerTaskManagement/ManagerRejectedTask.jsx";
 import ManagerActiveTask from "./ManagerTaskManagement/ManagerActiveTask.jsx";
-import Attendance from "../HrManager/attendance/Attendance.jsx";
+import Attendance from "../HrManager/attendance/SelfAttendance.jsx";
 import LeaveCalendar from "../../Pages/LeaveCalendar/LeaveCalendar.jsx";
 // import TodaysAttendance from "../HrManager/attendance/TodaysAttendance.jsx";
 import TodaysAttendance from "../../Pages/DailyAttendance/TodaysAttendance.jsx";
@@ -32,6 +32,7 @@ import PersonalInfo from "../Employee/EmpPresonal/PersonalInfo.jsx";
 import LeaveAssign from "./LeaveStatus/LeaveAssign.jsx";
 import AllEmpLeaves from "./LeaveStatus/AllEmpLeaves.jsx";
 import LeaveBalance from "./LeaveStatus/LeaveBalance.jsx";
+import NoticeManagement from "../Admin/Notification/NoticeManagement.jsx";
 
 const MainContent = () => {
   return (
@@ -59,11 +60,11 @@ const MainContent = () => {
         <Route path="/hr/city" exact component={City} />
         <Route path="/hr/dashboard" exact component={Dashboard} />
         {/* <Route path="/hr/task" exact component={TaskAssign} /> */}
-        <Route path="/hr/newTask" exact component={ManagerNewTask} />
-        <Route path="/hr/ActiveTask" exact component={ManagerActiveTask} />
-        <Route path="/hr/taskcancle" exact component={ManagerCencelledTask} />
-        <Route path="/hr/taskcomplete" exact component={ManagerCompletedTask} />
-        <Route path="/hr/rejectTask" exact component={ManagerRejectedTask} />
+        {/* <Route path="/hr/newTask" exact component={ManagerNewTask} /> */}
+        {/* <Route path="/hr/ActiveTask" exact component={ManagerActiveTask} /> */}
+        {/* <Route path="/hr/taskcancle" exact component={ManagerCencelledTask} /> */}
+        {/* <Route path="/hr/taskcomplete" exact component={ManagerCompletedTask} /> */}
+        {/* <Route path="/hr/rejectTask" exact component={ManagerRejectedTask} /> */}
         <Route path="/hr/attenDance" exact component={Attendance} />
         <Route path="/hr/viewAttenDance" exact component={ViewAttendance} />
         <Route
@@ -71,6 +72,7 @@ const MainContent = () => {
           exact
           component={AttendanceRegister}
         />
+        <Route path="/hr/NoticeManagement" exact component={NoticeManagement} />
         <Route path="/hr/holiday" exact component={LeaveCalendar} />
         <Route path="/hr/todaysAttendance" exact component={TodaysAttendance} />
         <Route path="/hr/createLeave" exact component={LeaveApplication} />

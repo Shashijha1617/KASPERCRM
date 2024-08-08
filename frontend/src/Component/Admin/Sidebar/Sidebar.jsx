@@ -17,6 +17,7 @@ import { LuKeyRound, LuPartyPopper } from "react-icons/lu";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { IoLocationOutline } from "react-icons/io5";
 import { RiUser3Line } from "react-icons/ri";
+import { HiOutlineSpeakerphone } from "react-icons/hi";
 
 const Sidebar = () => {
   const [activeCategory, setActiveCategory] = useState(null);
@@ -104,6 +105,11 @@ const Sidebar = () => {
       ],
     },
     {
+      icon: <HiOutlineSpeakerphone />,
+      name: "Notice",
+      navLinks: [{ to: "/admin/NoticeManagement", label: "Notice" }],
+    },
+    {
       icon: <LuPartyPopper />,
       name: "Holiday",
       navLinks: [{ to: "/admin/leaveCal", label: "Leave Calendar" }],
@@ -139,12 +145,16 @@ const Sidebar = () => {
       className="d-none d-sm-flex flex-column gap-2"
     >
       <h3
-        style={{ borderBottom: "3px solid green" }}
+        style={{ borderBottom: "3px solid #DE4E26" }}
         className="text-success justify-content-between py-2 d-flex gap-2"
       >
         <button
-          style={{ display: !extended ? "none" : "block", cursor: "none" }}
-          className=" btn btn-success rounded-5 py-0"
+          style={{
+            display: !extended ? "none" : "block",
+            cursor: "none",
+            background: "#DE4E26",
+          }}
+          className=" btn text-white rounded-0 py-0"
         >
           Admin
         </button>

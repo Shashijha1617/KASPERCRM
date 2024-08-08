@@ -63,6 +63,8 @@ const LeaveApplicationHRTableAccepted = (props) => {
           return {
             data,
             empID: data?.empID,
+            FirstName: data?.FirstName,
+            LastName: data?.LastName,
             Name: data?.FirstName + " " + data?.LastName,
             Leavetype: data?.Leavetype,
             CreatedOn: formatDateFull(data?.createdOn),
@@ -285,8 +287,9 @@ const LeaveApplicationHRTableAccepted = (props) => {
             <table className="table" style={{ fontSize: ".9rem" }}>
               <thead>
                 <tr className="shadow">
-                  <th style={rowHeadStyle}>Profile</th>
-                  <th style={rowHeadStyle}>Employee Name</th>
+                  <th colSpan={2} style={rowHeadStyle}>
+                    Employee Name
+                  </th>
                   <th style={rowHeadStyle}>Emp ID</th>
                   <th style={rowHeadStyle}>Leave Type</th>
                   <th style={rowHeadStyle}>Start Date</th>
@@ -305,22 +308,21 @@ const LeaveApplicationHRTableAccepted = (props) => {
                     return (
                       <tr key={index}>
                         <td style={rowBodyStyle} className="py-1">
-                          <div style={{ height: "35px", width: "35px" }}>
-                            <img
-                              style={{
-                                height: "100%",
-                                width: "100%",
-                                borderRadius: "50%",
-                                overflow: "hidden",
-                                objectFit: "cover",
-                              }}
-                              src={
-                                data?.data?.profile?.image_url
-                                  ? data?.data?.profile?.image_url
-                                  : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
-                              }
-                              alt=""
-                            />
+                          <div
+                            className="d-flex align-items-center justify-content-center"
+                            style={{
+                              height: "35px",
+                              width: "35px",
+                              borderRadius: "50%",
+                              backgroundColor: "#ccc",
+                              color: "white",
+                              fontWeight: "bold",
+                              overflow: "hidden",
+                              objectFit: "cover",
+                            }}
+                          >
+                            {data?.FirstName?.[0]}
+                            {data?.LastName?.[0]}
                           </div>
                         </td>
                         <td className="text-capitalize" style={rowBodyStyle}>

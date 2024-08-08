@@ -10,10 +10,10 @@ const {verifyHREmployee, verifyEmployee} = require('../middleware/authMiddleware
 const { getAllFamily, createFamily, updateFamily, deleteFamily } = require('../controllers/familyController');
 
 // GET: Retrieve all countries
-familyRoute.get("/family-info/:id", verifyHREmployee,  getAllFamily);
+familyRoute.get("/family-info/:id",   getAllFamily);
 
 // POST: Create a new family
-familyRoute.post("/family-info/:id", verifyEmployee,  createFamily);
+familyRoute.post("/family-info/:id",  createFamily);
 
 // PUT: Update an existing family
 familyRoute.put("/family-info/:id", verifyEmployee,  updateFamily);

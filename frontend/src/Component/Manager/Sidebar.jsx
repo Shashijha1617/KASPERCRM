@@ -13,6 +13,7 @@ import { IoCalendarOutline } from "react-icons/io5";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { GoKey, GoTasklist } from "react-icons/go";
 import { LuPartyPopper } from "react-icons/lu";
+import { HiOutlineSpeakerphone } from "react-icons/hi";
 
 const Sidebar = () => {
   const [activeCategory, setActiveCategory] = useState(null);
@@ -82,6 +83,11 @@ const Sidebar = () => {
       ],
     },
     {
+      icon: <HiOutlineSpeakerphone />,
+      name: "Notice",
+      navLinks: [{ to: "/manager/NoticeManagement", label: "Notice" }],
+    },
+    {
       icon: <LuPartyPopper />,
       name: "Holiday",
       navLinks: [{ to: "/manager/holiday", label: "Leave Calendar" }],
@@ -89,7 +95,7 @@ const Sidebar = () => {
     {
       icon: <FaRegUserCircle />,
       name: "Profile",
-      navLinks: [{ to: "/manager/personal-info", label: "Leave Calendar" }],
+      navLinks: [{ to: "/manager/personal-info", label: "Profile" }],
     },
   ];
 
@@ -114,12 +120,16 @@ const Sidebar = () => {
       className="d-none d-sm-flex flex-column gap-2"
     >
       <h3
-        style={{ borderBottom: "3px solid var(--basecolor)" }}
-        className=" justify-content-between py-2 d-flex gap-2"
+        style={{ borderBottom: "3px solid #DE4E26" }}
+        className="text-success justify-content-between py-2 d-flex gap-2"
       >
         <button
-          style={{ display: !extended ? "none" : "block", cursor: "none" }}
-          className=" btn btn-primary rounded-5 py-0"
+          style={{
+            display: !extended ? "none" : "block",
+            cursor: "none",
+            background: "#DE4E26",
+          }}
+          className=" btn text-white rounded-0 py-0"
         >
           Manager
         </button>

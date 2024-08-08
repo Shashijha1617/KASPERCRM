@@ -33,8 +33,8 @@ const LeaveApplicationEmpTable = (props) => {
         `${BASE_URL}/api/leave-application-man/` + localStorage.getItem("_id"),
         {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         }
       )
       .then((response) => {
@@ -53,7 +53,7 @@ const LeaveApplicationEmpTable = (props) => {
               Reasonforleave: data["Reasonforleave"],
               Status: data["Status"],
               updatedBy: data["updatedBy"],
-              reasonOfRejection: data["reasonOfRejection"]
+              reasonOfRejection: data["reasonOfRejection"],
             };
           }
         );
@@ -84,7 +84,7 @@ const LeaveApplicationEmpTable = (props) => {
   // };
 
   const status = (s) => {
-    console.log(s===3)
+    console.log(s === 3);
     if (s === "1") {
       return "Pending";
     }
@@ -119,7 +119,7 @@ const LeaveApplicationEmpTable = (props) => {
       ? "var(--primaryDashColorDark)"
       : "var(--primaryDashMenuColor)",
     border: "none",
-    whiteSpace: "pre"
+    whiteSpace: "pre",
   };
 
   const rowBodyStyle = {
@@ -130,7 +130,8 @@ const LeaveApplicationEmpTable = (props) => {
     color: darkMode
       ? "var(--secondaryDashColorDark)"
       : "var(--primaryDashMenuColor)",
-    border: "none"
+    border: "none",
+    whiteSpace: "pre",
   };
 
   return (
@@ -149,7 +150,7 @@ const LeaveApplicationEmpTable = (props) => {
                 color: darkMode
                   ? "var(--secondaryDashColorDark)"
                   : "var(--secondaryDashMenuColor)",
-                fontWeight: "600"
+                fontWeight: "600",
               }}
               className=" m-0"
             >
@@ -159,7 +160,7 @@ const LeaveApplicationEmpTable = (props) => {
               style={{
                 color: darkMode
                   ? "var(--secondaryDashColorDark)"
-                  : "var(--secondaryDashMenuColor)"
+                  : "var(--secondaryDashMenuColor)",
               }}
               className=" m-0"
             ></p>
@@ -253,13 +254,13 @@ const LeaveApplicationEmpTable = (props) => {
                 alignItems: "center",
                 wordSpacing: "5px",
                 flexDirection: "column",
-                gap: "2rem"
+                gap: "2rem",
               }}
             >
               <img
                 style={{
                   height: "auto",
-                  width: "25%"
+                  width: "25%",
                 }}
                 src={darkMode ? LeaveDark : LeaveLight}
                 alt="img"
@@ -268,7 +269,7 @@ const LeaveApplicationEmpTable = (props) => {
                 style={{
                   color: darkMode
                     ? "var(--secondaryDashColorDark)"
-                    : "var( --primaryDashMenuColor)"
+                    : "var( --primaryDashMenuColor)",
                 }}
               >
                 No Leave requests found.

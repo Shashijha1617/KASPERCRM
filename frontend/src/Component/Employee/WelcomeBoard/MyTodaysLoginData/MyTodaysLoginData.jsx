@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { MdOutlineFreeBreakfast, MdWorkOutline } from "react-icons/md";
-import { RiLoginCircleLine, RiLogoutCircleRLine } from "react-icons/ri";
+import {
+  MdOutlineFreeBreakfast,
+  MdWorkHistory,
+  MdWorkOutline,
+} from "react-icons/md";
+import {
+  RiLoginCircleLine,
+  RiLogoutBoxRFill,
+  RiLogoutCircleRLine,
+} from "react-icons/ri";
 import axios from "axios";
 import BASE_URL from "../../../../Pages/config/config";
 import { useTheme } from "../../../../Context/TheamContext/ThemeContext";
+import { PiCoffeeFill } from "react-icons/pi";
+import { FaUserClock } from "react-icons/fa";
+import { ImExit } from "react-icons/im";
 const MyTodaysLoginData = (props) => {
   const [attendanceData, setAttendanceData] = useState(null);
   const [empName, setEmpName] = useState(null);
@@ -66,22 +77,22 @@ const MyTodaysLoginData = (props) => {
 
   const labelData = [
     {
-      icon: <RiLoginCircleLine style={{ rotate: "180deg" }} />,
+      icon: <FaUserClock className="text-success" />,
       title: "Login",
       data: attendanceData.loginTime,
     },
     {
-      icon: <MdOutlineFreeBreakfast />,
+      icon: <PiCoffeeFill className="text-warning" />,
       title: "Total Break",
       data: convertMinutesToHoursAndMinutes(attendanceData.totalBrake),
     },
     {
-      icon: <MdWorkOutline />,
+      icon: <MdWorkHistory className="text-primary" />,
       title: "Total Working",
       data: convertMinutesToHoursAndMinutes(attendanceData.totalLoginTime),
     },
     {
-      icon: <RiLogoutCircleRLine />,
+      icon: <ImExit className="text-danger" />,
       title: "Logout",
       data: attendanceData.logoutTime
         ? attendanceData.logoutTime
@@ -101,9 +112,13 @@ const MyTodaysLoginData = (props) => {
       {labelData.map((item, index) => (
         <Labels
           style={{
-            background: darkMode ? "var(--basecolor)" : "var(--basecolor4)",
+            background: darkMode
+              ? "var(--primaryDashMenuColor)"
+              : "var(--primaryDashColorDark)",
+            // border: darkMode ? "1px solid black" : "1px solid white",
             height: "5rem",
           }}
+          TytleStyle={"text-primary"}
           key={index}
           icon={item.icon}
           title={item.title}
@@ -116,14 +131,22 @@ const MyTodaysLoginData = (props) => {
 
 export default MyTodaysLoginData;
 
-const Labels = ({ title, data, icon, style }) => {
+const Labels = ({ title, data, icon, style, TytleStyle }) => {
   return (
-    <div className="col-6 col-lg-3 row rounded-0 py-2" style={style}>
+    <div
+      className="col-6 col-lg-3 shadow-sm rounded-2 justify-content-between row py-2"
+      style={style}
+    >
       <div className="col-8 my-auto">
-        <span>{title}</span>
+        <span
+          className={TytleStyle}
+          style={{ fontSize: "1.2rem", fontWeight: "500" }}
+        >
+          {title}
+        </span>
         <p className="m-0">{data}</p>
       </div>
-      <div className="col-4 d-flex align-items-center justify-content-center m-auto fs-2">
+      <div className="col-2 d-flex align-items-center justify-content-center m-auto fs-2">
         {icon}
       </div>
     </div>

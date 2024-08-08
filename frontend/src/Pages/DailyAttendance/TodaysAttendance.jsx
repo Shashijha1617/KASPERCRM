@@ -220,7 +220,7 @@ const TodaysAttendance = () => {
                   ? "var(--secondaryDashColorDark)"
                   : "var(--primaryDashMenuColor)",
               }}
-              className="m-0 p-0 fs-6 text-center shadow-sm rounded-5"
+              className="m-0 p-0 fs-6 text-center"
             >
               {status(dayCurrent)} , <span>{dd}</span> - <span>{mm}</span> -
               <span>{yyyy}</span>
@@ -325,23 +325,31 @@ const TodaysAttendance = () => {
                             height: "35px",
                             width: "35px",
                             overflow: "hidden",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor: "#ccc", // background color for the initials
+                            borderRadius: "50%",
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            color: "#fff",
                           }}
                         >
-                          <img
-                            style={{
-                              height: "100%",
-                              width: "100%",
-                              objectFit: "cover",
-                              overflow: "hidden",
-                              borderRadius: "50%",
-                            }}
-                            src={
-                              user?.profile?.image_url
-                                ? user?.profile?.image_url
-                                : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
-                            }
-                            alt=""
-                          />
+                          {user?.profile?.image_url ? (
+                            <img
+                              style={{
+                                height: "100%",
+                                width: "100%",
+                                objectFit: "cover",
+                                overflow: "hidden",
+                                borderRadius: "50%",
+                              }}
+                              src={user.profile.image_url}
+                              alt={`${user?.FirstName} ${user?.LastName}`}
+                            />
+                          ) : (
+                            `${user?.FirstName?.[0]}${user?.LastName?.[0]}`
+                          )}
                         </div>
                         <div>
                           <p
@@ -401,14 +409,14 @@ const TodaysAttendance = () => {
                     <td style={rowBodyStyle}>
                       <span
                         style={{ fontSize: ".8rem" }}
-                        className={`py-0 px-3 rounded-5 fw-bold ${
+                        className={`py-0 px-3 rounded-5 ${
                           mark === "Present"
-                            ? "border border-success text-white"
+                            ? "border border-success"
                             : mark === "Late"
-                            ? "border border-info text-white"
+                            ? "border border-info"
                             : mark === "Half Day"
-                            ? "border border-warning text-white"
-                            : "border border-danger text-white"
+                            ? "border border-warning"
+                            : "border border-danger"
                         }`}
                       >
                         {mark}

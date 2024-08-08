@@ -4,11 +4,11 @@ import Sidebar from "./Sidebar/Sidebar.jsx";
 import AdminRoutes from "./Routes.jsx";
 import NavBar from "../../Pages/Navbar/NavBar.jsx";
 import "./DashboardAdmin.css";
-import SidebarSmallScreen from "./Sidebar/SidebarSmallScreen.jsx";
-import { useSidebar } from "../../Context/AttendanceContext/smallSidebarcontext.jsx";
 import SidebarSlider from "../../Pages/Sidebar/SidebarSlider.jsx";
 import { useTheme } from "../../Context/TheamContext/ThemeContext.js";
 import Footer from "../../Pages/Footer/Footer.jsx";
+import { useSidebar } from "../../Context/AttendanceContext/smallSidebarcontext.jsx";
+import SidebarSmallScreen from "./SidebarSmallScreen.jsx";
 
 const DashboardAdmin = (props) => {
   const [checked, setChecked] = useState(true);

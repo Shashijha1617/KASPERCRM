@@ -4,13 +4,11 @@ import Sidebar from "./sidebar/Sidebar.jsx";
 import EmpRoutes from "./router/Routes.jsx";
 import { HashRouter as Router } from "react-router-dom";
 import "./DashboardEmployee.css";
-
 import { useSidebar } from "../../Context/AttendanceContext/smallSidebarcontext.jsx";
-import SidebarSmallScreen from "./sidebar/SidebarSmallScreen.jsx";
 import { useTheme } from "../../Context/TheamContext/ThemeContext.js";
 import SidebarSlider from "../../Pages/Sidebar/SidebarSlider.jsx";
 import Footer from "../../Pages/Footer/Footer.jsx";
-// import Footer from "../../Pages/Footer/Footer.jsx";
+import SidebarSmallScreen from "./SidebarSmallScreen.jsx";
 
 const DashboardEmployee = (props) => {
   const [checked, setChecked] = useState(true);
@@ -52,7 +50,7 @@ const DashboardEmployee = (props) => {
             }}
             className="sidebarsmall d-flex "
           >
-            <SidebarSmallScreen data={props.data} />
+            <SidebarSmallScreen />
           </div>
           <div className="employeenavbar-grid">
             <NavBar

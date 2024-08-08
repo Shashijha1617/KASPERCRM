@@ -86,7 +86,7 @@ const EmployeeCountTable = (props) => {
           }}
           className="EmpcountCardBG-card-inner rounded-1"
         >
-          <div className="pl-4 pr-1 h-100 py-1 d-flex flex-column justify-content-between align-items-start">
+          <div className="pl-4 pr-1 h-100 py-1 d-flex flex-column justify-content-center align-items-center px-3">
             <div className="d-flex h-75 flex-column justify-content-evenly align-items-start w-100">
               <span className="d-flex justify-content-between align-items-center w-100">
                 Admin <b>{adminCount}</b>
@@ -101,12 +101,12 @@ const EmployeeCountTable = (props) => {
                 Employee <b>{employeeCount}</b>
               </span>
             </div>
-            <span className="bg-light w-100 text-center rounded-5 py-0  mb-2">
+            {/* <span className="bg-light w-100 text-center rounded-5 py-0  mb-2">
               <Link style={{ textDecoration: "none" }}>
                 {" "}
                 <span>View User List</span>
               </Link>
-            </span>
+            </span> */}
           </div>
         </div>
         <div className="EmpcountCardBG col-4  w-100 rounded-3 d-flex justify-content-center align-items-center shadow-sm">

@@ -324,7 +324,7 @@ const ManagerNewTask = () => {
         <p className="p-0 m-0">You can view all new tasks here!</p>
       </div>
 
-      <div className="row mx-auto text-white">
+      <div className="row mx-auto">
         {tasks.filter(
           (task) => task.status === "Assigned" && task.managerEmail === email
         ).length > 0 ? (
@@ -364,8 +364,9 @@ const ManagerNewTask = () => {
                           height: "30px",
                           width: "30px",
                           borderRadius: "50%",
+                          objectFit: "cover",
                         }}
-                        src="https://rihodjango.pixelstrap.net/riho/rihoapp/static/assets/images/user/3.jpg"
+                        src="https://www.portalcidade.news/wp-content/uploads/2021/11/email-logo.jpg"
                         alt=""
                       />
                       <span>{task.adminMail}</span>

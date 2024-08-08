@@ -212,14 +212,14 @@ const AdminSalaryTable = (props) => {
           <h5 className="my-auto text-capitalize"></h5>
 
           <div className="d-flex gap-2 justify-content-between py-1">
-            <div className="searchholder p-0 d-flex  position-relative">
+            <div className="searchholder p-0 d-flex my-auto  position-relative">
               <input
                 style={{
                   height: "100%",
                   width: "100%",
                   paddingLeft: "15%",
                 }}
-                className="form-control pr-0 border border-primary border-2"
+                className="form-control border border-primary border-2"
                 type="text"
                 placeholder="Search by name"
                 value={searchQuery}
@@ -319,24 +319,37 @@ const AdminSalaryTable = (props) => {
                     >
                       <div className="d-flex flex-nowrap gap-2">
                         <div
-                          className="mx-auto"
-                          style={{ height: "35px", width: "35px" }}
+                          className="mx-auto d-flex align-items-center justify-content-center"
+                          style={{
+                            height: "35px",
+                            width: "35px",
+                            borderRadius: "50%",
+                            backgroundColor: "#ccc",
+                            color: "white",
+                            fontWeight: "bold",
+                            overflow: "hidden",
+                            objectFit: "cover",
+                          }}
                         >
-                          <img
-                            style={{
-                              height: "100%",
-                              width: "100%",
-                              borderRadius: "50%",
-                              overflow: "hidden",
-                              objectFit: "cover",
-                            }}
-                            src={
-                              item?.data?.profile?.image_url
-                                ? item?.data?.profile?.image_url
-                                : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
-                            }
-                            alt=""
-                          />
+                          {item?.data?.profile?.image_url ? (
+                            <img
+                              style={{
+                                height: "100%",
+                                width: "100%",
+                                borderRadius: "50%",
+                                objectFit: "cover",
+                              }}
+                              src={item?.data?.profile?.image_url}
+                              alt=""
+                            />
+                          ) : (
+                            <span>
+                              {item?.EmployeeName?.split(" ")
+                                .map((name) => name[0])
+                                .join("")
+                                .toUpperCase()}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </td>

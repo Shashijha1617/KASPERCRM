@@ -1,66 +1,73 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Button, Container, Form } from "react-bootstrap";
-import {v4 as uuid} from  "uuid";
-import BASE_URL from "../../../Pages/config/config"
+import { v4 as uuid } from "uuid";
+import BASE_URL from "../../../Pages/config/config";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 
 const NoticeManagement = () => {
+  const email = localStorage.getItem("Email");
+  const [newTask, setNewTask] = useState({
+    notice: "",
+    attachments: null,
+  });
+  const { darkMode } = useTheme();
+  const isFormValid = () => {
+    return newTask.notice.trim() !== "";
+  };
 
-    const [newTask, setNewTask] = useState({
-        notice: "",
-        attachments: null,
+  const sendNotice = async () => {
+    let formData = new FormData();
+    const noticeId = uuid();
+    formData.append("noticeId", noticeId);
+    formData.append("notice", newTask.notice);
+    formData.append("file", newTask.attachments);
+    formData.append("creator", email);
+    // console.log(newTask);
+    // socket.emit('sendNotice', formData);
+    axios
+      .post(`${BASE_URL}/api/notice`, formData)
+      .then((res) => {
+        alert("Notice send");
+        setNewTask({
+          notice: "",
+          attachments: null,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      const isFormValid = () => {
-        return (
-          newTask.notice.trim() !== "" 
-        );
-      };
-   
-
-    const sendNotice = async () => {
-        let formData = new FormData();
-        const noticeId = uuid();
-        formData.append("noticeId", noticeId)
-        formData.append("notice", newTask.notice);
-        formData.append("file", newTask.attachments);
-        // console.log(newTask);
-        // socket.emit('sendNotice', formData);
-        axios
-          .post(`${BASE_URL}/api/notice`, formData)
-          .then((res) => {
-       alert("Notice send")
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      };
+  };
   return (
-    <div style={{ zIndex: "1" }} className="p-4 d-flex flex-column ">
-    <form className="row p-0 p-md-3 m-auto">
-      <h2 className="fw-bold text-muted "> 🖋️Send new Notice</h2>
-      <p className="text-muted">
-      Unleash the Power of Notice: Communicate with Impact, Ignite Change!
-      </p>
-      <div className="col-12 mt-5 d-flex flex-column">
-        <Form.Group controlId="Taskname">
-          <Form.Label className="fw-bold">Notice</Form.Label>
-          <input
-            className="form-control"
+    <div
+      style={{
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--secondaryDashMenuColor)",
+      }}
+      className="container-fluid py-2"
+    >
+      <TittleHeader
+        title={"Send new Notice"}
+        message={"Create notice or announcement from here."}
+      />
+      <form className="mt-3 d-flex flex-column gap-3">
+        <div>
+          <label>Notice</label>
+          <textarea
+            className="form-control rounded-0"
             type="text"
             required
-            placeholder="Notice"
+            placeholder="Please mention topic for the notice or announcement"
             value={newTask.notice}
-            onChange={(e) =>
-              setNewTask({ ...newTask, notice: e.target.value })
-            }
+            onChange={(e) => setNewTask({ ...newTask, notice: e.target.value })}
           />
-        </Form.Group>
-      </div>
-      <div>
-        <Form.Group controlId="Attachments">
-          <Form.Label className="fw-bold mt-3">Attachments</Form.Label>
+        </div>
+        <div>
+          <label>Attachments</label>
           <input
-            className="form-control"
+            className="form-control rounded-0"
             type="file"
             multiple
             required
@@ -68,19 +75,19 @@ const NoticeManagement = () => {
               setNewTask({ ...newTask, attachments: e.target.files[0] })
             }
           />
-        </Form.Group>
-      </div>
-      <Button
-        className="mt-4 w-100 fw-bold text-white"
-        variant="info"
-        onClick={sendNotice}
-        disabled={!isFormValid()}
-      >
-        Send Notice
-      </Button>
-    </form>
-  </div>
-  )
-}
+        </div>
+        <div className="d-flex">
+          <btn
+            className="btn btn-primary"
+            onClick={sendNotice}
+            disabled={!isFormValid()}
+          >
+            Send Notice
+          </btn>
+        </div>
+      </form>
+    </div>
+  );
+};
 
-export default NoticeManagement
+export default NoticeManagement;

@@ -7,9 +7,12 @@ import NavBar from "../../Pages/Navbar/NavBar.jsx";
 import SidebarSlider from "../../Pages/Sidebar/SidebarSlider.jsx";
 import { useTheme } from "../../Context/TheamContext/ThemeContext.js";
 import Footer from "../../Pages/Footer/Footer.jsx";
+import SidebarSmallScreen from "./SidebarSmallScreen.jsx";
+import { useSidebar } from "../../Context/AttendanceContext/smallSidebarcontext.jsx";
 
 const DashboardHR = (props) => {
   const [checked, setChecked] = useState(true);
+  const { isOpen } = useSidebar();
   const { darkMode } = useTheme();
 
   const handleChange = () => {
@@ -35,7 +38,7 @@ const DashboardHR = (props) => {
         position: "fixed",
         width: "100%",
         left: "0",
-        top: "0"
+        top: "0",
       }}
     >
       <SidebarSlider />
@@ -53,10 +56,19 @@ const DashboardHR = (props) => {
           <div
             className="d-flex"
             style={{
-              maxHeight: "100vh"
+              maxHeight: "100vh",
             }}
             id="main-non-nav"
           >
+            <div
+              style={{
+                transform: isOpen ? "translateX(0%)" : "translateX(-500%)",
+                transition: "1s ease",
+              }}
+              className="sidebarsmall d-flex "
+            >
+              <SidebarSmallScreen />
+            </div>
             <Sidebar />
             <div
               style={{ maxHeight: "92vh", overflow: "auto" }}

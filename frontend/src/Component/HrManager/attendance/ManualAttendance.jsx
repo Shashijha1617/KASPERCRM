@@ -3,13 +3,11 @@ import axios from "axios";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import BASE_URL from "../../../Pages/config/config";
 import Moment from "moment";
-import moment from "moment";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 
 function ManualAttendance() {
-  // const [employees, setEmployees] = useState([]);
-  // const [selectedEmployee, setSelectedEmployee] = useState("");
-  // const [attencenceID, setAttencenceID] = useState("");
-  // const [message, setMessage] = useState("");
+  const { darkMode } = useTheme();
 
   const {
     employees,
@@ -21,7 +19,7 @@ function ManualAttendance() {
     message,
     setMessage,
   } = useContext(AttendanceContext);
-
+  console.log(message);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -30,6 +28,7 @@ function ManualAttendance() {
             authorization: localStorage.getItem("token") || "",
           },
         });
+
         setEmployees(response.data);
       } catch (error) {
         console.error("Error fetching employees:", error);
@@ -51,14 +50,25 @@ function ManualAttendance() {
   };
 
   const getMessage = async (employeeID) => {
+    console.log(employeeID);
     try {
       const response = await axios.get(
         `${BASE_URL}/api/attendance/${employeeID}`
       );
-      const lastEntry = response.data[response.data.length - 1];
+
+      const lastEntry = response.data.filter(
+        (val) => val.employeeObjID._id === employeeID
+      )[0];
+
+      const year = lastEntry.years;
+      const month = year[year.length - 1].months;
+
+      const day = month[month.length - 1].dates;
+      const status = day[day.length - 1].status;
+      console.log(status);
 
       if (lastEntry) {
-        setMessage(`Status: ${lastEntry.years[0].months[0].dates[0].status}`);
+        setMessage(`Status: ${status}`);
       } else {
         setMessage("");
       }
@@ -66,31 +76,6 @@ function ManualAttendance() {
       console.error("Error fetching attendance data:", error);
     }
   };
-
-  // const handleLogin = async () => {
-  //   try {
-  //     if (!selectedEmployee) {
-  //       setMessage("Please select an employee");
-  //       return;
-  //     }
-  //     moment.locale("en");
-  //     const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
-  //     const currentTime = Moment().format("HH:mm:ss");
-  //     await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
-  //       employeeId: selectedEmployee,
-  //       year: new Date().getFullYear(),
-  //       month: new Date().getMonth() + 1,
-  //       date: new Date().getDate(),
-  //       logoutTime: [currentTime],
-  //       logoutTimeMs: [currentTimeMs],
-  //       status: "Login"
-  //     });
-  //     setMessage("Login time recorded successfully");
-  //   } catch (error) {
-  //     console.error("Error recording Login time:", error);
-  //     setMessage("Error recording logout time");
-  //   }
-  // };
 
   const handleLogin = async () => {
     try {
@@ -197,17 +182,51 @@ function ManualAttendance() {
     }
   };
 
-  console.log(employees);
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
 
   return (
-    <div className="App row">
-      <h1 className="text-center text-uppercase my-3">Attendance System</h1>
-      <div
-        className="form-control d-flex  gap-3 p-3 m-3"
-        style={{ height: "fit-content" }}
-      >
+    <div
+      style={{
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--secondaryDashMenuColor)",
+      }}
+      className="container-fluid py-2"
+    >
+      <TittleHeader
+        title={"Employee Manual Attendance"}
+        message={
+          "You can create manual attendance of employee in case of technical issue."
+        }
+      />
+      <div className="my-3 d-flex flex-column gap-3">
         <select
-          className="form-select mx-2 w-25 "
+          className="form-select  rounded-0"
           onChange={(e) => handleUserChange(e.target.value)}
         >
           <option value="">-- Select User --</option>

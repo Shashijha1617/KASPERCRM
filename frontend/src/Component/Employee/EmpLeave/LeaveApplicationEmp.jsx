@@ -22,8 +22,8 @@ const LeaveApplicationEmp = (props) => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         console.log(response.data);
@@ -50,7 +50,7 @@ const LeaveApplicationEmp = (props) => {
       hrEmail: event.target[5].value,
       aditionalManager: event.target[6].value,
       Reasonforleave: event.target[7].value,
-      email
+      email,
     };
     console.log(body);
     axios
@@ -59,8 +59,8 @@ const LeaveApplicationEmp = (props) => {
         body,
         {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         }
       )
       .then((res) => {
@@ -78,7 +78,7 @@ const LeaveApplicationEmp = (props) => {
             aditionalManager: body.aditionalManager,
             profile: empData.profile.image_url,
             status: "unseen",
-            path: "leaveApplication"
+            path: "leaveApplication",
           };
           socket.emit("leaveNotification", data);
         } else {
@@ -93,7 +93,7 @@ const LeaveApplicationEmp = (props) => {
 
             profile: null,
             status: "unseen",
-            path: "leaveApplication"
+            path: "leaveApplication",
           };
           socket.emit("leaveNotification", data);
         }
@@ -135,7 +135,7 @@ const LeaveApplicationEmp = (props) => {
       Status: newInfo.target[3].value,
       managerEmail: newInfo.target[4].value,
       hrEmail: newInfo.target[5].value,
-      Reasonforleave: newInfo.target[6].value
+      Reasonforleave: newInfo.target[6].value,
     };
 
     console.log("update", body);
@@ -143,8 +143,8 @@ const LeaveApplicationEmp = (props) => {
     axios
       .put(`${BASE_URL}/api/leave-application-emp/` + info["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((res) => {
         setTable(false);

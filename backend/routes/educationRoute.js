@@ -14,10 +14,10 @@ const {
 } = require("../middleware/authMiddleware");
 // GET: Retrieve all countries
 
-educationRoute.get("/education/:id", verifyHREmployee, getAllEducation);
+educationRoute.get("/education/:id",  getAllEducation);
 
 // POST: Create a new city
-educationRoute.post("/education/:id", verifyEmployee, createEducation);
+educationRoute.post("/education/:id",  createEducation);
 
 // PUT: Update an existing education
 educationRoute.put("/education/:id", verifyEmployee, updateEducation);

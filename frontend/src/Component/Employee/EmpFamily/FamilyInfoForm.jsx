@@ -1,11 +1,17 @@
 import React from "react";
 
 const FamilyInfoForm = (props) => {
+  let id;
+  if (props.data) {
+    id = props.data["_id"];
+  } else {
+    id = localStorage.getItem("_id");
+  }
   return (
     <div className="container-fluid">
       <h5 className="my-3">+ Add Experience</h5>
       <div>
-        <form onSubmit={props.onFamilyInfoSubmit}>
+        <form onSubmit={(e) => props.onFamilyInfoSubmit(e, id)}>
           <div>
             <label>Name</label>
             <div className="form-input">

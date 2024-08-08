@@ -5,9 +5,11 @@ import Table from "react-bootstrap/Table";
 import { BsFiletypeDoc } from "react-icons/bs";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import BASE_URL from "../../../Pages/config/config";
-import { IoMdAttach, IoMdEye } from "react-icons/io";
+import { IoIosChatboxes, IoMdAttach, IoMdEye } from "react-icons/io";
 import { v4 as uuid } from "uuid";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
+import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 
 const EmployeeNewTask = () => {
   const [tasks, setTasks] = useState([]);
@@ -17,7 +19,10 @@ const EmployeeNewTask = () => {
   const empMail = localStorage.getItem("Email");
   const { darkMode } = useTheme();
   const { socket } = useContext(AttendanceContext);
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [empData, setEmpData] = useState(null);
+  const [timeinfo, setTimeinfo] = useState(false);
+  const [expandedTaskId, setExpandedTaskId] = useState(null);
 
   const name = localStorage.getItem("Name");
   const id = localStorage.getItem("_id");
@@ -29,8 +34,8 @@ const EmployeeNewTask = () => {
           `${BASE_URL}/api/personal-info/` + id,
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         );
         setEmpData(response.data);
@@ -44,14 +49,20 @@ const EmployeeNewTask = () => {
     loadPersonalInfoData();
   }, [id]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000); // Update every second
+    return () => clearInterval(interval);
+  }, []);
+
   const calculateRemainingTime = (endDate) => {
-    const now = new Date();
+    const now = currentTime;
     const endDateTime = new Date(endDate);
     let remainingTime = endDateTime - now;
 
     if (remainingTime < 0) {
-      remainingTime = Math.abs(remainingTime);
-      return { delay: true, days: 0, hours: 0, minutes: 0 };
+      return { delay: true, days: 0, hours: 0, minutes: 0, seconds: 0 };
     } else {
       const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
       const hours = Math.floor(
@@ -60,7 +71,8 @@ const EmployeeNewTask = () => {
       const minutes = Math.floor(
         (remainingTime % (1000 * 60 * 60)) / (1000 * 60)
       );
-      return { delay: false, days, hours, minutes };
+      const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+      return { delay: false, days, hours, minutes, seconds };
     }
   };
 
@@ -90,7 +102,7 @@ const EmployeeNewTask = () => {
 
       await axios.put(`${BASE_URL}/api/tasks/${taskId}/employees/${empEmail}`, {
         emptaskStatus: "Accepted",
-        empTaskComment: empRemarks
+        empTaskComment: empRemarks,
       });
 
       toast.success("Task accepted successfully!");
@@ -112,7 +124,7 @@ const EmployeeNewTask = () => {
           profile: empData.profile.image_url,
           taskStatus: "Accepted",
           Account: 3,
-          path: "activeTask"
+          path: "activeTask",
         };
 
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
@@ -128,7 +140,7 @@ const EmployeeNewTask = () => {
           profile: null,
           taskStatus: "Accepted",
           Account: 3,
-          path: "activeTask"
+          path: "activeTask",
         };
 
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
@@ -151,7 +163,7 @@ const EmployeeNewTask = () => {
 
       await axios.put(`${BASE_URL}/api/tasks/${taskId}/employees/${empEmail}`, {
         emptaskStatus: "Rejected",
-        empTaskComment: empRemarks
+        empTaskComment: empRemarks,
       });
 
       toast.success("Task rejected successfully!");
@@ -167,7 +179,7 @@ const EmployeeNewTask = () => {
           profile: empData.profile.image_url,
           taskStatus: "Rejected",
           Account: 3,
-          path: "activeTask"
+          path: "activeTask",
         };
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
       } else {
@@ -182,7 +194,7 @@ const EmployeeNewTask = () => {
           profile: null,
           taskStatus: "Rejected",
           Account: 3,
-          path: "activeTask"
+          path: "activeTask",
         };
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
       }
@@ -203,7 +215,7 @@ const EmployeeNewTask = () => {
 
       await axios.put(`${BASE_URL}/api/tasks/${taskId}/employees/${empEmail}`, {
         emptaskStatus: "Completed",
-        empTaskComment: empRemarks
+        empTaskComment: empRemarks,
       });
 
       toast.success("Task completed successfully!");
@@ -224,7 +236,7 @@ const EmployeeNewTask = () => {
           messageBy: name,
           profile: empData.profile.image_url,
           Account: 3,
-          path: "activeTask"
+          path: "activeTask",
         };
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
       } else {
@@ -239,7 +251,7 @@ const EmployeeNewTask = () => {
           messageBy: name,
           profile: null,
           Account: 3,
-          path: "activeTask"
+          path: "activeTask",
         };
         socket.emit("employeeTaskUpdateNotification", employeeTaskNotification);
       }
@@ -256,19 +268,17 @@ const EmployeeNewTask = () => {
       task.employees.some((taskemp) => taskemp.empemail === email)
   ).length;
 
-  return (
-    <div className="container-fluid">
-      <h5
-        style={{
-          color: darkMode
-            ? "var(--primaryDashColorDark)"
-            : "var(--primaryDashMenuColor)"
-        }}
-        className="fw-bolder text-uppercase py-2 mt-2 "
-      >
-        🌟New Task ({totalTaskAssigned}){" "}
-      </h5>
+  const toggleTaskDetails = (taskId) => {
+    setExpandedTaskId((prevId) => (prevId === taskId ? null : taskId));
+  };
 
+  return (
+    <div className="container-fluid py-2">
+      <TittleHeader
+        numbers={totalTaskAssigned}
+        title={"New Task"}
+        message={"You can view all new task here."}
+      />
       {loading && (
         <div
           style={{ width: "100%", height: "100%" }}
@@ -286,15 +296,7 @@ const EmployeeNewTask = () => {
       {!loading && !tasks.length && (
         <p className="text-danger">Data not available.</p>
       )}
-      <div
-        style={{
-          overflowY: "auto",
-          maxHeight: "80vh",
-          scrollbarWidth: "thin",
-          scrollbarGutter: "stable",
-          scrollMargin: "1rem"
-        }}
-      >
+      <div className="row mx-auto">
         {email &&
           tasks
             .filter(
@@ -304,139 +306,62 @@ const EmployeeNewTask = () => {
             )
             .reverse()
             .map((task, index) => (
-              <details
+              <div
+                key={task._id}
                 style={{
-                  background: darkMode
-                    ? "var( --primaryDashMenuColor)"
-                    : "var(--primaryDashColorDark)"
+                  color: darkMode
+                    ? "var(--primaryDashColorDark)"
+                    : "var(--secondaryDashMenuColor)",
                 }}
-                className="p-1 position-relative fs-4 rounded mx-2 my-3"
-                key={task.id}
+                className="col-12 col-md-6 col-lg-4 p-2"
               >
-                <summary
-                  style={{
-                    height: "fit-content",
-                    background: darkMode
-                      ? "var( --primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)",
-                    position: "relative"
-                  }}
-                  className="d-flex flex-column justify-content-between py-4 align-center form-control"
-                >
-                  <div
-                    style={{
-                      color: darkMode
-                        ? "var(--secondaryDashColorDark)"
-                        : "var( --primaryDashMenuColor)"
-                    }}
-                    className="fs-5 d-flex justify-content-center flex-column text-capitalize"
-                  >
-                    #{index + 1} : {task.Taskname}
-                  </div>
-                  <div
-                    style={{ position: "absolute", top: "-10px", left: "15px" }}
-                    className="fw-bold bg-white rounded-5 border px-3 text-primary fs-6 d-flex justify-content-center align-center flex-column"
-                  >
-                    {task.department}
-                  </div>
-                  <div
-                    style={{
-                      color: darkMode
-                        ? "var(--secondaryDashColorDark)"
-                        : "var( --primaryDashMenuColor)",
-                      fontSize: ".8rem",
-                      position: "absolute",
-                      bottom: "5px"
-                    }}
-                    className="d-flex gap-2 RemainingTimeHandel justify-content-start"
-                  >
-                    {calculateRemainingTime(task.endDate).delay ? (
-                      <div>
-                        <div className="text-center d-none">
-                          <div className="fw-bold my-auto p-0">
-                            {calculateRemainingTime(task.endDate).days}{" "}
-                          </div>
-                          <div>Days</div>
-                        </div>
-                        <h5
-                          style={{ fontSize: ".8rem" }}
-                          className="text-danger p-0 m-0"
-                        >
-                          Task is running Late
-                        </h5>
-                      </div>
-                    ) : (
-                      <div className="text-center">
-                        {calculateRemainingTime(task.endDate).days} Days
-                      </div>
-                    )}
-                    {calculateRemainingTime(task.endDate).delay ? (
-                      <div className="text-center d-none">
-                        {calculateRemainingTime(task.endDate).hours} Min
-                      </div>
-                    ) : (
-                      <div className="text-center">
-                        {calculateRemainingTime(task.endDate).hours} Hrs
-                      </div>
-                    )}
-                    {calculateRemainingTime(task.endDate).delay ? (
-                      <div className="text-center d-none">
-                        {calculateRemainingTime(task.endDate).minutes} Min
-                      </div>
-                    ) : (
-                      <div className="text-center">
-                        and {calculateRemainingTime(task.endDate).minutes} Min
-                        Remaining
-                      </div>
-                    )}
-                  </div>
-                </summary>
                 <div
                   style={{
-                    position: "relative",
-                    background: darkMode
-                      ? "var( --primaryDashMenuColor)"
-                      : "var(--primaryDashColorDark)"
+                    border: !darkMode
+                      ? "1px solid var(--primaryDashMenuColor)"
+                      : "1px solid var(--secondaryDashColorDark)",
                   }}
-                  className="row p-1 my-2 mx-0 rounded"
+                  className="task-hover-effect p-2"
                 >
-                  <div
-                    style={{
-                      height: "fit-content",
-                      background: darkMode
-                        ? "var( --primaryDashMenuColor)"
-                        : "var(--primaryDashColorDark)"
-                    }}
-                    className="form-control"
-                  >
-                    <p
+                  <div className="d-flex align-items-center justify-content-between">
+                    <h5>{task.Taskname}</h5>
+                    <button className="btn btn-primary">{task.status}</button>
+                  </div>
+                  <hr />
+                  <div className="d-flex align-items-center justify-content-between gap-2">
+                    <div className="d-flex align-items-center gap-2">
+                      <img
+                        style={{
+                          height: "30px",
+                          width: "30px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                        }}
+                        src="https://www.portalcidade.news/wp-content/uploads/2021/11/email-logo.jpg"
+                        alt=""
+                      />
+                      <span>{task.adminMail}</span>
+                    </div>
+                    <span
                       style={{
-                        height: "fit-content",
-                        background: darkMode
-                          ? "var( --primaryDashMenuColor)"
-                          : "var(--primaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--primaryDashColorDark)"
-                          : "var( --primaryDashMenuColor)"
+                        border: darkMode
+                          ? "1px solid var(--primaryDashColorDark)"
+                          : "1px solid var(--primaryDashMenuColor)",
                       }}
-                      className="text-start fs-6 form-control border-0 "
+                      className="px-2 py-1 text-center"
                     >
-                      <h6 className="fw-bold">Task Description</h6>{" "}
-                      {task.description}
-                    </p>
-                    <div
-                      style={{
-                        height: "fit-content",
-                        background: darkMode
-                          ? "var( --primaryDashMenuColor)"
-                          : "var(--primaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--primaryDashColorDark)"
-                          : "var( --primaryDashMenuColor)"
-                      }}
-                      className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
-                    >
-                      <Table>
+                      {task.department}
+                    </span>
+                  </div>
+                  <hr />
+                  <div className="my-3 d-flex flex-column gap-1">
+                    <h6>Task Description</h6>
+                    <span>{task.description}</span>
+                  </div>
+                  <div>
+                    <div style={{ width: "100%", overflow: "auto" }}>
+                      <h6>Task Details</h6>
+                      <table className="table">
                         <thead>
                           <tr>
                             <th
@@ -449,7 +374,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none"
+                                border: "none",
                               }}
                             >
                               Task Durations
@@ -464,7 +389,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none"
+                                border: "none",
                               }}
                             >
                               Manager Email
@@ -479,7 +404,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none"
+                                border: "none",
                               }}
                             >
                               Start Date
@@ -494,25 +419,10 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--primaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none"
+                                border: "none",
                               }}
                             >
                               End Date
-                            </th>
-                            <th
-                              style={{
-                                verticalAlign: "middle",
-                                whiteSpace: "pre",
-                                background: darkMode
-                                  ? "var( --primaryDashMenuColor)"
-                                  : "var(--primaryDashColorDark)",
-                                color: darkMode
-                                  ? "var(--primaryDashColorDark)"
-                                  : "var( --primaryDashMenuColor)",
-                                border: "none"
-                              }}
-                            >
-                              Task Status
                             </th>
                           </tr>
                         </thead>
@@ -528,7 +438,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--secondaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none"
+                                border: "none",
                               }}
                             >
                               {task.duration} days
@@ -543,7 +453,7 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--secondaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none"
+                                border: "none",
                               }}
                             >
                               {task.managerEmail}
@@ -558,14 +468,14 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--secondaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none"
+                                border: "none",
                               }}
                             >
                               {new Date(task.startDate)
                                 .toLocaleDateString("en-US", {
                                   day: "numeric",
                                   month: "short",
-                                  year: "numeric"
+                                  year: "numeric",
                                 })
                                 .replace(",", "")}
                             </td>
@@ -579,370 +489,377 @@ const EmployeeNewTask = () => {
                                 color: darkMode
                                   ? "var(--secondaryDashColorDark)"
                                   : "var( --primaryDashMenuColor)",
-                                border: "none"
+                                border: "none",
                               }}
                             >
                               {new Date(task.endDate)
                                 .toLocaleDateString("en-US", {
                                   day: "numeric",
                                   month: "short",
-                                  year: "numeric"
+                                  year: "numeric",
                                 })
                                 .replace(",", "")}
                             </td>
-                            <td
-                              style={{
-                                verticalAlign: "middle",
-                                whiteSpace: "pre",
-                                background: darkMode
-                                  ? "var( --secondaryDashMenuColor)"
-                                  : "var(--secondaryDashColorDark)",
-                                color: darkMode
-                                  ? "var(--secondaryDashColorDark)"
-                                  : "var( --primaryDashMenuColor)",
-                                border: "none"
-                              }}
-                            >
-                              {task.status}
-                            </td>
                           </tr>
                         </tbody>
-                      </Table>
+                      </table>
                     </div>
-                    <div
-                      style={{
-                        height: "fit-content",
-                        background: darkMode
-                          ? "var( --primaryDashMenuColor)"
-                          : "var(--primaryDashColorDark)",
-                        color: darkMode
-                          ? "var(--primaryDashColorDark)"
-                          : "var( --primaryDashMenuColor)"
-                      }}
-                      className="row form-control d-flex my-1 mt-3 pt-3 rounded mx-1 justify-content-between"
-                    >
-                      <h6 className="fw-bold">Project Members</h6>
-                      <Table>
-                        <thead>
-                          <tr>
-                            <th
+                    <div className="mt-4">
+                      <span
+                        style={{ cursor: "pointer" }}
+                        onMouseEnter={() => setTimeinfo("name")}
+                        onMouseLeave={() => setTimeinfo(false)}
+                        onClick={() => toggleTaskDetails(task._id)}
+                      >
+                        {expandedTaskId === task._id ? (
+                          <span>
+                            View Less <MdArrowDropUp className="fs-4" />
+                          </span>
+                        ) : (
+                          <span>
+                            {" "}
+                            View Details <MdArrowDropDown className="fs-4" />
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                    {expandedTaskId === task._id && (
+                      <div>
+                        <div className="d-flex flex-column my-2">
+                          <h6>Remarks</h6>
+                          <span>{task.comment}</span>
+                        </div>
+                        <hr />
+                        <div style={{ width: "100%", overflow: "auto" }}>
+                          <h6 className="fw-bold">Project Members</h6>
+                          <Table>
+                            <thead>
+                              <tr>
+                                <th
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    background: darkMode
+                                      ? "var( --primaryDashMenuColor)"
+                                      : "var(--primaryDashColorDark)",
+                                    color: darkMode
+                                      ? "var(--primaryDashColorDark)"
+                                      : "var( --primaryDashMenuColor)",
+                                    border: "none",
+                                  }}
+                                >
+                                  Name
+                                </th>
+                                <th
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    background: darkMode
+                                      ? "var( --primaryDashMenuColor)"
+                                      : "var(--primaryDashColorDark)",
+                                    color: darkMode
+                                      ? "var(--primaryDashColorDark)"
+                                      : "var( --primaryDashMenuColor)",
+                                    border: "none",
+                                  }}
+                                >
+                                  Email
+                                </th>
+                                <th
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    background: darkMode
+                                      ? "var( --primaryDashMenuColor)"
+                                      : "var(--primaryDashColorDark)",
+                                    color: darkMode
+                                      ? "var(--primaryDashColorDark)"
+                                      : "var( --primaryDashMenuColor)",
+                                    border: "none",
+                                  }}
+                                >
+                                  Designation
+                                </th>
+
+                                <th
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    background: darkMode
+                                      ? "var( --primaryDashMenuColor)"
+                                      : "var(--primaryDashColorDark)",
+                                    color: darkMode
+                                      ? "var(--primaryDashColorDark)"
+                                      : "var( --primaryDashMenuColor)",
+                                    border: "none",
+                                  }}
+                                >
+                                  Task Status
+                                </th>
+                                <th
+                                  style={{
+                                    verticalAlign: "middle",
+                                    whiteSpace: "pre",
+                                    background: darkMode
+                                      ? "var( --primaryDashMenuColor)"
+                                      : "var(--primaryDashColorDark)",
+                                    color: darkMode
+                                      ? "var(--primaryDashColorDark)"
+                                      : "var( --primaryDashMenuColor)",
+                                    border: "none",
+                                  }}
+                                >
+                                  Remarks
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {email &&
+                                task.employees
+                                  .filter(
+                                    (taskemp) => taskemp.empemail === email
+                                  )
+                                  .map((taskemp, i) => (
+                                    <tr key={i}>
+                                      <td
+                                        style={{
+                                          verticalAlign: "middle",
+                                          whiteSpace: "pre",
+                                          background: darkMode
+                                            ? "var( --secondaryDashMenuColor)"
+                                            : "var(--secondaryDashColorDark)",
+                                          color: darkMode
+                                            ? "var(--secondaryDashColorDark)"
+                                            : "var( --primaryDashMenuColor)",
+                                          border: "none",
+                                        }}
+                                        className="text-capitalize"
+                                      >
+                                        {taskemp.empname}
+                                      </td>
+                                      <td
+                                        style={{
+                                          verticalAlign: "middle",
+                                          whiteSpace: "pre",
+                                          background: darkMode
+                                            ? "var( --secondaryDashMenuColor)"
+                                            : "var(--secondaryDashColorDark)",
+                                          color: darkMode
+                                            ? "var(--secondaryDashColorDark)"
+                                            : "var( --primaryDashMenuColor)",
+                                          border: "none",
+                                        }}
+                                      >
+                                        {taskemp.empemail}
+                                      </td>
+                                      <td
+                                        style={{
+                                          verticalAlign: "middle",
+                                          whiteSpace: "pre",
+                                          background: darkMode
+                                            ? "var( --secondaryDashMenuColor)"
+                                            : "var(--secondaryDashColorDark)",
+                                          color: darkMode
+                                            ? "var(--secondaryDashColorDark)"
+                                            : "var( --primaryDashMenuColor)",
+                                          border: "none",
+                                        }}
+                                      >
+                                        {taskemp.empdesignation}
+                                      </td>
+                                      <td
+                                        style={{
+                                          verticalAlign: "middle",
+                                          whiteSpace: "pre",
+                                          background: darkMode
+                                            ? "var( --secondaryDashMenuColor)"
+                                            : "var(--secondaryDashColorDark)",
+                                          color: darkMode
+                                            ? "var(--secondaryDashColorDark)"
+                                            : "var( --primaryDashMenuColor)",
+                                          border: "none",
+                                        }}
+                                      >
+                                        {taskemp.emptaskStatus}{" "}
+                                      </td>
+                                      <td
+                                        style={{
+                                          maxWidth: "10rem",
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis",
+                                          verticalAlign: "middle",
+                                          whiteSpace: "pre",
+                                          background: darkMode
+                                            ? "var( --secondaryDashMenuColor)"
+                                            : "var(--secondaryDashColorDark)",
+                                          color: darkMode
+                                            ? "var(--secondaryDashColorDark)"
+                                            : "var( --primaryDashMenuColor)",
+                                          border: "none",
+                                        }}
+                                      >
+                                        {taskemp.empTaskComment}
+                                      </td>
+                                    </tr>
+                                  ))}
+                            </tbody>
+                          </Table>
+                        </div>
+                        <hr />
+                        <span className="d-flex flex-column gap-1">
+                          <h6>Time Left</h6>
+                          <span>
+                            <div
                               style={{
-                                verticalAlign: "middle",
-                                whiteSpace: "pre",
-                                background: darkMode
-                                  ? "var( --primaryDashMenuColor)"
-                                  : "var(--primaryDashColorDark)",
-                                color: darkMode
-                                  ? "var(--primaryDashColorDark)"
-                                  : "var( --primaryDashMenuColor)",
-                                border: "none"
+                                display:
+                                  expandedTaskId === task._id ? "flex" : "none",
                               }}
                             >
-                              S. No
-                            </th>
-                            <th
-                              style={{
-                                verticalAlign: "middle",
-                                whiteSpace: "pre",
-                                background: darkMode
-                                  ? "var( --primaryDashMenuColor)"
-                                  : "var(--primaryDashColorDark)",
-                                color: darkMode
-                                  ? "var(--primaryDashColorDark)"
-                                  : "var( --primaryDashMenuColor)",
-                                border: "none"
-                              }}
-                            >
-                              Name
-                            </th>
-                            <th
-                              style={{
-                                verticalAlign: "middle",
-                                whiteSpace: "pre",
-                                background: darkMode
-                                  ? "var( --primaryDashMenuColor)"
-                                  : "var(--primaryDashColorDark)",
-                                color: darkMode
-                                  ? "var(--primaryDashColorDark)"
-                                  : "var( --primaryDashMenuColor)",
-                                border: "none"
-                              }}
-                            >
-                              Email
-                            </th>
-                            <th
-                              style={{
-                                verticalAlign: "middle",
-                                whiteSpace: "pre",
-                                background: darkMode
-                                  ? "var( --primaryDashMenuColor)"
-                                  : "var(--primaryDashColorDark)",
-                                color: darkMode
-                                  ? "var(--primaryDashColorDark)"
-                                  : "var( --primaryDashMenuColor)",
-                                border: "none"
-                              }}
-                            >
-                              Designation
-                            </th>
-                            <th
-                              style={{
-                                verticalAlign: "middle",
-                                whiteSpace: "pre",
-                                background: darkMode
-                                  ? "var( --primaryDashMenuColor)"
-                                  : "var(--primaryDashColorDark)",
-                                color: darkMode
-                                  ? "var(--primaryDashColorDark)"
-                                  : "var( --primaryDashMenuColor)",
-                                border: "none"
-                              }}
-                              className=""
-                            >
-                              Attach <IoMdAttach />
-                            </th>
-                            <th
-                              style={{
-                                verticalAlign: "middle",
-                                whiteSpace: "pre",
-                                background: darkMode
-                                  ? "var( --primaryDashMenuColor)"
-                                  : "var(--primaryDashColorDark)",
-                                color: darkMode
-                                  ? "var(--primaryDashColorDark)"
-                                  : "var( --primaryDashMenuColor)",
-                                border: "none"
-                              }}
-                            >
-                              Action
-                            </th>
-                            <th
-                              style={{
-                                verticalAlign: "middle",
-                                whiteSpace: "pre",
-                                background: darkMode
-                                  ? "var( --primaryDashMenuColor)"
-                                  : "var(--primaryDashColorDark)",
-                                color: darkMode
-                                  ? "var(--primaryDashColorDark)"
-                                  : "var( --primaryDashMenuColor)",
-                                border: "none"
-                              }}
-                            >
-                              Task Status
-                            </th>
-                            <th
-                              style={{
-                                verticalAlign: "middle",
-                                whiteSpace: "pre",
-                                background: darkMode
-                                  ? "var( --primaryDashMenuColor)"
-                                  : "var(--primaryDashColorDark)",
-                                color: darkMode
-                                  ? "var(--primaryDashColorDark)"
-                                  : "var( --primaryDashMenuColor)",
-                                border: "none"
-                              }}
-                            >
-                              Remarks
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                              <div className="d-flex gap-2 justify-content-between">
+                                {calculateRemainingTime(task.endDate).delay ? (
+                                  <div className="">
+                                    <span className=" rounded-5 border border-danger  my-auto  p-1 px-2">
+                                      Please finish the task as soon as you can,
+                                      as it's running late.
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <>
+                                    <div className="text-center">
+                                      <div
+                                        className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                        style={{
+                                          boxShadow: "0 0 5px 2px gray inset",
+                                          height: "30px",
+                                          minWidth: "30px",
+                                        }}
+                                      >
+                                        {
+                                          calculateRemainingTime(task.endDate)
+                                            .days
+                                        }
+                                      </div>
+                                      <div>Day</div>
+                                    </div>
+                                    <div className="text-center">
+                                      <div
+                                        className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                        style={{
+                                          boxShadow: "0 0 5px 2px gray inset",
+                                          height: "30px",
+                                          minWidth: "30px",
+                                        }}
+                                      >
+                                        {
+                                          calculateRemainingTime(task.endDate)
+                                            .hours
+                                        }
+                                      </div>
+                                      <div>Hrs</div>
+                                    </div>
+                                    <div className="text-center">
+                                      <div
+                                        className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                        style={{
+                                          boxShadow: "0 0 5px 2px gray inset",
+                                          height: "30px",
+                                          minWidth: "30px",
+                                        }}
+                                      >
+                                        {
+                                          calculateRemainingTime(task.endDate)
+                                            .minutes
+                                        }
+                                      </div>
+                                      <div>Min</div>
+                                    </div>
+                                    <div className="text-center">
+                                      <div
+                                        className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                        style={{
+                                          boxShadow: "0 0 5px 2px gray inset",
+                                          height: "30px",
+                                          minWidth: "30px",
+                                        }}
+                                      >
+                                        {
+                                          calculateRemainingTime(task.endDate)
+                                            .seconds
+                                        }
+                                      </div>
+                                      <div>Sec</div>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          </span>
+                        </span>
+                        <div className="d-flex flex-column gap-2 my-2">
+                          Action
                           {email &&
                             task.employees
                               .filter((taskemp) => taskemp.empemail === email)
                               .map((taskemp, i) => (
-                                <tr key={i}>
-                                  <td
-                                    style={{
-                                      verticalAlign: "middle",
-                                      whiteSpace: "pre",
-                                      background: darkMode
-                                        ? "var( --secondaryDashMenuColor)"
-                                        : "var(--secondaryDashColorDark)",
-                                      color: darkMode
-                                        ? "var(--secondaryDashColorDark)"
-                                        : "var( --primaryDashMenuColor)",
-                                      border: "none"
-                                    }}
+                                <div className="d-flex align-items-center gap-2">
+                                  <button
+                                    className="btn btn-primary py-1"
+                                    onClick={() =>
+                                      acceptTask(
+                                        task._id,
+                                        taskemp.empemail,
+                                        task
+                                      )
+                                    }
+                                    disabled={
+                                      taskemp.emptaskStatus === "Accepted" ||
+                                      taskemp.emptaskStatus === "Rejected" ||
+                                      taskemp.emptaskStatus === "Completed"
+                                    }
                                   >
-                                    {i + 1}
-                                  </td>
-                                  <td
-                                    style={{
-                                      verticalAlign: "middle",
-                                      whiteSpace: "pre",
-                                      background: darkMode
-                                        ? "var( --secondaryDashMenuColor)"
-                                        : "var(--secondaryDashColorDark)",
-                                      color: darkMode
-                                        ? "var(--secondaryDashColorDark)"
-                                        : "var( --primaryDashMenuColor)",
-                                      border: "none"
-                                    }}
-                                    className="text-capitalize"
+                                    Accept
+                                  </button>
+                                  <button
+                                    className="btn  py-1 btn-danger"
+                                    onClick={() =>
+                                      rejectTask(
+                                        task._id,
+                                        taskemp.empemail,
+                                        task
+                                      )
+                                    }
+                                    disabled={
+                                      taskemp.emptaskStatus === "Accepted" ||
+                                      taskemp.emptaskStatus === "Rejected" ||
+                                      taskemp.emptaskStatus === "Completed"
+                                    }
                                   >
-                                    {taskemp.empname}
-                                  </td>
-                                  <td
-                                    style={{
-                                      verticalAlign: "middle",
-                                      whiteSpace: "pre",
-                                      background: darkMode
-                                        ? "var( --secondaryDashMenuColor)"
-                                        : "var(--secondaryDashColorDark)",
-                                      color: darkMode
-                                        ? "var(--secondaryDashColorDark)"
-                                        : "var( --primaryDashMenuColor)",
-                                      border: "none"
-                                    }}
+                                    Reject
+                                  </button>
+                                  <button
+                                    className="btn py-1 btn-success"
+                                    onClick={() =>
+                                      completeTask(
+                                        task._id,
+                                        taskemp.empemail,
+                                        task
+                                      )
+                                    }
+                                    disabled={
+                                      taskemp.emptaskStatus === "Completed"
+                                    }
                                   >
-                                    {taskemp.empemail}
-                                  </td>
-                                  <td
-                                    style={{
-                                      verticalAlign: "middle",
-                                      whiteSpace: "pre",
-                                      background: darkMode
-                                        ? "var( --secondaryDashMenuColor)"
-                                        : "var(--secondaryDashColorDark)",
-                                      color: darkMode
-                                        ? "var(--secondaryDashColorDark)"
-                                        : "var( --primaryDashMenuColor)",
-                                      border: "none"
-                                    }}
-                                  >
-                                    {taskemp.empdesignation}
-                                  </td>
-                                  <td
-                                    style={{
-                                      verticalAlign: "middle",
-                                      whiteSpace: "pre",
-                                      background: darkMode
-                                        ? "var( --secondaryDashMenuColor)"
-                                        : "var(--secondaryDashColorDark)",
-                                      color: darkMode
-                                        ? "var(--secondaryDashColorDark)"
-                                        : "var( --primaryDashMenuColor)",
-                                      border: "none"
-                                    }}
-                                  >
-                                    <button className="btn btn-light w-100 shadow-sm">
-                                      <IoMdEye style={{ cursor: "pointer" }} />
-                                    </button>
-                                  </td>
-                                  <td
-                                    style={{
-                                      verticalAlign: "middle",
-                                      whiteSpace: "pre",
-                                      background: darkMode
-                                        ? "var( --secondaryDashMenuColor)"
-                                        : "var(--secondaryDashColorDark)",
-                                      color: darkMode
-                                        ? "var(--secondaryDashColorDark)"
-                                        : "var( --primaryDashMenuColor)",
-                                      border: "none"
-                                    }}
-                                  >
-                                    <div className="d-flex align-items-center justify-content-evenly">
-                                      <button
-                                        className="btn btn-primary py-1"
-                                        onClick={() =>
-                                          acceptTask(
-                                            task._id,
-                                            taskemp.empemail,
-                                            task
-                                          )
-                                        }
-                                        disabled={
-                                          taskemp.emptaskStatus ===
-                                            "Accepted" ||
-                                          taskemp.emptaskStatus ===
-                                            "Rejected" ||
-                                          taskemp.emptaskStatus === "Completed"
-                                        }
-                                      >
-                                        Accept
-                                      </button>
-                                      <button
-                                        className="btn  py-1 btn-danger"
-                                        onClick={() =>
-                                          rejectTask(
-                                            task._id,
-                                            taskemp.empemail,
-                                            task
-                                          )
-                                        }
-                                        disabled={
-                                          taskemp.emptaskStatus ===
-                                            "Accepted" ||
-                                          taskemp.emptaskStatus ===
-                                            "Rejected" ||
-                                          taskemp.emptaskStatus === "Completed"
-                                        }
-                                      >
-                                        Reject
-                                      </button>
-                                      <button
-                                        className="btn py-1 btn-success"
-                                        onClick={() =>
-                                          completeTask(
-                                            task._id,
-                                            taskemp.empemail,
-                                            task
-                                          )
-                                        }
-                                        disabled={
-                                          taskemp.emptaskStatus === "Completed"
-                                        }
-                                      >
-                                        Complete
-                                      </button>
-                                    </div>
-                                  </td>
-                                  <td
-                                    style={{
-                                      verticalAlign: "middle",
-                                      whiteSpace: "pre",
-                                      background: darkMode
-                                        ? "var( --secondaryDashMenuColor)"
-                                        : "var(--secondaryDashColorDark)",
-                                      color: darkMode
-                                        ? "var(--secondaryDashColorDark)"
-                                        : "var( --primaryDashMenuColor)",
-                                      border: "none"
-                                    }}
-                                  >
-                                    {taskemp.emptaskStatus}{" "}
-                                  </td>
-                                  <td
-                                    style={{
-                                      maxWidth: "10rem",
-                                      overflow: "hidden",
-                                      whiteSpace: "nowrap",
-                                      textOverflow: "ellipsis",
-                                      verticalAlign: "middle",
-                                      whiteSpace: "pre",
-                                      background: darkMode
-                                        ? "var( --secondaryDashMenuColor)"
-                                        : "var(--secondaryDashColorDark)",
-                                      color: darkMode
-                                        ? "var(--secondaryDashColorDark)"
-                                        : "var( --primaryDashMenuColor)",
-                                      border: "none"
-                                    }}
-                                  >
-                                    {taskemp.empTaskComment}
-                                  </td>
-                                </tr>
+                                    Complete
+                                  </button>
+                                </div>
                               ))}
-                        </tbody>
-                      </Table>
-                    </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </details>
+              </div>
             ))}
       </div>
     </div>

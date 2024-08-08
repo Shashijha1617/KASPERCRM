@@ -351,9 +351,7 @@ const EmployeeForm = (props) => {
               <input
                 className="form-control rounded-0"
                 type="text"
-                maxLength={10}
-                min={0}
-                placeholder="Please Enter 10 digit contact number"
+                placeholder="Contact No "
               />
             </div>
           </div>

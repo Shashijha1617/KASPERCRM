@@ -9,6 +9,8 @@ import "./WorkExperienceTable.css";
 import SearchLight from "../../../img/Attendance/SearchLight.svg";
 import BASE_URL from "../../../Pages/config/config.js";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext.js";
+import OverLayToolTip from "../../../Utils/OverLayToolTip.jsx";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader.jsx";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -21,14 +23,19 @@ const WorkExperienceTable = (props) => {
   const [loading, setLoading] = useState(true);
   const [rowData, setRowData] = useState([]);
   const { darkMode } = useTheme();
-
+  let id;
+  if (props.data) {
+    id = props.data["_id"];
+  } else {
+    id = localStorage.getItem("_id");
+  }
   // Removed const from here
   let workExperienceObj = [];
   let rowDataT = [];
 
   const loadWorkExperienceData = () => {
     axios
-      .get(`${BASE_URL}/api/work-experience/` + localStorage.getItem("_id"), {
+      .get(`${BASE_URL}/api/work-experience/` + id, {
         headers: {
           authorization: localStorage.getItem("token") || "",
         },
@@ -140,16 +147,11 @@ const WorkExperienceTable = (props) => {
     <div className="container-fluid">
       <div id="table-outer-div-scroll">
         <div className="d-flex justify-content-between my-2">
-          <h6
-            style={{
-              color: darkMode
-                ? "var(--primaryDashColorDark)"
-                : "var(--primaryDashMenuColor)",
-            }}
-            className="my-auto"
-          >
-            Work Experience ( {rowData.length} )
-          </h6>
+          <TittleHeader
+            title={"Work Experience"}
+            numbers={rowData.length}
+            message={"You can view work experience details here."}
+          />
 
           <div className="py-1">
             <button
@@ -175,82 +177,82 @@ const WorkExperienceTable = (props) => {
             />
           </div>
         )}
-
-        <table className="table">
-          <thead>
-            <tr>
-              <th style={rowHeadStyle}>Company Name</th>
-              <th style={rowHeadStyle}>Designation</th>
-              <th style={rowHeadStyle}>FromDate</th>
-              <th style={rowHeadStyle}>ToDate</th>
-              <th style={rowHeadStyle} className="text-end">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {rowData.map((items, index) => (
-              <tr key={index}>
-                <td style={rowBodyStyle} className="text-capitalize">
-                  {items.CompanyName}
-                </td>
-                <td style={rowBodyStyle} className="text-capitalize">
-                  {items.Designation}
-                </td>
-                <td style={rowBodyStyle} className="text-capitalize">
-                  {items.FromDate}
-                </td>
-                <td style={rowBodyStyle} className="text-capitalize">
-                  {items.ToDate}
-                </td>
-                <td style={rowBodyStyle} className="text-capitalize text-end">
-                  {" "}
-                  <button
-                    onClick={() => props.onEditWorkExperience(items.data)}
-                    style={{
-                      zIndex: "1",
-                      cursor: "pointer",
-                    }}
-                    className="btn btn-outline-primary"
-                  >
-                    <FaRegEdit /> Edit
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div
-          style={{
-            height: "65vh",
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            wordSpacing: "5px",
-            flexDirection: "column",
-            gap: "2rem",
-          }}
-        >
-          <img
-            style={{
-              height: "auto",
-              width: "30%",
-            }}
-            src={SearchLight}
-            alt="img"
-          />
-          <p
-            className="text-center w-75 mx-auto"
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var( --primaryDashMenuColor)",
-            }}
-          >
-            Details not available Please add.
-          </p>
+        <div>
+          {rowData.length > 0 ? (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th style={rowHeadStyle}>Company Name</th>
+                  <th style={rowHeadStyle}>Designation</th>
+                  <th style={rowHeadStyle}>FromDate</th>
+                  <th style={rowHeadStyle}>ToDate</th>
+                  <th style={rowHeadStyle} className="text-end">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {rowData.map((items, index) => (
+                  <tr key={index}>
+                    <td style={rowBodyStyle} className="text-capitalize">
+                      {items.CompanyName}
+                    </td>
+                    <td style={rowBodyStyle} className="text-capitalize">
+                      {items.Designation}
+                    </td>
+                    <td style={rowBodyStyle} className="text-capitalize">
+                      {items.FromDate}
+                    </td>
+                    <td style={rowBodyStyle} className="text-capitalize">
+                      {items.ToDate}
+                    </td>
+                    <td
+                      style={rowBodyStyle}
+                      className="text-capitalize text-end"
+                    >
+                      <OverLayToolTip
+                        onClick={() => props.onEditWorkExperience(items.data)}
+                        tooltip={"Edit"}
+                        icon={<FaRegEdit className="text-primary fs-5" />}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div
+              style={{
+                height: "65vh",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                wordSpacing: "5px",
+                flexDirection: "column",
+                gap: "2rem",
+              }}
+            >
+              <img
+                style={{
+                  height: "auto",
+                  width: "30%",
+                }}
+                src={SearchLight}
+                alt="img"
+              />
+              <p
+                className="text-center w-75 mx-auto"
+                style={{
+                  color: darkMode
+                    ? "var(--secondaryDashColorDark)"
+                    : "var( --primaryDashMenuColor)",
+                }}
+              >
+                Details not available Please add.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

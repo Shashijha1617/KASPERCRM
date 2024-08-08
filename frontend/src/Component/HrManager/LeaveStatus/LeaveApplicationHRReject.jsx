@@ -54,6 +54,8 @@ const LeaveApplicationHRTable = (props) => {
           return {
             data,
             empID: data?.empID,
+            FirstName: data?.FirstName,
+            LastName: data?.LastName,
             Name: data?.FirstName + " " + data?.LastName,
             Leavetype: data?.Leavetype,
             FromDate: data?.FromDate?.slice(0, 10),
@@ -458,25 +460,21 @@ const LeaveApplicationHRTable = (props) => {
                           }}
                           className="py-1"
                         >
-                          <div className="d-flex aline-center gap-2">
-                            <div style={{ height: "35px", width: "35px" }}>
-                              <img
-                                style={{
-                                  height: "100%",
-                                  width: "100%",
-                                  borderRadius: "50%",
-                                  overflow: "hidden",
-                                  objectFit: "cover",
-                                }}
-                                src={
-                                  data?.data?.profile?.image_url
-                                    ? data?.data?.profile?.image_url
-                                    : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
-                                }
-                                alt=""
-                              />
-                            </div>
-                            <div className="d-flex flex-column"></div>
+                          <div
+                            className="d-flex align-items-center justify-content-center"
+                            style={{
+                              height: "35px",
+                              width: "35px",
+                              borderRadius: "50%",
+                              backgroundColor: "#ccc",
+                              color: "white",
+                              fontWeight: "bold",
+                              overflow: "hidden",
+                              objectFit: "cover",
+                            }}
+                          >
+                            {data?.FirstName?.[0]}
+                            {data?.LastName?.[0]}
                           </div>
                         </td>
                         <td

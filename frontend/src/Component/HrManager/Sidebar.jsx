@@ -15,6 +15,7 @@ import { useTheme } from "../../Context/TheamContext/ThemeContext";
 import { ImCalendar } from "react-icons/im";
 import { PiUsersThree } from "react-icons/pi";
 import { IoCashOutline } from "react-icons/io5";
+import { HiOutlineSpeakerphone } from "react-icons/hi";
 
 const Sidebar = (props) => {
   const [activeCategory, setActiveCategory] = useState(null);
@@ -45,7 +46,7 @@ const Sidebar = (props) => {
         { to: "/hr/AttendanceRegister", label: "Attendance Register" },
         { to: "/hr/todaysAttendance", label: "TodaysAttendance" },
         { to: "/hr/viewAttenDance", label: "View Attendance" },
-        { to: "/hr/manualAttand", label: "All Emp Attendance" },
+        { to: "/hr/manualAttand", label: "Manual Attendance" },
       ],
     },
     {
@@ -58,20 +59,20 @@ const Sidebar = (props) => {
         { to: "/hr/leaveRejected", label: "Rejected " },
         { to: "/hr/assignLeave", label: "Assign Leave" },
         { to: "/hr/allEmpLeave", label: "All Emp Leave" },
-        { to: "/hr/leaveBalance", label: "Leave Balance" },
+        // { to: "/hr/leaveBalance", label: "Leave Balance" },
       ],
     },
-    {
-      icon: <MdTaskAlt />,
-      name: "Task",
-      navLinks: [
-        { to: "/hr/newTask", label: "Assign New Task" },
-        { to: "/hr/ActiveTask", label: "Active Task" },
-        { to: "/hr/taskcancle", label: "Cancelled Task" },
-        { to: "/hr/taskcomplete", label: "Completed Task" },
-        { to: "/hr/rejectTask", label: "Rejected Task" },
-      ],
-    },
+    // {
+    //   icon: <MdTaskAlt />,
+    //   name: "Task",
+    //   navLinks: [
+    //     { to: "/hr/newTask", label: "Assign New Task" },
+    //     { to: "/hr/ActiveTask", label: "Active Task" },
+    //     { to: "/hr/taskcancle", label: "Cancelled Task" },
+    //     { to: "/hr/taskcomplete", label: "Completed Task" },
+    //     { to: "/hr/rejectTask", label: "Rejected Task" },
+    //   ],
+    // },
     {
       icon: <MdOutlineContacts />,
       name: "Access",
@@ -94,6 +95,11 @@ const Sidebar = (props) => {
         { to: "/hr/state", label: "State" },
         { to: "/hr/city", label: "City" },
       ],
+    },
+    {
+      icon: <HiOutlineSpeakerphone />,
+      name: "Notice",
+      navLinks: [{ to: "/hr/NoticeManagement", label: "Notice" }],
     },
     {
       icon: <ImCalendar />,
@@ -127,12 +133,16 @@ const Sidebar = (props) => {
       className="d-none d-sm-flex flex-column gap-2 p-2"
     >
       <h3
-        style={{ borderBottom: "3px solid green" }}
+        style={{ borderBottom: "3px solid #DE4E26" }}
         className="text-success justify-content-between py-2 d-flex gap-2"
       >
         <button
-          style={{ display: !extended ? "none" : "block", cursor: "none" }}
-          className=" btn btn-success rounded-5 py-0"
+          style={{
+            display: !extended ? "none" : "block",
+            cursor: "none",
+            background: "#DE4E26",
+          }}
+          className=" btn text-white rounded-0 py-0"
         >
           HR
         </button>
