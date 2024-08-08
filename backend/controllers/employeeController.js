@@ -192,6 +192,93 @@ const createEmployee = async (req, res) => {
 };
 
 // find and update the city
+// const updateEmployee = async (req, res) => {
+//   const {
+//     Email,
+//     RoleID,
+//     Account,
+//     Gender,
+//     FirstName,
+//     LastName,
+//     DOB,
+//     ContactNo,
+//     EmployeeCode,
+//     DepartmentID,
+//     PositionID,
+//     DateOfJoining,
+//     reportManager,
+//     status
+//   } = req.body;
+//   try {
+//     const findEmployee = await Employee.findById(req.params.id);
+//     if (!findEmployee) {
+//       return res.status(400).send("Employee not found");
+//     }
+
+//     let updatedEmployees = {
+//       Email: Email,
+//       Account: Account,
+//       role: RoleID,
+//       Gender: Gender,
+//       FirstName: FirstName,
+//       LastName: LastName,
+//       DOB: DOB,
+//       ContactNo: ContactNo,
+//       EmployeeCode: EmployeeCode,
+//       department: DepartmentID,
+//       position: PositionID,
+//       DateOfJoining: DateOfJoining,
+//       reportManager: reportManager,
+//       profile: findEmployee.profile,
+//       status: status // Default to existing profile
+//     };
+
+//     if (
+//       Email != "" &&
+//       RoleID != "" &&
+//       Account != "" &&
+//       Gender != "" &&
+//       FirstName != "" &&
+//       DOB != "" &&
+//       ContactNo != "" &&
+//       EmployeeCode != " " &&
+//       DepartmentID != "" &&
+//       PositionID != "" &&
+//       DateOfJoining != ""
+//     ) {
+//       if (ContactNo.length >= 10 && ContactNo.length <= 10) {
+//         const findContact = await Employee.findOne({ ContactNo: ContactNo });
+//         if (findContact && req.params.id != findContact._id) {
+//           return res.status(400).send("Contact Number is alredy Ragister");
+//         } else {
+//           if (req.file) {
+//             if (findEmployee.profile) {
+//               await removeCloudinaryImage(findEmployee.profile.publicId);
+//             }
+
+//             const uploadedProfile = await uplodeImagesCloudinary(req.file.path);
+//             if (uploadedProfile) {
+//               updatedEmployees.profile = uploadedProfile;
+//             }
+//           }
+//           // Update the employee record
+//           const updatedResult = await Employee.findByIdAndUpdate(
+//             req.params.id,
+//             updatedEmployees,
+//             { new: true }
+//           );
+//           res.status(200).send(updatedResult);
+//         }
+//       } else {
+//         return res.status(400).send("Enter valid Contact Number");
+//       }
+//     } else {
+//       return res.status(400).send("file The all input faild");
+//     }
+//   } catch (error) {
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
 const updateEmployee = async (req, res) => {
   const {
     Email,
@@ -207,6 +294,7 @@ const updateEmployee = async (req, res) => {
     PositionID,
     DateOfJoining,
     reportManager,
+    reportHr,
     status
   } = req.body;
   try {
@@ -229,6 +317,7 @@ const updateEmployee = async (req, res) => {
       position: PositionID,
       DateOfJoining: DateOfJoining,
       reportManager: reportManager,
+      reportHr:reportHr,
       profile: findEmployee.profile,
       status: status // Default to existing profile
     };
