@@ -25,7 +25,7 @@ const Education = (props) => {
     };
 
     axios
-      .post(`${BASE_URL}/api/education/${props.data["_id"]}`, body, {
+      .post(`${BASE_URL}/api/education/` + localStorage.getItem("_id"), body, {
         headers: {
           authorization: localStorage.getItem("token") || "",
         },

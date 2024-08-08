@@ -3,7 +3,7 @@ import axios from "axios";
 import {
   MdArrowDropDown,
   MdArrowDropUp,
-  MdOutlineCancel
+  MdOutlineCancel,
 } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-hot-toast";
@@ -42,8 +42,8 @@ const ManagerNewTask = () => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setEmpData(response.data);
@@ -203,7 +203,7 @@ const ManagerNewTask = () => {
       // Update the task status to "Cancelled" in the database
       await axios.put(`${BASE_URL}/api/tasks/${taskID}`, {
         status: "Pending",
-        comment: AcceptTaskRemark
+        comment: AcceptTaskRemark,
       });
 
       // Display success notification
@@ -219,7 +219,7 @@ const ManagerNewTask = () => {
           messageBy: name,
           profile: empData.profile.image_url,
           status: "unseen",
-          path: "taskassign"
+          path: "taskassign",
         };
 
         socket.emit("adminTaskNotification", taskNotificationData);
@@ -233,7 +233,7 @@ const ManagerNewTask = () => {
           message: `Task Accepted`,
           messageBy: null,
           status: "unseen",
-          path: "taskassign"
+          path: "taskassign",
         };
 
         socket.emit("adminTaskNotification", taskNotificationData);
@@ -259,7 +259,7 @@ const ManagerNewTask = () => {
 
       await axios.put(`${BASE_URL}/api/tasks/${taskId}`, {
         status: "Rejected",
-        comment: RejectRemarks
+        comment: RejectRemarks,
       });
 
       toast.success("Task Rejected");
@@ -274,7 +274,7 @@ const ManagerNewTask = () => {
           messageBy: name,
           profile: empData.profile.image_url,
           status: "unseen",
-          path: "taskreject"
+          path: "taskreject",
         };
 
         socket.emit("adminTaskNotification", taskNotificationData);
@@ -288,7 +288,7 @@ const ManagerNewTask = () => {
           message: `Task Rejected`,
           messageBy: null,
           status: "unseen",
-          path: "taskreject"
+          path: "taskreject",
         };
 
         socket.emit("adminTaskNotification", taskNotificationData);
@@ -308,7 +308,7 @@ const ManagerNewTask = () => {
         style={{
           color: darkMode
             ? "var(--primaryDashColorDark)"
-            : "var(--primaryDashMenuColor)"
+            : "var(--primaryDashMenuColor)",
         }}
       >
         <h5 style={{ fontWeight: "600" }} className="p-0 m-0 text-uppercase">
@@ -334,15 +334,13 @@ const ManagerNewTask = () => {
                 task.status === "Assigned" && task.managerEmail === email
             )
             .reverse()
-            .map
-            
-            ((task) => (
+            .map((task) => (
               <div
                 key={task._id}
                 style={{
                   color: darkMode
                     ? "var(--primaryDashColorDark)"
-                    : "var(--secondaryDashMenuColor)"
+                    : "var(--secondaryDashMenuColor)",
                 }}
                 className="col-12 col-md-6 col-lg-4 p-2"
               >
@@ -350,7 +348,7 @@ const ManagerNewTask = () => {
                   style={{
                     border: !darkMode
                       ? "1px solid var(--primaryDashMenuColor)"
-                      : "1px solid var(--secondaryDashColorDark)"
+                      : "1px solid var(--secondaryDashColorDark)",
                   }}
                   className="task-hover-effect p-2"
                 >
@@ -365,18 +363,18 @@ const ManagerNewTask = () => {
                         style={{
                           height: "30px",
                           width: "30px",
-                          borderRadius: "50%"
+                          borderRadius: "50%",
                         }}
                         src="https://rihodjango.pixelstrap.net/riho/rihoapp/static/assets/images/user/3.jpg"
                         alt=""
                       />
-                      <span>Kishor.kumar@kasperinfotech.org</span>
+                      <span>{task.adminMail}</span>
                     </div>
                     <span
                       style={{
                         border: darkMode
                           ? "1px solid var(--primaryDashColorDark)"
-                          : "1px solid var(--primaryDashMenuColor)"
+                          : "1px solid var(--primaryDashMenuColor)",
                       }}
                       className="px-2 py-1 text-center"
                     >
@@ -441,7 +439,7 @@ const ManagerNewTask = () => {
                             <div
                               style={{
                                 display:
-                                  expandedTaskId === task._id ? "flex" : "none"
+                                  expandedTaskId === task._id ? "flex" : "none",
                               }}
                             >
                               <div className="d-flex gap-2 justify-content-between">
@@ -460,7 +458,7 @@ const ManagerNewTask = () => {
                                         style={{
                                           boxShadow: "0 0 5px 2px gray inset",
                                           height: "30px",
-                                          minWidth: "30px"
+                                          minWidth: "30px",
                                         }}
                                       >
                                         {
@@ -476,7 +474,7 @@ const ManagerNewTask = () => {
                                         style={{
                                           boxShadow: "0 0 5px 2px gray inset",
                                           height: "30px",
-                                          minWidth: "30px"
+                                          minWidth: "30px",
                                         }}
                                       >
                                         {
@@ -492,7 +490,7 @@ const ManagerNewTask = () => {
                                         style={{
                                           boxShadow: "0 0 5px 2px gray inset",
                                           height: "30px",
-                                          minWidth: "30px"
+                                          minWidth: "30px",
                                         }}
                                       >
                                         {
@@ -508,7 +506,7 @@ const ManagerNewTask = () => {
                                         style={{
                                           boxShadow: "0 0 5px 2px gray inset",
                                           height: "30px",
-                                          minWidth: "30px"
+                                          minWidth: "30px",
                                         }}
                                       >
                                         {
@@ -579,7 +577,7 @@ const ManagerNewTask = () => {
               style={{
                 color: darkMode
                   ? "var(--primaryDashColorDark)"
-                  : "var(--primaryDashMenuColor)"
+                  : "var(--primaryDashMenuColor)",
               }}
             >
               Sorry, there are no tasks assigned yet.

@@ -40,7 +40,7 @@ const CreateTask = async (req, res) => {
   const { status } = req.body;
   const { startDate } = req.body;
   const { endDate } = req.body;
-
+  const {adminMail} =req.body;
   const dateDifference = Math.ceil(
     (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)
   );
@@ -52,6 +52,7 @@ const CreateTask = async (req, res) => {
     description: description,
     department: department,
     managerEmail: managerEmail,
+    adminMail:adminMail,
     comment: "Task Assigned",
     duration: extradate,
     status: "Assigned",

@@ -176,84 +176,82 @@ const WorkExperienceTable = (props) => {
           </div>
         )}
 
-        {rowData.length > 0 ? (
-          <table className="table">
-            <thead>
-              <tr>
-                <th style={rowHeadStyle}>Company Name</th>
-                <th style={rowHeadStyle}>Designation</th>
-                <th style={rowHeadStyle}>FromDate</th>
-                <th style={rowHeadStyle}>ToDate</th>
-                <th style={rowHeadStyle} className="text-end">
-                  Action
-                </th>
+        <table className="table">
+          <thead>
+            <tr>
+              <th style={rowHeadStyle}>Company Name</th>
+              <th style={rowHeadStyle}>Designation</th>
+              <th style={rowHeadStyle}>FromDate</th>
+              <th style={rowHeadStyle}>ToDate</th>
+              <th style={rowHeadStyle} className="text-end">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {rowData.map((items, index) => (
+              <tr key={index}>
+                <td style={rowBodyStyle} className="text-capitalize">
+                  {items.CompanyName}
+                </td>
+                <td style={rowBodyStyle} className="text-capitalize">
+                  {items.Designation}
+                </td>
+                <td style={rowBodyStyle} className="text-capitalize">
+                  {items.FromDate}
+                </td>
+                <td style={rowBodyStyle} className="text-capitalize">
+                  {items.ToDate}
+                </td>
+                <td style={rowBodyStyle} className="text-capitalize text-end">
+                  {" "}
+                  <button
+                    onClick={() => props.onEditWorkExperience(items.data)}
+                    style={{
+                      zIndex: "1",
+                      cursor: "pointer",
+                    }}
+                    className="btn btn-outline-primary"
+                  >
+                    <FaRegEdit /> Edit
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {rowData.map((items, index) => (
-                <tr key={index}>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    {items.CompanyName}
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    {items.Designation}
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    {items.FromDate}
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    {items.ToDate}
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize text-end">
-                    {" "}
-                    <button
-                      onClick={() => props.onEditWorkExperience(items.data)}
-                      style={{
-                        zIndex: "1",
-                        cursor: "pointer",
-                      }}
-                      className="btn btn-outline-primary"
-                    >
-                      <FaRegEdit /> Edit
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div
+            ))}
+          </tbody>
+        </table>
+
+        <div
+          style={{
+            height: "65vh",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            wordSpacing: "5px",
+            flexDirection: "column",
+            gap: "2rem",
+          }}
+        >
+          <img
             style={{
-              height: "65vh",
-              width: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              wordSpacing: "5px",
-              flexDirection: "column",
-              gap: "2rem",
+              height: "auto",
+              width: "30%",
+            }}
+            src={SearchLight}
+            alt="img"
+          />
+          <p
+            className="text-center w-75 mx-auto"
+            style={{
+              color: darkMode
+                ? "var(--secondaryDashColorDark)"
+                : "var( --primaryDashMenuColor)",
             }}
           >
-            <img
-              style={{
-                height: "auto",
-                width: "30%",
-              }}
-              src={SearchLight}
-              alt="img"
-            />
-            <p
-              className="text-center w-75 mx-auto"
-              style={{
-                color: darkMode
-                  ? "var(--secondaryDashColorDark)"
-                  : "var( --primaryDashMenuColor)",
-              }}
-            >
-              Details not available Please add.
-            </p>
-          </div>
-        )}
+            Details not available Please add.
+          </p>
+        </div>
       </div>
     </div>
   );

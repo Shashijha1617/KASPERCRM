@@ -198,6 +198,7 @@ const TaskChart = () => {
   return (
     <div
       style={{
+        height: "fit-content",
         background: darkMode
           ? "var(--primaryDashMenuColor)"
           : "var(--primaryDashColorDark)",
@@ -205,17 +206,14 @@ const TaskChart = () => {
           ? "var(--primaryDashColorDark)"
           : "var(--primaryDashMenuColor)",
       }}
-      className="ChartCard rounded-0 shadow py-2 px-3 pt-3"
+      className="ChartCard p-2 shadow rounded-0"
     >
-      <div className="ChartHeader"></div>
-      <div className="chartBody">
-        <Chart
-          options={taskStatusChartData.options}
-          series={taskStatusChartData.series}
-          type="bar"
-          height="320px"
-        />
-      </div>
+      <Chart
+        options={taskStatusChartData.options}
+        series={taskStatusChartData.series}
+        type="bar"
+        height="305px"
+      />
     </div>
   );
 };

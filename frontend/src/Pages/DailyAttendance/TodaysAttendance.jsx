@@ -197,6 +197,8 @@ const TodaysAttendance = () => {
     border: "none",
   };
 
+  console.log(sortedAndFilteredData);
+
   return (
     <div className="container-fluid pb-5">
       <div className="d-flex justify-content-between py-3">
@@ -333,7 +335,11 @@ const TodaysAttendance = () => {
                               overflow: "hidden",
                               borderRadius: "50%",
                             }}
-                            src="https://tse3.mm.bing.net/th?id=OIP.-d8GY5axNJZYoXsNOUJ4iwAAAA&pid=Api&P=0&h=180"
+                            src={
+                              user?.profile?.image_url
+                                ? user?.profile?.image_url
+                                : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
+                            }
                             alt=""
                           />
                         </div>

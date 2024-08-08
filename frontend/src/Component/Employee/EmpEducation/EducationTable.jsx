@@ -7,6 +7,7 @@ import { css } from "@emotion/core";
 import { FaPlus, FaRegEdit } from "react-icons/fa";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import SearchLight from "../../../img/Attendance/SearchLight.svg";
+import BASE_URL from "../../../Pages/config/config";
 
 const override = css`
   display: block;
@@ -24,14 +25,11 @@ const EducationTable = (props) => {
   useEffect(() => {
     const loadEducationData = () => {
       axios
-        .get(
-          "http://localhost:4000/api/education/" + localStorage.getItem("_id"),
-          {
-            headers: {
-              authorization: localStorage.getItem("token") || "",
-            },
-          }
-        )
+        .get(`${BASE_URL}/api/education/` + localStorage.getItem("_id"), {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        })
         .then((response) => {
           const educationObj = response.data;
           console.log("response", response.data);
@@ -61,7 +59,7 @@ const EducationTable = (props) => {
     console.log(e1, e2);
     if (window.confirm("Are you sure to delete this record? ")) {
       axios
-        .delete(`http://localhost:4000/api/education/${e1}/${e2}`, {
+        .delete(`${BASE_URL}/api/education/${e1}/${e2}`, {
           headers: {
             authorization: localStorage.getItem("token") || "",
           },
@@ -171,98 +169,97 @@ const EducationTable = (props) => {
           />
         </div>
       )}
-      {rowData > 0 ? (
-        <div>
-          <table className="table">
-            <thead>
-              <tr>
-                <th style={rowHeadStyle}>School/University</th>
-                <th style={rowHeadStyle}>Degree</th>
-                <th style={rowHeadStyle}>Grade</th>
-                <th style={rowHeadStyle}>Passing Year</th>
-                <th style={rowHeadStyle} className="text-end">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rowData.map((items, index) => (
-                <tr key={index}>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    {items.SchoolUniversity}
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    {items.Degree}
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    {items.Grade}
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    {items.PassingOfYear}
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize text-end">
-                    <button
-                      onClick={() => props.onEditEducation(items.data)}
-                      style={{
-                        zIndex: "1",
-                        cursor: "pointer",
-                      }}
-                      className="btn d-flex align-items-center justify-content-center gap-2"
-                    >
-                      <FaRegEdit />
-                      <span className="d-none d-md-flex">Edit</span>
-                    </button>
 
-                    <button
-                      onClick={() => props.onEducationDelete(items.data)}
-                      style={{
-                        zIndex: "1",
-                        cursor: "pointer",
-                      }}
-                      className="btn  d-flex align-items-center justify-content-center gap-2"
-                    >
-                      <FaRegEdit />
-                      <span className="d-none d-md-flex">Delete</span>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div
+      <div>
+        <table className="table">
+          <thead>
+            <tr>
+              <th style={rowHeadStyle}>School/University</th>
+              <th style={rowHeadStyle}>Degree</th>
+              <th style={rowHeadStyle}>Grade</th>
+              <th style={rowHeadStyle}>Passing Year</th>
+              <th style={rowHeadStyle} className="text-end">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {rowData.map((items, index) => (
+              <tr key={index}>
+                <td style={rowBodyStyle} className="text-capitalize">
+                  {items.SchoolUniversity}
+                </td>
+                <td style={rowBodyStyle} className="text-capitalize">
+                  {items.Degree}
+                </td>
+                <td style={rowBodyStyle} className="text-capitalize">
+                  {items.Grade}
+                </td>
+                <td style={rowBodyStyle} className="text-capitalize">
+                  {items.PassingOfYear}
+                </td>
+                <td style={rowBodyStyle} className="text-capitalize text-end">
+                  <button
+                    onClick={() => props.onEditEducation(items.data)}
+                    style={{
+                      zIndex: "1",
+                      cursor: "pointer",
+                    }}
+                    className="btn d-flex align-items-center justify-content-center gap-2"
+                  >
+                    <FaRegEdit />
+                    <span className="d-none d-md-flex">Edit</span>
+                  </button>
+
+                  <button
+                    onClick={() => props.onEducationDelete(items.data)}
+                    style={{
+                      zIndex: "1",
+                      cursor: "pointer",
+                    }}
+                    className="btn  d-flex align-items-center justify-content-center gap-2"
+                  >
+                    <FaRegEdit />
+                    <span className="d-none d-md-flex">Delete</span>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        style={{
+          height: "65vh",
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          wordSpacing: "5px",
+          flexDirection: "column",
+          gap: "2rem",
+        }}
+      >
+        <img
           style={{
-            height: "65vh",
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            wordSpacing: "5px",
-            flexDirection: "column",
-            gap: "2rem",
+            height: "auto",
+            width: "30%",
+          }}
+          src={SearchLight}
+          alt="img"
+        />
+        <p
+          className="text-center w-75 mx-auto"
+          style={{
+            color: darkMode
+              ? "var(--secondaryDashColorDark)"
+              : "var( --primaryDashMenuColor)",
           }}
         >
-          <img
-            style={{
-              height: "auto",
-              width: "30%",
-            }}
-            src={SearchLight}
-            alt="img"
-          />
-          <p
-            className="text-center w-75 mx-auto"
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var( --primaryDashMenuColor)",
-            }}
-          >
-            Details not available Please add.
-          </p>
-        </div>
-      )}
+          Details not available Please add.
+        </p>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { FaCheck } from "react-icons/fa6";
-import { IoCheckmarkDone, IoCheckmarkDoneSharp } from "react-icons/io5";
+import {
+  IoChatbubble,
+  IoChatbubbles,
+  IoCheckmarkDone,
+  IoCheckmarkDoneCircleSharp,
+  IoCheckmarkDoneSharp,
+} from "react-icons/io5";
 import {
   MdArrowDropDown,
   MdArrowDropUp,
@@ -21,12 +27,14 @@ import ActiveTask from "../../../img/Task/ActiveTask.svg";
 import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 import "./TaskManagement.css";
 import { HiDocumentSearch } from "react-icons/hi";
-import { IoMdDoneAll } from "react-icons/io";
+import { IoIosSend, IoMdDoneAll } from "react-icons/io";
 import { RiArrowDropDownLine, RiAttachmentLine } from "react-icons/ri";
 import { PiInfoLight } from "react-icons/pi";
 import { getFormattedDate } from "../../../Utils/GetDayFormatted";
 import AvatarGroup from "../../../Pages/AvatarGroup/AvatarGroup";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import OverLayToolTip from "../../../Utils/OverLayToolTip";
+import { AiFillFilePpt, AiFillFileWord } from "react-icons/ai";
 
 const ManagerActiveTask = () => {
   const history = useHistory();
@@ -100,6 +108,13 @@ const ManagerActiveTask = () => {
     loadEmployeeData();
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000); // Update every second
+    return () => clearInterval(interval);
+  }, []);
+
   const calculateRemainingTime = (endDate) => {
     const now = currentTime;
     const endDateTime = new Date(endDate);
@@ -149,7 +164,8 @@ const ManagerActiveTask = () => {
         val.department === dep &&
         !employeeEmails.includes(val.Email) &&
         val.Email !== email &&
-        (val.data.reportHr || val.data.reportManager)
+        (val.data.reportHr || val.data.reportManager) &&
+        val.data.Account !== 4
       );
     });
     setRowData(filteredData);
@@ -494,7 +510,7 @@ const ManagerActiveTask = () => {
                         src="https://rihodjango.pixelstrap.net/riho/rihoapp/static/assets/images/user/3.jpg"
                         alt=""
                       />{" "}
-                      <span>Kishor.kumar@kasperinfotech.org</span>
+                      <span>{task.adminMail}</span>
                     </div>
                     <span
                       style={{
@@ -544,7 +560,7 @@ const ManagerActiveTask = () => {
                   </div>
                   <div style={{ maxWidth: "100%" }}>
                     <div className="d-flex align-items-center justify-content-between my-3">
-                      <AvatarGroup images={images} />
+                      {/* <AvatarGroup images={images} /> */}
                       <div
                         className="d-flex"
                         style={{
@@ -728,101 +744,96 @@ const ManagerActiveTask = () => {
                         Remarks
                         <span>{task.comment}</span>
                       </div>
-                      <div className="d-flex flex-column gap-1 mt-2 ">
-                        <span className="mb-2">Remaining Time</span>
-                        <div className="d-flex gap-2 RemainingTimeHandel justify-content-between ">
-                          {calculateRemainingTime(task.endDate).delay ? (
-                            <div>
-                              <div className="text-center d-none ">
-                                <div className="form-control fw-bold p-0">
-                                  {calculateRemainingTime(task.endDate).days}
+                      <hr />
+                      <span className="d-flex flex-column gap-1">
+                        <h6>Time Left</h6>
+                        <span>
+                          <div
+                            style={{
+                              display:
+                                expandedTaskId === task._id ? "flex" : "none",
+                            }}
+                          >
+                            <div className="d-flex gap-2 justify-content-between">
+                              {calculateRemainingTime(task.endDate).delay ? (
+                                <div className="">
+                                  <span className=" rounded-5 border border-danger  my-auto  p-1 px-2">
+                                    Please finish the task as soon as you can,
+                                    as it's running late.
+                                  </span>
                                 </div>
-                                <div>Day</div>
-                              </div>
-                              <span
-                                className={`border px-2 py-1 border-danger ${
-                                  flash ? "flash" : ""
-                                }`}
-                              >
-                                Please finish the task as soon as you can, as
-                                it's running late.
-                              </span>
+                              ) : (
+                                <>
+                                  <div className="text-center">
+                                    <div
+                                      className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                      style={{
+                                        boxShadow: "0 0 5px 2px gray inset",
+                                        height: "30px",
+                                        minWidth: "30px",
+                                      }}
+                                    >
+                                      {
+                                        calculateRemainingTime(task.endDate)
+                                          .days
+                                      }
+                                    </div>
+                                    <div>Day</div>
+                                  </div>
+                                  <div className="text-center">
+                                    <div
+                                      className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                      style={{
+                                        boxShadow: "0 0 5px 2px gray inset",
+                                        height: "30px",
+                                        minWidth: "30px",
+                                      }}
+                                    >
+                                      {
+                                        calculateRemainingTime(task.endDate)
+                                          .hours
+                                      }
+                                    </div>
+                                    <div>Hrs</div>
+                                  </div>
+                                  <div className="text-center">
+                                    <div
+                                      className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                      style={{
+                                        boxShadow: "0 0 5px 2px gray inset",
+                                        height: "30px",
+                                        minWidth: "30px",
+                                      }}
+                                    >
+                                      {
+                                        calculateRemainingTime(task.endDate)
+                                          .minutes
+                                      }
+                                    </div>
+                                    <div>Min</div>
+                                  </div>
+                                  <div className="text-center">
+                                    <div
+                                      className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
+                                      style={{
+                                        boxShadow: "0 0 5px 2px gray inset",
+                                        height: "30px",
+                                        minWidth: "30px",
+                                      }}
+                                    >
+                                      {
+                                        calculateRemainingTime(task.endDate)
+                                          .seconds
+                                      }
+                                    </div>
+                                    <div>Sec</div>
+                                  </div>
+                                </>
+                              )}
                             </div>
-                          ) : (
-                            <div className="text-center">
-                              <div
-                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
-                                style={{
-                                  boxShadow: "0 0 5px 2px gray inset",
-                                  height: "30px",
-                                  minWidth: "30px",
-                                }}
-                              >
-                                {calculateRemainingTime(task.endDate).days}{" "}
-                              </div>{" "}
-                              <div>Day</div>
-                            </div>
-                          )}
-                          {calculateRemainingTime(task.endDate).delay ? (
-                            <div className="text-center d-none">
-                              <div
-                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
-                                style={{
-                                  boxShadow: "0 0 5px 2px gray inset",
-                                  height: "30px",
-                                  minWidth: "30px",
-                                }}
-                              >
-                                {calculateRemainingTime(task.endDate).hours}{" "}
-                              </div>{" "}
-                              <div>Min</div>
-                            </div>
-                          ) : (
-                            <div className="text-center">
-                              <div
-                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
-                                style={{
-                                  boxShadow: "0 0 5px 2px gray inset",
-                                  height: "30px",
-                                  minWidth: "30px",
-                                }}
-                              >
-                                {calculateRemainingTime(task.endDate).hours}{" "}
-                              </div>{" "}
-                              <div>Hrs</div>
-                            </div>
-                          )}
-                          {calculateRemainingTime(task.endDate).delay ? (
-                            <div className="text-center d-none">
-                              <div
-                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
-                                style={{
-                                  boxShadow: "0 0 5px 2px gray inset",
-                                  height: "30px",
-                                  minWidth: "30px",
-                                }}
-                              >
-                                {calculateRemainingTime(task.endDate).minutes}{" "}
-                              </div>{" "}
-                              <div>Min</div>
-                            </div>
-                          ) : (
-                            <div className="text-center">
-                              <div
-                                className="d-flex px-1 bg-white text-black align-items-center justify-content-center"
-                                style={{
-                                  boxShadow: "0 0 5px 2px gray inset",
-                                  height: "30px",
-                                  minWidth: "30px",
-                                }}
-                              >
-                                {calculateRemainingTime(task.endDate).minutes}{" "}
-                              </div>{" "}
-                              <div>Min</div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                          </div>
+                        </span>
+                      </span>
                       <hr />
                       {/* <div className="d-flex flex-column gap-2 my-2">
                         Action
@@ -874,10 +885,11 @@ const ManagerActiveTask = () => {
                       </div> */}
                       <div
                         style={{ height: "fit-content" }}
-                        className="d-flex  pt-3 rounded mx-1 justify-content-between"
+                        className="d-flex rounded mx-1 justify-content-between"
                       >
-                        <button
-                          className="btn btn-primary rounded-5 d-flex justify-center aline-center gap-2"
+                        {" "}
+                        <OverLayToolTip
+                          icon={<IoIosSend className="fs-4 text-success" />}
                           onClick={() =>
                             forwordTaskToEmployee(
                               task._id,
@@ -886,44 +898,38 @@ const ManagerActiveTask = () => {
                               task
                             )
                           }
-                        >
-                          <MdOutlineAssignmentInd />{" "}
-                          <span className="d-none d-md-flex">Forward Task</span>
-                        </button>
-                        <button
-                          className="btn btn-warning rounded-5 d-flex justify-center aline-center gap-2"
+                          tooltip={"Forward Task"}
+                        />
+                        <OverLayToolTip
+                          icon={<AiFillFilePpt className="fs-4 text-danger" />}
                           onClick={() => showPdf(task._id)}
-                        >
-                          <HiDocumentSearch />{" "}
-                          <span className="d-none d-md-flex">
-                            View attachment
-                          </span>
-                        </button>
-                        <button
-                          className="btn btn-success rounded-5 d-flex justify-center aline-center gap-2"
+                          tooltip={"Attachment"}
+                        />
+                        <OverLayToolTip
+                          icon={<IoChatbubble className="fs-4 text-primary " />}
                           onClick={() =>
                             navigateHandler(task._id, task.adminMail)
                           }
-                        >
-                          <IoMdDoneAll />
-                          <span className="d-none d-md-flex">Update Admin</span>
-                        </button>
+                          tooltip={"Ask Admin"}
+                        />
                         {task.employees.length > 0 &&
                         task.employees.filter((val) => {
                           return val.emptaskStatus !== "Task Assigned";
                         }).length > 0 ? (
-                          <button
-                            className="btn btn-success rounded-5 d-flex justify-center aline-center gap-2"
+                          <OverLayToolTip
+                            icon={
+                              <IoChatbubbles className="fs-4 text-primary " />
+                            }
                             onClick={() => navigateEmpHandler(task)}
-                          >
-                            <IoMdDoneAll />
-                            <span className="d-none d-md-flex">Update Emp</span>
-                          </button>
+                            tooltip={"Ask Team"}
+                          />
                         ) : (
                           <></>
                         )}
-                        <button
-                          className="btn btn-success rounded-5 d-flex justify-center aline-center gap-2"
+                        <OverLayToolTip
+                          icon={
+                            <IoCheckmarkDoneCircleSharp className="fs-4 text-success" />
+                          }
                           onClick={() =>
                             completeTask(
                               task._id,
@@ -931,13 +937,8 @@ const ManagerActiveTask = () => {
                               task.Taskname
                             )
                           }
-                          disabled={calculateProgress(task) !== 100}
-                        >
-                          <IoMdDoneAll />
-                          <span className="d-none d-md-flex">
-                            Complete Task
-                          </span>
-                        </button>
+                          tooltip={"Complete Task"}
+                        />
                       </div>
                     </>
                   )}

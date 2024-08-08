@@ -340,6 +340,13 @@ const NavBar = (props, data) => {
     return null;
   };
 
+  function truncateMessage(message) {
+    if (message.length > 15) {
+      return message.substring(0, 15) + "...";
+    }
+    return message;
+  }
+
   return (
     <div
       className="px-2 py-1"
@@ -475,7 +482,7 @@ const NavBar = (props, data) => {
                                   style={{ fontSize: ".75rem" }}
                                   className="p-0 m-0 w-100 text-muted fw-bold"
                                 >
-                                  {val.message}
+                                  {truncateMessage(val.message)}
                                 </p>
                                 <p
                                   style={{ fontSize: ".80rem" }}
@@ -487,8 +494,13 @@ const NavBar = (props, data) => {
                             </div>
                             <div className="d-flex align-items-center gap-1">
                               <span
-                                style={{ fontSize: ".80rem" }}
-                                className="btn py-1 py-0 px-1 rounded-5 text-white  w-100 fw-bold bg-danger"
+                                style={{
+                                  fontSize: ".80rem",
+                                  height: "1.2rem",
+                                  width: "1.2rem",
+                                  borderRadius: "50%",
+                                }}
+                                className="d-flex align-items-center text-white  bg-danger justify-content-center"
                                 onClick={(e) => (
                                   notificationDeleteHandler(val.taskId),
                                   e.stopPropagation()

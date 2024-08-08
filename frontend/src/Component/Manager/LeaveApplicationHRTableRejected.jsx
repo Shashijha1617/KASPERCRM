@@ -19,7 +19,7 @@ const override = css`
   border-color: red;
 `;
 
-const LeaveApplicationHRTable = (props) => {
+const LeaveApplicationHRTableRejected = (props) => {
   const [leaveApplicationHRData, setLeaveApplicationHRData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rowData, setRowData] = useState([]);
@@ -107,7 +107,7 @@ const LeaveApplicationHRTable = (props) => {
     const start = new Date(startDate);
     const end = new Date(endDate);
     const diffTime = Math.abs(end - start);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // Add 1 to include both start and end dates
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
     return diffDays;
   };
 
@@ -129,7 +129,7 @@ const LeaveApplicationHRTable = (props) => {
   };
 
   const exportToPDF = () => {
-    if (window.confirm("Are you sure to download Pending Leave record?")) {
+    if (window.confirm("Are you sure to download Rejected Leave record?")) {
       const pdfWidth = 297;
       const pdfHeight = 210;
       const doc = new jsPDF({
@@ -139,7 +139,7 @@ const LeaveApplicationHRTable = (props) => {
       });
 
       doc.setFontSize(18);
-      doc.text("Employee Pending Leave Details", pdfWidth / 2, 15, "center");
+      doc.text("Employee Rejected Leave Details", pdfWidth / 2, 15, "center");
 
       const headers = [
         "Emp Id",
@@ -153,11 +153,11 @@ const LeaveApplicationHRTable = (props) => {
       ];
 
       // Filter only rejected leaves
-      const PendingLeaves = filteredData.filter(
-        (row) => row.Status === "Pending"
+      const rejectedLeaves = filteredData.filter(
+        (row) => row.Status === "Rejected"
       );
 
-      const data = PendingLeaves.map((row) => [
+      const data = rejectedLeaves.map((row) => [
         row.empID,
         row.Leavetype,
         row.FromDate,
@@ -175,7 +175,7 @@ const LeaveApplicationHRTable = (props) => {
         startY: 25,
       });
 
-      doc.save("Pending_leaveApplication_data.pdf");
+      doc.save("rejected_leaveApplication_data.pdf");
     }
   };
 
@@ -192,7 +192,7 @@ const LeaveApplicationHRTable = (props) => {
   };
 
   const approvedLeaves = filteredData.filter(
-    (data) => data.Status === "Pending"
+    (data) => data.Status === "Rejected"
   ).length;
 
   const rowHeadStyle = {
@@ -293,7 +293,7 @@ const LeaveApplicationHRTable = (props) => {
                   <th style={rowHeadStyle}>Leave Type</th>
                   <th style={rowHeadStyle}>Start Date</th>
                   <th style={rowHeadStyle}>End Date</th>
-                  <th style={rowHeadStyle}>Created at</th>
+                  <th style={rowHeadStyle}>CreatedOn</th>
                   <th style={rowHeadStyle}>Days</th>
                   <th style={rowHeadStyle}>Status</th>
                   <th style={rowHeadStyle}>Remarks</th>
@@ -302,7 +302,7 @@ const LeaveApplicationHRTable = (props) => {
               </thead>
               <tbody>
                 {filteredData
-                  .filter((e) => e.Status == "Pending")
+                  .filter((e) => e.Status == "Rejected")
                   .map((data, index) => {
                     return (
                       <tr key={index}>
@@ -333,13 +333,13 @@ const LeaveApplicationHRTable = (props) => {
                         <td style={rowBodyStyle}>{data.FromDate}</td>
                         <td style={rowBodyStyle}>{data.ToDate}</td>
                         <td style={rowBodyStyle}>
-                          <span>{data.CreatedOn}</span>
+                          <span>{data.timestamps}</span>
                         </td>
                         <td style={rowBodyStyle}>
                           <span>{data.Days}</span>
                         </td>
                         <td style={rowBodyStyle}>
-                          <span className=" text-white bg-warning px-2 py-0 rounded-5">
+                          <span className=" text-white bg-danger px-2 py-0 rounded-5">
                             {data.Status}
                           </span>
                         </td>
@@ -415,4 +415,4 @@ const LeaveApplicationHRTable = (props) => {
   );
 };
 
-export default LeaveApplicationHRTable;
+export default LeaveApplicationHRTableRejected;

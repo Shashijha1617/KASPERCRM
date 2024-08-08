@@ -137,7 +137,11 @@ const LeaveApplicationEmpTable = (props) => {
       <LeaveBalance />
       <div className="container-fluid">
         <div className="d-flex justify-content-between py-2">
-        <TittleHeader title={"Your Leave Application"} numbers={rowData.length} message={"You can view your applied leaves here."}/>
+          <TittleHeader
+            title={"Your Leave Application"}
+            numbers={rowData.length}
+            message={"You can view your applied leaves here."}
+          />
           <div className="my-auto">
             <h5
               style={{
@@ -148,7 +152,7 @@ const LeaveApplicationEmpTable = (props) => {
               }}
               className=" m-0"
             >
-               {/* ( {} ) */}
+              {/* ( {} ) */}
             </h5>
             <p
               style={{
@@ -157,9 +161,7 @@ const LeaveApplicationEmpTable = (props) => {
                   : "var(--secondaryDashMenuColor)",
               }}
               className=" m-0"
-            >
-              
-            </p>
+            ></p>
           </div>
           <Button
             variant="primary"
@@ -197,7 +199,9 @@ const LeaveApplicationEmpTable = (props) => {
                   <th style={rowHeadStyle}>Remarks</th>
                   <th style={rowHeadStyle}>Status</th>
                   <th style={rowHeadStyle}>Update By</th>
-                  <th className="text-end" style={rowHeadStyle}>Reason for Rejection</th>
+                  <th className="text-end" style={rowHeadStyle}>
+                    Reason for Rejection
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -213,14 +217,24 @@ const LeaveApplicationEmpTable = (props) => {
                         {data.updatedBy ? (
                           data.updatedBy
                         ) : (
-                          <span className="border border-danger rounded-5 px-2" style={{ opacity: "50%" , fontSize:'.9rem'}}>Not Updated</span>
+                          <span
+                            className="border border-danger rounded-5 px-2"
+                            style={{ opacity: "50%", fontSize: ".9rem" }}
+                          >
+                            Not Updated
+                          </span>
                         )}
                       </td>
                       <td className="text-end" style={rowBodyStyle}>
                         {data.reasonOfRejection ? (
                           data.reasonOfRejection
                         ) : (
-                          <span className="border border-danger rounded-5 px-2" style={{ opacity: "50%" , fontSize:'.9rem'}}>Not Updated</span>
+                          <span
+                            className="border border-danger rounded-5 px-2"
+                            style={{ opacity: "50%", fontSize: ".9rem" }}
+                          >
+                            Not Updated
+                          </span>
                         )}
                       </td>
                     </tr>

@@ -17,7 +17,7 @@ const TittleHeader = ({ title, message, numbers }) => {
           style={{
             fontWeight: "500",
           }}
-          className="m-0 p-0"
+          className="m-0 p-0 text-capitalize"
         >
           {title}
         </h5>{" "}

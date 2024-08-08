@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  MdFreeBreakfast,
-  MdOutlineFreeBreakfast,
-  MdWorkOutline,
-} from "react-icons/md";
-import {
-  RiLoginCircleFill,
-  RiLoginCircleLine,
-  RiLogoutCircleRLine,
-} from "react-icons/ri";
+import { MdOutlineFreeBreakfast, MdWorkOutline } from "react-icons/md";
+import { RiLoginCircleLine, RiLogoutCircleRLine } from "react-icons/ri";
 import axios from "axios";
 import BASE_URL from "../../../../Pages/config/config";
 import { useTheme } from "../../../../Context/TheamContext/ThemeContext";
-import { FaBusinessTime } from "react-icons/fa6";
-import { FaSignOutAlt } from "react-icons/fa";
-import { IoIosTime } from "react-icons/io";
 const MyTodaysLoginData = (props) => {
   const [attendanceData, setAttendanceData] = useState(null);
   const [empName, setEmpName] = useState(null);
@@ -77,12 +66,12 @@ const MyTodaysLoginData = (props) => {
 
   const labelData = [
     {
-      icon: <FaBusinessTime className="text-success" />,
+      icon: <RiLoginCircleLine style={{ rotate: "180deg" }} />,
       title: "Login",
       data: attendanceData.loginTime,
     },
     {
-      icon: <IoIosTime className="text-warning" />,
+      icon: <MdOutlineFreeBreakfast />,
       title: "Total Break",
       data: convertMinutesToHoursAndMinutes(attendanceData.totalBrake),
     },
@@ -92,7 +81,7 @@ const MyTodaysLoginData = (props) => {
       data: convertMinutesToHoursAndMinutes(attendanceData.totalLoginTime),
     },
     {
-      icon: <FaSignOutAlt className="text-danger" />,
+      icon: <RiLogoutCircleRLine />,
       title: "Logout",
       data: attendanceData.logoutTime
         ? attendanceData.logoutTime
@@ -107,13 +96,12 @@ const MyTodaysLoginData = (props) => {
           ? "var(--primaryDashColorDark)"
           : "var(--secondaryDashMenuColor)",
       }}
-      className="row justify-content-between rounded-0 row-gap-3  container-fluid my-2 mx-auto"
+      className="row justify-content-between rounded-0 row-gap-3 container-fluid my-2 mx-auto"
     >
       {labelData.map((item, index) => (
         <Labels
           style={{
-            // background: darkMode ? "var(--basecolor)" : "var(--basecolor4)",
-            boxShadow: "3px 3px 3px rgba(0,0,0,.4)",
+            background: darkMode ? "var(--basecolor)" : "var(--basecolor4)",
             height: "5rem",
           }}
           key={index}
@@ -130,15 +118,10 @@ export default MyTodaysLoginData;
 
 const Labels = ({ title, data, icon, style }) => {
   return (
-    <div
-      className="col-6 col-lg-3 row rounded-2 border border-black py-2"
-      style={style}
-    >
+    <div className="col-6 col-lg-3 row rounded-0 py-2" style={style}>
       <div className="col-8 my-auto">
-        <span className="fs-5 text-primary" style={{ fontWeight: "500" }}>
-          {title}
-        </span>
-        <p className="m-0 fw-bold text-muted">{data}</p>
+        <span>{title}</span>
+        <p className="m-0">{data}</p>
       </div>
       <div className="col-4 d-flex align-items-center justify-content-center m-auto fs-2">
         {icon}

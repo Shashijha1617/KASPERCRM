@@ -16,7 +16,7 @@ var leaveApplicationSchema = new mongoose.Schema({
   reasonOfRejection: { type: String },
   aditionalManager: { type: String },
   employee: [{ type: mongoose.Schema.Types.ObjectId, ref: "Employee" }]
-});
+}, {timestamps:true});
 
 // leaveApplicationSchema.plugin(autoIncrement.plugin, {
 //   model: "LeaveApplication",

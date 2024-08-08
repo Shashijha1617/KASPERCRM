@@ -24,11 +24,15 @@ const FamilyInfo = (props) => {
     };
 
     axios
-      .post(`${BASE_URL}/api/family-info/` + props.data["_id"], body, {
-        headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
-      })
+      .post(
+        `${BASE_URL}/api/family-info/` + localStorage.getItem("_id"),
+        body,
+        {
+          headers: {
+            authorization: localStorage.getItem("token") || "",
+          },
+        }
+      )
       .then((res) => {
         setTable(false);
         setTable(true);

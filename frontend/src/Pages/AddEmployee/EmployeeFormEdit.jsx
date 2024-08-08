@@ -383,6 +383,8 @@ const EmployeeFormEdit = (props) => {
                   type="text"
                   placeholder="Contact No "
                   required
+                  maxLength={10}
+                  min={0}
                   value={contactNoData}
                   onChange={(value) => onContactNoDataChange(value)}
                 />

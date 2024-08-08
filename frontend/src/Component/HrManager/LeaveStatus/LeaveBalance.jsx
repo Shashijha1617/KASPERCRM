@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { IoMdDownload } from "react-icons/io";
 import axios from "axios";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext";
+import TittleHeader from "../../../Pages/TittleHeader/TittleHeader";
 
 const LeaveBalance = () => {
   const [leaveBalance, setLeaveBalance] = useState([]);
   const id = localStorage.getItem("_id");
+  const { darkMode } = useTheme();
 
   useEffect(() => {
     axios
@@ -34,57 +37,60 @@ const LeaveBalance = () => {
   };
 
   return (
-    <>
-      <div className="d-flex justify-content-between mb-2 mt-4 p-2">
-        <h4 className="fw-bold text-muted my-auto">Leave Balance</h4>
-        <div className="d-flex align-items-center gap-2"></div>
-      </div>
+    <div className="container-fluid py-">
+      <TittleHeader
+        title={"Leaves Balance"}
+        message={"You can see all new leave balances here."}
+      />
 
-      <div className="card-deck d-flex flex-wrap gap-1 justify-content-between w-100">
+      <div className="d-flex flex-wrap justify-content-between gap-2 my-2">
         {leaveBalance.length > 0 ? (
           <>
             {" "}
             {leaveBalance.map(({ leaveType, balance, totalBalance }) => (
               <div
-                style={{
-                  minWidth: "250px",
-                  boxShadow: "2px 2px 8px 2px black",
-                }}
                 key={leaveType}
-                className="border-0 rounded shadow-sm"
+                style={{
+                  color: darkMode
+                    ? "var(--secondaryDashColorDark)"
+                    : "var(--secondaryDashMenuColor)",
+                  background: darkMode
+                    ? "var(--primaryDashMenuColor)"
+                    : "var(--primaryDashColorDark)",
+                  minWidth: "250px",
+                }}
+                className="card-body rounded-2"
               >
-                <div className="card-body">
-                  <div className="d-flex justify-content-between">
-                    <p className="fw-bold text-primary">
-                      {leaveType.charAt(0).toUpperCase() + leaveType.slice(1)}
-                    </p>
-                  </div>
-                  <h6 className="card-text text-center fs-2 fw-bold">
-                    {totalBalance - balance} / {totalBalance}
-                  </h6>
-                  <div>
-                    <p style={{ fontSize: ".8rem" }}>
-                      {calculatePercentage(
-                        totalBalance - balance,
-                        totalBalance
-                      )}
-                      % of 100%
-                    </p>
-                    <div style={{ height: "4px" }} className="progress">
-                      <div
-                        className="progress-bar"
-                        role="progressbar"
-                        style={{
-                          width: `${calculatePercentage(
-                            totalBalance - balance,
-                            totalBalance
-                          )}%`,
-                        }}
-                        aria-valuenow={25}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      />
-                    </div>
+                <div className="d-flex justify-content-between">
+                  <p className="">
+                    {leaveType.charAt(0).toUpperCase() + leaveType.slice(1)}
+                  </p>
+                </div>
+                <h6
+                  style={{ fontWeight: "400" }}
+                  className="card-text text-center mb-4"
+                >
+                  {totalBalance - balance} Out of / {totalBalance}
+                </h6>
+                <div>
+                  <p className="p-0 m-0 text-end" style={{ fontSize: ".8rem" }}>
+                    {calculatePercentage(totalBalance - balance, totalBalance)}%
+                    of 100%
+                  </p>
+                  <div style={{ height: "6px" }} className="progress">
+                    <div
+                      className="progress-bar bg-primary"
+                      role="progressbar"
+                      style={{
+                        width: `${calculatePercentage(
+                          totalBalance - balance,
+                          totalBalance
+                        )}%`,
+                      }}
+                      aria-valuenow={25}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    />
                   </div>
                 </div>
               </div>
@@ -98,7 +104,7 @@ const LeaveBalance = () => {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

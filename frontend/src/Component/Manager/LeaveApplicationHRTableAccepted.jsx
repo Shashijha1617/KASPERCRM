@@ -19,13 +19,11 @@ const override = css`
   border-color: red;
 `;
 
-const LeaveApplicationHRTable = (props) => {
+const LeaveApplicationHRTableAccepted = (props) => {
   const [leaveApplicationHRData, setLeaveApplicationHRData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rowData, setRowData] = useState([]);
-  const [sortColumn, setSortColumn] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortDirection, setSortDirection] = useState("asc");
   const [filteredData, setFilteredData] = useState([]);
   const { darkMode } = useTheme();
   const email = localStorage.getItem("Email");
@@ -129,7 +127,7 @@ const LeaveApplicationHRTable = (props) => {
   };
 
   const exportToPDF = () => {
-    if (window.confirm("Are you sure to download Pending Leave record?")) {
+    if (window.confirm("Are you sure to download Approved Leave record?")) {
       const pdfWidth = 297;
       const pdfHeight = 210;
       const doc = new jsPDF({
@@ -139,7 +137,7 @@ const LeaveApplicationHRTable = (props) => {
       });
 
       doc.setFontSize(18);
-      doc.text("Employee Pending Leave Details", pdfWidth / 2, 15, "center");
+      doc.text("Employee Approved Leave Details", pdfWidth / 2, 15, "center");
 
       const headers = [
         "Emp Id",
@@ -153,11 +151,11 @@ const LeaveApplicationHRTable = (props) => {
       ];
 
       // Filter only rejected leaves
-      const PendingLeaves = filteredData.filter(
-        (row) => row.Status === "Pending"
+      const ApprovedLeaves = filteredData.filter(
+        (row) => row.Status === "Approved"
       );
 
-      const data = PendingLeaves.map((row) => [
+      const data = ApprovedLeaves.map((row) => [
         row.empID,
         row.Leavetype,
         row.FromDate,
@@ -175,7 +173,7 @@ const LeaveApplicationHRTable = (props) => {
         startY: 25,
       });
 
-      doc.save("Pending_leaveApplication_data.pdf");
+      doc.save("Approved_leaveApplication_data.pdf");
     }
   };
 
@@ -192,7 +190,7 @@ const LeaveApplicationHRTable = (props) => {
   };
 
   const approvedLeaves = filteredData.filter(
-    (data) => data.Status === "Pending"
+    (data) => data.Status === "Approved"
   ).length;
 
   const rowHeadStyle = {
@@ -293,7 +291,7 @@ const LeaveApplicationHRTable = (props) => {
                   <th style={rowHeadStyle}>Leave Type</th>
                   <th style={rowHeadStyle}>Start Date</th>
                   <th style={rowHeadStyle}>End Date</th>
-                  <th style={rowHeadStyle}>Created at</th>
+                  <th style={rowHeadStyle}>CreatedOn</th>
                   <th style={rowHeadStyle}>Days</th>
                   <th style={rowHeadStyle}>Status</th>
                   <th style={rowHeadStyle}>Remarks</th>
@@ -302,7 +300,7 @@ const LeaveApplicationHRTable = (props) => {
               </thead>
               <tbody>
                 {filteredData
-                  .filter((e) => e.Status == "Pending")
+                  .filter((e) => e.Status == "Approved")
                   .map((data, index) => {
                     return (
                       <tr key={index}>
@@ -339,7 +337,7 @@ const LeaveApplicationHRTable = (props) => {
                           <span>{data.Days}</span>
                         </td>
                         <td style={rowBodyStyle}>
-                          <span className=" text-white bg-warning px-2 py-0 rounded-5">
+                          <span className=" text-white bg-success px-2 py-0 rounded-5">
                             {data.Status}
                           </span>
                         </td>
@@ -415,4 +413,4 @@ const LeaveApplicationHRTable = (props) => {
   );
 };
 
-export default LeaveApplicationHRTable;
+export default LeaveApplicationHRTableAccepted;

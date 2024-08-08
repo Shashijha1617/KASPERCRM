@@ -80,6 +80,7 @@ const AdminSalaryTable = (props) => {
         const rowDataT = salaryObj.map((data) => ({
           data,
           empID: data["empID"],
+          profile: data["profile"],
           EmployeeName: `${data["FirstName"]} ${data["LastName"]}`,
           PositionName: data["position"][0]["PositionName"],
           // Email: data["email"][0]["Email"],
@@ -187,6 +188,8 @@ const AdminSalaryTable = (props) => {
       : "var(--primaryDashMenuColor)",
     border: "none",
   };
+
+  console.log(currentItems);
 
   return (
     <div>

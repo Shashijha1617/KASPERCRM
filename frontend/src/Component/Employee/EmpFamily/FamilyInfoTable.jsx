@@ -165,86 +165,85 @@ const FamilyInfoTable = (props) => {
           />
         </div>
       )}
-      {rowData > 0 ? (
-        <div>
-          <table className="table" style={{ fontSize: ".9rem" }}>
-            <thead>
-              <tr>
-                <th style={rowHeadStyle}>Name</th>
-                <th style={rowHeadStyle}>Relationship</th>
-                <th style={rowHeadStyle}>DOB</th>
-                <th style={rowHeadStyle}>Occupation</th>
-                <th style={rowHeadStyle} className="text-end">
-                  Action
-                </th>
+
+      <div>
+        <table className="table" style={{ fontSize: ".9rem" }}>
+          <thead>
+            <tr>
+              <th style={rowHeadStyle}>Name</th>
+              <th style={rowHeadStyle}>Relationship</th>
+              <th style={rowHeadStyle}>DOB</th>
+              <th style={rowHeadStyle}>Occupation</th>
+              <th style={rowHeadStyle} className="text-end">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {rowData.map((items, index) => (
+              <tr key={index}>
+                <td style={rowBodyStyle} className="text-capitalize">
+                  {items.Name}
+                </td>
+                <td style={rowBodyStyle} className="text-capitalize">
+                  {items.Relationship}
+                </td>
+                <td style={rowBodyStyle} className="text-capitalize">
+                  {items.DOB}
+                </td>
+                <td style={rowBodyStyle} className="text-capitalize">
+                  {items.Occupation}
+                </td>
+                <td style={rowBodyStyle} className="text-capitalize text-end">
+                  {" "}
+                  <button
+                    onClick={() => props.onEditFamilyInfo(items.data)}
+                    style={{
+                      zIndex: "1",
+                      cursor: "pointer",
+                    }}
+                    className="btn btn-outline-primary"
+                  >
+                    <FaRegEdit /> Edit
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {rowData.map((items, index) => (
-                <tr key={index}>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    {items.Name}
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    {items.Relationship}
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    {items.DOB}
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize">
-                    {items.Occupation}
-                  </td>
-                  <td style={rowBodyStyle} className="text-capitalize text-end">
-                    {" "}
-                    <button
-                      onClick={() => props.onEditFamilyInfo(items.data)}
-                      style={{
-                        zIndex: "1",
-                        cursor: "pointer",
-                      }}
-                      className="btn btn-outline-primary"
-                    >
-                      <FaRegEdit /> Edit
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        style={{
+          height: "65vh",
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          wordSpacing: "5px",
+          flexDirection: "column",
+          gap: "2rem",
+        }}
+      >
+        <img
           style={{
-            height: "65vh",
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            wordSpacing: "5px",
-            flexDirection: "column",
-            gap: "2rem",
+            height: "auto",
+            width: "30%",
+          }}
+          src={SearchLight}
+          alt="img"
+        />
+        <p
+          className="text-center w-75 mx-auto"
+          style={{
+            color: darkMode
+              ? "var(--secondaryDashColorDark)"
+              : "var( --primaryDashMenuColor)",
           }}
         >
-          <img
-            style={{
-              height: "auto",
-              width: "30%",
-            }}
-            src={SearchLight}
-            alt="img"
-          />
-          <p
-            className="text-center w-75 mx-auto"
-            style={{
-              color: darkMode
-                ? "var(--secondaryDashColorDark)"
-                : "var( --primaryDashMenuColor)",
-            }}
-          >
-            Member's details not available, please add member.
-          </p>
-        </div>
-      )}
+          Member's details not available, please add member.
+        </p>
+      </div>
     </div>
   );
 };

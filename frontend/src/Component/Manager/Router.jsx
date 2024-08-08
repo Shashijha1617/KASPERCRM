@@ -11,6 +11,8 @@ import Company from "../../Pages/Company/Company.jsx";
 // import Employee from "../../Pages/AddEmployee/Employee.jsx";
 import Salary from "../../Pages/Salary/Salary.jsx";
 import LeaveApplicationHR from "../Manager/LeaveApplicationHR.jsx";
+import LeaveApplicationHRAccepted from "../Manager/LeaveApplicationHRAccepted.jsx";
+import LeaveApplicationHRRejected from "../Manager/LeaveApplicationHRRejected.jsx";
 import NotFound404 from "../../Pages/PageNot/NotFound404.jsx";
 import Dashboard from "../Manager/Dashboard/ManagerDash.jsx";
 import ViewAttendance from "../HrManager/attendance/ViewAttendance.jsx";
@@ -50,6 +52,16 @@ const MainContent = () => {
           path="/manager/leaveApplication"
           exact
           component={LeaveApplicationHR}
+        />
+        <Route
+          path="/manager/leaveApplicationAccepted"
+          exact
+          component={LeaveApplicationHRAccepted}
+        />
+        <Route
+          path="/manager/leaveApplicationRejected"
+          exact
+          component={LeaveApplicationHRRejected}
         />
         <Route path="/manager/city" exact component={City} />
         <Route path="/manager/dashboard" exact component={Dashboard} />

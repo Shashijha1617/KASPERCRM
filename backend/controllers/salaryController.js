@@ -8,7 +8,7 @@ const getAllSalary = async (req, res) => {
     .populate({
       path: "salary"
     })
-    .select("FirstName LastName empID")
+    .select("FirstName LastName empID  profile")
     .populate({
       path: "position"
     })

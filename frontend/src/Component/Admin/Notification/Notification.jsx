@@ -4,6 +4,7 @@ import { ImBin } from "react-icons/im";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import "./notification.css";
 import BASE_URL from "../../../Pages/config/config";
+import { useTheme } from "../../../Context/TheamContext/ThemeContext";
 
 const Notification = () => {
   const [selectAll, setSelectAll] = useState(false);
@@ -12,13 +13,14 @@ const Notification = () => {
   const { socket } = useContext(AttendanceContext);
   const id = localStorage.getItem("_id");
   const email = localStorage.getItem("Email");
+  const { darkMode } = useTheme();
 
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setNotification(response.data.Notification);
@@ -72,8 +74,8 @@ const Notification = () => {
           { email },
           {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           }
         )
         .then((response) => {
@@ -91,7 +93,7 @@ const Notification = () => {
       const taskIDArray = selectedNotification.map((val) => val.taskId);
       const data = {
         employeeMail: email,
-        tasks: taskIDArray
+        tasks: taskIDArray,
       };
       if (selectAll) {
         clearAllHandler();
@@ -99,8 +101,8 @@ const Notification = () => {
         axios
           .post(`${BASE_URL}/api/multiSelectedNotificationDelete`, data, {
             headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+              authorization: localStorage.getItem("token") || "",
+            },
           })
           .then((response) => {
             setNotification(response.data.result.Notification);
@@ -122,8 +124,8 @@ const Notification = () => {
         { email },
         {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         }
       )
       .then((response) => {
@@ -136,14 +138,46 @@ const Notification = () => {
         console.log(error);
       });
   };
-  console.log(notification);
+
+  const rowHeadStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--primaryDashMenuColor)"
+      : "var(--primaryDashColorDark)",
+    color: darkMode
+      ? "var(--primaryDashColorDark)"
+      : "var(--secondaryDashMenuColor)",
+    border: "none",
+    position: "sticky",
+    top: "0rem",
+    zIndex: "100",
+  };
+
+  const rowBodyStyle = {
+    verticalAlign: "middle",
+    whiteSpace: "pre",
+    background: darkMode
+      ? "var(--secondaryDashMenuColor)"
+      : "var(--secondaryDashColorDark)",
+    color: darkMode
+      ? "var(--secondaryDashColorDark)"
+      : "var(--primaryDashMenuColor)",
+    border: "none",
+  };
   return (
-    <>
-      <div className="row">
-        <form className="d-flex col-8 flex-column gap-3">
+    <div
+      style={{
+        color: darkMode
+          ? "var(--primaryDashColorDark)"
+          : "var(--secondaryDashMenuColor)",
+      }}
+      className="container-fluid py-3"
+    >
+      <div className="row w-100">
+        <form className="d-flex flex-column gap-3">
           <div>
-            <div className="p-2">
-              {" "}
+            <div className="my-2 d-flex align-items-centergap-1">
               <input
                 type="checkbox"
                 name=""
@@ -156,11 +190,11 @@ const Notification = () => {
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">Select</th>
-                  <th scope="col">task Name</th>
-                  <th scope="col">Sender</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Action</th>
+                  <th style={rowHeadStyle}>Select</th>
+                  <th style={rowHeadStyle}>Task Name</th>
+                  <th style={rowHeadStyle}>Sender</th>
+                  <th style={rowHeadStyle}>Status</th>
+                  <th style={rowHeadStyle}>Action</th>
                 </tr>
               </thead>
 
@@ -168,7 +202,7 @@ const Notification = () => {
                 {notification &&
                   notification.map((val, index) => (
                     <tr key={index}>
-                      <th scope="row">
+                      <th style={rowBodyStyle}>
                         <input
                           type="checkbox"
                           name=""
@@ -179,18 +213,20 @@ const Notification = () => {
                           )}
                         />
                       </th>
-                      <td>{val.taskName}</td>
-                      <td>{val.senderMail}</td>
+                      <td style={rowBodyStyle}>{val.taskName}</td>
+                      <td style={rowBodyStyle}>{val.senderMail}</td>
                       {val.status === "unseen" ? (
-                        <td>Unread</td>
+                        <td style={rowBodyStyle}>Unread</td>
                       ) : (
-                        <td>read</td>
+                        <td style={rowBodyStyle}>read</td>
                       )}
-                      <td>
-                        <ImBin
+                      <td style={rowBodyStyle}>
+                        <button
                           onClick={() => notificationDeleteHandler(val.taskId)}
-                          className="bin"
-                        />
+                          className="btn btn-danger"
+                        ></button>
+                        <ImBin />{" "}
+                        <span className="d-none d-md-flex">Delete</span>
                       </td>
                     </tr>
                   ))}
@@ -201,12 +237,12 @@ const Notification = () => {
       </div>
 
       <button
-        className="Notification_delete"
+        className="btn btn-danger"
         onClick={multiNotificationDeleteHandler}
       >
         Delete
       </button>
-    </>
+    </div>
   );
 };
 

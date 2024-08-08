@@ -38,8 +38,10 @@ const Sidebar = () => {
       icon: <IoCalendarOutline />,
       name: "Leave",
       navLinks: [
-        { to: "/manager/createLeave", label: "Apply Leave" },
-        { to: "/manager/leaveApplication", label: "View ALL Leave " },
+        { to: "/manager/createLeave", label: "My Leave" },
+        { to: "/manager/leaveApplication", label: "Leave Requests" },
+        { to: "/manager/leaveApplicationAccepted", label: "Accepted Leave " },
+        { to: "/manager/leaveApplicationRejected", label: "Rejected Leave " },
       ],
     },
     {
