@@ -26,10 +26,7 @@ const SidebarSmallScreen = () => {
     {
       icon: <RiUser3Line />,
       name: "Employee",
-      navLinks: [
-        // { to: "/admin/user", label: "Employee List" },
-        { to: "/admin/employee", label: "Employee List" },
-      ],
+      navLinks: [{ to: "/admin/employee", label: "Employee List" }],
     },
     {
       icon: <MdCurrencyRupee />,
@@ -41,17 +38,14 @@ const SidebarSmallScreen = () => {
       name: "Attendance",
       navLinks: [
         { to: "/admin/myAttendance", label: "My Attendance" },
-        // { to: "/admin/adminAttendance", label: "Create Attendance" },
         { to: "/admin/todaysAttendance", label: "TodaysAttendance" },
         { to: "/admin/viewAttendance", label: "View Attendance" },
-        // { to: "/admin/leave", label: "View Leave " }
       ],
     },
     {
       icon: <IoCalendarOutline />,
       name: "Leave",
       navLinks: [
-        // { to: "/admin/applyLeave", label: "Apply Leave" },
         { to: "/admin/leaveApplication", label: "Leave Request" },
         { to: "/admin/leaveAccepted", label: "Approved Leaves " },
         { to: "/admin/leaveRejected", label: "Rejected Leaves " },
@@ -192,7 +186,12 @@ const SidebarSmallScreen = () => {
           >
             <p className="m-0 py-0 pl-1 text-warning">{name}</p>
             {navLinks.map((link) => (
-              <Link className="text-decoration-none" key={link.to} to={link.to}>
+              <Link
+                className="text-decoration-none"
+                key={link.to}
+                to={link.to}
+                onClick={toggleSidebar} // Close the sidebar on link click
+              >
                 <div
                   style={{
                     color: darkMode
@@ -201,10 +200,7 @@ const SidebarSmallScreen = () => {
                   }}
                   className="text-decoration-none flex-nowrap text-start gap-3  d-flex justify-content-between "
                 >
-                  <div
-                    // style={{ borderBottom: "1px solid white" }}
-                    className="d-flex gap-1 flex-nowrap"
-                  >
+                  <div className="d-flex gap-1 flex-nowrap">
                     <p className="m-0">{link.icon}</p>
                     <p style={{ whiteSpace: "pre" }} className="m-auto">
                       {link.label}

@@ -262,7 +262,10 @@ const TodaysAttendance = () => {
           placeholder="Search by employee name"
         />
       </div>
-      <div className="border" style={{ maxHeight: "78vh", overflow: "auto" }}>
+      <div
+        className="border"
+        style={{ minHeight: "70vh", maxHeight: "70vh", overflow: "auto" }}
+      >
         {sortedAndFilteredData.length > 0 ? (
           <table className="table" style={{ fontSize: ".9rem" }}>
             <thead>
@@ -463,7 +466,8 @@ const TodaysAttendance = () => {
         ) : (
           <div
             style={{
-              height: "80vh",
+              minHeight: "70vh",
+              maxHeight: "70vh",
               width: "100%",
               display: "flex",
               justifyContent: "center",

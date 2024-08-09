@@ -367,8 +367,9 @@ const NavBar = (props, data) => {
             color: darkMode
               ? "var(--primaryDashColorDark)"
               : "var(--primaryDashMenuColor)",
+            fontSize: "2.2rem",
           }}
-          className="my-auto btn fs-5 p-1 mx-0 d-flex d-sm-none align-iems-center"
+          className="my-auto btn p-1 mx-0 d-flex d-sm-none align-iems-center"
         >
           <LuMenu />
         </button>

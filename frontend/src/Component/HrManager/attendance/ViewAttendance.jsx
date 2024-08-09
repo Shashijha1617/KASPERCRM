@@ -253,7 +253,7 @@ const AttendanceDetails = () => {
       {attendanceData && (
         <div
           className="border border-1"
-          style={{ overflow: "auto", maxHeight: "70vh" }}
+          style={{ overflow: "auto", maxHeight: "60vh", minHeight: "60vh" }}
         >
           <table
             className="table"

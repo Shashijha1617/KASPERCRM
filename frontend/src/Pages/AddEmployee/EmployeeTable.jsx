@@ -366,10 +366,10 @@ const AdminEmployeeTable = (props) => {
             <LuSearch
               style={{
                 position: "absolute",
-                top: "30%",
+                top: "25%",
                 left: "9px",
-                height: "17px",
-                width: "17px",
+                height: "1.2rem",
+                width: "1.2rem",
                 color: "black",
               }}
             />
@@ -473,8 +473,8 @@ const AdminEmployeeTable = (props) => {
         <div>
           <div
             style={{
-              minHeight: "75vh",
-              maxHeight: "75vh",
+              minHeight: "68vh",
+              maxHeight: "68vh",
               overflow: "auto",
               position: "relative",
             }}

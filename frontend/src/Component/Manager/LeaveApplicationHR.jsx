@@ -20,8 +20,8 @@ const LeaveApplicationHR = (props) => {
     axios
       .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         setEmpData(response.data);
@@ -44,13 +44,13 @@ const LeaveApplicationHR = (props) => {
       FromDate: event.target[1].value,
       ToDate: event.target[2].value,
       Status: event.target[3].value,
-      Reasonforleave: event.target[4].value
+      Reasonforleave: event.target[4].value,
     };
     axios
       .post(`${BASE_URL}/api/leave-application-hr/` + props.data["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((res) => {
         setTable(false);
@@ -87,8 +87,8 @@ const LeaveApplicationHR = (props) => {
         { id, email, leaveType, totalLeaveRequired },
         {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         }
       )
       .then((res) => {
@@ -117,7 +117,7 @@ const LeaveApplicationHR = (props) => {
 
     let body = {
       Status: newInfo.target[3].value,
-      updatedBy: `${empData["FirstName"]} ${empData["LastName"]}`
+      updatedBy: `${empData["FirstName"]} ${empData["LastName"]}`,
     };
 
     const taskId = uuid();
@@ -129,8 +129,8 @@ const LeaveApplicationHR = (props) => {
       axios
         .put(`${BASE_URL}/api/leave-application-hr/` + info["_id"], body, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
         .then((res) => {
           setTable(false);
@@ -150,7 +150,7 @@ const LeaveApplicationHR = (props) => {
               messageBy: name,
               profile: empData.profile.image_url,
               status: "unseen",
-              path: empData.Account === 1 ? "createLeave" : "leaveApplication"
+              path: empData.Account === 1 ? "createLeave" : "leaveApplication",
             };
 
             socket.emit("leaveManagerStatusNotification", data);
@@ -167,7 +167,7 @@ const LeaveApplicationHR = (props) => {
               messageBy: name,
               profile: null,
               status: "unseen",
-              path: empData.Account === 1 ? "createLeave" : "leaveApplication"
+              path: empData.Account === 1 ? "createLeave" : "leaveApplication",
             };
 
             socket.emit("leaveManagerStatusNotification", data);
@@ -185,8 +185,8 @@ const LeaveApplicationHR = (props) => {
       axios
         .put(`${BASE_URL}/api/leave-application-hr/` + info["_id"], body, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
         .then((res) => {
           setTable(false);
@@ -214,7 +214,7 @@ const LeaveApplicationHR = (props) => {
               messageBy: name,
               profile: empData.profile.image_url,
               status: "unseen",
-              path: empData.Account === 1 ? "createLeave" : "leaveApplication"
+              path: empData.Account === 1 ? "createLeave" : "leaveApplication",
             };
             console.log(data);
             socket.emit("leaveManagerStatusNotification", data);
@@ -232,7 +232,7 @@ const LeaveApplicationHR = (props) => {
               messageBy: name,
               profile: null,
               status: "unseen",
-              path: empData.Account === 1 ? "createLeave" : "leaveApplication"
+              path: empData.Account === 1 ? "createLeave" : "leaveApplication",
             };
             console.log(data);
             socket.emit("leaveManagerStatusNotification", data);

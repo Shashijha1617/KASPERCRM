@@ -212,7 +212,7 @@ const AdminSalaryTable = (props) => {
           <h5 className="my-auto text-capitalize"></h5>
 
           <div className="d-flex gap-2 justify-content-between py-1">
-            <div className="searchholder p-0 d-flex my-auto  position-relative">
+            <div className="searchholder d-none d-md-flex p-0 d-flex my-auto  position-relative">
               <input
                 style={{
                   height: "100%",
@@ -240,7 +240,24 @@ const AdminSalaryTable = (props) => {
           </div>
         </div>
       </div>
-
+      <div className="searchholder d-block d-md-none container-fluid my-2  d-flex position-relative">
+        <input
+          style={{
+            height: "100%",
+            width: "100%",
+            paddingLeft: "15%",
+          }}
+          className="form-control border border-primary border-2"
+          type="text"
+          placeholder="Search by name"
+          value={searchQuery}
+          onChange={handleSearchInputChange}
+        />
+        <LuSearch
+          className="text-black"
+          style={{ position: "absolute", top: "30%", left: "5%" }}
+        />
+      </div>
       <div id="clear-both" />
       {loading && (
         <div id="loading-bar">
@@ -257,8 +274,8 @@ const AdminSalaryTable = (props) => {
       <div className="row m-auto container-fluid">
         <div
           style={{
-            minHeight: "70vh",
-            maxHeight: "70vh",
+            minHeight: "65vh",
+            maxHeight: "65vh",
             overflow: "auto",
             width: "100%",
           }}

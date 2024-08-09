@@ -64,7 +64,7 @@ const DashboardAdmin = (props) => {
           <div className="sidebar-grid">
             <Sidebar />
           </div>
-          <div className="mainbar-grid">
+          <div className="mainbar-grid py-5 py-md-3">
             <AdminRoutes />
             <div
               style={{ zIndex: "50", position: "absolute", bottom: "0" }}

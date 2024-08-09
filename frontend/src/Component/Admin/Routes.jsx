@@ -42,7 +42,7 @@ import SelfAttendance from "../HrManager/attendance/SelfAttendance.jsx";
 
 const AdminRoutes = () => {
   return (
-    <div style={{ maxHeight: "100vh", overflow: "auto" }}>
+    <div style={{ maxHeight: "85vh", minHeightL: "85vh", overflow: "auto" }}>
       <Switch>
         <Route path="/admin/dashboard" exact component={AdminDasd} />
         <Route path="/admin/role" exact component={Role} />

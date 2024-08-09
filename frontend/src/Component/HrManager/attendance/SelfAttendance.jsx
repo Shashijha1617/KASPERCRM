@@ -262,7 +262,7 @@ const SelfAttendance = () => {
   return (
     <div className="d-flex flex-column px-2 gap-3">
       <div className="d-flex gap-3 justify-content-between"></div>
-      <div className="d-flex align-items-center  justify-content-between">
+      <div className="d-flex align-items-start align-items-md-center gap-2  justify-content-between flex-column flex-md-row">
         <TittleHeader
           title={"Attendance List"}
           message={"You can check yous attendance here."}
@@ -286,7 +286,6 @@ const SelfAttendance = () => {
               </select>
             </div>
             <div>
-            
               <select
                 className="form-select my-0 rounded-0 shadow"
                 id="month"
@@ -305,7 +304,10 @@ const SelfAttendance = () => {
       </div>
 
       {attendanceData && (
-        <div className="border" style={{ overflow: "auto", maxHeight: "80vh" }}>
+        <div
+          className="border"
+          style={{ overflow: "auto", minHeight: "70vh", maxHeight: "70vh" }}
+        >
           <table
             style={{
               fontWeight: "normal",

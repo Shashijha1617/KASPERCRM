@@ -279,11 +279,12 @@ const LeaveApplicationHRTable = (props) => {
       <div>
         <div
           style={{
-            maxHeight: "76vh",
+            maxHeight: "73vh",
+            minHeight: "73vh",
             overflow: "auto",
             position: "relative",
           }}
-          className="table-responsive border border-1 border-black"
+          className="table-responsive border border-1"
         >
           {filteredData.length > 0 ? (
             <table className="table" style={{ fontSize: ".9rem" }}>
