@@ -70,11 +70,11 @@ label, input {
   }
 }
 
-@media (max-width: 576px) {
+/* @media (max-width: 576px) {
   html {
-    font-size: 10px;
+    font-size: 12px;
   }
-}
+} */
 
 
 /* Button Styles  */

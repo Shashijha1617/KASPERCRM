@@ -12,14 +12,14 @@
 /* MultiStageLoginForm.css */
 
 .login-container {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    font-family: Arial, sans-serif;
+    font-family: Arial, sans-serif; */
 
-    background: linear-gradient(white, white), url(http://localhost:3000/static/media/FLATiMAGE.e42bb2ca.jpeg);
+    background: linear-gradient(white, white), url(../../img//AuthPage/ForgetPage.jpg);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -62,12 +62,17 @@
 .login-input {
     box-sizing: border-box;
     width: 100%;
-    border-radius: 10px;
+    border-radius: 5px;
     height: 40px;
     margin: 10px 0 10px;
     padding: 15px;
     border: 1px;
-    background-color: #eef3ff;
+    background-color: #ffffff;
+}
+.login-input:focus {
+    outline: 2px solid rgba(0, 0, 255, 0.397);
+    background-color: rgba(163, 163, 255, 0.267);
+    font-weight: 500;
 }
 
 input:focus {
@@ -99,7 +104,7 @@ input:focus {
 
 .progress-container {
     width: 70%;
-    height: 20px;
+    height: 5px;
     background-color: #ddd;
     border-radius: 10px;
     position: relative;
@@ -145,3 +150,35 @@ input:focus {
     margin-bottom: 10px;
     color: #333;
 }
+
+
+.otp-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+.otp-input {
+    width: 3rem;
+    height: 3rem;
+    padding: 10px;
+    text-align: center;
+    font-size: 1.6rem;
+    border: 1px solid #b7b4b4cf;
+    border-radius: 5px;
+  }
+  .otp-input:focus {
+    background-color: rgba(0, 0, 255, 0.267);
+  }
+  
+  .login-button {
+    margin-top: 20px;
+  }
+  
+  .resend-otp-button {
+    background: none;
+    color: #007BFF;
+    border: none;
+    cursor: pointer;
+  }
+  

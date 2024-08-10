@@ -1,17 +1,9 @@
 import React, { useState } from "react";
 import "./Login.css";
-import { css } from "@emotion/core";
-import LoginIMG from "../../img/LOGINBACK.svg";
 import { RxEyeOpen } from "react-icons/rx";
 import { GoEyeClosed } from "react-icons/go";
-import { FaUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
-const override = css`
-  display: block;
-  margin: 0 auto;
-  border-color: red;
-`;
+import LoginImage from "../../img/AuthPage/LoginPage.jpeg";
 
 const Login = (props) => {
   let error = null;
@@ -32,33 +24,36 @@ const Login = (props) => {
     >
       <div
         style={{ height: "100%", width: "100%" }}
-        className="row mx-auto bg-white"
+        className="row flex-row-reverse mx-auto bg-white"
       >
         <div
           style={{ height: "100%" }}
-          className="col-12 col-md-6 position-relative  px-0 p-md-5 d-flex bg-white flex-column justify-content-center aline-center"
+          className="col-12 col-md-4 position-relative  px-0 p-md-5 d-flex bg-white flex-column justify-content-center aline-center"
         >
           <form
-            style={{ height: "100%" }}
+            style={{
+              height: "fit-content",
+              zIndex: "1",
+            }}
             onSubmit={props.onSubmit}
-            className="form  my-auto  w-75  p-0 p-md-3 pb-4 rounded text-black fw-bold d-flex flex-column justify-content-center"
+            className="form my-auto p-md-3 p py-5 rounded text-black fw-bold d-flex flex-column justify-content-center"
           >
-            <h2
+            <h4
               style={{
-                color: "var(--primaryDashColorDark)"
+                color: "var(--primaryDashColorDark)",
               }}
-              className="fw-bolder mb-4 text-center text-md-start gap-2"
+              className="my-4 text-center text-md-start gap-2"
             >
-              <FaUserCircle /> Log in
-            </h2>
+              Sign In
+            </h4>
             <div className="d-flex flex-column my-3">
               <label for="email" className="ps-2 fw-normal">
-                Enter your email address{" "}
+                Account
               </label>
               <input
                 name="email"
-                placeholder="abcd@xyz.com"
-                className="form-control rounded-5 bg-white border-3 border-muted"
+                placeholder="Email Address, Phone or UserID"
+                className="login-input border my-0"
                 type="text"
               />
             </div>
@@ -70,9 +65,8 @@ const Login = (props) => {
               <div className="position-relative">
                 <input
                   name="password"
-                  style={{ width: "100%" }}
                   placeholder="**********"
-                  className="form-control rounded-5 bg-white border-3 border-muted"
+                  className="login-input border my-0"
                   type={!seePass ? "password" : "text"}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -82,7 +76,7 @@ const Login = (props) => {
                     top: "5%",
                     right: "3%",
                     outline: "none",
-                    border: "none"
+                    border: "none",
                   }}
                   className="fs-5 text-muted my-0"
                   onClick={(e) => {
@@ -101,7 +95,7 @@ const Login = (props) => {
                     bottom: "-80%",
                     left: "50%",
                     transform: "translate(-50%)",
-                    whiteSpace: "pre"
+                    whiteSpace: "pre",
                   }}
                   className="alert   text-danger"
                 >
@@ -115,7 +109,7 @@ const Login = (props) => {
             <p
               style={{
                 display: alertMsg ? "block" : "none",
-                fontWeight: "normal"
+                fontWeight: "normal",
               }}
               className="text-danger text-center"
             >
@@ -126,17 +120,18 @@ const Login = (props) => {
               <input
                 style={{
                   background: "var(--primaryDashColorDark)",
-                  color: "var(--primaryDashMenuColor)"
+                  color: "var(--primaryDashMenuColor)",
                 }}
                 type="submit"
-                className="btn col-12 col-md-5  shadow rounded-5 fw-bolder shadow-sm"
+                className="btn btn-primary"
                 value=" Login"
               />
               <Link
                 to="/forgetPassword"
-                className="fw-semibold btn  col-12 col-md-5 shadow rounded-5 mt-0"
+                className="fw-normal text-decoration-none"
+                style={{ cursor: "pointer" }}
               >
-                Forgot password
+                Forgot password?
               </Link>
             </div>
 
@@ -147,7 +142,7 @@ const Login = (props) => {
                 left: "50%",
                 transform: "translate(-50%)",
                 fontWeight: "normal",
-                whiteSpace: "pre"
+                whiteSpace: "pre",
               }}
               className="d-blocktext-center text-muted"
             >
@@ -159,30 +154,18 @@ const Login = (props) => {
         <div
           style={{
             height: "100%",
-            backgroundColor: "var(--primaryDashColorDark)"
+            zIndex: "0",
+            // position: "relative",
+            backgroundImage: `url(${LoginImage})`,
           }}
-          className="col-12 col-md-6 p-5 d-flex flex-column justify-content-center gap-4 "
+          className="imagePossition col-12 col-md-8 p-5 d-flex flex-column justify-content-center gap-4 "
         >
-          <div className="pt-5">
-            <h5
-              style={{ wordSpacing: "5px" }}
-              className="text-white text-center"
-            >
-              👋 Nice to see you again
-            </h5>
-            <h1
-              style={{ letterSpacing: "5px" }}
-              className="fw-bolder text-white text-center"
-            >
-              Welcome Back
-            </h1>
-          </div>
-          <img
-            style={{ width: "80%", margin: "0 auto" }}
-            src={LoginIMG}
-            alt=""
-          />
-          <p className="text-center pt-5 text-white">www.kasperinfotech.org</p>
+          <p
+            style={{ position: "absolute", bottom: "10px" }}
+            className="text-center pt-5 text-white"
+          >
+            www.kasperinfotech.org
+          </p>
         </div>
       </div>
     </div>

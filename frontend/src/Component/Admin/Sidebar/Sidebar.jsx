@@ -63,7 +63,7 @@ const Sidebar = () => {
         { to: "/admin/leaveAccepted", label: "Approved Leaves " },
         { to: "/admin/leaveRejected", label: "Rejected Leaves " },
         { to: "/admin/leaveAssign", label: "Leave Assign" },
-        { to: "/admin/allEmpLeave", label: "All Emp Leave Balance" },
+        { to: "/admin/AllEmpLeave", label: "All Emp Leave Balance" },
       ],
     },
     {

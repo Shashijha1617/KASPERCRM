@@ -1077,40 +1077,71 @@ io.on("connection", (socket) => {
       console.error("Error saving notification:", error);
     }
   });
-  socket.on("getMessages", async (data, callback) => {
-    const { from, to, taskId, text, bwt } = data;
-    console.log(data);
-    try {
-      if (bwt === "admin-manager") {
-        // Find a task with all participants matching
-        const existingTask = await Update.findOne({
-          taskId: taskId,
-          participants: { $all: [from, ...to] }
-        });
+ 
 
-        if (existingTask) {
-          callback(existingTask.message);
-        } else {
-          callback([]);
-        }
-      } else if (bwt === "emp-manager") {
-        // Find a task with at least one matching participant
-        const existingTask = await Update.findOne({
-          taskId: taskId,
-          participants: { $in: [from, ...to] } // Use $in to match any of the participants
-        });
 
-        if (existingTask) {
-          callback(existingTask.message);
-        } else {
-          callback([]);
+ socket.on("getMessages", async (data, callback) => {
+      const { from, to, taskId, text, bwt } = data;
+      console.log(data);
+  
+      try {
+        if (bwt === "admin-manager"){
+          // Find a task with all participants matching
+          const existingTask = await Update.findOne({
+            taskId: taskId,
+            participants: { $all: [from, ...to] }
+          });
+  
+          if (existingTask) {
+            callback(existingTask.message);
+          } else {
+            callback([]);
+          }
+        } else if (bwt === "emp-manager"){
+          // Create an array of participants to match
+          const participantsToMatch = [from, ...to];
+  
+          // Find a task with at least two matching participants
+          const existingTask = await Update.aggregate([
+            {
+              $match: {
+                taskId: taskId,
+                participants: { $in: participantsToMatch }
+              }
+            },
+            {
+              $addFields: {
+                matchingParticipantsCount: {
+                  $size: {
+                    $filter: {
+                      input: "$participants",
+                      as: "participant",
+                      cond: { $in: ["$$participant", participantsToMatch] }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              $match: {
+                matchingParticipantsCount: { $gte: 2 }
+              }
+            }
+          ]);
+  
+          if (existingTask && existingTask.length > 0) {
+            callback(existingTask[0].message);
+          } else {
+            callback([]); // No matching task found with at least 2 participants
+          }
         }
+      } catch (error) {
+        console.error("Error handling message:", error);
+        callback([]);
       }
-    } catch (error) {
-      console.error("Error handling message:", error);
-      callback([]);
-    }
-  });
+    });
+
+
 
   socket.on("sendMessage", async (data) => {
     const { from, to, taskId, text, bwt, name, profile, notiId } = data;

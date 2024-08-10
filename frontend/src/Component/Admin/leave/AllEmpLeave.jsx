@@ -122,8 +122,8 @@ const AllEmpLeaves = (props) => {
       {!loading ? (
         <div
           style={{
-            minHeight: "80vh",
-            maxHeight: "80vh",
+            minHeight: "72vh",
+            maxHeight: "72vh",
             overflow: "auto",
             width: "100%",
           }}

@@ -1,10 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import Logo from "../../img/logo.webp";
-import MiniLogo from "../../img/MiniLogo.png";
 import "./NavBar.css";
-import { IoMdClose } from "react-icons/io";
-// import Switch from "react-switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { AttendanceContext } from "../../Context/AttendanceContext/AttendanceContext";
@@ -15,9 +12,8 @@ import DarkModeToggle from "../TheamChanger/DarkModeToggle";
 import { FaBell } from "react-icons/fa6";
 import { LuMenu } from "react-icons/lu";
 import { useSidebar } from "../../Context/AttendanceContext/smallSidebarcontext";
-import DarkMode from "../TheamChanger/DarkMode/DarkMode";
 import profile from "../../img/profile.jpg";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import BASE_URL from "../config/config";
 import { useTheme } from "../../Context/TheamContext/ThemeContext";
@@ -34,7 +30,7 @@ const NavBar = (props, data) => {
   const [notiToggle, setNotiToggle] = useState(false);
   const { socket } = useContext(AttendanceContext);
   const { toggleSidebar } = useSidebar();
-  const [loginNoti, setLoginNoti] = useState(true); //this is only for hr and admin to block employee login notification.
+  const [loginNoti, setLoginNoti] = useState(true);
   let userProfile;
 
   console.log(userProfile);

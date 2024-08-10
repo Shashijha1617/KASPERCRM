@@ -50,7 +50,7 @@ const AdminCompleteTask = () => {
     >
       <TittleHeader
         title={"Completed Task"}
-        numbers={tasks.filter((task) => task.status === "Rejected").length}
+        numbers={tasks.filter((task) => task.status === "Completed").length}
         message={"You can view all completed task status here."}
       />
       {loading && (

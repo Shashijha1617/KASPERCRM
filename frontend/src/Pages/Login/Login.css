@@ -1,123 +1,44 @@
-
-#root {
-  height: auto;
-}
-
-#main-outer-div {
-  position: relative;
-  background-color: #fff;
-  width: 80%;
-  max-width: 400px;
-  margin: auto;
-  margin-top: 7%;
-  padding: 30px;
-  border-radius: 10px;
-}
-
-#logo-img {
-  text-align: center;
-  padding: 2rem 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80%;
-  margin: auto;
-}
-
-#logo-div {
-  width: 50%;
-  margin: 0 auto;
-}
-
-#title-div {
-  margin: 0 auto;
-  text-align: center;
-}
-
-.login-form-input {
+.login-input {
   box-sizing: border-box;
   width: 100%;
-  border-radius: 10px;
+  border-radius: 5px;
   height: 40px;
   margin: 10px 0 10px;
   padding: 15px;
   border: 1px;
-  background-color: #eef3ff;
+  background-color: #ffffff;
+}
+.login-input:focus {
+  outline: 2px solid rgba(0, 0, 255, 0.397);
+  background-color: rgba(163, 163, 255, 0.267);
+  font-weight: 500;
 }
 
-.login-form-input:focus {
-  border: 1px solid rgb(226, 210, 39);
+.form {
+  width: 80%;
+  background: "#f0eeeed2",
+}
+ 
+.imagePossition {
+  position: absolute;
 }
 
-.login-form-input::placeholder {
-  font-weight: bold;
-  color: red;
-}
-
-#outer-login-form-div {
-  width: 90%;
-  margin: 0 auto;
-}
-
-.login-form-input[type="submit"] {
-  background-color: #2d2ae2;
-  font-weight: bold;
-  border-width: 0px;
-  margin-top: 15px;
-  padding: 0px;
-}
-
-.loading {
-  text-align: center;
-  margin-top: 15px;
-}
-
-.title {
-  font-size: 20px;
-}
-
-.alert {
-  font-size: 14px;
-  text-align: center;
-  color: red;
-}
-
-@media (max-width: 300px) {
-  #main-outer-div {
-    width: 50%;
-    min-width: 0px;
+@media (min-width: 768px) {
+  .form {
+    width: 100%;
+    background: "#none",
+  }
+  .imagePossition {
+    position: relative;
   }
 }
 
-.login-bg {
-  background: linear-gradient(white, white), url(../../img/FLATiMAGE.jpeg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  background-blend-mode: multiply;
-}
-
-.login-holder {
-  backdrop-filter: blur(3px);
-  background-color: rgba(255, 255, 255, 0.568);
-  box-shadow: -3px 3px 5px rgba(202, 201, 201, 0.804);
-  border-radius: 10px;
-}
-
-@keyframes beat {
-  0% {
-    transform: scale(1);
+@media (min-width: 992px) {
+  .form {
+    width: 100%;
+    background: "none",
   }
-
-  50% {
-    transform: scale(1.2);
+  .imagePossition {
+    position: relative;
   }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-.heart {
-  animation: beat 0.7s infinite;
 }
